@@ -1,0 +1,235 @@
+<div id="supplier" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+
+    <!-- HEADER -->
+    <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+      <!-- APP TITLE -->
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="70">
+
+        <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/suppliers'">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+          <img *ngIf="supplier.contact.profile_image" [src]="supplier.contact.profile_image">
+          <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start start"
+             *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+          <div class="h2" *ngIf="pageType ==='edit'">
+            {{supplier.name}}
+          </div>
+          <div class="h2" *ngIf="pageType ==='new'">
+            New Supplier
+          </div>
+          <div class="subtitle secondary-text">
+            <span>Supplier Detail</span>
+          </div>
+        </div>
+      </div>
+      <!-- / APP TITLE -->
+
+      <button mat-raised-button
+              class="save-product-button mat-white-bg mt-16 mt-sm-0"
+              [disabled]="supplierForm.invalid"
+              *ngIf="pageType ==='new'" (click)="addSupplier()">
+        <span>ADD</span>
+      </button>
+      <button mat-raised-button
+              class="save-product-button mat-white-bg mt-16 mt-sm-0"
+              *ngIf="pageType ==='edit'" (click)="saveSupplier()">
+        <span>Delete</span>
+      </button>
+      <button mat-raised-button
+              class="save-product-button mat-white-bg mt-16 mt-sm-0"
+              [disabled]="supplierForm.invalid || supplierForm.pristine"
+              *ngIf="pageType ==='edit'" (click)="saveSupplier()">
+        <span>SAVE</span>
+      </button>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card mat-white-bg">
+
+      <!-- CONTENT -->
+      <div class="content">
+
+        <form name="supplierForm" [formGroup]="supplierForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+          <!--<mat-tab-group>
+
+            <mat-tab label="Basic Info">-->
+              <div class="tab-content p-24" fusePerfectScrollbar>
+
+                <mat-form-field class="w-100-p">
+                  <mat-label>Name</mat-label>
+                  <input matInput
+                         name="name"
+                         formControlName="name"
+                         placeholder="Supplier Name"
+                         required>
+                </mat-form-field>
+
+                <mat-form-field class="w-100-p">
+                  <mat-label>Email</mat-label>
+                  <input matInput
+                         name="email"
+                         formControlName="email"
+                         placeholder="Email"
+                         required>
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>No</mat-label>
+                  <input matInput
+                         name="no"
+                         formControlName="no"
+                         placeholder="No">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Street</mat-label>
+                  <input matInput
+                         name="street"
+                         formControlName="street"
+                         placeholder="street">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Postal Code</mat-label>
+                  <input matInput
+                         name="postal_code"
+                         formControlName="postal_code"
+                         placeholder="Postal Code">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>City</mat-label>
+                  <input matInput
+                         name="city"
+                         formControlName="city"
+                         placeholder="City">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Country</mat-label>
+                  <input matInput
+                         name="country"
+                         formControlName="country"
+                         placeholder="Country">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>PO Box</mat-label>
+                  <input matInput
+                         name="po_box"
+                         formControlName="po_box"
+                         placeholder="PO Box">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Landline 1</mat-label>
+                  <input matInput
+                         name="ph_landline1"
+                         formControlName="ph_landline1"
+                         placeholder="Phone Landline 1">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Landline 2</mat-label>
+                  <input matInput
+                         name="ph_landline2"
+                         formControlName="ph_landline2"
+                         placeholder="Phone Landline 2">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Landline 3</mat-label>
+                  <input matInput
+                         name="ph_landline3"
+                         formControlName="ph_landline3"
+                         placeholder="Phone Landline 3">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Mobile 1</mat-label>
+                  <input matInput
+                         name="ph_mobile1"
+                         formControlName="ph_mobile1"
+                         placeholder="Phone Mobile 3">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Mobile 2</mat-label>
+                  <input matInput
+                         name="ph_mobile2"
+                         formControlName="ph_mobile2"
+                         placeholder="Phone Mobile 2">
+                </mat-form-field>
+                <mat-form-field class="w-100-p">
+                  <mat-label>Phone Mobile 3</mat-label>
+                  <input matInput
+                         name="ph_mobile3"
+                         formControlName="ph_mobile3"
+                         placeholder="Phone Mobile 3">
+                </mat-form-field>
+
+                <!--<mat-form-field class="w-100-p">
+                                    <textarea matInput
+                                              name="description"
+                                              formControlName="description"
+                                              placeholder="Product Description"
+                                              rows="5">
+                                    </textarea>
+                </mat-form-field>
+
+                <h3 class="mb-0">Categories</h3>
+                <mat-form-field class="w-100-p" floatPlaceholder="never">
+                  <mat-chip-list matPrefix #categoryList
+                                 name="categories"
+                                 formControlName="categories">
+
+                    <mat-chip *ngFor="let category of supplier.categories"
+                              removable="true" (removed)="supplier.removeCategory(category)">
+                      {{category}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <input matInput
+                         matChipInputAddOnBlur="true"
+                         (matChipInputTokenEnd)="supplier.addCategory($event)"
+                         placeholder="Add category..."
+                         [matChipInputFor]="categoryList"/>
+                </mat-form-field>
+
+                <h3 class="mb-0">Tags</h3>
+                <mat-form-field class="w-100-p" floatPlaceholder="never">
+                  <mat-chip-list matPrefix #tagList
+                                 name="tags"
+                                 formControlName="tags">
+
+                    <mat-chip *ngFor="let tag of supplier.tags"
+                              removable="true" (removed)="supplier.removeTag(tag)">
+                      {{tag}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                  </mat-chip-list>
+                  <input matInput
+                         matChipInputAddOnBlur="true"
+                         (matChipInputTokenEnd)="supplier.addTag($event)"
+                         placeholder="Add tag..."
+                         [matChipInputFor]="tagList"/>
+                </mat-form-field>-->
+              </div>
+            <!--</mat-tab>
+
+          </mat-tab-group>-->
+        </form>
+
+      </div>
+      <!-- / CONTENT -->
+
+    </div>
+    <!-- / CONTENT CARD -->
+
+  </div>
+  <!-- / CENTER -->
+</div>
