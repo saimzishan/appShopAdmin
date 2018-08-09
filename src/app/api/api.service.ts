@@ -15,7 +15,7 @@ export class ApiService {
       if (res.status < 200 || res.status >= 300) {
         return this.handleError(res);
       }
-      return { status: res.status , data: res.json() || ''};
+      return { status: res.status , res};
     }
 
     /*

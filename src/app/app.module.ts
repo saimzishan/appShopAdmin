@@ -1,3 +1,4 @@
+import { SpinnerService } from './spinner/spinner.service';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
@@ -18,6 +19,9 @@ import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
+import {SpinnerComponent} from './spinner/spinner.component';
+
+
 const appRoutes: Routes = [
   {
     path: 'products',
@@ -60,7 +64,8 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -84,6 +89,7 @@ const appRoutes: Routes = [
     FuseNavigationService,
     ApiService,
     UsersService,
+    SpinnerService,
   ],
   bootstrap: [
     AppComponent
