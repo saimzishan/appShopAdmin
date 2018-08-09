@@ -16,7 +16,8 @@ import {TranslateModule} from '@ngx-translate/core';
 import {AppStoreModule} from './store/store.module';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
-
+import { ApiService } from './api/api.service';
+import { UsersService } from './api/users.service';
 const appRoutes: Routes = [
   {
     path: 'products',
@@ -30,10 +31,11 @@ const appRoutes: Routes = [
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
-  /*{
+ {
     path: 'pages',
     loadChildren: './main/content/pages/pages.module#FusePagesModule'
   },
+  /*
   {
     path: 'ui',
     loadChildren: './main/content/ui/ui.module#FuseUIModule'
@@ -52,7 +54,7 @@ const appRoutes: Routes = [
   },*/
   {
     path: '**',
-    redirectTo: 'apps/dashboards/project'
+    redirectTo: 'pages/auth/login'
   }
 ];
 
@@ -79,7 +81,9 @@ const appRoutes: Routes = [
   providers: [
     FuseSplashScreenService,
     FuseConfigService,
-    FuseNavigationService
+    FuseNavigationService,
+    ApiService,
+    UsersService,
   ],
   bootstrap: [
     AppComponent

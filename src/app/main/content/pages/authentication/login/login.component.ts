@@ -45,8 +45,7 @@ export class FuseLoginComponent implements OnInit
         });
     }
 
-    onLoginFormValuesChanged()
-    {
+    onLoginFormValuesChanged() {
         for ( const field in this.loginFormErrors )
         {
             if ( !this.loginFormErrors.hasOwnProperty(field) )
@@ -65,5 +64,9 @@ export class FuseLoginComponent implements OnInit
                 this.loginFormErrors[field] = control.errors;
             }
         }
+    }
+
+    getLogin() {
+        console.log(this.loginFormErrors);
     }
 }

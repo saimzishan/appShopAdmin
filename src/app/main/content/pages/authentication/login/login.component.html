@@ -5,7 +5,7 @@
         <div id="login-form" *fuseIfOnDom [@animate]="{value:'*',params:{duration:'300ms',y:'100px'}}">
 
             <div class="logo">
-                <img src="assets/images/logos/fuse.svg">
+                <img src="assets/images/logos/login-logo.jpg">
             </div>
 
             <div class="title">LOGIN TO YOUR ACCOUNT</div>
@@ -41,13 +41,13 @@
                 </div>
 
                 <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
-                        [disabled]="loginForm.invalid">
+                        [disabled]="loginForm.invalid"  (click)="getLogin()">
                     LOGIN
                 </button>
 
             </form>
 
-            <div class="separator">
+            <!-- <div class="separator">
                 <span class="text">OR</span>
             </div>
 
@@ -62,7 +62,7 @@
             <div class="register" fxLayout="column" fxLayoutAlign="center center">
                 <span class="text">Don't have an account?</span>
                 <a class="link" [routerLink]="'/pages/auth/register'">Create an account</a>
-            </div>
+            </div> -->
 
         </div>
 
