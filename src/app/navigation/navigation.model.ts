@@ -119,6 +119,53 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
           },*/
         ]
       },
+      {
+        'id': 'brands',
+        'title': 'User Management',
+        'translate': 'NAV.BRANDS',
+        'type': 'collapse',
+        'icon': 'label',
+        'children': [
+          /*{
+            'id'   : 'dashboard',
+            'title': 'Dashboard',
+            'type' : 'item',
+            'url'  : '/apps/e-commerce/dashboard'
+          },*/
+          {
+            'id': 'view',
+            'title': 'Manage Users',
+            'type': 'item',
+            'icon': 'visibility',
+            'url': '/user-management/manage-users',
+            'exactMatch': true
+          },
+          {
+            'id': 'add',
+            'title': 'Manage Roles',
+            'type': 'item',
+            'icon': 'add_circle',
+            'url': 'user-management/manage-roles',
+            'exactMatch': true
+          },
+          {
+            'id'        : 'productDetail',
+            'title'     : 'Manage Permissions',
+            'type'      : 'item',
+            'icon': 'add_circle',
+            'url'       : '/user-management/manage-permissions',
+            'exactMatch': true
+          },
+          {
+            'id': 'add',
+            'title': 'Manage Product',
+            'type': 'item',
+            'icon': 'add_circle',
+            'url': '/user-management/manage-products',
+            'exactMatch': true
+          },
+        ]
+      },
       /*{
           'id'       : 'applications',
           'title'    : 'Applications',

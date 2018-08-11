@@ -20,12 +20,17 @@ import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
 import {SpinnerComponent} from './spinner/spinner.component';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 
 
 const appRoutes: Routes = [
   {
     path: 'products',
     loadChildren: './main/content/products/products.module#ProductsModule'
+  },
+  {
+    path: 'user-management',
+    loadChildren: './main/content/user-management-admin/user-management.module#UserManagementModule'
   },
   {
     path: 'suppliers',
@@ -81,7 +86,8 @@ const appRoutes: Routes = [
     AppStoreModule,
     FuseMainModule,
     FileDropModule,
-    TreeModule
+    TreeModule,
+    SnotifyModule
   ],
   providers: [
     FuseSplashScreenService,
@@ -90,6 +96,8 @@ const appRoutes: Routes = [
     ApiService,
     UsersService,
     SpinnerService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService
   ],
   bootstrap: [
     AppComponent

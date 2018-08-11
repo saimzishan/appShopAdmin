@@ -5,6 +5,9 @@ import { FuseConfigService } from '../../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../../core/animations';
 import { UserModel } from '../../../../../models/user.model';
 import { UsersService } from '../../../../../api/users.service';
+import {SnotifyService} from 'ng-snotify';
+import { Router } from '@angular/router';
+
 @Component({
     selector   : 'fuse-login',
     templateUrl: './login.component.html',
@@ -20,7 +23,9 @@ export class FuseLoginComponent implements OnInit
         private fuseConfig: FuseConfigService,
         private formBuilder: FormBuilder,
         private userServices: UsersService,
-        private spinnerService: SpinnerService
+        private spinnerService: SpinnerService,
+        private snotifyService: SnotifyService,
+        private router: Router,
     )
     {
         this.userModel = new UserModel();
@@ -38,8 +43,8 @@ export class FuseLoginComponent implements OnInit
         };
     }
 
-    ngOnInit()
-    {
+    ngOnInit() {
+        // this.snotifyService.success('Wao', ' !');
         this.loginForm = this.formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
@@ -76,13 +81,15 @@ export class FuseLoginComponent implements OnInit
         this.userServices.getLogin(this.userModel)
             .subscribe((res: any) => {
                 if (res.status === 200) {
-                    console.log(res);
+                    localStorage.setItem('currentUser', JSON.stringify(res.res) )
+                    this.snotifyService.success('Login sucessfully', 'Success !');
+                    this.router.navigate(['/user-management']);
                 }
                 this.spinnerService.requestInProcess(false);
             }, errors => {
                 this.spinnerService.requestInProcess(false);
-                let e = errors;
-                console.log(e.error.message);
+                let e = errors.error.message;
+                this.snotifyService.error(e, 'Error !' );
                 // this.notificationServiceBus.launchNotification(true, e);
             });
     }
