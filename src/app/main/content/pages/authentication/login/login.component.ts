@@ -1,7 +1,12 @@
+import { SpinnerService } from './../../../../../spinner/spinner.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseConfigService } from '../../../../../core/services/config.service';
 import { fuseAnimations } from '../../../../../core/animations';
+import { UserModel } from '../../../../../models/user.model';
+import { UsersService } from '../../../../../api/users.service';
+import {SnotifyService} from 'ng-snotify';
+import { Router } from '@angular/router';
 
 @Component({
     selector   : 'fuse-login',
@@ -13,12 +18,17 @@ export class FuseLoginComponent implements OnInit
 {
     loginForm: FormGroup;
     loginFormErrors: any;
-
+    userModel: UserModel;
     constructor(
         private fuseConfig: FuseConfigService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private userServices: UsersService,
+        private spinnerService: SpinnerService,
+        private snotifyService: SnotifyService,
+        private router: Router,
     )
     {
+        this.userModel = new UserModel();
         this.fuseConfig.setSettings({
             layout: {
                 navigation: 'none',
@@ -33,8 +43,8 @@ export class FuseLoginComponent implements OnInit
         };
     }
 
-    ngOnInit()
-    {
+    ngOnInit() {
+        // this.snotifyService.success('Wao', ' !');
         this.loginForm = this.formBuilder.group({
             email   : ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
@@ -67,6 +77,20 @@ export class FuseLoginComponent implements OnInit
     }
 
     getLogin() {
-        console.log(this.loginFormErrors);
+        this.spinnerService.requestInProcess(true);
+        this.userServices.getLogin(this.userModel)
+            .subscribe((res: any) => {
+                if (res.status === 200) {
+                    localStorage.setItem('currentUser', JSON.stringify(res.res) )
+                    this.snotifyService.success('Login sucessfully', 'Success !');
+                    this.router.navigate(['/user-management']);
+                }
+                this.spinnerService.requestInProcess(false);
+            }, errors => {
+                this.spinnerService.requestInProcess(false);
+                let e = errors.error.message;
+                this.snotifyService.error(e, 'Error !' );
+                // this.notificationServiceBus.launchNotification(true, e);
+            });
     }
 }

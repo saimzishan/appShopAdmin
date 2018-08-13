@@ -11,11 +11,11 @@ export class ApiService {
     /*
       Extract JSON Object from Response
     */
-    protected extractData(res: Response) {
-      if (res.status < 200 || res.status >= 300) {
-        return this.handleError(res);
+    protected extractData(res) {
+      if (res && !res.error) {
+        return { status: res.status , res};
       }
-      return { status: res.status , data: res.json() || ''};
+      return this.handleError(res);     
     }
 
     /*

@@ -1,3 +1,4 @@
+import { SpinnerService } from './spinner/spinner.service';
 import { Component } from '@angular/core';
 import { FuseSplashScreenService } from './core/services/splash-screen.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,13 +16,21 @@ import { locale as navigationTurkish } from './navigation/i18n/tr';
 })
 export class AppComponent
 {
+    public isRequesting = false;
+    private sub: any;
+
     constructor(
         private fuseNavigationService: FuseNavigationService,
         private fuseSplashScreen: FuseSplashScreenService,
         private translate: TranslateService,
-        private translationLoader: FuseTranslationLoaderService
+        private translationLoader: FuseTranslationLoaderService,
+        private spinnerService: SpinnerService
     )
     {
+        this.sub = this.spinnerService.requestInProcess$.subscribe(
+            isDone => {
+              this.isRequesting = isDone;
+            });
         // Add languages
         this.translate.addLangs(['en', 'tr']);
 

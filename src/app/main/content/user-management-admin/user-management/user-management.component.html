@@ -1,0 +1,108 @@
+<div id="adminHome" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+    <!-- CENTER -->
+    <div  class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg"
+             fxLayout="column" fxLayoutAlign="center center"
+             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+             <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"> Users Management</span>
+            </div>
+            <!-- / APP TITLE -->
+
+             <!-- SEARCH -->
+            <div class="search-input-wrapper mx-12 m-md-0"
+                 fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                <label for="search" class="mr-8">
+                    <mat-icon class="secondary-text">search</mat-icon>
+                </label>
+                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+                    <input id="search" matInput #filter placeholder="Search">
+                </mat-form-field>
+            </div>
+            <!-- / SEARCH -->
+
+            <!-- [routerLink]="'/products/new'" -->
+            <button mat-raised-button
+                    (click)="toggleMe()"
+                    class="add-product-button mat-white-bg my-12 mt-sm-0">
+                <span>ADD NEW USER</span>
+            </button>
+          
+        </div>
+
+          <!-- CONTENT CARD -->
+          <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="!isAddingNewUser">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+              </mat-form-field>
+            <mat-table
+                       #table [dataSource]="dataSource"
+                       matSort
+                       [@animateStagger]="{value:'50'}"
+                       fusePerfectScrollbar>
+          
+              <!-- id Column -->
+              <ng-container cdkColumnDef="id">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.id}}</p>
+                </mat-cell>
+            </ng-container>
+          
+              <!-- Name Column -->
+              <ng-container cdkColumnDef="name">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.name}}</p>
+                </mat-cell>
+            </ng-container>
+          
+              <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+              <mat-row *cdkRowDef="let product; columns: displayedColumns;">
+              </mat-row>
+            </mat-table>
+          
+             <mat-paginator #paginator
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+              
+              
+        </div>
+
+        <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="isAddingNewUser">
+            <form name="loginForm" [formGroup]="userForm" novalidate>
+
+                <mat-form-field>
+                    <input matInput placeholder="User name" formControlName="email">
+                    <mat-error *ngIf="loginFormErrors.email.required">
+                        User Name is required
+                    </mat-error>
+                </mat-form-field>
+<!-- 
+                <mat-form-field>
+                    <input matInput type="password" placeholder="Password" formControlName="password" [(ngModel)]="userModel.password">
+                    <mat-error *ngIf="loginFormErrors.password.required">
+                        Password is required
+                    </mat-error>
+                </mat-form-field> -->
+
+                <button mat-raised-button color="accent" class="submit-button" aria-label="Add new user"
+                        [disabled]="userForm.invalid"  (click)="getLogin()">
+                    Add User
+                </button>
+
+            </form>
+        </div>    
+          <!-- CONTENT CARD -->
+</div>            

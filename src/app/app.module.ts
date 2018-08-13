@@ -1,3 +1,4 @@
+import { SpinnerService } from './spinner/spinner.service';
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http';
@@ -18,17 +19,39 @@ import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
-import { UserManagmentComponent } from './user-managment/user-managment.component';
+import {SpinnerComponent} from './spinner/spinner.component';
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+import { AuthGuard } from './guard/auth.guard';
+
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+  let token;
+  if (user) {
+      token = user.access_token;           
+  } 
+  return (token);
+}
+
 const appRoutes: Routes = [
   {
+    canActivate: [AuthGuard],
     path: 'products',
     loadChildren: './main/content/products/products.module#ProductsModule'
   },
   {
+    canActivate: [AuthGuard],
+    path: 'user-management',
+    loadChildren: './main/content/user-management-admin/user-management.module#UserManagementModule'
+  },
+  {
+    canActivate: [AuthGuard],
     path: 'suppliers',
     loadChildren: './main/content/suppliers/suppliers.module#SuppliersModule'
   },
   {
+    canActivate: [AuthGuard],
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
@@ -66,7 +89,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    UserManagmentComponent
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -79,10 +102,17 @@ const appRoutes: Routes = [
       delay: 0,
       passThruUnknownUrl: true
     }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:4200'],
+      }
+    }),
     AppStoreModule,
     FuseMainModule,
     FileDropModule,
-    TreeModule
+    TreeModule,
+    SnotifyModule
   ],
   providers: [
     FuseSplashScreenService,
@@ -90,6 +120,10 @@ const appRoutes: Routes = [
     FuseNavigationService,
     ApiService,
     UsersService,
+    SpinnerService,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    SnotifyService,
+    AuthGuard,
   ],
   bootstrap: [
     AppComponent
