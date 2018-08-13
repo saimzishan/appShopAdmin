@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
+import { AuthGuard } from '../../../../guard/auth.guard';
 
 export interface PeriodicElement {
     id: number,
@@ -40,6 +41,7 @@ export class UserManagmentComponent implements OnInit {
     }
    
     ngOnInit() {
+        console.log(AuthGuard.isTokenExpired());
         this.index();
      }
    
