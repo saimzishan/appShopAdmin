@@ -95,7 +95,7 @@ export class ProductService implements Resolve<any>
                 })
             };
 
-            this.http.post(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
+            this.http.put(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
                 }, reject);
@@ -119,7 +119,7 @@ export class ProductService implements Resolve<any>
                 })
             };
 
-            this.http.post(GLOBAL.USER_API + 'products/', product, httpOptions)
+            this.http.post(GLOBAL.USER_API + 'products', product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
                 }, reject);
