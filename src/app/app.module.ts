@@ -21,22 +21,37 @@ import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
 import {SpinnerComponent} from './spinner/spinner.component';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+import { AuthGuard } from './guard/auth.guard';
 
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  let user = JSON.parse(localStorage.getItem('currentUser'));
+  let token;
+  if (user) {
+      token = user.access_token;           
+  } 
+  return (token);
+}
 
 const appRoutes: Routes = [
   {
+    canActivate: [AuthGuard],
     path: 'products',
     loadChildren: './main/content/products/products.module#ProductsModule'
   },
   {
+    canActivate: [AuthGuard],
     path: 'user-management',
     loadChildren: './main/content/user-management-admin/user-management.module#UserManagementModule'
   },
   {
+    canActivate: [AuthGuard],
     path: 'suppliers',
     loadChildren: './main/content/suppliers/suppliers.module#SuppliersModule'
   },
   {
+    canActivate: [AuthGuard],
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
@@ -83,6 +98,12 @@ const appRoutes: Routes = [
       delay: 0,
       passThruUnknownUrl: true
     }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:4200'],
+      }
+    }),
     AppStoreModule,
     FuseMainModule,
     FileDropModule,
@@ -97,7 +118,8 @@ const appRoutes: Routes = [
     UsersService,
     SpinnerService,
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
-    SnotifyService
+    SnotifyService,
+    AuthGuard,
   ],
   bootstrap: [
     AppComponent
