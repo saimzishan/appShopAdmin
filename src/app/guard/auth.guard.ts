@@ -16,19 +16,19 @@ export class AuthGuard implements CanActivate {
             u =  Boolean(user);
            
         } 
-        AuthGuard.decodeUserInfo();
-        return Boolean(token && u);
+        AuthGuard.isTokenExpired(token);
+        return Boolean(token && u && !AuthGuard.isTokenExpired(token));
     }
 
-    public static decodeUserInfo() {
-        let user = JSON.parse(localStorage.getItem('currentUser'));
-        let token;
-        if (user) {
-            token = user.access_token;           
-        } 
+    public static decodeUserInfo(token) {
         const helper = new JwtHelperService();
         const decodedToken = helper.decodeToken(token);
-        console.log(decodedToken);
+    }
+
+    public static isTokenExpired(myRawToken): boolean {
+        const helper = new JwtHelperService();
+        const isExpired = helper.isTokenExpired(myRawToken);
+        return Boolean(isExpired);
     }
 
     public static logout(): boolean {
