@@ -1,8 +1,10 @@
+import { GLOBAL } from './../../../shared/globel';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 @Injectable()
 export class ProductService implements Resolve<any>
@@ -52,9 +54,23 @@ export class ProductService implements Resolve<any>
             }
             else
             {
-                this.http.get('api/e-commerce-products/' + this.routeParams.id)
+                let access_token = AuthGuard.getToken();
+                if (access_token === undefined) {
+                    let error = {
+                        message: 'Unauthorized'
+                    }
+                    return Observable.throw({ error: error });
+                }
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + access_token
+                    })
+                };
+    
+                this.http.get(GLOBAL.USER_API + 'products/' + this.routeParams.id, httpOptions)
                     .subscribe((response: any) => {
-                        this.product = response;
+                        this.product = response.data;
                         this.onProductChanged.next(this.product);
                         resolve(response);
                     }, reject);
@@ -65,7 +81,21 @@ export class ProductService implements Resolve<any>
     saveProduct(product)
     {
         return new Promise((resolve, reject) => {
-            this.http.post('api/e-commerce-products/' + product.id, product)
+            let access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                let error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.post(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
                 }, reject);
@@ -75,7 +105,21 @@ export class ProductService implements Resolve<any>
     addProduct(product)
     {
         return new Promise((resolve, reject) => {
-            this.http.post('api/e-commerce-products/', product)
+            let access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                let error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.post(GLOBAL.USER_API + 'products/', product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
                 }, reject);

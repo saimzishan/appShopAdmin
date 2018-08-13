@@ -1,7 +1,7 @@
 import { FormGroup } from '@angular/forms';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from './../../../../spinner/spinner.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { UserManagementService } from './../users.service';
 import {fuseAnimations} from '../../../../core/animations';
 import { DataSource } from '@angular/cdk/collections';
@@ -14,6 +14,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
+import { AuthGuard } from '../../../../guard/auth.guard';
 
 export interface PeriodicElement {
     id: number,
@@ -26,7 +27,7 @@ export interface PeriodicElement {
     styleUrls  : ['./user-management.component.css'],
     animations: fuseAnimations
 })
-export class UserManagmentComponent implements OnInit {
+export class UserManagmentComponent implements AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('filter') filter: ElementRef;
     @ViewChild(MatSort) sort: MatSort;
@@ -39,7 +40,8 @@ export class UserManagmentComponent implements OnInit {
 
     }
    
-    ngOnInit() {
+    ngAfterViewInit () {
+        // console.log(AuthGuard.isTokenExpired());
         this.index();
      }
    

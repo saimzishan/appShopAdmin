@@ -12,9 +12,11 @@ import { FileDropModule } from "ngx-file-drop";
 import { TreeModule } from "angular-tree-component";
 import {ProductsService} from '../products/products.service';
 import { MatSortModule, MatTableModule, MatFormFieldModule, MatButtonModule } from '@angular/material';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path: '',
     component: UserManagmentComponent,
     // resolve: {
@@ -22,6 +24,7 @@ const routes = [
     // }
   },
   {
+    canActivate: [AuthGuard],
     path     : 'manage-users',
     component: UserManagmentComponent,
     // resolve  : {
@@ -29,6 +32,7 @@ const routes = [
     // }
   },
   {
+    canActivate: [AuthGuard],
     path     : 'manage-roles',
     component: RoleManagmentComponent,
     // resolve  : {
@@ -36,6 +40,7 @@ const routes = [
     // }
   },
   {
+    canActivate: [AuthGuard],
     path     : 'manage-products',
     component: ProductManagmentComponent,
     // resolve  : {
@@ -43,6 +48,7 @@ const routes = [
     // }
   },
   {
+    canActivate: [AuthGuard],
     path     : 'manage-permissions',
     component: PermissionManagementComponent,
     // resolve  : {

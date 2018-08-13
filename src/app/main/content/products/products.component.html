@@ -62,10 +62,10 @@
                 <ng-container cdkColumnDef="image">
                     <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
                     <mat-cell *cdkCellDef="let product">
-                        <img class="product-image"
+                        <!-- <img class="product-image"
                              *ngIf="product.images[0]" [alt]="product.name"
                              [src]="product.images[0].url"/>
-                        <img *ngIf="!product.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                        <img *ngIf="!product.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
                     </mat-cell>
                 </ng-container>
 
@@ -81,9 +81,9 @@
                 <ng-container cdkColumnDef="category">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="category text-truncate">
+                        <!-- <p class="category text-truncate">
                             {{product.categories[0]}}
-                        </p>
+                        </p> -->
                     </mat-cell>
                 </ng-container>
 
@@ -91,9 +91,9 @@
                 <ng-container cdkColumnDef="price">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <p class="price text-truncate">
+                        <!-- <p class="price text-truncate">
                             {{product.priceTaxIncl | currency:'USD':'symbol'}}
-                        </p>
+                        </p> -->
                     </mat-cell>
                 </ng-container>
 
@@ -102,12 +102,12 @@
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-sm>
 
-                        <span class="quantity-indicator text-truncate"
+                        <!-- <span class="quantity-indicator text-truncate"
                               [ngClass]="{'mat-red-500-bg':product.quantity <= 5, 'mat-amber-500-bg':product.quantity > 5 && product.quantity <= 25,'mat-green-600-bg':product.quantity > 25}">
                         </span>
                         <span>
                             {{product.quantity}}
-                        </span>
+                        </span> -->
 
                     </mat-cell>
                 </ng-container>

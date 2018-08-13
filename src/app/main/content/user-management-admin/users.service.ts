@@ -12,6 +12,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import { HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../../shared/globel';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 @Injectable()
 export class UserManagementService extends ApiService {
@@ -38,18 +39,24 @@ export class UserManagementService extends ApiService {
     //     });
     // }
 
-    index(){
-        const currntUser = JSON.parse(localStorage.getItem('currentUser'));
+    index() {
+        let access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            let error = {
+                message: 'Unauthorized'
+            }
+            return Observable.throw({ error: error });
+        }
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + currntUser.access_token
+                'Authorization': 'Bearer ' + access_token
             })
         };
         return this.http.get(GLOBAL.USER_API + 'users', httpOptions)
-                    .map(this.extractData)
-                    .catch((err) => { return this.handleError(err); }
-                );
-                        
+            .map(this.extractData)
+            .catch((err) => { return this.handleError(err); }
+            );
+
     }
 }
