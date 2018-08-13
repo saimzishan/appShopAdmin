@@ -1,6 +1,7 @@
+import { SpinnerService } from './../../../spinner/spinner.service';
 import { GLOBAL } from './../../../shared/globel';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -14,7 +15,9 @@ export class ProductService implements Resolve<any>
     onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private spinnerService: SpinnerService,
+        private router: Router
     )
     {
     }
@@ -45,10 +48,11 @@ export class ProductService implements Resolve<any>
 
     getProduct(): Promise<any>
     {
+        this.spinnerService.requestInProcess(true);
         return new Promise((resolve, reject) => {
             if ( this.routeParams.id === 'new' )
             {
-
+                this.spinnerService.requestInProcess(false);
                 this.onProductChanged.next(false);
                 resolve(false);
             }
@@ -71,6 +75,7 @@ export class ProductService implements Resolve<any>
                 this.http.get(GLOBAL.USER_API + 'products/' + this.routeParams.id, httpOptions)
                     .subscribe((response: any) => {
                         this.product = response.data;
+        this.spinnerService.requestInProcess(false);                        
                         this.onProductChanged.next(this.product);
                         resolve(response);
                     }, reject);
@@ -98,6 +103,7 @@ export class ProductService implements Resolve<any>
             this.http.put(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
+                this.router.navigate(['/products']);
                 }, reject);
         });
     }
@@ -122,6 +128,7 @@ export class ProductService implements Resolve<any>
             this.http.post(GLOBAL.USER_API + 'products', product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
+                this.router.navigate(['/products']);
                 }, reject);
         });
     }

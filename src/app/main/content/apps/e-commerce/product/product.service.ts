@@ -1,6 +1,6 @@
 import { GLOBAL } from './../../../../../shared/globel';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -14,7 +14,8 @@ export class EcommerceProductService implements Resolve<any>
     onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        private router: Router
     )
     {
     }
@@ -29,8 +30,6 @@ export class EcommerceProductService implements Resolve<any>
     {
 
         this.routeParams = route.params;
-		console.log(this.routeParams.id);
-
         return new Promise((resolve, reject) => {
 
             Promise.all([
@@ -97,7 +96,8 @@ export class EcommerceProductService implements Resolve<any>
 
             this.http.put(GLOBAL.USER_API + 'products/'+ product.id, product, httpOptions)
                 .subscribe((response: any) => {
-                    resolve(response);
+                    resolve(response.data);
+                this.router.navigate(['/products']);
                 }, reject);
         });
     }
@@ -121,7 +121,8 @@ export class EcommerceProductService implements Resolve<any>
 
             this.http.post(GLOBAL.USER_API + 'products', product, httpOptions)
                 .subscribe((response: any) => {
-                    resolve(response);
+                    resolve(response.data);
+                this.router.navigate(['/products']);
                 }, reject);
         });
     }
