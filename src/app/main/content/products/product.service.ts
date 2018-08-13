@@ -52,7 +52,7 @@ export class ProductService implements Resolve<any>
         return new Promise((resolve, reject) => {
             if ( this.routeParams.id === 'new' )
             {
-
+                this.spinnerService.requestInProcess(false);
                 this.onProductChanged.next(false);
                 resolve(false);
             }
@@ -102,7 +102,7 @@ export class ProductService implements Resolve<any>
 
             this.http.put(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
                 .subscribe((response: any) => {
-                    resolve(response.data);
+                    resolve(response);
                 this.router.navigate(['/products']);
                 }, reject);
         });
@@ -127,7 +127,7 @@ export class ProductService implements Resolve<any>
 
             this.http.post(GLOBAL.USER_API + 'products', product, httpOptions)
                 .subscribe((response: any) => {
-                    resolve(response.data);
+                    resolve(response);
                 this.router.navigate(['/products']);
                 }, reject);
         });

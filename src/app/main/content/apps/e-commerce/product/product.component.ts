@@ -127,7 +127,7 @@ export class FuseEcommerceProductComponent implements OnInit, OnDestroy
                 //     duration        : 2000
                 // });
                 this.snotifyService.success('Product added','Success !');
-                this.spinnerService.requestInProcess(true);
+                this.spinnerService.requestInProcess(false);
                 // Change the location with new one
                 // this.location.go('/products');
             });
