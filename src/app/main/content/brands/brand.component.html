@@ -1,0 +1,116 @@
+<div id="brand" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/brands'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+
+                <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                    <img *ngIf="brand.images[0]" [src]="brand.images[0].url">
+                    <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        New Brand
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Brand Detail</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid" *ngIf="pageType ==='new'"
+                (click)="addBrand()">
+                <span>ADD</span>
+            </button>
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteBrand()">
+                <span>DELETE</span>
+            </button>
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid || brandForm.pristine"
+                *ngIf="pageType ==='edit'" (click)="saveBrand()">
+                <span>SAVE</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="brandForm" [formGroup]="brandForm" class="brand w-100-p" fxLayout="column" fxFlex>
+
+                    <!-- <mat-tab-group> -->
+
+                    <!-- <mat-tab label="Details"> -->
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+
+                        <mat-form-field class="w-100-p">
+                            <input matInput name="name" formControlName="name" placeholder="Brand Name" required>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-100-p">
+                            <textarea matInput name="notes" formControlName="notes" placeholder="Notes"></textarea>
+                        </mat-form-field>
+
+                        <!-- <mat-form-field class="w-100-p">
+                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
+                                </mat-form-field> -->
+
+                        <!-- <h3 class="mb-0">Categories</h3> -->
+
+                        <!-- <tree-root [nodes]="nodes" [options]="options"></tree-root> -->
+                    </div>
+                    <!-- </mat-tab> -->
+
+
+                    <!-- </mat-tab-group> -->
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
+
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Modal body text goes here.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
