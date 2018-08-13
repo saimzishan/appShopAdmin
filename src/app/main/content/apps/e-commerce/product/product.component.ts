@@ -1,3 +1,6 @@
+import { Router } from '@angular/router';
+import { SnotifyService } from 'ng-snotify';
+import { SpinnerService } from './../../../../../spinner/spinner.service';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { EcommerceProductService } from './product.service';
 import { fuseAnimations } from '../../../../../core/animations';
@@ -32,7 +35,10 @@ export class FuseEcommerceProductComponent implements OnInit, OnDestroy
         private productService: EcommerceProductService,
         private formBuilder: FormBuilder,
         public snackBar: MatSnackBar,
-        private location: Location
+        private location: Location, 
+        private spinnerService: SpinnerService,
+        private snotifyService: SnotifyService,
+        private router: Router
     )
     {
 
@@ -88,6 +94,7 @@ export class FuseEcommerceProductComponent implements OnInit, OnDestroy
 
     saveProduct()
     {
+        this.spinnerService.requestInProcess(true);
         const data = this.productForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
         this.productService.saveProduct(data)
@@ -97,15 +104,15 @@ export class FuseEcommerceProductComponent implements OnInit, OnDestroy
                 this.productService.onProductChanged.next(data);
 
                 // Show the success message
-                this.snackBar.open('Product saved', 'OK', {
-                    verticalPosition: 'top',
-                    duration        : 2000
-                });
+                this.snotifyService.success('Product saved','Success !');
+                this.spinnerService.requestInProcess(false);
+                // this.location.go('/products');
             });
     }
 
     addProduct()
     {
+        this.spinnerService.requestInProcess(true);
         const data = this.productForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
         this.productService.addProduct(data)
@@ -115,13 +122,14 @@ export class FuseEcommerceProductComponent implements OnInit, OnDestroy
                 this.productService.onProductChanged.next(data);
 
                 // Show the success message
-                this.snackBar.open('Product added', 'OK', {
-                    verticalPosition: 'top',
-                    duration        : 2000
-                });
-
+                // this.snackBar.open('Product added', 'OK', {
+                //     verticalPosition: 'top',
+                //     duration        : 2000
+                // });
+                this.snotifyService.success('Product added','Success !');
+                this.spinnerService.requestInProcess(true);
                 // Change the location with new one
-                this.location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
+                // this.location.go('/products');
             });
     }
 
