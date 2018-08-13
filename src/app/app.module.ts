@@ -18,6 +18,7 @@ import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
+import { UserManagmentComponent } from './user-managment/user-managment.component';
 const appRoutes: Routes = [
   {
     path: 'products',
@@ -34,6 +35,10 @@ const appRoutes: Routes = [
  {
     path: 'pages',
     loadChildren: './main/content/pages/pages.module#FusePagesModule'
+  },
+  {
+    path: 'usermanagment',
+    loadChildren: './app/user-managment/user-managment.module#UserManagmentModule'
   },
   /*
   {
@@ -60,7 +65,8 @@ const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UserManagmentComponent
   ],
   imports: [
     BrowserModule,

@@ -6,8 +6,8 @@ import {ProductsComponent} from './products.component';
 import {ProductComponent} from './product.component';
 import {ProductsService} from './products.service';
 import {ProductService} from './product.service';
-import {FileDropModule} from "ngx-file-drop";
-import {TreeModule} from "angular-tree-component";
+import {FileDropModule} from 'ngx-file-drop';
+import {TreeModule} from 'angular-tree-component';
 
 const routes = [
   {
