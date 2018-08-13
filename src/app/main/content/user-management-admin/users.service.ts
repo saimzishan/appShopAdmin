@@ -41,12 +41,12 @@ export class UserManagementService extends ApiService {
 
     index() {
         let access_token = AuthGuard.getToken();
-      if (access_token === undefined) {
-        let error  = { 
-                message : 'Unauthorized'   
+        if (access_token === undefined) {
+            let error = {
+                message: 'Unauthorized'
+            }
+            return Observable.throw({ error: error });
         }
-        return Observable.throw({error : error });
-      }
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
@@ -54,9 +54,9 @@ export class UserManagementService extends ApiService {
             })
         };
         return this.http.get(GLOBAL.USER_API + 'users', httpOptions)
-                    .map(this.extractData)
-                    .catch((err) => { return this.handleError(err); }
-                );
-                        
+            .map(this.extractData)
+            .catch((err) => { return this.handleError(err); }
+            );
+
     }
 }

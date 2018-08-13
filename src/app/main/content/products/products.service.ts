@@ -1,8 +1,10 @@
+import { GLOBAL } from './../../../shared/globel';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 @Injectable()
 export class ProductsService implements Resolve<any>
@@ -38,12 +40,25 @@ export class ProductsService implements Resolve<any>
         });
     }
 
-    getProducts(): Promise<any>
-    {
+    getProducts(): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.http.get('api/e-commerce-products')
+            let access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                let error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.get(GLOBAL.USER_API + 'products', httpOptions)
                 .subscribe((response: any) => {
-                    this.products = response;
+                    this.products = response.data;
                     this.onProductsChanged.next(this.products);
                     resolve(response);
                 }, reject);

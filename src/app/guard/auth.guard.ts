@@ -42,11 +42,11 @@ export class AuthGuard implements CanActivate {
         return token;
     }
 
-    public static logout(): boolean {
-        let user = JSON.parse(localStorage.getItem('currentUser'));
-        let u =  Boolean(user);
-        return u;
+    public static logout() {
+       localStorage.clear();
     }
+
+
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
       

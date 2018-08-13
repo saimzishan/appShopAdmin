@@ -8,9 +8,11 @@ import {ProductsService} from './products.service';
 import {ProductService} from './product.service';
 import {FileDropModule} from "ngx-file-drop";
 import {TreeModule} from "angular-tree-component";
+import { AuthGuard } from '../../../guard/auth.guard';
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path     : '',
     component: ProductsComponent,
     resolve  : {
@@ -18,6 +20,7 @@ const routes = [
     }
   },
   {
+    canActivate: [AuthGuard],
     path     : ':id',
     component: ProductComponent,
     resolve  : {
@@ -25,6 +28,7 @@ const routes = [
     }
   },
   {
+    canActivate: [AuthGuard],
     path     : ':id/:handle',
     component: ProductComponent,
     resolve  : {
