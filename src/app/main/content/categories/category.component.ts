@@ -101,7 +101,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   activeNodes(treeModel: any) {
-    this.parentCat = treeModel.activeNodes.data.name;
+    this.parentCat = treeModel.activeNodes.data;
     console.log(treeModel.activeNodes);
   }
 
