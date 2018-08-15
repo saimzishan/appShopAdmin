@@ -32,6 +32,10 @@ const appRoutes: Routes = [
     loadChildren: './main/content/suppliers/suppliers.module#SuppliersModule'
   },
   {
+    path: 'categories',
+    loadChildren: './main/content/categories/categories.module#CategoriesModule'
+  },
+  {
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
