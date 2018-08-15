@@ -5,7 +5,7 @@ export class Supplier
 {
   id: number;
   name: string;
-  type: string;
+  type = '';
   contact: Contact;
   products: Product[];
   handle: string;

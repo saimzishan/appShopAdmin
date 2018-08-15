@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject, ViewChild } from '@angular/core';
 import { BrandService } from './brand.service';
 import { fuseAnimations } from '../../../core/animations';
 import 'rxjs/add/operator/startWith';
@@ -16,6 +16,7 @@ import { Location } from '@angular/common';
 import { FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
 import { GLOBAL } from '../../../shared/globel';
 import { SnotifyService } from 'ng-snotify';
+import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 // import { $ } from 'protractor';
 declare var $: any;
 
@@ -27,11 +28,15 @@ declare var $: any;
   animations: fuseAnimations
 })
 export class BrandComponent implements OnInit, OnDestroy {
+  @ViewChild('dialogContent') dialogContent: TemplateRef<any>;
+
   brand = new Brand();
   onBrandChanged: Subscription;
   pageType: string;
   brandForm: FormGroup;
   files: UploadFile[] = [];
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+
   // nodes = [
   //   {
   //     id: 1,
@@ -87,15 +92,6 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // this.animal = result;
-    });
-  }
-
   createBrandForm() {
     return this.formBuilder.group({
       id: [this.brand.id],
@@ -121,13 +117,26 @@ export class BrandComponent implements OnInit, OnDestroy {
   }
 
   deleteBrand() {
-    // $('#modal').modal('show');
-    const data = this.brandForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.brandService.deleteBrand(data)
-      .then(() => {
-        this.brandService.onBrandChanged.next(data);
-      });
+
+    // {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+
+    this.confirmDialogRef.componentInstance.confirmMessage = 'Are you sure you want to delete?';
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const data = this.brandForm.getRawValue();
+        data.handle = FuseUtils.handleize(data.name);
+        this.brandService.deleteBrand(data)
+          .then(() => {
+            this.brandService.onBrandChanged.next(data);
+          });
+      }
+      this.confirmDialogRef = null;
+    });
+
   }
 
   addBrand() {

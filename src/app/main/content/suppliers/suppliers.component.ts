@@ -3,7 +3,7 @@ import { SuppliersService } from './suppliers.service';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { fuseAnimations } from '../../../core/animations';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -12,41 +12,65 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 import { FuseUtils } from '../../../core/fuseUtils';
+import { SpinnerService } from '../../../spinner/spinner.service';
+import { SnotifyService } from 'ng-snotify';
 
 @Component({
-  selector   : 'app-suppliers',
+  selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
-  styleUrls  : ['./suppliers.component.scss'],
-  animations : fuseAnimations
+  styleUrls: ['./suppliers.component.scss'],
+  animations: fuseAnimations
 })
-export class SuppliersComponent implements OnInit
-{
-  dataSource: FilesDataSource | null;
+export class SuppliersComponent implements OnInit {
+  dataSource: any;
   displayedColumns = ['id', 'image', 'name', 'email', 'phone', 'address', 'action'];
+  suppliers;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private suppliersService: SuppliersService
-  )
-  {
+    private suppliersService: SuppliersService,
+    private spinnerService: SpinnerService,
+    private snotifyService: SnotifyService
+  ) {
   }
 
-  ngOnInit()
-  {
-    this.dataSource = new FilesDataSource(this.suppliersService, this.paginator, this.sort);
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged()
-      .subscribe(() => {
-        if ( !this.dataSource )
-        {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
+  ngOnInit() {
+    this.getSuppliers();
+    // this.dataSource = new FilesDataSource(this.suppliersService, this.paginator, this.sort);
+    // Observable.fromEvent(this.filter.nativeElement, 'keyup')
+    //   .debounceTime(150)
+    //   .distinctUntilChanged()
+    //   .subscribe(() => {
+    //     if ( !this.dataSource )
+    //     {
+    //       return;
+    //     }
+    //     this.dataSource.filter = this.filter.nativeElement.value;
+    //   });
+  }
+
+  getSuppliers() {
+    this.spinnerService.requestInProcess(true);
+    this.suppliersService.getSuppliers()
+      .subscribe((res: any) => {
+        this.suppliers = res.res.data.data;
+    // console.log(res.res.data.data);
+        this.setDataSuorce(res.res.data.data);
+        this.spinnerService.requestInProcess(false);
+      }, errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
       });
+  }
+
+  setDataSuorce(obj) {
+    this.dataSource = new MatTableDataSource<any>(obj);
+    this.dataSource.paginator = this.paginator;
   }
 }
 
@@ -55,23 +79,19 @@ export class FilesDataSource extends DataSource<any>
   _filterChange = new BehaviorSubject('');
   _filteredDataChange = new BehaviorSubject('');
 
-  get filteredData(): any
-  {
+  get filteredData(): any {
     return this._filteredDataChange.value;
   }
 
-  set filteredData(value: any)
-  {
+  set filteredData(value: any) {
     this._filteredDataChange.next(value);
   }
 
-  get filter(): string
-  {
+  get filter(): string {
     return this._filterChange.value;
   }
 
-  set filter(filter: string)
-  {
+  set filter(filter: string) {
     this._filterChange.next(filter);
   }
 
@@ -79,15 +99,13 @@ export class FilesDataSource extends DataSource<any>
     private suppliersService: SuppliersService,
     private _paginator: MatPaginator,
     private _sort: MatSort
-  )
-  {
+  ) {
     super();
     this.filteredData = this.suppliersService.suppliers;
   }
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<any[]>
-  {
+  connect(): Observable<any[]> {
     const displayDataChanges = [
       this.suppliersService.onProductsChanged,
       this._paginator.page,
@@ -96,7 +114,7 @@ export class FilesDataSource extends DataSource<any>
     ];
 
     return Observable.merge(...displayDataChanges).map(() => {
-      let data = this.suppliersService.suppliers.slice();
+      let data = this.suppliersService.suppliers;
 
       data = this.filterData(data);
 
@@ -110,19 +128,15 @@ export class FilesDataSource extends DataSource<any>
     });
   }
 
-  filterData(data)
-  {
-    if ( !this.filter )
-    {
+  filterData(data) {
+    if (!this.filter) {
       return data;
     }
     return FuseUtils.filterArrayByString(data, this.filter);
   }
 
-  sortData(data): any[]
-  {
-    if ( !this._sort.active || this._sort.direction === '' )
-    {
+  sortData(data): any[] {
+    if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
 
@@ -130,8 +144,7 @@ export class FilesDataSource extends DataSource<any>
       let propertyA: number | string = '';
       let propertyB: number | string = '';
 
-      switch ( this._sort.active )
-      {
+      switch (this._sort.active) {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
@@ -159,7 +172,6 @@ export class FilesDataSource extends DataSource<any>
     });
   }
 
-  disconnect()
-  {
+  disconnect() {
   }
 }

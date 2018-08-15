@@ -1,25 +1,25 @@
 import { SpinnerService } from './spinner/spinner.service';
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {RouterModule, Routes} from '@angular/router';
-import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 import 'hammerjs';
-import {SharedModule} from './core/modules/shared.module';
-import {AppComponent} from './app.component';
-import {FuseFakeDbService} from './fuse-fake-db/fuse-fake-db.service';
-import {FuseMainModule} from './main/main.module';
-import {FuseSplashScreenService} from './core/services/splash-screen.service';
-import {FuseConfigService} from './core/services/config.service';
-import {FuseNavigationService} from './core/components/navigation/navigation.service';
-import {TranslateModule} from '@ngx-translate/core';
-import {AppStoreModule} from './store/store.module';
+import { SharedModule } from './core/modules/shared.module';
+import { AppComponent } from './app.component';
+import { FuseFakeDbService } from './fuse-fake-db/fuse-fake-db.service';
+import { FuseMainModule } from './main/main.module';
+import { FuseSplashScreenService } from './core/services/splash-screen.service';
+import { FuseConfigService } from './core/services/config.service';
+import { FuseNavigationService } from './core/components/navigation/navigation.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { AppStoreModule } from './store/store.module';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
 import { UsersService } from './api/users.service';
-import {SpinnerComponent} from './spinner/spinner.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { AuthGuard } from './guard/auth.guard';
 
@@ -29,8 +29,8 @@ export function tokenGetter() {
   const user = JSON.parse(localStorage.getItem('currentUser'));
   let token;
   if (user) {
-      token = user.access_token;           
-  } 
+    token = user.access_token;
+  }
   return (token);
 }
 
@@ -60,7 +60,7 @@ const appRoutes: Routes = [
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
- {
+  {
     path: 'pages',
     loadChildren: './main/content/pages/pages.module#FusePagesModule'
   },
@@ -126,7 +126,7 @@ const appRoutes: Routes = [
     ApiService,
     UsersService,
     SpinnerService,
-    { provide: 'SnotifyToastConfig', useValue: ToastDefaults},
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService,
     AuthGuard,
   ],
