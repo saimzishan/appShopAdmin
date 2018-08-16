@@ -18,6 +18,7 @@ import {Location} from '@angular/common';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 import { Category } from '../models/category.model';
+import { TreeModule } from 'ng2-tree';
 // import {MatTreeModule} from '@angular/material/tree';
 
 
