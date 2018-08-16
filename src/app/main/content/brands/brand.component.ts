@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef } from '@angular/core';
 import { BrandService } from './brand.service';
 import { fuseAnimations } from '../../../core/animations';
 import 'rxjs/add/operator/startWith';

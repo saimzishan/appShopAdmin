@@ -7,8 +7,7 @@ import { GLOBAL } from '../../../shared/globel';
 import { ApiService } from '../../../api/api.service';
 
 @Injectable()
-export class SuppliersService extends ApiService
-{
+export class SuppliersService extends ApiService {
   suppliers: any[];
   onSuppliersChanged: BehaviorSubject<any> = new BehaviorSubject({});
   // http: any;
@@ -25,8 +24,7 @@ export class SuppliersService extends ApiService
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-  {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
 
     return new Promise((resolve, reject) => {
 
@@ -53,18 +51,20 @@ export class SuppliersService extends ApiService
   //   });
   // }
 
-  getSuppliers(){
+  getSuppliers() {
     const currntUser = JSON.parse(localStorage.getItem('currentUser'));
     const httpOptions = {
-        headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + currntUser.access_token
-        })
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + currntUser.access_token
+      })
     };
     return this.http.get(GLOBAL.USER_API + 'suppliers', httpOptions)
-                .map(this.extractData)
-                .catch((err) => { return this.handleError(err); }
-            );
-                    
-}
+      .map(this.extractData)
+      .catch((err) => {
+        return this.handleError(err);
+      }
+      );
+
+  }
 }

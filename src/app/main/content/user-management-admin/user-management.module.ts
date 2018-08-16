@@ -8,11 +8,12 @@ import { RoleManagmentComponent } from './role-management/role-management.compon
 import { ProductManagmentComponent } from './product-management/product-management.component';
 import { PermissionManagementComponent } from './permission-management/permission-management.component';
 import { UserManagementService } from './users.service';
-import { FileDropModule } from "ngx-file-drop";
-import { TreeModule } from "angular-tree-component";
-import {ProductsService} from '../products/products.service';
+import { FileDropModule } from 'ngx-file-drop';
+import { TreeModule } from 'angular-tree-component';
+import { ProductsService } from '../products/products.service';
 import { MatSortModule, MatTableModule, MatFormFieldModule, MatButtonModule } from '@angular/material';
 import { AuthGuard } from '../../../guard/auth.guard';
+import { AdminHomeComponent } from './dashboard/home.component';
 
 const routes = [
   {
@@ -25,7 +26,7 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
-    path     : 'manage-users',
+    path: 'manage-users',
     component: UserManagmentComponent,
     // resolve  : {
     //   academy: UserManagementService
@@ -33,7 +34,7 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
-    path     : 'manage-roles',
+    path: 'manage-roles',
     component: RoleManagmentComponent,
     // resolve  : {
     //   academy: UserManagementService
@@ -41,7 +42,7 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
-    path     : 'manage-products',
+    path: 'manage-products',
     component: ProductManagmentComponent,
     // resolve  : {
     //   academy: UserManagementService
@@ -49,7 +50,7 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
-    path     : 'manage-permissions',
+    path: 'manage-permissions',
     component: PermissionManagementComponent,
     // resolve  : {
     //   academy: UserManagementService
@@ -64,13 +65,14 @@ const routes = [
     FuseAngularMaterialModule,
     FileDropModule,
     TreeModule,
-    MatTableModule
+    MatTableModule,
   ],
   declarations: [
     UserManagmentComponent,
     RoleManagmentComponent,
     ProductManagmentComponent,
-    PermissionManagementComponent
+    PermissionManagementComponent,
+    AdminHomeComponent
   ],
   providers: [UserManagementService, ProductsService]
 })

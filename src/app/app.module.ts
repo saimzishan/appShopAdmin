@@ -18,7 +18,7 @@ import { AppStoreModule } from './store/store.module';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
 import { ApiService } from './api/api.service';
-// import { UsersService } from './api/users.service';
+import { UsersService } from './api/users.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 import { AuthGuard } from './guard/auth.guard';
@@ -66,7 +66,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'usermanagment',
-    loadChildren: './app/user-managment/user-managment.module#UserManagmentModule'
+    loadChildren: './main/content/user-management-admin/user-management.module#UserManagementModule'
   },
   /*
   {
@@ -124,7 +124,7 @@ const appRoutes: Routes = [
     FuseConfigService,
     FuseNavigationService,
     ApiService,
-    // UsersService,
+    UsersService,
     SpinnerService,
     { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
     SnotifyService,
