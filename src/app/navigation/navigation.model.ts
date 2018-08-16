@@ -82,6 +82,44 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
         ]
       },
       {
+        'id': 'categories',
+        'title': 'Categories',
+        'translate': 'NAV.CATEGORIES',
+        'type': 'collapse',
+        'icon': 'label',
+        'children': [
+          /*{
+            'id'   : 'dashboard',
+            'title': 'Dashboard',
+            'type' : 'item',
+            'url'  : '/apps/e-commerce/dashboard'
+          },*/
+          {
+            'id': 'view',
+            'title': 'View',
+            'type': 'item',
+            'icon': 'visibility',
+            'url': '/categories',
+            'exactMatch': true
+          },
+          {
+            'id': 'add',
+            'title': 'Add',
+            'type': 'item',
+            'icon': 'add_circle',
+            'url': '/categories/new',
+            'exactMatch': true
+          },
+          /*{
+            'id'        : 'productDetail',
+            'title'     : 'Product Detail',
+            'type'      : 'item',
+            'url'       : '/products/:id/:handle',
+            'exactMatch': true
+          },*/
+        ]
+      },
+      {
         'id': 'brands',
         'title': 'Brands',
         'translate': 'NAV.BRANDS',

@@ -58,6 +58,14 @@ const appRoutes: Routes = [
       "./main/content/user-management-admin/user-management.module#UserManagementModule"
   },
   {
+    path: "categories",
+    loadChildren: "./main/content/categories/categories.module#CategoriesModule"
+  },
+  {
+    path: "apps",
+    loadChildren: "./main/content/apps/apps.module#FuseAppsModule"
+  },
+  {
     canActivate: [AuthGuard],
     path: "suppliers",
     loadChildren: "./main/content/suppliers/suppliers.module#SuppliersModule"
