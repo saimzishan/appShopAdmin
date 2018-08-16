@@ -1,72 +1,80 @@
-import { SpinnerService } from './spinner/spinner.service';
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-import 'hammerjs';
-import { SharedModule } from './core/modules/shared.module';
-import { AppComponent } from './app.component';
-import { FuseFakeDbService } from './fuse-fake-db/fuse-fake-db.service';
-import { FuseMainModule } from './main/main.module';
-import { FuseSplashScreenService } from './core/services/splash-screen.service';
-import { FuseConfigService } from './core/services/config.service';
-import { FuseNavigationService } from './core/components/navigation/navigation.service';
-import { TranslateModule } from '@ngx-translate/core';
-import { AppStoreModule } from './store/store.module';
-import { FileDropModule } from 'ngx-file-drop';
-import { TreeModule } from 'angular-tree-component';
-import { ApiService } from './api/api.service';
+import { SpinnerService } from "./spinner/spinner.service";
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { HttpClientModule } from "@angular/common/http";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { RouterModule, Routes } from "@angular/router";
+import { InMemoryWebApiModule } from "angular-in-memory-web-api";
+import "hammerjs";
+import { SharedModule } from "./core/modules/shared.module";
+import { AppComponent } from "./app.component";
+import { FuseFakeDbService } from "./fuse-fake-db/fuse-fake-db.service";
+import { FuseMainModule } from "./main/main.module";
+import { FuseSplashScreenService } from "./core/services/splash-screen.service";
+import { FuseConfigService } from "./core/services/config.service";
+import { FuseNavigationService } from "./core/components/navigation/navigation.service";
+import { TranslateModule } from "@ngx-translate/core";
+import { AppStoreModule } from "./store/store.module";
+import { FileDropModule } from "ngx-file-drop";
+import { TreeModule } from "angular-tree-component";
+import { ApiService } from "./api/api.service";
 // import { UsersService } from './api/users.service';
-import { SpinnerComponent } from './spinner/spinner.component';
-import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
-import { AuthGuard } from './guard/auth.guard';
+import { SpinnerComponent } from "./spinner/spinner.component";
+import { SnotifyModule, SnotifyService, ToastDefaults } from "ng-snotify";
+import { AuthGuard } from "./guard/auth.guard";
 
-import { JwtModule } from '@auth0/angular-jwt';
+import { JwtModule } from "@auth0/angular-jwt";
+import { UsersService } from "./api/users.service";
 
 export function tokenGetter() {
-  const user = JSON.parse(localStorage.getItem('currentUser'));
+  const user = JSON.parse(localStorage.getItem("currentUser"));
   let token;
   if (user) {
     token = user.access_token;
   }
-  return (token);
+  return token;
 }
 
 const appRoutes: Routes = [
   {
-    canActivate: [AuthGuard],
-    path: 'products',
-    loadChildren: './main/content/products/products.module#ProductsModule'
+    path: "",
+    redirectTo: "/pages/auth/login",
+    pathMatch: "full"
   },
   {
     canActivate: [AuthGuard],
-    path: 'brands',
-    loadChildren: './main/content/brands/brands.module#BrandsModule'
+    path: "products",
+    loadChildren: "./main/content/products/products.module#ProductsModule"
   },
   {
     canActivate: [AuthGuard],
-    path: 'user-management',
-    loadChildren: './main/content/user-management-admin/user-management.module#UserManagementModule'
+    path: "brands",
+    loadChildren: "./main/content/brands/brands.module#BrandsModule"
   },
   {
     canActivate: [AuthGuard],
-    path: 'suppliers',
-    loadChildren: './main/content/suppliers/suppliers.module#SuppliersModule'
+    path: "user-management",
+    loadChildren:
+      "./main/content/user-management-admin/user-management.module#UserManagementModule"
   },
   {
     canActivate: [AuthGuard],
-    path: 'apps',
-    loadChildren: './main/content/apps/apps.module#FuseAppsModule'
+    path: "suppliers",
+    loadChildren: "./main/content/suppliers/suppliers.module#SuppliersModule"
   },
   {
-    path: 'pages',
-    loadChildren: './main/content/pages/pages.module#FusePagesModule'
+    canActivate: [AuthGuard],
+    path: "apps",
+    loadChildren: "./main/content/apps/apps.module#FuseAppsModule"
   },
   {
-    path: 'usermanagment',
-    loadChildren: './app/user-managment/user-managment.module#UserManagmentModule'
+    path: "pages",
+    loadChildren: "./main/content/pages/pages.module#FusePagesModule"
+  },
+  {
+    path: "usermanagment",
+    loadChildren:
+      "./app/user-managment/user-managment.module#UserManagmentModule"
   },
   /*
   {
@@ -86,16 +94,14 @@ const appRoutes: Routes = [
     loadChildren: './main/content/components-third-party/components-third-party.module#FuseComponentsThirdPartyModule'
   },*/
   {
-    path: '**',
-    redirectTo: 'pages/auth/login'
+    path: "**",
+    redirectTo: "/pages/auth/login",
+    pathMatch: "full"
   }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SpinnerComponent
-  ],
+  declarations: [AppComponent, SpinnerComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -110,7 +116,7 @@ const appRoutes: Routes = [
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        whitelistedDomains: ['localhost:4200'],
+        whitelistedDomains: ["localhost:4200"]
       }
     }),
     AppStoreModule,
@@ -124,15 +130,12 @@ const appRoutes: Routes = [
     FuseConfigService,
     FuseNavigationService,
     ApiService,
-    // UsersService,
+    UsersService,
     SpinnerService,
-    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    { provide: "SnotifyToastConfig", useValue: ToastDefaults },
     SnotifyService,
-    AuthGuard,
+    AuthGuard
   ],
-  bootstrap: [
-    AppComponent
-  ]
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}
