@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AuthGuard } from '../../../guard/auth.guard';
+import { SnotifyService } from 'ng-snotify';
 
 @Injectable()
 export class ProductService implements Resolve<any>
@@ -17,9 +18,9 @@ export class ProductService implements Resolve<any>
     constructor(
         private http: HttpClient,
         private spinnerService: SpinnerService,
-        private router: Router
-    )
-    {
+        private router: Router,
+        private snotifyService: SnotifyService
+    ) {
     }
 
     /**
@@ -28,8 +29,7 @@ export class ProductService implements Resolve<any>
      * @param {RouterStateSnapshot} state
      * @returns {Observable<any> | Promise<any> | any}
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
 
         this.routeParams = route.params;
 
@@ -46,18 +46,15 @@ export class ProductService implements Resolve<any>
         });
     }
 
-    getProduct(): Promise<any>
-    {
+    getProduct(): Promise<any> {
         this.spinnerService.requestInProcess(true);
         return new Promise((resolve, reject) => {
-            if ( this.routeParams.id === 'new' )
-            {
+            if (this.routeParams.id === 'new') {
                 this.spinnerService.requestInProcess(false);
                 this.onProductChanged.next(false);
                 resolve(false);
             }
-            else
-            {
+            else {
                 let access_token = AuthGuard.getToken();
                 if (access_token === undefined) {
                     let error = {
@@ -71,11 +68,11 @@ export class ProductService implements Resolve<any>
                         'Authorization': 'Bearer ' + access_token
                     })
                 };
-    
+
                 this.http.get(GLOBAL.USER_API + 'products/' + this.routeParams.id, httpOptions)
                     .subscribe((response: any) => {
                         this.product = response.data;
-        this.spinnerService.requestInProcess(false);                        
+                        this.spinnerService.requestInProcess(false);
                         this.onProductChanged.next(this.product);
                         resolve(response);
                     }, reject);
@@ -83,8 +80,7 @@ export class ProductService implements Resolve<any>
         });
     }
 
-    saveProduct(product)
-    {
+    saveProduct(product) {
         return new Promise((resolve, reject) => {
             let access_token = AuthGuard.getToken();
             if (access_token === undefined) {
@@ -103,13 +99,12 @@ export class ProductService implements Resolve<any>
             this.http.put(GLOBAL.USER_API + 'products/' + product.id, product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
-                this.router.navigate(['/products']);
+                    this.router.navigate(['/products']);
                 }, reject);
         });
     }
 
-    addProduct(product)
-    {
+    addProduct(product) {
         return new Promise((resolve, reject) => {
             let access_token = AuthGuard.getToken();
             if (access_token === undefined) {
@@ -128,7 +123,39 @@ export class ProductService implements Resolve<any>
             this.http.post(GLOBAL.USER_API + 'products', product, httpOptions)
                 .subscribe((response: any) => {
                     resolve(response);
-                this.router.navigate(['/products']);
+                    this.router.navigate(['/products']);
+                }, reject);
+        });
+    }
+
+    deleteProduct(product) {
+        this.spinnerService.requestInProcess(true);
+        return new Promise((resolve, reject) => {
+            const access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                const error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.delete(GLOBAL.USER_API + 'products/' + product.id, httpOptions)
+                .subscribe((response: any) => {
+                    this.spinnerService.requestInProcess(false);
+                    if (!response.error) {
+                        resolve(response);
+                        this.snotifyService.success('Product Deleted Successfully');
+                        this.router.navigate(['/suppliers']);
+                    }
+                    else {
+                        this.snotifyService.error(response.error);
+                    }
                 }, reject);
         });
     }

@@ -18,13 +18,12 @@ import { AppStoreModule } from "./store/store.module";
 import { FileDropModule } from "ngx-file-drop";
 import { TreeModule } from "angular-tree-component";
 import { ApiService } from "./api/api.service";
-// import { UsersService } from './api/users.service';
+import { UsersService } from "./api/users.service";
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { SnotifyModule, SnotifyService, ToastDefaults } from "ng-snotify";
 import { AuthGuard } from "./guard/auth.guard";
 
 import { JwtModule } from "@auth0/angular-jwt";
-import { UsersService } from "./api/users.service";
 
 export function tokenGetter() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -72,6 +71,10 @@ const appRoutes: Routes = [
   },
   {
     canActivate: [AuthGuard],
+    path: "categories",
+    loadChildren: "./main/content/categories/categories.module#CategoriesModule"
+  },
+  {
     path: "apps",
     loadChildren: "./main/content/apps/apps.module#FuseAppsModule"
   },
@@ -82,7 +85,7 @@ const appRoutes: Routes = [
   {
     path: "usermanagment",
     loadChildren:
-      "./app/user-managment/user-managment.module#UserManagmentModule"
+      "./main/content/user-management-admin/user-management.module#UserManagementModule"
   },
   /*
   {

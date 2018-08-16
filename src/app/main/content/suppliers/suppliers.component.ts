@@ -107,7 +107,7 @@ export class FilesDataSource extends DataSource<any>
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
     const displayDataChanges = [
-      this.suppliersService.onProductsChanged,
+      this.suppliersService.onSuppliersChanged,
       this._paginator.page,
       this._filterChange,
       this._sort.sortChange

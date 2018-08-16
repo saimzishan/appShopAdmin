@@ -16,6 +16,7 @@ import { Location } from '@angular/common';
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-supplier',
   templateUrl: './supplier.component.html',
   styleUrls: ['./supplier.component.scss'],
@@ -39,12 +40,9 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    // Subscribe to update product on changes
     this.onSupplierChanged =
       this.supplierService.onSupplierChanged
         .subscribe(supplier => {
-
           if (supplier) {
             this.supplier = new Supplier(supplier);
             this.pageType = 'edit';
@@ -53,7 +51,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
             this.pageType = 'new';
             this.supplier = new Supplier();
           }
-
           this.supplierForm = this.createSupplierForm();
         });
 
@@ -62,30 +59,24 @@ export class SupplierComponent implements OnInit, OnDestroy {
   getStatesOfGermany() {
     this.supplierService.getGermanyJson()
       .subscribe((res: any) => {
-        //
-        // this.categories = res.data.Result;
         this.stateJSON = res;
         setTimeout(() => {
-
         }, 500);
       },
         errors => {
-          let e = errors.json();
+          const e = errors.json();
         });
   }
 
   getStatesOfCanada() {
     this.supplierService.getCanadaJson()
       .subscribe((res: any) => {
-        //
-        // this.categories = res.data.Result;
         this.stateJSON = res;
         setTimeout(() => {
-
         }, 500);
       },
         errors => {
-          let e = errors.json();
+          const e = errors.json();
         });
   }
 
@@ -116,22 +107,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
       ph_mobile2: [this.supplier.contact.ph_mobile2],
       ph_mobile3: [this.supplier.contact.ph_mobile3],
       handle: [this.supplier.handle],
-      /*description     : [this.supplier.description],
-      categories      : [this.supplier.categories],
-      tags            : [this.supplier.tags],
-      images          : [this.supplier.images],
-      priceTaxExcl    : [this.supplier.priceTaxExcl],
-      priceTaxIncl    : [this.supplier.priceTaxIncl],
-      taxRate         : [this.supplier.taxRate],
-      comparedPrice   : [this.supplier.comparedPrice],
-      quantity        : [this.supplier.quantity],
-      sku             : [this.supplier.sku],
-      width           : [this.supplier.width],
-      height          : [this.supplier.height],
-      depth           : [this.supplier.depth],
-      weight          : [this.supplier.weight],
-      extraShippingFee: [this.supplier.extraShippingFee],
-      active          : [this.supplier.active]*/
     });
   }
 
@@ -140,11 +115,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     data.handle = FuseUtils.handleize(data.name);
     this.supplierService.saveSupplier(data)
       .then(() => {
-
-        // Trigger the subscription with new data
         this.supplierService.onSupplierChanged.next(data);
-
-        // Show the success message
         this.snackBar.open('Supplier saved', 'OK', {
           verticalPosition: 'top',
           duration: 2000
@@ -157,12 +128,11 @@ export class SupplierComponent implements OnInit, OnDestroy {
     data.handle = FuseUtils.handleize(data.name);
     this.supplierService.addSupplier(data)
       .then(() => {
-        // Trigger the subscription with new data
         this.supplierService.onSupplierChanged.next(data);
       });
   }
 
-  deleteBrand() {
+  deleteSupplier() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
     });
@@ -178,7 +148,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
       }
       this.confirmDialogRef = null;
     });
-
   }
 
   ngOnDestroy() {

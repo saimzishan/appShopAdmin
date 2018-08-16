@@ -40,7 +40,9 @@
                 (click)="addProduct()">
                 <span>ADD</span>
             </button>
-
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteProduct()">
+                <span>DELETE</span>
+              </button>
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="productForm.invalid || productForm.pristine"
                 *ngIf="pageType ==='edit'" (click)="saveProduct()">
                 <span>SAVE</span>

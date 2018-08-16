@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Component,
   OnDestroy,
@@ -35,6 +36,27 @@ import {
 import { GLOBAL } from "../../../shared/globel";
 import { SnotifyService } from "ng-snotify";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
+=======
+import { Component, OnDestroy, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { BrandService } from './brand.service';
+import { fuseAnimations } from '../../../core/animations';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/observable/fromEvent';
+import { Subscription } from 'rxjs/Subscription';
+import { Brand } from '../models/brand.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { FuseUtils } from '../../../core/fuseUtils';
+import { MatSnackBar, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Location } from '@angular/common';
+import { FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile } from 'ngx-file-drop';
+import { GLOBAL } from '../../../shared/globel';
+import { SnotifyService } from 'ng-snotify';
+import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+>>>>>>> 2c5bbeb7f9651e1b019801026fd6e0ccdf70f7a7
 // import { $ } from 'protractor';
 declare var $: any;
 

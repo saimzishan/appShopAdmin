@@ -13,9 +13,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {Product} from '../models/product.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {FuseUtils} from '../../../core/fuseUtils';
-import {MatSnackBar} from '@angular/material';
+import {MatSnackBar, MatDialog, MatDialogRef} from '@angular/material';
 import {Location} from '@angular/common';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
+import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-product',
@@ -29,6 +30,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   onProductChanged: Subscription;
   pageType: string;
   productForm: FormGroup;
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+
   files: UploadFile[] = [];
   nodes = [
     {
@@ -61,7 +64,8 @@ export class ProductComponent implements OnInit, OnDestroy {
               public snackBar: MatSnackBar,
               private location: Location, 
               private spinnerService: SpinnerService,
-              private snotifyService: SnotifyService
+              private snotifyService: SnotifyService,
+              private dialog: MatDialog
             ) {
 
   }
@@ -84,6 +88,24 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.productForm = this.createProductForm();
         });
 
+  }
+
+  deleteProduct() {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage = 'Are you sure you want to delete?';
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const data = this.productForm.getRawValue();
+        data.handle = FuseUtils.handleize(data.name);
+        this.productService.deleteProduct(data)
+          .then(() => {
+            this.productService.onProductChanged.next(data);
+          });
+      }
+      this.confirmDialogRef = null;
+    });
   }
 
   createProductForm() {
