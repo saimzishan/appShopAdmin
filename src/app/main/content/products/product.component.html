@@ -42,7 +42,7 @@
             </button>
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteProduct()">
                 <span>DELETE</span>
-              </button>
+            </button>
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="productForm.invalid || productForm.pristine"
                 *ngIf="pageType ==='edit'" (click)="saveProduct()">
                 <span>SAVE</span>
@@ -76,8 +76,54 @@
                                 </mat-form-field>
 
                                 <h3 class="mb-0">Categories</h3>
+                                <div class="row" *ngFor="let c of category">
 
-                                <tree-root [nodes]="nodes" [options]="options"></tree-root>
+                                    <!-- <mat-icon *ngIf="c.children.length>0 && !viewChildren" (click)="enableChildren()" class="secondary-text s-15 mat-icon material-icons colorShow" role="img" aria-hidden="true">expand_more</mat-icon>
+                                        <mat-icon *ngIf="c.children.length>0 && viewChildren" (click)="disableChildren()" class="secondary-text s-15 mat-icon material-icons colorHide" role="img" aria-hidden="true">expand_less</mat-icon>
+                                    <mat-checkbox>
+                                        <mat-icon style="margin-top: 6px" class="secondary-text s-25 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
+                                        {{c.name}} {{c.children.name}}
+                                    </mat-checkbox>
+                                    <ng-container *ngIf="viewChildren">
+                                        <div class="row" *ngFor="let a of c.children">
+                                            {{a.name}}
+                                        </div>
+                                    </ng-container> -->
+
+                                    <ul style="list-style-type:none">
+                                        <li>
+                                            <mat-icon *ngIf="c.children.length>0 && !viewChildren" (click)="enableChildren()" class="secondary-text s-15 mat-icon material-icons colorShow"
+                                                role="img" aria-hidden="true">expand_more</mat-icon>
+                                            <mat-icon *ngIf="c.children.length>0 && viewChildren" (click)="disableChildren()" class="secondary-text s-15 mat-icon material-icons colorHide"
+                                                role="img" aria-hidden="true">expand_less</mat-icon>
+                                            <mat-checkbox>
+                                                <mat-icon style="margin-top: 6px" class="secondary-text s-25 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
+                                                {{c.name}}
+                                            </mat-checkbox>
+                                        </li>
+                                        <ul *ngIf="c.children.length>0 && viewChildren" style="list-style-type:none">
+                                            <ng-container *ngFor="let a of c.children">
+                                                <li>
+                                                    <mat-checkbox>
+                                                        {{a.name}}
+                                                    </mat-checkbox>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </ul>
+
+                                </div>
+                                <!-- <div class="row">
+                                    <mat-checkbox>
+                                        <mat-icon style="font-size: 5px" class="secondary-text s-48 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
+                                    </mat-checkbox>
+
+                                </div> -->
+
+                                <!-- <tree-root [nodes]="category" [options]="children"></tree-root> -->
+                                <!-- <tree-root *ngFor="let c of category">
+                                    {{c.name}}
+                                </tree-root> -->
 
                                 <!--<mat-form-field class="w-100-p" floatPlaceholder="never">
                                     <mat-chip-list matPrefix #categoryList
@@ -219,13 +265,13 @@
                             <div class="row">
                                 <mat-tab-group>
                                     <!-- <div class="row"> -->
-                                        <mat-tab label="Tab 1"></mat-tab>
+                                    <mat-tab label="Tab 1"></mat-tab>
                                     <!-- </div> -->
                                     <!-- <div class="row"> -->
-                                        <mat-tab label="Tab 2"></mat-tab>
+                                    <mat-tab label="Tab 2"></mat-tab>
                                     <!-- </div> -->
                                     <!-- <div class="row"> -->
-                                        <mat-tab label="Tab 3"></mat-tab>
+                                    <mat-tab label="Tab 3"></mat-tab>
                                     <!-- </div> -->
                                 </mat-tab-group>
                             </div>

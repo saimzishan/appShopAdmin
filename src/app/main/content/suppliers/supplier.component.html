@@ -40,7 +40,7 @@
         (click)="addSupplier()">
         <span>ADD</span>
       </button>
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="saveSupplier()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteSupplier()">
         <span>Delete</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="supplierForm.invalid || supplierForm.pristine"

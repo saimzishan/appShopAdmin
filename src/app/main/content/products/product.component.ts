@@ -17,6 +17,9 @@ import {MatSnackBar, MatDialog, MatDialogRef} from '@angular/material';
 import {Location} from '@angular/common';
 import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+import { Category } from '../models/category.model';
+// import {MatTreeModule} from '@angular/material/tree';
+
 
 @Component({
   selector: 'app-product',
@@ -28,35 +31,39 @@ import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dia
 export class ProductComponent implements OnInit, OnDestroy {
   product = new Product();
   onProductChanged: Subscription;
+  category = new Category();
+  onCategoryChanged: Subscription;
+  viewChildren = false;
   pageType: string;
   productForm: FormGroup;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   files: UploadFile[] = [];
-  nodes = [
-    {
-      id: 1,
-      name: 'cat 1',
-      children: [
-        { id: 2, name: 'cat 1-1' },
-        { id: 3, name: 'cat 1-2' }
-      ]
-    },
-    {
-      id: 4,
-      name: 'cat 2',
-      children: [
-        { id: 5, name: 'cat 2-1' },
-        {
-          id: 6,
-          name: 'cat 2-2',
-          children: [
-            { id: 7, name: 'cat 2-2-1' }
-          ]
-        }
-      ]
-    }
-  ];
+  nodes: any;
+  // nodes = [
+  //   {
+  //     id: 1,
+  //     name: 'cat 1',
+  //     children: [
+  //       { id: 2, name: 'cat 1-1' },
+  //       { id: 3, name: 'cat 1-2' }
+  //     ]
+  //   },
+  //   {
+  //     id: 4,
+  //     name: 'cat 2',
+  //     children: [
+  //       { id: 5, name: 'cat 2-1' },
+  //       {
+  //         id: 6,
+  //         name: 'cat 2-2',
+  //         children: [
+  //           { id: 7, name: 'cat 2-2-1' }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // ];
   options = {};
 
   constructor(private productService: ProductService,
@@ -88,7 +95,29 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.productForm = this.createProductForm();
         });
 
+        this.onCategoryChanged =
+        this.productService.onCategoryChanged
+          .subscribe(category => {
+  
+            // if (category) 
+              this.category = category;
+
+         
+            console.log(this.category);
+  
+            // this.productForm = this.createProductForm();
+          });
+
   }
+
+  enableChildren() {
+    this.viewChildren = true;
+  }
+
+  disableChildren() {
+    this.viewChildren = false;
+  }
+
 
   deleteProduct() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
@@ -132,6 +161,31 @@ export class ProductComponent implements OnInit, OnDestroy {
       active: [this.product.active]
     });
   }
+
+  // createCategoryForm() {
+  //   return this.formBuilder.group({
+  //     id: [this.category.id],
+  //     name: [this.category.name],
+  //     handle: [this.product.handle],
+  //     description: [this.product.description],
+  //     categories: [this.product.categories],
+  //     tags: [this.product.tags],
+  //     images: [this.product.images],
+  //     priceTaxExcl: [this.product.priceTaxExcl],
+  //     priceTaxIncl: [this.product.priceTaxIncl],
+  //     price: [this.product.price],
+  //     taxRate: [this.product.taxRate],
+  //     comparedPrice: [this.product.comparedPrice],
+  //     quantity: [this.product.quantity],
+  //     sku: [this.product.sku],
+  //     width: [this.product.width],
+  //     height: [this.product.height],
+  //     depth: [this.product.depth],
+  //     weight: [this.product.weight],
+  //     extraShippingFee: [this.product.extraShippingFee],
+  //     active: [this.product.active]
+  //   });
+  // }
 
   saveProduct() {
     this.spinnerService.requestInProcess(true);
