@@ -8,12 +8,13 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 import {Subscription} from 'rxjs/Subscription';
-import {Supplier} from '../models/supplier.model';
+import {Category} from '../models/category.model';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {FuseUtils} from '../../../core/fuseUtils';
 import {MatSnackBar} from '@angular/material';
 import {Location} from '@angular/common';
 import {ITreeOptions, TreeNode, TreeModel} from 'angular-tree-component';
+import {Supplier} from "../models/supplier.model";
 
 @Component({
   selector: 'app-category',
@@ -23,12 +24,14 @@ import {ITreeOptions, TreeNode, TreeModel} from 'angular-tree-component';
   animations: fuseAnimations
 })
 export class CategoryComponent implements OnInit, OnDestroy {
+  category = new Category();
   supplier = new Supplier();
   onSupplierChanged: Subscription;
   pageType: string;
   supplierForm: FormGroup;
 
   parentCat;
+  model = {};
 
   options: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
@@ -94,15 +97,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   addNode(tree: any) {
+    // console.log(tree);
+    const data = this.supplierForm.getRawValue();
+    data.handle = FuseUtils.handleize(data.name);
+    console.log(tree.activeNodes);
     this.nodes[0].children.push({
-      name: 'a new child'
+      name: data.name
     });
-    tree.treeModel.update();
+    tree.update();
   }
 
   activeNodes(treeModel: any) {
-    this.parentCat = treeModel.activeNodes.data;
-    console.log(treeModel.activeNodes);
+    this.parentCat = treeModel.activeNodes[0].data.name;
+    console.log(treeModel.activeNodes[0].data.name);
   }
 
   onEvent(data) {
@@ -120,9 +127,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   createSupplierForm() {
     return this.formBuilder.group({
-      // id              : [this.supplier.id],
-      name: [''],
-      /*email           : [this.supplier.contact.email],
+      id              : [this.category.id],
+      name            : [this.category.name],
+      parentName      : [this.category.parentName],
+      /*email         : [this.supplier.contact.email],
       no              : [this.supplier.contact.no],
       street          : [this.supplier.contact.street],
       postal_code     : [this.supplier.contact.postal_code],
@@ -154,7 +162,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       active          : [this.supplier.active]*/
     });
   }
-
 
 
   saveSupplier() {
@@ -190,11 +197,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
         });
 
         // Change the location with new one
-        this.location.go('suppliers/' + this.supplier.id);
+         this.location.go('suppliers/' + this.supplier.id);
       });
   }
 
   ngOnDestroy() {
-    this.onSupplierChanged.unsubscribe();
+    // this.onSupplierChanged.unsubscribe();
   }
 }

@@ -80,19 +80,21 @@
                 </mat-form-field>
                 <mat-label>Parent Category</mat-label>
                 <tree-root #tree [options]="options" [nodes]="nodes" (activate)="activeNodes(tree.treeModel)"></tree-root>
+
+
                 <mat-form-field class="w-100-p">
+                  <mat-label>Parent Category Name</mat-label>
                 <input matInput
-                       matChipInputAddOnBlur="true"
-                       placeholder=""
+                       name="parentName"
+                       formControlName="parentName"
+                       placeholder="Parent Name"
                        value="{{parentCat}}"
                        />
                 </mat-form-field>
 
                 <button mat-raised-button
                         class="save-product-button mat-white-bg mt-16 mt-sm-0"
-                        [disabled]="supplierForm.invalid"
-                        *ngIf="pageType ==='new'"
-                (click)="addNode(tree)">
+                (click)="addNode(tree.treeModel)">
                   <span>ADD</span>
                 </button>
                 <!--<mat-form-field class="w-100-p">
