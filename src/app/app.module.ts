@@ -57,6 +57,10 @@ const appRoutes: Routes = [
   },
   {
     canActivate: [AuthGuard],
+    path: 'categories',
+    loadChildren: './main/content/categories/categories.module#CategoriesModule'
+  },
+  {
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },

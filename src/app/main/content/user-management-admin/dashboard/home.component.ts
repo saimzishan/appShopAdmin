@@ -14,9 +14,10 @@ import 'rxjs/add/observable/fromEvent';
 // import { FuseUtils } from '../../../core/fuseUtils';
 
 @Component({
-    selector   : 'app-admin-home',
+    // tslint:disable-next-line:component-selector
+    selector: 'app-admin-home',
     templateUrl: './home.component.html',
-    styleUrls  : ['./home.component.css']
+    styleUrls: ['./home.component.css']
     // animations : fuseAnimations
 })
 export class AdminHomeComponent implements OnInit {
