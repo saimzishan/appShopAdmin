@@ -13,7 +13,9 @@ export class ProductService implements Resolve<any>
 {
     routeParams: any;
     product: any;
+    category: any;
     onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
+    onCategoryChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
     constructor(
         private http: HttpClient,
@@ -36,7 +38,8 @@ export class ProductService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getProduct()
+                this.getProduct(),
+                this.getCategories()
             ]).then(
                 () => {
                     resolve();
@@ -77,6 +80,32 @@ export class ProductService implements Resolve<any>
                         resolve(response);
                     }, reject);
             }
+        });
+    }
+
+    getCategories(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                const error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.get(GLOBAL.USER_API + 'categories', httpOptions)
+                .subscribe((response: any) => {
+                    this.category = response.data;
+                    this.onCategoryChanged.next(this.category);
+                    resolve(response);
+                    // console.log(this.category);
+                }, reject);
         });
     }
 

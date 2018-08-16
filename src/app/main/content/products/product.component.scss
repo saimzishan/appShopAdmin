@@ -1,5 +1,20 @@
 #product {
 
+    .colorShow{
+        color: rgb(35, 155, 35) !important;
+        cursor: pointer;
+        font-size: 15px;
+        margin-left: -27px;
+    }
+
+    .colorHide{
+        color: rgb(212, 57, 46) !important;
+        cursor: pointer;
+        font-size: 15px;
+        margin-left: -27px;
+
+    }
+
     .header {
 
         .product-image {
