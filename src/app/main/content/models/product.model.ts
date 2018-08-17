@@ -15,7 +15,7 @@ export class supplier_id {
   content_type: string;
   constructor(supplier_id?) {
     supplier_id = supplier_id || {};
-    this.id = supplier_id.id || FuseUtils.generateGUID();
+    this.id = supplier_id.id || "";
     this.price = supplier_id.price || "";
     this.ean = supplier_id.ean || "";
     this.sku = supplier_id.sku || "";

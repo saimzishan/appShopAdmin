@@ -67,13 +67,6 @@
                                     <input matInput name="name" formControlName="name" placeholder="Product Name" required>
                                 </mat-form-field>
 
-                                <mat-form-field class="w-100-p">
-                                    <input matInput name="price" formControlName="price" placeholder="Product Price">
-                                </mat-form-field>
-
-                                <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
-                                </mat-form-field> -->
 
                                 <h3 class="mb-0">Categories</h3>
                                 <div class="row" *ngFor="let c of category">
@@ -171,42 +164,46 @@
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>-->
+
                                 <mat-form-field class="w-100-p">
-                                    <input matInput name="sku" formControlName="sku" placeholder="Product Code/SKU">
+                                    <mat-select placeholder="Select Brand" name="brand_id" formControlName="brand_id" required>
+                                        <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                            {{brand.name}}
+                                        </mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput name="weight" formControlName="weight" placeholder="Weight (KGS)">
+                                    <mat-select placeholder="Select Taxes" name="tax_id" formControlName="tax_id" required>
+                                        <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                            {{brand.name}}
+                                        </mat-option>
+                                    </mat-select>
                                 </mat-form-field>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput name="width" formControlName="width" placeholder="Width (Centimeters)">
+                                    <textarea required matInput name="short_description" rows="3" formControlName="short_description" placeholder="Product Short Description">
+                                     </textarea>
                                 </mat-form-field>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput name="height" formControlName="height" placeholder="Height (Centimeters)">
-                                </mat-form-field>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput name="depth" formControlName="depth" placeholder="Depth (Centimeters)">
-                                </mat-form-field>
-                                <mat-form-field class="w-100-p">
-                                    <textarea matInput name="short_description" formControlName="short_description" placeholder="Product Description" rows="5">
-                                </textarea>
+                                    <textarea matInput name="long_description" rows="5" formControlName="long_description" placeholder="Product Long Description">
+                                     </textarea>
                                 </mat-form-field>
                             </div>
                         </mat-tab>
 
-                        <mat-tab label="Product Images">
+                        <!-- <mat-tab label="Product Images">
 
                             <div class="tab-content p-24" fusePerfectScrollbar>
                                 <div fxLayout="row" fxLayoutAlign="start start" fxLayoutWrap>
                                     <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-                                        style="width: 100%;">
-                                        <!--<span>optional content (don't set headertext then)</span>-->
-                                    </file-drop>
+                                        style="width: 100%;"> -->
+                        <!--<span>optional content (don't set headertext then)</span>-->
+                        <!-- </file-drop>
                                     <div class="upload-table">
                                         <table class="table">
                                             <thead>
-                                                <tr>
-                                                    <!-- <th>Name</th> -->
-                                                </tr>
+                                                <tr> -->
+                        <!-- <th>Name</th> -->
+                        <!-- </tr>
                                             </thead>
                                             <tbody class="upload-name-style">
                                                 <tr *ngFor="let item of files; let i=index">
@@ -218,9 +215,9 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <!--<div class="tab-content p-24" fusePerfectScrollbar>
+                        <!--<div class="tab-content p-24" fusePerfectScrollbar>
                                 <div fxLayout="row" fxLayoutAlign="start start" fxLayoutWrap>
 
                                     <div *ngIf="product.images.length === 0"
@@ -236,79 +233,88 @@
                                     </div>
                                 </div>
                             </div>-->
-                        </mat-tab>
+                        <!-- </mat-tab> -->
 
                         <mat-tab label="Supplier">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field class="w-100-p">
+                                    <mat-select placeholder="Select Supplier" name="supplier_id" formControlName="supplier_id" required>
+                                        <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                                            {{supplier.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="price" formControlName="price" placeholder="Product Price" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="sku" formControlName="sku" placeholder="Product Code/SKU" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="upc" formControlName="upc" placeholder="Upc" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="ean" formControlName="ean" placeholder="Ean" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="width" formControlName="width" placeholder="Width (Centimeters)" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="height" formControlName="height" placeholder="Height (Centimeters)" required>
+                                </mat-form-field>
+                                <mat-form-field class="w-100-p">
+                                    <input matInput name="depth" formControlName="depth" placeholder="Depth (Centimeters)" required>
+                                </mat-form-field>
+
+                                <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
+                                <div fxLayout="row" fxLayoutAlign="start start" fxLayoutWrap>
+                                    <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                                        style="width: 100%;" required>
+                                        <!--<span>optional content (don't set headertext then)</span>-->
+                                    </file-drop>
+                                    <div class="upload-table">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="upload-name-style">
+                                                <tr *ngFor="let item of files; let i=index">
+                                                    <td>
+                                                        <strong>{{ item.relativePath }}</strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- </div> -->
+
+                            </div>
                         </mat-tab>
 
                         <mat-tab label="Options & SKUs">
-                            <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
-                            <div class="row">
-                                <mat-tab-group>
-                                    <!-- <div class="row"> -->
-                                    <mat-tab label="Tab 1"></mat-tab>
-                                    <!-- </div> -->
-                                    <!-- <div class="row"> -->
-                                    <mat-tab label="Tab 2"></mat-tab>
-                                    <!-- </div> -->
-                                    <!-- <div class="row"> -->
-                                    <mat-tab label="Tab 3"></mat-tab>
-                                    <!-- </div> -->
-                                </mat-tab-group>
-                            </div>
-                            <!-- <div class="row">
-                                        <mat-tab label="Option">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <div class="row">
+                                    <mat-tab-group>
+                                        <mat-tab label="Option Set">
+                                            <div class="tab-content p-24" fusePerfectScrollbar>
                                                 <mat-form-field class="w-100-p">
-                                                        <input matInput
-                                                               name="sku"
-                                                               formControlName="sku"
-                                                               placeholder="SKU">
-                                                    </mat-form-field>
-                    
-                                                    <mat-form-field class="w-100-p">
-                                                        <input matInput
-                                                               name="quantity"
-                                                               formControlName="quantity"
-                                                               placeholder="Quantity" type="number">
-                                                    </mat-form-field>
+                                                    <mat-select placeholder="Option Set" name="supplier_id" formControlName="supplier_id" required>
+                                                        <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                                                            {{optionSet.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
                                         </mat-tab>
-                                    </div> -->
+                                        <mat-tab label="Create new Option Set"></mat-tab>
+                                    </mat-tab-group>
+                                </div>
 
-                            <!-- <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="priceTaxExcl"
-                                           formControlName="priceTaxExcl"
-                                           placeholder="Tax Excluded Price" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                </mat-form-field>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="priceTaxIncl"
-                                           formControlName="priceTaxIncl"
-                                           placeholder="Tax Included Price" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                </mat-form-field>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="taxRate"
-                                           formControlName="taxRate"
-                                           placeholder="Tax Rate" type="number">
-                                    <span matPrefix>&#37;</span>
-                                </mat-form-field>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="comparedPrice"
-                                           formControlName="comparedPrice"
-                                           placeholder="Compared Price" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                    <mat-hint align="start">Add a compare price to show next to the real price</mat-hint>
-                                </mat-form-field> -->
-
-                            <!-- </div> -->
+                            </div>
                         </mat-tab>
 
                         <mat-tab label="Custom Fields">

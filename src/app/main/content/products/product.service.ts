@@ -159,6 +159,97 @@ export class ProductService extends ApiService implements Resolve<any> {
       });
   }
 
+  getSupplier() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "suppliers", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+  getTaxes() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "taxes", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getBrands() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "brands", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getOptionSets() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "optionsets", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   deleteProduct(product) {
     this.spinnerService.requestInProcess(true);
     return new Promise((resolve, reject) => {

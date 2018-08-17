@@ -26,9 +26,10 @@ import { AuthGuard } from "./guard/auth.guard";
 import { JwtModule } from "@auth0/angular-jwt";
 
 export function tokenGetter() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  let user: any = localStorage.getItem("currentUser");
   let token;
   if (user) {
+    user = JSON.parse(user);
     token = user.access_token;
   }
   return token;

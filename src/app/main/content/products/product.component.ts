@@ -41,6 +41,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   viewChildren = false;
   pageType: string;
   productForm: FormGroup;
+
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   files: UploadFile[] = [];
@@ -70,6 +71,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   //   }
   // ];
   options = {};
+  suppliers: any;
+  brands;
+  taxes;
+  optionSets;
 
   constructor(
     private productService: ProductService,
@@ -83,6 +88,11 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to update product on changes
+    this.getSupplier();
+    // this.getTaxes();
+    this.getBrands();
+    this.getOptionSets();
+
     this.onProductChanged = this.productService.onProductChanged.subscribe(
       product => {
         if (product) {
@@ -101,9 +111,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       category => {
         // if (category)
         this.category = category;
-
-        console.log(this.category);
-
         // this.productForm = this.createProductForm();
       }
     );
@@ -146,7 +153,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       category_id: [this.product.category_id],
       tax_id: [this.product.tax_id],
       brand_id: [this.product.brand_id],
-      supplier_ids: [this.product.supplier_ids],
+      supplier_id: [this.product.supplier_ids.id],
       price: [this.product.supplier_ids.price],
       // taxRate: [this.product.taxRate],
       // comparedPrice: [this.product.comparedPrice],
@@ -155,7 +162,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       width: [this.product.supplier_ids.width],
       height: [this.product.supplier_ids.height],
       depth: [this.product.supplier_ids.depth],
-      weight: [this.product.supplier_ids.weight]
+      weight: [this.product.supplier_ids.weight],
+      upc: [this.product.supplier_ids.upc],
+      ean: [this.product.supplier_ids.ean]
       // extraShippingFee: [this.product.extraShippingFee],
       // active: [this.product.active],
     });
@@ -244,6 +253,79 @@ export class ProductComponent implements OnInit, OnDestroy {
   //   // this.location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
   // });
   // }
+
+  getSupplier() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getSupplier().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.suppliers = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getTaxes() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getTaxes().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.taxes = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getBrands() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getBrands().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.brands = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getOptionSets() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getOptionSets().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.optionSets = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
 
   dropped(event: UploadEvent) {
     this.files = event.files;
