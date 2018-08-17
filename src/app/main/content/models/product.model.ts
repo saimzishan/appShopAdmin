@@ -1,112 +1,99 @@
-import { FuseUtils } from '../../../core/fuseUtils';
-import { MatChipInputEvent } from '@angular/material';
+import { FuseUtils } from "../../../core/fuseUtils";
+import { MatChipInputEvent } from "@angular/material";
 
-export class Product
-{
-    id: string;
-    name: string;
-    handle: string;
-    description: string;
-    categories: string[];
-    tags: string[];
-    images: {
-        default: boolean,
-        id: string,
-        url: string,
-        type: string
-    }[];
-    priceTaxExcl: number;
-    priceTaxIncl: number;
-    price: number;
-    taxRate: number;
-    comparedPrice: number;
-    quantity: number;
-    sku: string;
-    width: string;
-    height: string;
-    depth: string;
-    weight: string;
-    extraShippingFee: number;
-    active: boolean;
+export class supplier_id {
+  id: string;
+  price: string;
+  ean: string;
+  sku: string;
+  upc: string;
+  weight: string;
+  width: string;
+  height: string;
+  depth: string;
+  image: string;
+  content_type: string;
+  constructor(supplier_id?) {
+    supplier_id = supplier_id || {};
+    this.id = supplier_id.id || FuseUtils.generateGUID();
+    this.price = supplier_id.price || "";
+    this.ean = supplier_id.ean || "";
+    this.sku = supplier_id.sku || "";
+    this.height = supplier_id.height || "";
+    this.depth = supplier_id.depth || "";
+    this.image = supplier_id.image || "";
+    this.content_type = supplier_id.content_type || "";
+  }
+}
 
-    constructor(product?)
-    {
-        product = product || {};
-        this.id = product.id || FuseUtils.generateGUID();
-        this.name = product.name || '';
-        this.handle = product.handle || FuseUtils.handleize(this.name);
-        this.description = product.description || '';
-        this.categories = product.categories || [];
-        this.tags = product.tags || [];
-        this.images = product.images || [];
-        this.priceTaxExcl = product.priceTaxExcl || 0;
-        this.priceTaxIncl = product.priceTaxIncl || 0;
-        this.price = product.price || 0;
-        this.taxRate = product.taxRate || 0;
-        this.comparedPrice = product.comparedPrice || 0;
-        this.quantity = product.quantity || 0;
-        this.sku = product.sku || 0;
-        this.width = product.width || 0;
-        this.height = product.height || 0;
-        this.depth = product.depth || 0;
-        this.weight = product.weight || 0;
-        this.extraShippingFee = product.extraShippingFee || 0;
-        this.active = product.active || true;
+export class Product {
+  id: string;
+  name: string;
+  handle: string;
+  short_description: string;
+  long_description: string;
+  categories: string[];
+  category_id: string;
+  tax_id: string;
+  brand_id: string;
+  supplier_ids: supplier_id;
+
+  constructor(product?) {
+    product = product || {};
+    this.id = product.id || FuseUtils.generateGUID();
+    this.name = product.name || "";
+    this.handle = product.handle || FuseUtils.handleize(this.name);
+    this.supplier_ids = new supplier_id();
+  }
+
+  addCategory(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add category
+    if (value) {
+      this.categories.push(value);
     }
 
-    addCategory(event: MatChipInputEvent): void
-    {
-        const input = event.input;
-        const value = event.value;
-
-        // Add category
-        if ( value )
-        {
-            this.categories.push(value);
-        }
-
-        // Reset the input value
-        if ( input )
-        {
-            input.value = '';
-        }
+    // Reset the input value
+    if (input) {
+      input.value = "";
     }
+  }
 
-    removeCategory(category)
-    {
-        const index = this.categories.indexOf(category);
+  removeCategory(category) {
+    const index = this.categories.indexOf(category);
 
-        if ( index >= 0 )
-        {
-            this.categories.splice(index, 1);
-        }
+    if (index >= 0) {
+      this.categories.splice(index, 1);
     }
+  }
 
-    addTag(event: MatChipInputEvent): void
-    {
-        const input = event.input;
-        const value = event.value;
+  // addTag(event: MatChipInputEvent): void
+  // {
+  //     const input = event.input;
+  //     const value = event.value;
 
-        // Add tag
-        if ( value )
-        {
-            this.tags.push(value);
-        }
+  //     // Add tag
+  //     if ( value )
+  //     {
+  //         this.tags.push(value);
+  //     }
 
-        // Reset the input value
-        if ( input )
-        {
-            input.value = '';
-        }
-    }
+  //     // Reset the input value
+  //     if ( input )
+  //     {
+  //         input.value = '';
+  //     }
+  // }
 
-    removeTag(tag)
-    {
-        const index = this.tags.indexOf(tag);
+  // removeTag(tag)
+  // {
+  //     const index = this.tags.indexOf(tag);
 
-        if ( index >= 0 )
-        {
-            this.tags.splice(index, 1);
-        }
-    }
+  //     if ( index >= 0 )
+  //     {
+  //         this.tags.splice(index, 1);
+  //     }
+  // }
 }

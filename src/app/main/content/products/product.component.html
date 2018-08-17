@@ -17,10 +17,10 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
 
-                <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                <!-- <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
                     <img *ngIf="product.images[0]" [src]="product.images[0].url">
                     <img *ngIf="!product.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
-                </div>
+                </div> -->
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2" *ngIf="pageType ==='edit'">
@@ -71,9 +71,9 @@
                                     <input matInput name="price" formControlName="price" placeholder="Product Price">
                                 </mat-form-field>
 
-                                <mat-form-field class="w-100-p">
+                                <!-- <mat-form-field class="w-100-p">
                                     <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
-                                </mat-form-field>
+                                </mat-form-field> -->
 
                                 <h3 class="mb-0">Categories</h3>
                                 <div class="row" *ngFor="let c of category">
@@ -187,7 +187,7 @@
                                     <input matInput name="depth" formControlName="depth" placeholder="Depth (Centimeters)">
                                 </mat-form-field>
                                 <mat-form-field class="w-100-p">
-                                    <textarea matInput name="description" formControlName="description" placeholder="Product Description" rows="5">
+                                    <textarea matInput name="short_description" formControlName="short_description" placeholder="Product Description" rows="5">
                                 </textarea>
                                 </mat-form-field>
                             </div>
@@ -238,26 +238,8 @@
                             </div>-->
                         </mat-tab>
 
-                        <mat-tab label="Inventory">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <mat-label>
-                                    You can track inventory for your products by first choosing an option from those shown below. You will then be able to update
-                                    inventory levels.
-                                </mat-label>
-                                <br>
-                                <br>
-                                <mat-label>
-                                    <h3 class="mb-0">Tracking Method</h3>
-                                </mat-label>
-                                <br>
-                                <mat-radio-group>
-                                    <mat-radio-button value="1">Do not track inventory for this product</mat-radio-button>
-                                    <mat-icon matSuffix>help</mat-icon>
-                                    <br>
-                                    <mat-radio-button value="2">Track inventory for this product
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            </div>
+                        <mat-tab label="Supplier">
+
                         </mat-tab>
 
                         <mat-tab label="Options & SKUs">
@@ -347,10 +329,10 @@
                                     <input matInput name="Weight" formControlName="weight" placeholder="Weight">
                                 </mat-form-field>
 
-                                <mat-form-field class="w-100-p">
+                                <!-- <mat-form-field class="w-100-p">
                                     <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
                                     <span matPrefix>$&nbsp;</span>
-                                </mat-form-field>
+                                </mat-form-field> -->
 
                                 <!-- <mat-form-field class="w-100-p">
                                     <input matInput
@@ -387,10 +369,10 @@
                                     <input matInput name="Weight" formControlName="weight" placeholder="Weight">
                                 </mat-form-field>
 
-                                <mat-form-field class="w-100-p">
+                                <!-- <mat-form-field class="w-100-p">
                                     <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
                                     <span matPrefix>$&nbsp;</span>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </div>
                         </mat-tab>
 
@@ -413,10 +395,10 @@
                                     <input matInput name="Weight" formControlName="weight" placeholder="Weight">
                                 </mat-form-field>
 
-                                <mat-form-field class="w-100-p">
+                                <!-- <mat-form-field class="w-100-p">
                                     <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
                                     <span matPrefix>$&nbsp;</span>
-                                </mat-form-field>
+                                </mat-form-field> -->
                             </div>
                         </mat-tab>
 
