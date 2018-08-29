@@ -1,3 +1,4 @@
+import { Supplier } from "./../models/product.model";
 import { Subscription } from "rxjs/Subscription";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
@@ -11,7 +12,7 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/observable/fromEvent";
 import { Product } from "../models/product.model";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { FuseUtils } from "../../../core/fuseUtils";
 import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
 import { Location } from "@angular/common";
@@ -81,14 +82,14 @@ export class ProductComponent implements OnInit, OnDestroy {
   //   }
   // ];
   options = {};
-  suppliers: any;
+  suppliers: Supplier;
   brands;
   taxes;
   optionSets;
   optionsTab = true;
   skusTab = false;
   rulesTab = false;
-
+  supplier: Supplier = new Supplier();
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -156,31 +157,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   createProductForm() {
-    return this.formBuilder.group({
-      id: [this.product.id],
-      name: [this.product.name],
-      handle: [this.product.handle],
-      short_description: [this.product.short_description],
-      long_description: [this.product.long_description],
-      categories: [this.product.categories],
-      category_id: [this.product.category_id],
-      tax_id: [this.product.tax_id],
-      brand_id: [this.product.brand_id],
-      supplier_id: [this.product.supplier_ids.id],
-      price: [this.product.supplier_ids.price],
-      // taxRate: [this.product.taxRate],
-      // comparedPrice: [this.product.comparedPrice],
-      // quantity: [this.product.quantity],
-      sku: [this.product.supplier_ids.sku],
-      width: [this.product.supplier_ids.width],
-      height: [this.product.supplier_ids.height],
-      depth: [this.product.supplier_ids.depth],
-      weight: [this.product.supplier_ids.weight],
-      upc: [this.product.supplier_ids.upc],
-      ean: [this.product.supplier_ids.ean]
-      // extraShippingFee: [this.product.extraShippingFee],
-      // active: [this.product.active],
-    });
+    return this.formBuilder.group({});
   }
 
   newOptionAdded() {
@@ -231,11 +208,20 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  addProduct() {
+  addProduct(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
+    }
+    // const supplier: Supplier = this.product.suppliers;
+    this.product.suppliers = [];
+    this.product.suppliers.push(new Supplier(this.supplier));
     this.spinnerService.requestInProcess(true);
-    const data = this.productForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.productService.addProduct(data).subscribe(
+    console.log(this.product);
+    // const data = this.productForm.getRawValue();
+    // data.handle = FuseUtils.handleize(data.name);
+    this.productService.addProduct(this.product).subscribe(
       (res: any) => {
         if (res.status === 200) {
           this.snotifyService.success("Product added", "Success !");
@@ -277,7 +263,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.productService.getSupplier().subscribe(
       (res: any) => {
         if (!res.status) {
-          this.suppliers = res.res.data;
+          this.suppliers = res.res.data.data;
+          console.log(this.suppliers);
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -432,6 +419,16 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.optionsTab = true;
         this.skusTab = false;
     }
+  }
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
   }
 
   ngOnDestroy() {
