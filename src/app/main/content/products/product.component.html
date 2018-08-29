@@ -331,8 +331,8 @@
                                             <div *ngIf="optionsTab" [ngClass]="{'show active' : optionsTab}" class="tab-pane fade" id="v-pills-home" role="tabpanel"
                                                 aria-labelledby="v-pills-home-tab">
                                                 <label style="border-bottom: 2px solid;
-                                                border-bottom-style: dashed;">Option
-                                                    Set</label>
+                                                border-bottom-style: dashed;">Option Set
+                                                </label>
                                                 <br>
                                                 <mat-form-field class="w-60-p">
                                                     <mat-select placeholder="Option Set" name="supplier_id" formControlName="supplier_id" (change)="checkMyOptions($event.value)"
@@ -346,7 +346,7 @@
 
                                                 <mat-form-field class="w-30-p">
                                                     <input matInput name="height" formControlName="height" hidden>
-                                                    <a (click)="newOptionAdded()">Create new Option SetSelect option set</a>
+                                                    <a (click)="addandDeleteModal.show()">Create new Option SetSelect option set</a>
                                                 </mat-form-field>
                                                 <br>
                                                 <label style="border-bottom: 2px solid;
@@ -376,13 +376,12 @@
                                                     Create SKU
                                                 </button>
                                                 <button mat-raised-button color="accent">
-                                                        Generate SKUs
-                                                    </button>
-                                                    Or
+                                                    Generate SKUs
+                                                </button>
+                                                Or
                                             </div>
                                             <div *ngIf="rulesTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                                                aria-labelledby="v-pills-messages-tab">Lorem
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                aria-labelledby="v-pills-messages-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
                                                 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.Lorem
                                                 ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
@@ -513,22 +512,26 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="addOptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<app-modals #addandDeleteModal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        ...
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+</app-modals>
+<!-- <div class="modal fade" id="addOptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+
+
         </div>
     </div>
-</div>
+</div> -->
