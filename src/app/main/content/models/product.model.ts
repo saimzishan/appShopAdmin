@@ -1,5 +1,5 @@
-import { FuseUtils } from "../../../core/fuseUtils";
-import { MatChipInputEvent } from "@angular/material";
+import { FuseUtils } from '../../../core/fuseUtils';
+import { MatChipInputEvent } from '@angular/material';
 
 export class supplier_id {
   id: string;
@@ -15,15 +15,20 @@ export class supplier_id {
   content_type: string;
   constructor(supplier_id?) {
     supplier_id = supplier_id || {};
-    this.id = supplier_id.id || "";
-    this.price = supplier_id.price || "";
-    this.ean = supplier_id.ean || "";
-    this.sku = supplier_id.sku || "";
-    this.height = supplier_id.height || "";
-    this.depth = supplier_id.depth || "";
-    this.image = supplier_id.image || "";
-    this.content_type = supplier_id.content_type || "";
+    this.id = supplier_id.id || '';
+    this.price = supplier_id.price || '';
+    this.ean = supplier_id.ean || '';
+    this.sku = supplier_id.sku || '';
+    this.height = supplier_id.height || '';
+    this.depth = supplier_id.depth || '';
+    this.image = supplier_id.image || '';
+    this.content_type = supplier_id.content_type || '';
   }
+}
+
+export class Option{
+  id: string;
+  option_name = '';
 }
 
 export class Product {
@@ -37,11 +42,12 @@ export class Product {
   tax_id: string;
   brand_id: string;
   supplier_ids: supplier_id;
+  option_set: Option[];
 
   constructor(product?) {
     product = product || {};
     this.id = product.id || FuseUtils.generateGUID();
-    this.name = product.name || "";
+    this.name = product.name || '';
     this.handle = product.handle || FuseUtils.handleize(this.name);
     this.supplier_ids = new supplier_id();
   }
@@ -57,7 +63,7 @@ export class Product {
 
     // Reset the input value
     if (input) {
-      input.value = "";
+      input.value = '';
     }
   }
 
