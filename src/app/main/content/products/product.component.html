@@ -316,12 +316,14 @@
 
                                     <div class="col-md-2">
                                         <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                            <a class="nav-link" [ngClass]="{'active' : optionsTab}" id="v-pills-home-tab" data-toggle="pill" (click)="openRelatedTab('optionsTab')"
-                                                role="tab" aria-controls="v-pills-home" aria-selected="true">Options</a>
-                                            <a class="nav-link" [ngClass]="{'active' : skusTab}" id="v-pills-profile-tab" data-toggle="pill" (click)="openRelatedTab('skusTab')"
-                                                role="tab" aria-controls="v-pills-profile" aria-selected="false">SKUs</a>
-                                            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" (click)="openRelatedTab('rulesTab')" role="tab" aria-controls="v-pills-messages"
-                                                aria-selected="false" [ngClass]="{'active' : rulesTab}">Rules</a>
+                                            <a class="nav-link" style="cursor: pointer" [ngClass]="{'active' : optionsTab}" id="v-pills-home-tab" data-toggle="pill"
+                                                (click)="openRelatedTab('optionsTab')" role="tab" aria-controls="v-pills-home"
+                                                aria-selected="true">Options</a>
+                                            <a *ngIf="disableSkuAndRuleTab" style="cursor: pointer" class="nav-link" [ngClass]="{'active' : skusTab}" id="v-pills-profile-tab"
+                                                data-toggle="pill" (click)="openRelatedTab('skusTab')" role="tab" aria-controls="v-pills-profile"
+                                                aria-selected="false">SKUs</a>
+                                            <a *ngIf="disableSkuAndRuleTab" style="cursor: pointer" class="nav-link" id="v-pills-messages-tab" data-toggle="pill" (click)="openRelatedTab('rulesTab')"
+                                                role="tab" aria-controls="v-pills-messages" aria-selected="false" [ngClass]="{'active' : rulesTab}">Rules</a>
 
                                         </div>
                                     </div>
@@ -332,7 +334,8 @@
                                                 aria-labelledby="v-pills-home-tab">
                                                 <label style="border-bottom: 2px solid;
                                                 border-bottom-style: dashed;">Option
-                                                    Set</label>
+                                                    Set
+                                                </label>
                                                 <br>
                                                 <mat-form-field class="w-60-p">
                                                     <mat-select placeholder="Option Set" name="supplier_id" formControlName="supplier_id" (change)="checkMyOptions($event.value)"
@@ -371,29 +374,108 @@
 
                                                 </div>
                                             </div>
-                                            <div *ngIf="skusTab" [ngClass]="{'show active' : skusTab}" class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                            <div *ngIf="skusTab && disableSkuAndRuleTab" [ngClass]="{'show active' : skusTab}" class="tab-pane fade" id="v-pills-profile"
+                                                role="tabpanel" aria-labelledby="v-pills-profile-tab">
                                                 <button mat-raised-button color="accent">
                                                     Create SKU
                                                 </button>
                                                 <button mat-raised-button color="accent">
-                                                        Generate SKUs
-                                                    </button>
-                                                    Or
+                                                    Generate SKUs
+                                                </button>
+                                                <br>
+                                                <table class="table table-bordered">
+                                                    <!-- Name Column -->
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th> -->
+                                                            <!-- </th> -->
+                                                            <th scope="col">
+                                                                <mat-checkbox></mat-checkbox>
+                                                                &nbsp; Image
+                                                            </th>
+                                                            <th scope="col">SKU</th>
+                                                            <th scope="col">UPC</th>
+                                                            <th scope="col">BPN</th>
+                                                            <th scope="col">Cost</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                            <div *ngIf="rulesTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages" role="tabpanel"
-                                                aria-labelledby="v-pills-messages-tab">Lorem
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.Lorem
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
-
+                                            <div *ngIf="rulesTab && disableSkuAndRuleTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages"
+                                                role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                                                <label style="border-bottom: 2px solid;
+                                                border-bottom-style: dashed;">Product
+                                                    Rules
+                                                </label>
+                                                <br>
+                                                <button mat-raised-button color="accent">
+                                                    Create a Rule
+                                                </button>&nbsp; Or &nbsp;
+                                                <mat-form-field>
+                                                    <mat-select placeholder="Choose">
+                                                        <mat-option>--Choose An Action--</mat-option>
+                                                        <mat-option>Deleted Selected</mat-option>
+                                                        <mat-option>Enable Selected</mat-option>
+                                                        <mat-option>Disable Selected</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>&nbsp;
+                                                <button mat-raised-button color="accent">
+                                                    Go
+                                                </button>&nbsp;
+                                                <label style="color: blue ; cursor: pointer">Filter
+                                                </label>&nbsp;&nbsp;
+                                                <label style="color: blue ; cursor: pointer">Clear Filter
+                                                </label>
+                                                <table class="table table-bordered">
+                                                    <!-- Name Column -->
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th> -->
+                                                            <!-- </th> -->
+                                                            <th scope="col">
+                                                                <mat-checkbox></mat-checkbox>
+                                                                &nbsp; When Selected
+                                                            </th>
+                                                            <th scope="col">Set Rule</th>
+                                                            <th scope="col">Enabled</th>
+                                                            <th scope="col">Rule Options</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br><br>
+                                                <label style="border-bottom: 2px solid;
+                                                    border-bottom-style: dashed;">Option
+                                                    Set Rules
+                                                </label>
+                                                <br>
+                                                <table class="table table-bordered">
+                                                    <!-- Name Column -->
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th> -->
+                                                            <!-- </th> -->
+                                                            <th scope="col">
+                                                                &nbsp; When Selected
+                                                            </th>
+                                                            <th scope="col">Set Rule</th>
+                                                            <th scope="col">Enabled</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
 
                                         </div>

@@ -28,6 +28,7 @@ import { Category } from '../models/category.model';
 import { TreeModule } from 'ng2-tree';
 import { MatTableDataSource } from '@angular/material';
 import { NgSelectMultipleOption } from '@angular/forms/src/directives';
+import { FuseOptionFormDialogComponent } from './sku-form/option-form.component';
 // import * as $ from 'jquery';
 declare var $: any;
 // import {MatTreeModule} from '@angular/material/tree';
@@ -50,6 +51,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
   dataSource;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+  disableSkuAndRuleTab = false;
+  dialogRef: any;
 
   files: UploadFile[] = [];
   nodes: any;
@@ -181,7 +184,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   newOptionAdded() {
-    $('#addOptionModal').modal('show');
+    // $('#addOptionModal').modal('show');
+    this.newContact();
   }
 
   // createCategoryForm() {
@@ -386,10 +390,34 @@ export class ProductComponent implements OnInit, OnDestroy {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
       this.setDataSuorce(result.options);
+      this.disableSkuAndRuleTab = true;
     } else {
       this.dataSource = [];
+      this.disableSkuAndRuleTab = false;
     }
   }
+
+  newContact()
+  {
+      this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
+          panelClass: 'contact-form-dialog',
+          data      : {
+              action: 'new'
+          }
+      });
+
+      this.dialogRef.afterClosed()
+          .subscribe((response: FormGroup) => {
+              if ( !response )
+              {
+                  return;
+              }
+
+
+          });
+
+  }
+
   setDataSuorce(obj) {
     this.dataSource = obj;
   }
