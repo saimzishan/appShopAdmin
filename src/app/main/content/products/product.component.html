@@ -298,7 +298,7 @@
                         <mat-tab label="Options & SKUs">
                             <div class="tab-content p-24" fusePerfectScrollbar>
                                 <div class="row">
-                                    <mat-tab-group>
+                                    <!-- <mat-tab-group>
                                         <mat-tab label="Option Set">
                                             <div class="tab-content p-24" fusePerfectScrollbar>
                                                 <mat-form-field class="w-100-p">
@@ -311,8 +311,105 @@
                                             </div>
                                         </mat-tab>
                                         <mat-tab label="Create new Option Set"></mat-tab>
-                                    </mat-tab-group>
+                                    </mat-tab-group> -->
+
+
+                                    <div class="col-md-2">
+                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home"
+                                                aria-selected="true">Options</a>
+                                            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
+                                                aria-selected="false">SKUs</a>
+                                            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
+                                                aria-selected="false">Rules</a>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10">
+
+                                        <div class="tab-content" id="v-pills-tabContent">
+                                            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                                <label style="border-bottom: 2px solid;
+                                                border-bottom-style: dashed;">Option Set</label>
+                                                <br>
+                                                <mat-form-field class="w-60-p">
+                                                    <mat-select placeholder="Option Set" name="supplier_id" formControlName="supplier_id" (change)="checkMyOptions($event.value)"
+                                                        required>
+                                                        <mat-option value="-1">--None--</mat-option>
+                                                        <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                                                            {{optionSet.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+
+                                                <mat-form-field class="w-30-p">
+                                                    <input matInput name="height" formControlName="height" hidden>
+                                                    <a href="">Create new Option SetSelect option set</a>
+                                                </mat-form-field>
+                                                <br>
+                                                <label style="border-bottom: 2px solid;
+                                                border-bottom-style: dashed;">Options</label>
+                                                <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
+                                                    <table class="table table-bordered">
+                                                        <!-- Name Column -->
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Option name</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let row of dataSource">
+                                                                <td>
+                                                                    {{row.value}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <br>
+
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.Lorem
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.Lorem
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                            </div>
+                                            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos.Lorem
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                                ipsum dolor sit amet consectetur adipisicing elit. Quisquam, dignissimos
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+
 
                             </div>
                         </mat-tab>
@@ -322,92 +419,95 @@
 
                                 <div class="py-16" fxLayout="row">
                                     <mat-form-field fxFlex>
-                                        <input matInput name="Width" formControlName="width" placeholder="Width">
+                                        <input matInput name="width" formControlName="width" placeholder="Custom Field #1 Name">
                                     </mat-form-field>
                                     <mat-form-field fxFlex>
-                                        <input matInput name="Height" formControlName="height" placeholder="Height">
+                                        <input matInput name="Height" formControlName="height" placeholder="Custom Field #1 value">
                                     </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Depth" formControlName="depth" placeholder="Depth">
-                                    </mat-form-field>
+
                                 </div>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput name="Weight" formControlName="weight" placeholder="Weight">
-                                </mat-form-field>
 
-                                <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                </mat-form-field> -->
-
-                                <!-- <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="sku"
-                                           formControlName="sku"
-                                           placeholder="SKU">
-                                </mat-form-field>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput
-                                           name="quantity"
-                                           formControlName="quantity"
-                                           placeholder="Quantity" type="number">
-                                </mat-form-field> -->
                             </div>
                         </mat-tab>
 
                         <mat-tab label="Other Details">
                             <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
+                                <div>
+                                    <legend>
+                                        <h2>Product Identifiers</h2>
+                                    </legend>
+                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
+                                        <div class="py-16" fxLayout="row">
+                                            <mat-form-field fxFlex class="w-50-p">
+                                                <input matInput name="width" formControlName="width" placeholder="Global Trade Item Number">
+                                            </mat-form-field>
+                                            <mat-form-field fxFlex class="w-50-p">
+                                                <input matInput name="Height" formControlName="height" placeholder="Manufacturer Part Number">
+                                            </mat-form-field>
+                                        </div>
 
-                                <div class="py-16" fxLayout="row">
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Width" formControlName="width" placeholder="Width">
-                                    </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Height" formControlName="height" placeholder="Height">
-                                    </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Depth" formControlName="depth" placeholder="Depth">
-                                    </mat-form-field>
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="Depth" formControlName="depth" placeholder="Brand Name">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="weight" formControlName="weight" placeholder="Product UPC/EAN">
+                                        </mat-form-field>
+
+                                    </div>
+
+                                </div>
+                                <div>
+                                    <legend>
+                                        <h2>Related Products</h2>
+                                    </legend>
+                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
+                                        Related Products
+                                        <mat-checkbox formControlName="Weight"></mat-checkbox>
+                                        Find and show related products automatically
+                                    </div>
+
+
+                                </div>
+                                <div>
+
+                                    <legend>
+                                        <h2>Other Details</h2>
+                                    </legend>
+                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
+                                        <div class="py-16" fxLayout="row">
+                                            <mat-form-field fxFlex class="w-50-p">
+                                                <input matInput name="Width" formControlName="width" placeholder="Bin Picking Number">
+                                            </mat-form-field>
+                                            <mat-form-field fxFlex class="w-50-p">
+                                                <textarea matInput name="Height" formControlName="height" placeholder="Warranty Information"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                        <br>
+                                        <mat-form-field class="w-100-p">
+                                            <mat-select name="Width" placeholder="Select" formControlName="brand_id">
+                                                <mat-option value="option" selected>Default</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="Weight" formControlName="weight" placeholder="Search Keywords">
+                                        </mat-form-field>
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="Weight" formControlName="weight" placeholder="Availability">
+                                        </mat-form-field>
+                                        Visible
+                                        <mat-checkbox name="Width" formControlName="weight"></mat-checkbox>
+                                        Yes, this product should be visible on my web site
+                                        <br>
+                                        <br> Featured Product
+                                        <mat-checkbox name="Width" formControlName="weight"></mat-checkbox>
+                                        Yes, this is a featured product
+
+                                    </div>
+
                                 </div>
 
-                                <mat-form-field class="w-100-p">
-                                    <input matInput name="Weight" formControlName="weight" placeholder="Weight">
-                                </mat-form-field>
-
-                                <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                </mat-form-field> -->
                             </div>
                         </mat-tab>
-
-                        <mat-tab label="Bulk Pricing">
-                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
-
-                                <div class="py-16" fxLayout="row">
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Width" formControlName="width" placeholder="Width">
-                                    </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Height" formControlName="height" placeholder="Height">
-                                    </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Depth" formControlName="depth" placeholder="Depth">
-                                    </mat-form-field>
-                                </div>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput name="Weight" formControlName="weight" placeholder="Weight">
-                                </mat-form-field>
-
-                                <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="extraShippingFee" formControlName="extraShippingFee" placeholder="Extra Shipping Fee" type="number">
-                                    <span matPrefix>$&nbsp;</span>
-                                </mat-form-field> -->
-                            </div>
-                        </mat-tab>
-
                     </mat-tab-group>
                 </form>
 

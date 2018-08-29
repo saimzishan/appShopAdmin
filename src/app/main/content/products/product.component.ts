@@ -24,6 +24,9 @@ import {
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 import { Category } from "../models/category.model";
 import { TreeModule } from "ng2-tree";
+import { MatTableDataSource } from "@angular/material";
+import { NgSelectMultipleOption } from "@angular/forms/src/directives";
+
 // import {MatTreeModule} from '@angular/material/tree';
 
 @Component({
@@ -41,7 +44,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   viewChildren = false;
   pageType: string;
   productForm: FormGroup;
-
+  dataSource;
+  displayedColumns: string[] = ["OptionName"];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   files: UploadFile[] = [];
@@ -368,8 +372,25 @@ export class ProductComponent implements OnInit, OnDestroy {
   fileLeave(event) {
     console.log(event);
   }
+  checkMyOptions(val) {
+    const result = this.optionSets.find(option => option.id === val);
+    if (result !== undefined) {
+      this.setDataSuorce(result.options);
+    } else {
+      this.dataSource = [];
+    }
+  }
+  setDataSuorce(obj) {
+    this.dataSource = obj;
+  }
 
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
+}
+export interface PeriodicElement {
+  value: string;
+  id: number;
+  option_set_id: number;
+  product_variant_option_id: number;
 }
