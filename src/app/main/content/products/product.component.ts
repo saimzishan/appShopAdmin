@@ -20,14 +20,9 @@ import {
   FileSystemFileEntry,
   UploadEvent,
   UploadFile
-<<<<<<< HEAD
-} from "ngx-file-drop";
-import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
-import { Category } from "../models/category.model";
-import { TreeModule } from "ng2-tree";
-
-=======
 } from 'ngx-file-drop';
+// import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 import { Category } from '../models/category.model';
 import { TreeModule } from 'ng2-tree';
@@ -35,7 +30,6 @@ import { MatTableDataSource } from '@angular/material';
 import { NgSelectMultipleOption } from '@angular/forms/src/directives';
 // import * as $ from 'jquery';
 declare var $: any;
->>>>>>> jquery
 // import {MatTreeModule} from '@angular/material/tree';
 
 @Component({
@@ -55,10 +49,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   pageType: string;
   productForm: FormGroup;
   dataSource;
-<<<<<<< HEAD
-=======
-  displayedColumns: string[] = ['OptionName'];
->>>>>>> jquery
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   files: UploadFile[] = [];
@@ -405,12 +395,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   openRelatedTab(val: string) {
     switch (val) {
-      case "rulesTab":
+      case 'rulesTab':
         this.rulesTab = true;
         this.optionsTab = false;
         this.skusTab = false;
         break;
-      case "skusTab":
+      case 'skusTab':
         this.rulesTab = false;
         this.optionsTab = false;
         this.skusTab = true;
