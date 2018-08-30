@@ -57,30 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   files: UploadFile[] = [];
   nodes: any;
-  // nodes = [
-  //   {
-  //     id: 1,
-  //     name: 'cat 1',
-  //     children: [
-  //       { id: 2, name: 'cat 1-1' },
-  //       { id: 3, name: 'cat 1-2' }
-  //     ]
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'cat 2',
-  //     children: [
-  //       { id: 5, name: 'cat 2-1' },
-  //       {
-  //         id: 6,
-  //         name: 'cat 2-2',
-  //         children: [
-  //           { id: 7, name: 'cat 2-2-1' }
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // ];
+
   options = {};
   suppliers: Supplier;
   brands;
@@ -116,8 +93,6 @@ export class ProductComponent implements OnInit, OnDestroy {
           this.pageType = "new";
           this.product = new Product();
         }
-
-        this.productForm = this.createProductForm();
       }
     );
 
@@ -156,39 +131,10 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  createProductForm() {
-    return this.formBuilder.group({});
-  }
-
   newOptionAdded() {
     // $('#addOptionModal').modal('show');
     this.newContact();
   }
-
-  // createCategoryForm() {
-  //   return this.formBuilder.group({
-  //     id: [this.category.id],
-  //     name: [this.category.name],
-  //     handle: [this.product.handle],
-  //     description: [this.product.description],
-  //     categories: [this.product.categories],
-  //     tags: [this.product.tags],
-  //     images: [this.product.images],
-  //     priceTaxExcl: [this.product.priceTaxExcl],
-  //     priceTaxIncl: [this.product.priceTaxIncl],
-  //     price: [this.product.price],
-  //     taxRate: [this.product.taxRate],
-  //     comparedPrice: [this.product.comparedPrice],
-  //     quantity: [this.product.quantity],
-  //     sku: [this.product.sku],
-  //     width: [this.product.width],
-  //     height: [this.product.height],
-  //     depth: [this.product.depth],
-  //     weight: [this.product.weight],
-  //     extraShippingFee: [this.product.extraShippingFee],
-  //     active: [this.product.active]
-  //   });
-  // }
 
   saveProduct() {
     this.spinnerService.requestInProcess(true);
@@ -214,49 +160,25 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    // const supplier: Supplier = this.product.suppliers;
     this.product.suppliers = [];
     this.product.suppliers.push(new Supplier(this.supplier));
     this.spinnerService.requestInProcess(true);
-    console.log(this.product);
-    // const data = this.productForm.getRawValue();
-    // data.handle = FuseUtils.handleize(data.name);
+
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
-        if (res.status === 200) {
-          this.snotifyService.success("Product added", "Success !");
-          // this.router.navigate(['/user-management']);
-        }
+        this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
+        this.product = new Product();
+        this.supplier = new Supplier();
       },
       errors => {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
-  // .then(() => {
-
-  //   // Trigger the subscription with new data
-  //   this.productService.onProductChanged.next(data);
-
-  //   // Show the success message
-  //   // this.snackBar.open('Product added', 'OK', {
-  //   //   verticalPosition: 'top',
-  //   //   duration: 2000
-  //   // });
-
-  //   this.snotifyService.success('Product added','Success !');
-  //   this.spinnerService.requestInProcess(false);
-  //   // Change the location with new one
-  //   this.location.go('/products');
-  //   // Change the location with new one
-  //   // this.location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
-  // });
-  // }
 
   getSupplier() {
     this.spinnerService.requestInProcess(true);
@@ -264,7 +186,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       (res: any) => {
         if (!res.status) {
           this.suppliers = res.res.data.data;
-          console.log(this.suppliers);
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -340,8 +261,6 @@ export class ProductComponent implements OnInit, OnDestroy {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
           // Here you can access the real file
-          console.log(droppedFile.relativePath, file);
-
           /**
            // You could upload it like this:
            const formData = new FormData()
@@ -361,18 +280,13 @@ export class ProductComponent implements OnInit, OnDestroy {
       } else {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
   }
 
-  fileOver(event) {
-    console.log(event);
-  }
+  fileOver(event) {}
 
-  fileLeave(event) {
-    console.log(event);
-  }
+  fileLeave(event) {}
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
@@ -430,7 +344,17 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  selectCategory(event, cId) {
+    if (event.checked) {
+      this.product.category_id = cId;
+    }
+  }
+  handleSelection(event) {
+    if (event.option.selected) {
+      event.source.deselectAll();
+      event.option._setSelected(true);
+    }
+  }
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }

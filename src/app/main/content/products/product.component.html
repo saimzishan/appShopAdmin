@@ -83,21 +83,21 @@
                                         </div>
                                     </ng-container> -->
 
-                                    <ul style="list-style-type:none">
+                                    <ul style="list-style-type:none; margin-bottom: -1.5rem;">
                                         <li>
                                             <mat-icon *ngIf="c.children.length>0 && !viewChildren" (click)="enableChildren()" class="secondary-text s-15 mat-icon material-icons colorShow"
                                                 role="img" aria-hidden="true">expand_more</mat-icon>
                                             <mat-icon *ngIf="c.children.length>0 && viewChildren" (click)="disableChildren()" class="secondary-text s-15 mat-icon material-icons colorHide"
                                                 role="img" aria-hidden="true">expand_less</mat-icon>
-                                            <mat-checkbox>
-                                                <mat-icon style="margin-top: 6px" class="secondary-text s-25 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
+                                            <mat-checkbox (change)="selectCategory($event, c.id)" class="xb-checkbox" style="font-size: small">
+                                                <mat-icon style="font-size: small" class="secondary-text s-25 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
                                                 {{c.name}}
                                             </mat-checkbox>
                                         </li>
-                                        <ul *ngIf="c.children.length>0 && viewChildren" style="list-style-type:none">
+                                        <ul *ngIf="c.children.length>0 && viewChildren" style="list-style-type:none; margin-bottom: -1.5rem;">
                                             <ng-container *ngFor="let a of c.children">
                                                 <li>
-                                                    <mat-checkbox>
+                                                    <mat-checkbox class="xb-checkbox">
                                                         {{a.name}}
                                                     </mat-checkbox>
                                                 </li>
@@ -106,6 +106,7 @@
                                     </ul>
 
                                 </div>
+                                <br>
                                 <!-- <div class="row">
                                     <mat-checkbox>
                                         <mat-icon style="font-size: 5px" class="secondary-text s-48 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
@@ -375,14 +376,14 @@
 
                                                 <mat-form-field class="w-30-p">
                                                     <input matInput name="height" [(ngModel)]="product.height" hidden>
-                                                    <a (click)="newOptionAdded()">Create new Option SetSelect option set</a>
+                                                    <a>Create new Option set</a>
+                                                    <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
                                                 </mat-form-field>
                                                 <br>
                                                 <label style="border-bottom: 2px solid;
                                                 border-bottom-style: dashed;">Options</label>
                                                 <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
-                                                    <table class="table table-bordered">
-                                                        <!-- Name Column -->
+                                                    <!-- <table class="table table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Option name</th>
@@ -395,14 +396,19 @@
                                                                 </td>
                                                             </tr>
                                                         </tbody>
-                                                    </table>
+                                                    </table> -->
+                                                    <mat-selection-list (selectionChange)="handleSelection($event)">
+                                                        <mat-list-option *ngFor="let row of dataSource">
+                                                            {{row.value}}
+                                                        </mat-list-option>
+                                                    </mat-selection-list>
                                                     <br>
 
                                                 </div>
                                             </div>
                                             <div *ngIf="skusTab && disableSkuAndRuleTab" [ngClass]="{'show active' : skusTab}" class="tab-pane fade" id="v-pills-profile"
                                                 role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                                                <button mat-raised-button color="accent">
+                                                <!-- <button mat-raised-button color="accent">
                                                     Create SKU
                                                 </button>
                                                 <button mat-raised-button color="accent">
@@ -410,11 +416,9 @@
                                                 </button>
                                                 <br>
                                                 <table class="table table-bordered">
-                                                    <!-- Name Column -->
                                                     <thead>
                                                         <tr>
-                                                            <!-- <th> -->
-                                                            <!-- </th> -->
+                                                         
                                                             <th scope="col">
                                                                 <mat-checkbox></mat-checkbox>
                                                                 &nbsp; Image
@@ -431,7 +435,15 @@
                                                         <tr>
                                                         </tr>
                                                     </tbody>
-                                                </table>
+                                                </table> -->
+                                                <br>
+                                                <br>
+                                                <mat-form-field fxFlex class="w-50-p">
+                                                    <input matInput placeholder="Sku">
+                                                </mat-form-field>
+                                                <br>
+                                                <br>
+                                                <br>
                                             </div>
                                             <div *ngIf="rulesTab && disableSkuAndRuleTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages"
                                                 role="tabpanel" aria-labelledby="v-pills-messages-tab">
