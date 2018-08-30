@@ -360,55 +360,44 @@
                                         <div class="tab-content" id="v-pills-tabContent">
                                             <div *ngIf="optionsTab" [ngClass]="{'show active' : optionsTab}" class="tab-pane fade" id="v-pills-home" role="tabpanel"
                                                 aria-labelledby="v-pills-home-tab">
-                                                <label style="border-bottom: 2px solid;
-                                                border-bottom-style: dashed;">Option Set
-                                                </label>
-                                                <br>
-                                                <mat-form-field class="w-60-p">
-                                                    <mat-select placeholder="Option Set" name="supplier_id" [(ngModel)]="product.supplier_id" (change)="checkMyOptions($event.value)"
-                                                        required>
-                                                        <mat-option value="-1">--None--</mat-option>
-                                                        <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
-                                                            {{optionSet.name}}
-                                                        </mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
 
-                                                <mat-form-field class="w-30-p">
-                                                    <input matInput name="height" [(ngModel)]="product.height" hidden>
-                                                    <a>Create new Option set</a>
-                                                    <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
-                                                </mat-form-field>
-                                                <br>
-                                                <label style="border-bottom: 2px solid;
-                                                border-bottom-style: dashed;">Options</label>
-                                                <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
-                                                    <!-- <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Option name</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr *ngFor="let row of dataSource">
-                                                                <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label style="border-bottom: 2px solid;
+                                                            border-bottom-style: dashed;">Option Set
+                                                        </label>
+                                                        <mat-select placeholder="Option Set" name="supplier_id" [(ngModel)]="product.supplier_id" (change)="checkMyOptions($event.value)"
+                                                            required>
+                                                            <mat-option value="-1">--None--</mat-option>
+                                                            <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                                                                {{optionSet.name}}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </div>
+
+
+
+                                                    <div class="col-md-6">
+                                                        <!-- <input matInput name="height" [(ngModel)]="product.height" hidden> -->
+                                                        <!-- <a>Create new Option set</a> -->
+                                                        <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
+                                                        <label style="border-bottom: 2px solid;
+                                                    border-bottom-style: dashed;">Options</label>
+                                                        <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
+
+                                                            <mat-selection-list (selectionChange)="handleSelection($event)">
+                                                                <mat-list-option *ngFor="let row of dataSource">
                                                                     {{row.value}}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table> -->
-                                                    <mat-selection-list (selectionChange)="handleSelection($event)">
-                                                        <mat-list-option *ngFor="let row of dataSource">
-                                                            {{row.value}}
-                                                        </mat-list-option>
-                                                    </mat-selection-list>
-                                                    <br>
+                                                                </mat-list-option>
+                                                            </mat-selection-list>
 
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div *ngIf="skusTab && disableSkuAndRuleTab" [ngClass]="{'show active' : skusTab}" class="tab-pane fade" id="v-pills-profile"
                                                 role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                                                <!-- <button mat-raised-button color="accent">
+                                                <button mat-raised-button color="accent">
                                                     Create SKU
                                                 </button>
                                                 <button mat-raised-button color="accent">
@@ -418,7 +407,7 @@
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                         
+
                                                             <th scope="col">
                                                                 <mat-checkbox></mat-checkbox>
                                                                 &nbsp; Image
@@ -435,26 +424,19 @@
                                                         <tr>
                                                         </tr>
                                                     </tbody>
-                                                </table> -->
-                                                <br>
-                                                <br>
-                                                <mat-form-field fxFlex class="w-50-p">
-                                                    <input matInput placeholder="Sku">
-                                                </mat-form-field>
-                                                <br>
-                                                <br>
-                                                <br>
+                                                </table>
+
                                             </div>
                                             <div *ngIf="rulesTab && disableSkuAndRuleTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages"
                                                 role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                                                <label style="border-bottom: 2px solid;
+                                                <!-- <label style="border-bottom: 2px solid;
                                                 border-bottom-style: dashed;">Product Rules
                                                 </label>
                                                 <br>
                                                 <button mat-raised-button color="accent">
                                                     Create a Rule
-                                                </button>&nbsp; Or &nbsp;
-                                                <mat-form-field>
+                                                </button>&nbsp; Or &nbsp; -->
+                                                <mat-form-field class="w-50-p">
                                                     <mat-select placeholder="Choose">
                                                         <mat-option>--Choose An Action--</mat-option>
                                                         <mat-option>Deleted Selected</mat-option>
@@ -462,7 +444,7 @@
                                                         <mat-option>Disable Selected</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>&nbsp;
-                                                <button mat-raised-button color="accent">
+                                                <!-- <button mat-raised-button color="accent">
                                                     Go
                                                 </button>&nbsp;
                                                 <label style="color: blue ; cursor: pointer">Filter
@@ -470,11 +452,8 @@
                                                 <label style="color: blue ; cursor: pointer">Clear Filter
                                                 </label>
                                                 <table class="table table-bordered">
-                                                    <!-- Name Column -->
                                                     <thead>
                                                         <tr>
-                                                            <!-- <th> -->
-                                                            <!-- </th> -->
                                                             <th scope="col">
                                                                 <mat-checkbox></mat-checkbox>
                                                                 &nbsp; When Selected
@@ -496,11 +475,8 @@
                                                 </label>
                                                 <br>
                                                 <table class="table table-bordered">
-                                                    <!-- Name Column -->
                                                     <thead>
                                                         <tr>
-                                                            <!-- <th> -->
-                                                            <!-- </th> -->
                                                             <th scope="col">
                                                                 &nbsp; When Selected
                                                             </th>
@@ -512,33 +488,13 @@
                                                         <tr>
                                                         </tr>
                                                     </tbody>
-                                                </table>
+                                                </table> -->
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
-
-
-
                             </div>
                         </mat-tab>
-
-                        <!-- <mat-tab label="Custom Fields">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-
-                                <div class="py-16" fxLayout="row">
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="width" [(ngModel)]="product.width" placeholder="Custom Field #1 Name">
-                                    </mat-form-field>
-                                    <mat-form-field fxFlex>
-                                        <input matInput name="Height" [(ngModel)]="product.height" placeholder="Custom Field #1 value">
-                                    </mat-form-field>
-
-                                </div>
-
-                            </div>
-                        </mat-tab> -->
 
                         <mat-tab label="Other Details">
                             <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
