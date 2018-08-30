@@ -362,11 +362,11 @@
                                                 aria-labelledby="v-pills-home-tab">
 
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <label style="border-bottom: 2px solid;
                                                             border-bottom-style: dashed;">Option Set
                                                         </label>
-                                                        <mat-select placeholder="Option Set" name="supplier_id" [(ngModel)]="product.supplier_id" (change)="checkMyOptions($event.value)"
+                                                        <mat-select placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set.id" (change)="checkMyOptions($event.value)"
                                                             required>
                                                             <mat-option value="-1">--None--</mat-option>
                                                             <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
@@ -377,7 +377,7 @@
 
 
 
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <!-- <input matInput name="height" [(ngModel)]="product.height" hidden> -->
                                                         <!-- <a>Create new Option set</a> -->
                                                         <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
@@ -385,13 +385,16 @@
                                                     border-bottom-style: dashed;">Options</label>
                                                         <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
 
-                                                            <mat-selection-list (selectionChange)="handleSelection($event)">
-                                                                <mat-list-option *ngFor="let row of dataSource">
+                                                            <mat-selection-list name="option_value" #option_val (selectionChange)="handleSelection($event)">
+                                                                <mat-list-option (click)="setSelection(option_val)" *ngFor="let row of dataSource" [value]="row.id">
                                                                     {{row.value}}
                                                                 </mat-list-option>
                                                             </mat-selection-list>
 
                                                         </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button class="btn btn-primary" style="margin-top: 10px;">Add</button>
                                                     </div>
                                                 </div>
                                             </div>

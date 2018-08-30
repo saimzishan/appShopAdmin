@@ -32,6 +32,24 @@ export class Supplier {
     this.content_type = supplier.content_type || "";
   }
 }
+export class OptionSet {
+  id: number;
+  optionValue: OptionValue;
+  constructor(optionSet?) {
+    optionSet = optionSet || {};
+    this.id = optionSet.id;
+  }
+}
+export class OptionValue {
+  id: number;
+  option_set_id: number;
+  constructor(optionValue?) {
+    optionValue = optionValue || {};
+    this.option_set_id = optionValue.option_set_id;
+    this.id = optionValue.id;
+  }
+}
+
 export class Product {
   id: string;
   name: string;
@@ -43,7 +61,7 @@ export class Product {
   tax_id: number;
   brand_id: number;
   suppliers: Array<Supplier>;
-  option_set: Option[];
+  option_set: OptionSet[];
 
   constructor(product?) {
     product = product || {};

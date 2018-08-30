@@ -1,4 +1,4 @@
-import { Supplier } from "./../models/product.model";
+import { Supplier, OptionSet, OptionValue } from "./../models/product.model";
 import { Subscription } from "rxjs/Subscription";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
@@ -66,6 +66,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   optionsTab = true;
   skusTab = false;
   rulesTab = false;
+  option_set: OptionSet = new OptionSet();
+  option_value;
   supplier: Supplier = new Supplier();
   constructor(
     private productService: ProductService,
@@ -291,6 +293,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
       this.setDataSuorce(result.options);
+      this.option_set.id = result.id;
       this.disableSkuAndRuleTab = true;
     } else {
       this.dataSource = [];
@@ -354,6 +357,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       event.source.deselectAll();
       event.option._setSelected(true);
     }
+  }
+  setSelection(val) {
+    this.option_set.optionValue.id = val.selectedOptions.selected[0].value;
+    console.log(this.option_set);
   }
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
