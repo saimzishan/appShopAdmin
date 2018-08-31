@@ -314,8 +314,8 @@
                                                         <!-- <input matInput name="height" [(ngModel)]="supplier.height" hidden> -->
                                                         <!-- <a>Create new Option set</a> -->
                                                         <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
-                                                        <label style="border-bottom: 2px solid;
-                                                    border-bottom-style: dashed;">Options</label>
+                                                        <label style="color: #939393">Options</label>
+                                                        <br>
                                                         <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
 
                                                             <mat-selection-list name="option_id" #option_val (selectionChange)="handleSelection($event)">
@@ -354,12 +354,14 @@
                                                         <!-- <table class="table table-bordered" *ngIf='product_variants.length > 0'>
                                                             <thead>
                                                                 <tr>
-
                                                                     <th scope="col">
                                                                         Option set
                                                                     </th>
                                                                     <th scope="col">
                                                                         Option value
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                        Action
                                                                     </th>
                                                                 </tr>
                                                             </thead>
@@ -372,6 +374,11 @@
                                                                     <td>
                                                                         {{getOptionName(row.id, row.option_set_id)}}
                                                                     </td>
+                                                                    <th scope="col">
+                                                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;" (click)="deleteOption(i)">
+                                                                            delete
+                                                                        </mat-icon>
+                                                                    </th>
                                                                 </tr>
                                                             </tbody>
                                                         </table> -->

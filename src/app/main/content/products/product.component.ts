@@ -411,6 +411,14 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  // deleteOption(index) {
+  //   this.product.option_values.splice(index, 1);
+  //   if (this.product.option_values.length === 0) {
+  //     this.disableSkuAndRuleTab = false;
+  //   }
+  //   console.log(this.product.option_values);
+  // }
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
