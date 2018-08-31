@@ -38,6 +38,7 @@ export class OptionSet {
   constructor(optionSet?) {
     optionSet = optionSet || {};
     this.id = optionSet.id;
+    this.optionValue = new OptionValue(optionSet.optionValue);
   }
 }
 export class OptionValue {
@@ -45,8 +46,8 @@ export class OptionValue {
   option_set_id: number;
   constructor(optionValue?) {
     optionValue = optionValue || {};
-    this.option_set_id = optionValue.option_set_id;
-    this.id = optionValue.id;
+    this.option_set_id = optionValue.option_set_id || -1;
+    this.id = optionValue.id || -1;
   }
 }
 
@@ -61,14 +62,15 @@ export class Product {
   tax_id: number;
   brand_id: number;
   suppliers: Array<Supplier>;
-  option_set: OptionSet[];
+  option_values: Array<OptionValue>;
 
   constructor(product?) {
     product = product || {};
     this.id = product.id || FuseUtils.generateGUID();
     this.name = product.name || "";
     this.handle = product.handle || FuseUtils.handleize(this.name);
-    // this.suppliers = new Supplier();
+    this.suppliers = new Array<Supplier>();
+    this.option_values = new Array<OptionValue>();
   }
 
   addCategory(event: MatChipInputEvent): void {
