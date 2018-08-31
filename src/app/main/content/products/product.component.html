@@ -363,10 +363,9 @@
 
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <label style="border-bottom: 2px solid;
-                                                            border-bottom-style: dashed;">Option Set
-                                                        </label>
-                                                        <mat-select placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set.id" (change)="checkMyOptions($event.value)"
+                                                        <label style="color: #939393">Option Set</label>
+                                                        <br>
+                                                        <mat-select placeholder="Choose Option Set" name="option_set_id" [(ngModel)]="option_set.id" (change)="checkMyOptions($event.value)"
                                                             required>
                                                             <mat-option value="-1">--None--</mat-option>
                                                             <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
@@ -381,8 +380,8 @@
                                                         <!-- <input matInput name="height" [(ngModel)]="product.height" hidden> -->
                                                         <!-- <a>Create new Option set</a> -->
                                                         <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
-                                                        <label style="border-bottom: 2px solid;
-                                                    border-bottom-style: dashed;">Options</label>
+                                                        <label style="color: #939393">Options</label>
+                                                        <br>
                                                         <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
 
                                                             <mat-selection-list name="option_value" #option_val (selectionChange)="handleSelection($event)">
@@ -394,7 +393,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <button (click)="addRelatedvalue()" class="btn btn-primary" style="margin-top: 10px;">Add</button>
+                                                        <button (click)="addRelatedvalue()" class="btn btn-primary" style="margin-top: 10px;">
+                                                            <mat-icon>add</mat-icon>
+                                                            <!-- <label>Add</label> -->
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <br>
@@ -404,17 +406,18 @@
                                                         <table class="table table-bordered" *ngIf='product.option_values.length > 0'>
                                                             <thead>
                                                                 <tr>
-
                                                                     <th scope="col">
                                                                         Option set
                                                                     </th>
                                                                     <th scope="col">
                                                                         Option value
                                                                     </th>
+                                                                    <th scope="col">
+                                                                        Action
+                                                                    </th>
                                                                 </tr>
                                                             </thead>
-
-                                                            <tbody *ngFor="let row of product.option_values">
+                                                            <tbody *ngFor="let row of product.option_values ; let i = index">
                                                                 <tr>
                                                                     <td>
                                                                         {{getOptionSetName(row.option_set_id)}}
@@ -422,6 +425,11 @@
                                                                     <td>
                                                                         {{getOptionName(row.id, row.option_set_id)}}
                                                                     </td>
+                                                                    <th scope="col">
+                                                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;" (click)="deleteOption(i)">
+                                                                            delete
+                                                                        </mat-icon>
+                                                                    </th>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -463,7 +471,8 @@
                                             <div *ngIf="rulesTab && disableSkuAndRuleTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages"
                                                 role="tabpanel" aria-labelledby="v-pills-messages-tab">
                                                 <label style="border-bottom: 2px solid;
-                                                border-bottom-style: dashed;">Product Rules
+                                                border-bottom-style: dashed;">Product
+                                                    Rules
                                                 </label>
                                                 <br>
                                                 <button mat-raised-button color="accent">
@@ -504,7 +513,8 @@
                                                 <br>
                                                 <br>
                                                 <label style="border-bottom: 2px solid;
-                                                    border-bottom-style: dashed;">Option Set Rules
+                                                    border-bottom-style: dashed;">Option
+                                                    Set Rules
                                                 </label>
                                                 <br>
                                                 <table class="table table-bordered">
