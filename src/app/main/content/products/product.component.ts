@@ -1,4 +1,11 @@
-import { Supplier, OptionSet, OptionValue } from "./../models/product.model";
+import { Contact } from "./../apps/contacts/contact.model";
+import {
+  Supplier,
+  OptionSet,
+  OptionValue,
+  ProductVariant,
+  Options
+} from "./../models/product.model";
 import { Subscription } from "rxjs/Subscription";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
@@ -44,6 +51,13 @@ declare var $: any;
 })
 export class ProductComponent implements OnInit, OnDestroy {
   product = new Product();
+  supplier: Supplier = new Supplier();
+  product_variant: ProductVariant = new ProductVariant();
+  options: Options = new Options();
+  option_id = -1;
+  option_set_id = -1;
+  rule_id = -1;
+
   onProductChanged: Subscription;
   category = new Category();
   onCategoryChanged: Subscription;
@@ -58,7 +72,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   files: UploadFile[] = [];
   nodes: any;
 
-  options = {};
   suppliers: Supplier;
   brands;
   taxes;
@@ -68,7 +81,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   rulesTab = false;
   option_set: OptionSet = new OptionSet();
   option_value: OptionValue = new OptionValue();
-  supplier: Supplier = new Supplier();
+
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -162,8 +175,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    this.product.suppliers.push(new Supplier(this.supplier));
+    this.product.suppliers.push(this.supplier);
+    // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
+    console.log(this.product);
 
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
@@ -358,21 +373,26 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
   setSelection(val) {
-    this.option_value.id = val.selectedOptions.selected[0].value;
-    this.option_value.option_set_id = this.option_set.id;
+    this.option_id = val.selectedOptions.selected[0].value;
   }
   addRelatedvalue() {
-    if (this.option_value.id === -1) {
+    if (this.option_id === -1) {
       this.snotifyService.warning(
         "Please select option set and option before !"
       );
       return;
     }
-    this.product.option_values.push(new OptionValue(this.option_value));
-    this.option_set.id = -1;
-    this.option_set = new OptionSet();
+    // this.product.suppliers[0].productVariants .push(new OptionValue(this.option_value));
+
+    this.options.option_id = this.option_id;
+    this.options.option_rule_id = this.rule_id;
+    this.options.option_set_id = this.option_set_id;
+    this.product_variant.options.push(this.options);
+    this.supplier.productVariants.push(this.product_variant);
+    this.option_set_id = this.rule_id = this.option_id = -1;
+    this.product_variant = new ProductVariant();
+    this.options = new Options();
     this.checkMyOptions(-1);
-    this.option_value = new OptionValue();
     this.disableSkuAndRuleTab = true;
   }
   getOptionSetName(id) {

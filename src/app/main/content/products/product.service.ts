@@ -13,11 +13,12 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { AuthGuard } from "../../../guard/auth.guard";
 import { SnotifyService } from "ng-snotify";
+import { Product } from "../models/product.model";
 
 @Injectable()
 export class ProductService extends ApiService implements Resolve<any> {
   routeParams: any;
-  product: any;
+  product: Product = new Product();
   category: any;
   onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
   onCategoryChanged: BehaviorSubject<any> = new BehaviorSubject({});
