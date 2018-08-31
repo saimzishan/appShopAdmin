@@ -67,7 +67,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   skusTab = false;
   rulesTab = false;
   option_set: OptionSet = new OptionSet();
-  option_value;
+  option_value: OptionValue = new OptionValue();
   supplier: Supplier = new Supplier();
   constructor(
     private productService: ProductService,
@@ -162,7 +162,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    this.product.suppliers = [];
     this.product.suppliers.push(new Supplier(this.supplier));
     this.spinnerService.requestInProcess(true);
 
@@ -359,8 +358,38 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
   setSelection(val) {
-    this.option_set.optionValue.id = val.selectedOptions.selected[0].value;
-    console.log(this.option_set);
+    this.option_value.id = val.selectedOptions.selected[0].value;
+    this.option_value.option_set_id = this.option_set.id;
+  }
+  addRelatedvalue() {
+    if (this.option_value.id === -1) {
+      this.snotifyService.warning(
+        "Please select option set and option before !"
+      );
+      return;
+    }
+    this.product.option_values.push(new OptionValue(this.option_value));
+    this.option_set.id = -1;
+    this.option_set = new OptionSet();
+    this.checkMyOptions(-1);
+    this.option_value = new OptionValue();
+    this.disableSkuAndRuleTab = true;
+  }
+  getOptionSetName(id) {
+    const result = this.optionSets.find(option => option.id === id);
+    if (result) {
+      return result.name;
+    }
+  }
+  getOptionName(id, pid) {
+    const res = this.optionSets.find(option => option.id === pid);
+    if (res) {
+      // console.log(res);
+      const result = res.options.find(option => option.id === id);
+      if (result) {
+        return result.value;
+      }
+    }
   }
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();

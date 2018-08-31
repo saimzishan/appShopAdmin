@@ -394,7 +394,37 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <button class="btn btn-primary" style="margin-top: 10px;">Add</button>
+                                                        <button (click)="addRelatedvalue()" class="btn btn-primary" style="margin-top: 10px;">Add</button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-4">
+                                                        <table class="table table-bordered" *ngIf='product.option_values.length > 0'>
+                                                            <thead>
+                                                                <tr>
+
+                                                                    <th scope="col">
+                                                                        Option set
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                        Option value
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody *ngFor="let row of product.option_values">
+                                                                <tr>
+                                                                    <td>
+                                                                        {{getOptionSetName(row.option_set_id)}}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{getOptionName(row.id, row.option_set_id)}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
