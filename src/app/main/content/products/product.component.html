@@ -65,8 +65,8 @@
                                 <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
                                     <span>Product name is required.</span>!</span>
 
-                                <h3 class="mb-0">Categories</h3>
-                                <div class="row" *ngFor="let c of category">
+                                <!-- <h3 class="mb-0">Categories</h3> -->
+                                <!-- <div class="row" *ngFor="let c of category">
 
 
 
@@ -92,7 +92,11 @@
                                         </ul>
                                     </ul>
 
-                                </div>
+                                </div> -->
+                                <ng-container *ngIf="tree">
+                                    <tree [tree]="tree" (nodeRemoved)="handleRemoved($event)" (nodeRenamed)="handleRenamed($event)" (nodeSelected)="handleSelected($event)"
+                                        (nodeMoved)="handleMoved($event)"></tree>
+                                </ng-container>
                                 <br>
 
 
@@ -266,25 +270,25 @@
                                                                         </mat-form-field> -->
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="text" name="SKU" [(ngModel)]="product_variant.sku" placeholder="SKU">
+                                                                        <input class="form-control" type="text" name="SKUas" [(ngModel)]="product_variant.sku" placeholder="SKU">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number" name="UPC" [(ngModel)]="product_variant.upc" placeholder="UPC">
+                                                                        <input class="form-control" type="number" name="UPCas" [(ngModel)]="product_variant.upc" placeholder="UPC">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="text" name="EAN" [(ngModel)]="product_variant.ean" placeholder="EAN">
+                                                                        <input class="form-control" type="text" name="EANas" [(ngModel)]="product_variant.ean" placeholder="EAN">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number" name="Weight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
+                                                                        <input class="form-control" type="number" name="Weightas" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number" name="Width" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
+                                                                        <input class="form-control" type="number" name="Widthas" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number" name="Height" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
+                                                                        <input class="form-control" type="number" name="Heightas" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
                                                                     </td>
                                                                     <td>
-                                                                        <input class="form-control" type="number" name="Depth" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
+                                                                        <input class="form-control" type="number" name="Depthas" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
                                                                     </td>
 
 
@@ -342,9 +346,12 @@
 
                                                 <br>
                                                 <div class="row">
-                                                    <div class="col-md-11"></div>
+                                                    <div class="col-md-10"></div>
                                                     <div class="col-md-1">
-                                                        <button (click)="addRelatedvalue()" class="btn btn-primary pull-right" style="margin-top: 10px;">Add</button>
+                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option</button>
+                                                    </div>
+                                                    <div>
+                                                        <button (click)="addRelatedvalue('addPV')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add PV</button>
                                                     </div>
                                                 </div>
                                                 <br>

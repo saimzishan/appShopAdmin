@@ -1,20 +1,16 @@
-
 export class Category {
   id = -1;
-  name = '';
+  name = "";
+  value = "";
   parent_id: number;
-  notes = '';
-  children: {
-    id: string,
-    parent_id: string,
-    name: string,
-    notes: string
-  }[];
+  notes = "";
+  children: Category[];
 
   constructor(category?) {
     category = category || {};
     this.id = category.id || -1;
-    this.name = category.name || '';
-    this.parent_id = category.parentName || '';
+    this.name = category.name || "";
+    this.value = category.name || "";
+    this.parent_id = category.parentName || "";
   }
 }

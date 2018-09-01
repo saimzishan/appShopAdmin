@@ -16,7 +16,7 @@ import { FuseNavigationService } from "./core/components/navigation/navigation.s
 import { TranslateModule } from "@ngx-translate/core";
 import { AppStoreModule } from "./store/store.module";
 import { FileDropModule } from "ngx-file-drop";
-import { TreeModule } from "angular-tree-component";
+import { TreeModule } from "ng2-tree";
 import { ApiService } from "./api/api.service";
 import { UsersService } from "./api/users.service";
 import { SpinnerComponent } from "./spinner/spinner.component";
@@ -25,6 +25,7 @@ import { AuthGuard } from "./guard/auth.guard";
 import { JwtModule } from "@auth0/angular-jwt";
 import * as $ from "jquery";
 import { ModalComponents } from "./models/modal.components";
+
 export function tokenGetter() {
   let user: any = localStorage.getItem("currentUser");
   let token;

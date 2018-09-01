@@ -38,6 +38,9 @@ import { MatTableDataSource } from "@angular/material";
 import { NgSelectMultipleOption } from "@angular/forms/src/directives";
 import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import * as $ from 'jquery';
+import { TreeModel } from "ng2-tree";
+import { Router } from "@angular/router";
+
 declare var $: any;
 // import {MatTreeModule} from '@angular/material/tree';
 
@@ -54,6 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   supplier: Supplier = new Supplier();
   product_variant: ProductVariant = new ProductVariant();
   options: Options = new Options();
+  tOptions: Options[] = [];
   option_id = -1;
   option_set_id = -1;
   rule_id = -1;
@@ -81,7 +85,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   rulesTab = false;
   option_set: OptionSet = new OptionSet();
   option_value: OptionValue = new OptionValue();
-
+  public tree: TreeModel;
+  category_id: any;
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -89,7 +94,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     private location: Location,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -115,6 +121,20 @@ export class ProductComponent implements OnInit, OnDestroy {
       category => {
         // if (category)
         this.category = category;
+        // this.tree.id = this.category.id;
+        // this.tree.value = this.category.value;
+        // let temp: TreeModel = {
+        //   value: category[0].value,
+        //   id: category[0].id
+        // };
+        //
+        let temp = this.changeFieldName(category);
+
+        this.tree = {
+          value: "Categories",
+          children: temp
+        };
+        // console.log(temp);
         // this.productForm = this.createProductForm();
       }
     );
@@ -176,9 +196,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       return;
     }
     this.product.suppliers.push(this.supplier);
+    this.product.category_id = this.category_id;
     // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
-    console.log(this.product);
 
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
@@ -186,6 +206,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.spinnerService.requestInProcess(false);
         this.product = new Product();
         this.supplier = new Supplier();
+        this.router.navigate(["/products"]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -375,25 +396,48 @@ export class ProductComponent implements OnInit, OnDestroy {
   setSelection(val) {
     this.option_id = val.selectedOptions.selected[0].value;
   }
-  addRelatedvalue() {
-    if (this.option_id === -1) {
-      this.snotifyService.warning(
-        "Please select option set and option before !"
-      );
-      return;
-    }
-    // this.product.suppliers[0].productVariants .push(new OptionValue(this.option_value));
+  addRelatedvalue(check?: string) {
+    if (check === "addOption") {
+      if (this.option_id === -1) {
+        this.snotifyService.warning(
+          "Please select option set and option before !"
+        );
+        return;
+      }
+      // this.product.suppliers[0].productVariants .push(new OptionValue(this.option_value));
 
-    this.options.option_id = this.option_id;
-    this.options.option_rule_id = this.rule_id;
-    this.options.option_set_id = this.option_set_id;
-    this.product_variant.options.push(this.options);
-    this.supplier.productVariants.push(this.product_variant);
-    this.option_set_id = this.rule_id = this.option_id = -1;
-    this.product_variant = new ProductVariant();
-    this.options = new Options();
-    this.checkMyOptions(-1);
-    this.disableSkuAndRuleTab = true;
+      this.options.option_id = this.option_id;
+      this.options.option_rule_id = this.rule_id;
+      this.options.option_set_id = this.option_set_id;
+      this.tOptions.push(this.options);
+      this.option_set_id = this.rule_id = this.option_id = -1;
+      this.options = new Options();
+      this.checkMyOptions(-1);
+      this.disableSkuAndRuleTab = true;
+    } else {
+      if (
+        this.product_variant.depth === undefined ||
+        this.product_variant.ean === undefined ||
+        this.product_variant.height === undefined ||
+        this.product_variant.sku === undefined ||
+        this.product_variant.upc === undefined ||
+        this.product_variant.weight === undefined ||
+        this.product_variant.width === undefined
+      ) {
+        this.snotifyService.warning("Please add all fields !");
+        return;
+      }
+      if (this.tOptions.length > 0) {
+        this.product_variant.options = this.tOptions;
+        this.supplier.productVariants.push(this.product_variant);
+        this.product_variant = new ProductVariant();
+        this.tOptions = [];
+      } else {
+        this.snotifyService.warning(
+          "Please add option set and option before !"
+        );
+      }
+    }
   }
   getOptionSetName(id) {
     const result = this.optionSets.find(option => option.id === id);
@@ -419,6 +463,37 @@ export class ProductComponent implements OnInit, OnDestroy {
   //   }
   //   console.log(this.product.option_values);
   // }
+
+  changeFieldName(categories: Category[]) {
+    let res: TreeModel[] = [];
+    categories.forEach(category => {
+      category.value = category.name;
+      // delete element.name;
+      let tempTree: TreeModel = {
+        id: category.id,
+        value: category.name,
+        children: []
+      };
+      if (category.children.length > 0) {
+        category.children.forEach(ele => {
+          ele.value = ele.name;
+          // delete ele.name;
+          let tTree: TreeModel = {
+            id: ele.id,
+            value: ele.name
+          };
+          tempTree.children.push(tTree);
+        });
+      }
+      res.push(tempTree);
+    });
+    return res;
+  }
+  handleSelected(event) {
+    console.log(event);
+    this.category_id = event.node.node.id;
+  }
+
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
