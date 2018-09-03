@@ -1,5 +1,3 @@
-import { FuseUtils } from "../../../core/fuseUtils";
-import { MatChipInputEvent } from "@angular/material";
 
 export class Option {
   id: string;

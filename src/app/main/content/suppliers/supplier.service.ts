@@ -7,22 +7,23 @@ import { SpinnerService } from '../../../spinner/spinner.service';
 import { AuthGuard } from '../../../guard/auth.guard';
 import { GLOBAL } from '../../../shared/globel';
 import { SnotifyService } from 'ng-snotify';
+import { ApiService } from '../../../api/api.service';
 
 @Injectable()
-export class SupplierService implements Resolve<any>
+export class SupplierService extends ApiService implements Resolve<any>
 {
   routeParams: any;
   supplier: any;
   onSupplierChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  constructor(
-    private http: HttpClient,
-    private spinnerService: SpinnerService,
-    private snotifyService: SnotifyService,
-    private router: Router
-  )
-  {
-  }
+//   constructor(
+//     private http: HttpClient,
+//     private spinnerService: SpinnerService,
+//     private snotifyService: SnotifyService,
+//     private router: Router
+//   )
+//   {
+//   }
 
   /**
    * Resolve
@@ -95,36 +96,69 @@ export class SupplierService implements Resolve<any>
   // }
 
   addSupplier(supplier) {
-    this.spinnerService.requestInProcess(true);
-    return new Promise((resolve, reject) => {
-        const access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-            const error = {
-                message: 'Unauthorized'
-            }
-            return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + access_token
-            })
-        };
+    // return new Promise((resolve, reject) => {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
 
-        this.http.post(GLOBAL.USER_API + 'suppliers', supplier , httpOptions)
-            .subscribe((response: any) => {
-                this.spinnerService.requestInProcess(false);
-                if (!response.error) {
-                    resolve(response);
-                    this.snotifyService.success('Supplier Added');
-                    this.router.navigate(['/suppliers']);
-                }
-                else {
-                    this.snotifyService.error(response.error);
-                }
-            }, reject);
-    });
-}
+    //   this.http
+    //     .post(GLOBAL.USER_API + "products", product, httpOptions)
+    //     .subscribe((response: any) => {
+    //       console.log(response);
+    //       resolve(response);
+    //       this.router.navigate(["/products"]);
+    //     }, reject);
+    // });
+    return this.http
+      .post(GLOBAL.USER_API + 'suppliers' , supplier , httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+
+//   addSupplier(supplier) {
+//     this.spinnerService.requestInProcess(true);
+//     return new Promise((resolve, reject) => {
+//         const access_token = AuthGuard.getToken();
+//         if (access_token === undefined) {
+//             const error = {
+//                 message: 'Unauthorized'
+//             }
+//             return Observable.throw({ error: error });
+//         }
+//         const httpOptions = {
+//             headers: new HttpHeaders({
+//                 'Content-Type': 'application/json',
+//                 'Authorization': 'Bearer ' + access_token
+//             })
+//         };
+
+//         this.http.post(GLOBAL.USER_API + 'suppliers', supplier , httpOptions)
+//             .subscribe((response: any) => {
+//                 this.spinnerService.requestInProcess(false);
+//                 if (!response.error) {
+//                     resolve(response);
+//                     this.snotifyService.success('Supplier Added');
+//                     this.router.navigate(['/suppliers']);
+//                 }
+//                 else {
+//                     this.snotifyService.error(response.error);
+//                 }
+//             }, reject);
+//     });
+// }
 
 deleteSuppler(supplier) {
   this.spinnerService.requestInProcess(true);

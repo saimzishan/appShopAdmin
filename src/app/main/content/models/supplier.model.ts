@@ -1,10 +1,10 @@
-import { Contact } from "./contact.model";
-import { Product } from "./product.model";
+import { Contact } from './contact.model';
+import { Product } from './product.model';
 
 export class Supplier {
   id: number;
   name: string;
-  type = "";
+  type: number;
   contact: Contact;
   products: Product[];
   handle: string;

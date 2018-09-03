@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { RouterModule } from '@angular/router';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
-import {SuppliersComponent} from './suppliers.component';
-import {SuppliersService} from './suppliers.service';
-import {SupplierComponent} from './supplier.component';
-import {SupplierService} from './supplier.service';
+import { SuppliersComponent } from './suppliers.component';
+import { SuppliersService } from './suppliers.service';
+import { SupplierComponent } from './supplier.component';
+import { SupplierService } from './supplier.service';
 
 const routes = [
   {
-    path     : '',
+    path: '',
     component: SuppliersComponent,
-    resolve  : {
+    resolve: {
       academy: SuppliersService
     }
   },
   {
-    path     : ':id',
+    path: ':id',
     component: SupplierComponent,
-    resolve  : {
+    resolve: {
       academy: SupplierService
     }
   },
@@ -32,14 +33,14 @@ const routes = [
 ];
 
 @NgModule({
-  imports     : [
+  imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseAngularMaterialModule
+    FuseAngularMaterialModule,
+    MatExpansionModule
   ],
   declarations: [SuppliersComponent, SupplierComponent],
   providers: [SuppliersService, SupplierService]
 })
-export class SuppliersModule
-{
+export class SuppliersModule {
 }
