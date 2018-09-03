@@ -8,13 +8,10 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg"
-         fxLayout="column" fxLayoutAlign="center center"
-         fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
-      <div class="logo my-12 m-sm-0"
-           fxLayout="row" fxLayoutAlign="start center">
+      <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
         <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
         <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Categories</span>
       </div>
@@ -32,9 +29,7 @@
       </div>-->
       <!-- / SEARCH -->
 
-      <button mat-raised-button
-              [routerLink]="'/categories/new'"
-              class="add-product-button mat-white-bg my-12 mt-sm-0">
+      <button mat-raised-button [routerLink]="'/categories/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
         <span>ADD NEW CATEGORY</span>
       </button>
 
@@ -43,7 +38,6 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-
       <tree-root #tree [options]="options" [nodes]="nodes"></tree-root>
 
       <!--<mat-table class="products-table"
