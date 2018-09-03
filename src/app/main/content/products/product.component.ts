@@ -1,54 +1,54 @@
-import { Contact } from "./../apps/contacts/contact.model";
+import { Contact } from './../apps/contacts/contact.model';
 import {
   Supplier,
   OptionSet,
   OptionValue,
   ProductVariant,
   Options
-} from "./../models/product.model";
-import { Subscription } from "rxjs/Subscription";
-import { SnotifyService } from "ng-snotify";
-import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { ProductService } from "./product.service";
-import { fuseAnimations } from "../../../core/animations";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
-import { Product } from "../models/product.model";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
-import { FuseUtils } from "../../../core/fuseUtils";
-import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
-import { Location } from "@angular/common";
+} from './../models/product.model';
+import { Subscription } from 'rxjs/Subscription';
+import { SnotifyService } from 'ng-snotify';
+import { SpinnerService } from './../../../spinner/spinner.service';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ProductService } from './product.service';
+import { fuseAnimations } from '../../../core/animations';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/observable/merge';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
+import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/observable/fromEvent';
+import { Product } from '../models/product.model';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FuseUtils } from '../../../core/fuseUtils';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { Location } from '@angular/common';
 import {
   FileSystemDirectoryEntry,
   FileSystemFileEntry,
   UploadEvent,
   UploadFile
-} from "ngx-file-drop";
+} from 'ngx-file-drop';
 // import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 
-import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
-import { Category } from "../models/category.model";
-import { TreeModule } from "ng2-tree";
-import { MatTableDataSource } from "@angular/material";
-import { NgSelectMultipleOption } from "@angular/forms/src/directives";
-import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
+import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+import { Category } from '../models/category.model';
+import { TreeModule } from 'ng2-tree';
+import { MatTableDataSource } from '@angular/material';
+import { NgSelectMultipleOption } from '@angular/forms/src/directives';
+import { FuseOptionFormDialogComponent } from './sku-form/option-form.component';
 // import * as $ from 'jquery';
-import { TreeModel } from "ng2-tree";
-import { Router } from "@angular/router";
+import { TreeModel } from 'ng2-tree';
+import { Router } from '@angular/router';
 
 declare var $: any;
 // import {MatTreeModule} from '@angular/material/tree';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: "app-product",
-  templateUrl: "./product.component.html",
-  styleUrls: ["./product.component.scss"],
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss'],
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
@@ -109,9 +109,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       product => {
         if (product) {
           this.product = new Product(product);
-          this.pageType = "edit";
+          this.pageType = 'edit';
         } else {
-          this.pageType = "new";
+          this.pageType = 'new';
           this.product = new Product();
         }
       }
@@ -128,10 +128,11 @@ export class ProductComponent implements OnInit, OnDestroy {
         //   id: category[0].id
         // };
         //
-        let temp = this.changeFieldName(category);
+
+        const temp = this.changeFieldName(category);
 
         this.tree = {
-          value: "Categories",
+          value: 'Categories',
           children: temp
         };
         // console.log(temp);
@@ -153,7 +154,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       disableClose: false
     });
     this.confirmDialogRef.componentInstance.confirmMessage =
-      "Are you sure you want to delete?";
+      'Are you sure you want to delete?';
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         const data = this.productForm.getRawValue();
@@ -181,18 +182,18 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.productService.onProductChanged.next(data);
 
       // Show the success message
-      this.snotifyService.success("Product added", "Success !");
+      this.snotifyService.success('Product added', 'Success !');
       // Change the location with new one
       this.spinnerService.requestInProcess(false);
 
-      this.location.go("/products");
+      this.location.go('/products');
     });
   }
 
   addProduct(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning('Please Fill All Fields');
       return;
     }
     this.product.suppliers.push(this.supplier);
@@ -202,17 +203,17 @@ export class ProductComponent implements OnInit, OnDestroy {
 
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
+        this.snotifyService.success(res.res.message, 'Success !');
         this.spinnerService.requestInProcess(false);
         this.product = new Product();
         this.supplier = new Supplier();
-        this.router.navigate(["/products"]);
+        this.router.navigate(['/products']);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
+        this.snotifyService.error(e, 'Error !');
       }
     );
   }
@@ -230,7 +231,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
+        this.snotifyService.error(e, 'Error !');
         // this.notificationServiceBus.launchNotification(true, e);
       }
     );
@@ -248,7 +249,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
+        this.snotifyService.error(e, 'Error !');
         // this.notificationServiceBus.launchNotification(true, e);
       }
     );
@@ -266,7 +267,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
+        this.snotifyService.error(e, 'Error !');
         // this.notificationServiceBus.launchNotification(true, e);
       }
     );
@@ -284,7 +285,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
         e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
+        this.snotifyService.error(e, 'Error !');
         // this.notificationServiceBus.launchNotification(true, e);
       }
     );
@@ -338,9 +339,9 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   newContact() {
     this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
-      panelClass: "contact-form-dialog",
+      panelClass: 'contact-form-dialog',
       data: {
-        action: "new"
+        action: 'new'
       }
     });
 
@@ -356,12 +357,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   openRelatedTab(val: string) {
     switch (val) {
-      case "rulesTab":
+      case 'rulesTab':
         this.rulesTab = true;
         this.optionsTab = false;
         this.skusTab = false;
         break;
-      case "skusTab":
+      case 'skusTab':
         this.rulesTab = false;
         this.optionsTab = false;
         this.skusTab = true;
@@ -397,10 +398,10 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.option_id = val.selectedOptions.selected[0].value;
   }
   addRelatedvalue(check?: string) {
-    if (check === "addOption") {
+    if (check === 'addOption') {
       if (this.option_id === -1) {
         this.snotifyService.warning(
-          "Please select option set and option before !"
+          'Please select option set and option before !'
         );
         return;
       }
@@ -424,7 +425,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant.weight === undefined ||
         this.product_variant.width === undefined
       ) {
-        this.snotifyService.warning("Please add all fields !");
+        this.snotifyService.warning('Please add all fields !');
         return;
       }
       if (this.tOptions.length > 0) {
@@ -434,7 +435,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.tOptions = [];
       } else {
         this.snotifyService.warning(
-          "Please add option set and option before !"
+          'Please add option set and option before !'
         );
       }
     }
@@ -465,11 +466,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   // }
 
   changeFieldName(categories: Category[]) {
-    let res: TreeModel[] = [];
+    const res: TreeModel[] = [];
     categories.forEach(category => {
       category.value = category.name;
       // delete element.name;
-      let tempTree: TreeModel = {
+      const tempTree: TreeModel = {
         id: category.id,
         value: category.name,
         children: []
@@ -478,7 +479,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         category.children.forEach(ele => {
           ele.value = ele.name;
           // delete ele.name;
-          let tTree: TreeModel = {
+          const tTree: TreeModel = {
             id: ele.id,
             value: ele.name
           };
