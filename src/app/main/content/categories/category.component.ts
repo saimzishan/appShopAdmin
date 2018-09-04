@@ -1,25 +1,25 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {CategoryService} from './category.service';
-import {fuseAnimations} from '../../../core/animations';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
-import {Subscription} from 'rxjs/Subscription';
-import {Category} from '../models/category.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {FuseUtils} from '../../../core/fuseUtils';
-import {MatSnackBar} from '@angular/material';
-import {Location} from '@angular/common';
-import {ITreeOptions, TreeNode, TreeModel} from 'angular-tree-component';
-import {Supplier} from "../models/supplier.model";
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { CategoryService } from "./category.service";
+import { fuseAnimations } from "../../../core/animations";
+import "rxjs/add/operator/startWith";
+import "rxjs/add/observable/merge";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/observable/fromEvent";
+import { Subscription } from "rxjs/Subscription";
+import { Category } from "../models/category.model";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { FuseUtils } from "../../../core/fuseUtils";
+import { MatSnackBar } from "@angular/material";
+import { Location } from "@angular/common";
+import { ITreeOptions, TreeNode, TreeModel } from "angular-tree-component";
+import { Supplier } from "../models/supplier.model";
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.scss'],
+  selector: "app-category",
+  templateUrl: "./category.component.html",
+  styleUrls: ["./category.component.scss"],
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
@@ -41,37 +41,36 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   asyncChildren = [
     {
-      name: 'child1',
+      name: "child1",
       hasChildren: true
-    }, {
-      name: 'child2'
+    },
+    {
+      name: "child2"
     }
   ];
 
-  constructor(private categoryService: CategoryService,
-              private formBuilder: FormBuilder,
-              public snackBar: MatSnackBar,
-              private location: Location) {
-
+  constructor(
+    private categoryService: CategoryService,
+    private formBuilder: FormBuilder,
+    public snackBar: MatSnackBar,
+    private location: Location
+  ) {
     this.nodes = [
       {
         id: 1,
-        name: 'root1',
-        children: [
-          {name: 'child1'}
-        ]
+        name: "root1",
+        children: [{ name: "child1" }]
       },
       {
         id: 2,
-        name: 'root2',
+        name: "root2",
         hasChildren: true
       },
       {
         id: 3,
-        name: 'root3'
+        name: "root3"
       }
     ];
-
   }
 
   ngOnInit() {
@@ -118,7 +117,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   getChildren(node: any) {
-    const newNodes = this.asyncChildren.map((c) => Object.assign({}, c));
+    const newNodes = this.asyncChildren.map(c => Object.assign({}, c));
     console.log(newNodes);
     return new Promise((resolve, reject) => {
       setTimeout(() => resolve(newNodes), 1000);
@@ -127,8 +126,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   createSupplierForm() {
     return this.formBuilder.group({
-      id              : [this.category.id],
-      name            : [this.category.name],
+      id: [this.category.id],
+      name: [this.category.name]
       // parentName      : [this.category.parentName],
       /*email         : [this.supplier.contact.email],
       no              : [this.supplier.contact.no],
@@ -163,42 +162,37 @@ export class CategoryComponent implements OnInit, OnDestroy {
     });
   }
 
-
   saveSupplier() {
     const data = this.supplierForm.getRawValue();
     data.handle = FuseUtils.handleize(data.name);
-    this.categoryService.saveSupplier(data)
-      .then(() => {
+    this.categoryService.saveSupplier(data).then(() => {
+      // Trigger the subscription with new data
+      this.categoryService.onSupplierChanged.next(data);
 
-        // Trigger the subscription with new data
-        this.categoryService.onSupplierChanged.next(data);
-
-        // Show the success message
-        this.snackBar.open('Supplier saved', 'OK', {
-          verticalPosition: 'top',
-          duration: 2000
-        });
+      // Show the success message
+      this.snackBar.open("Supplier saved", "OK", {
+        verticalPosition: "top",
+        duration: 2000
       });
+    });
   }
 
   addSupplier() {
     const data = this.supplierForm.getRawValue();
     data.handle = FuseUtils.handleize(data.name);
-    this.categoryService.addSupplier(data)
-      .then(() => {
+    this.categoryService.addSupplier(data).then(() => {
+      // Trigger the subscription with new data
+      this.categoryService.onSupplierChanged.next(data);
 
-        // Trigger the subscription with new data
-        this.categoryService.onSupplierChanged.next(data);
-
-        // Show the success message
-        this.snackBar.open('Supplier added', 'OK', {
-          verticalPosition: 'top',
-          duration: 2000
-        });
-
-        // Change the location with new one
-         this.location.go('suppliers/' + this.supplier.id);
+      // Show the success message
+      this.snackBar.open("Supplier added", "OK", {
+        verticalPosition: "top",
+        duration: 2000
       });
+
+      // Change the location with new one
+      this.location.go("suppliers/" + this.supplier.id);
+    });
   }
 
   ngOnDestroy() {

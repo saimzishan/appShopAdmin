@@ -1,28 +1,51 @@
+import { Contact } from './../apps/contacts/contact.model';
+import {
+  Supplier,
+  OptionSet,
+  OptionValue,
+  ProductVariant,
+  Options
+} from './../models/product.model';
+import { Subscription } from 'rxjs/Subscription';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from './../../../spinner/spinner.service';
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {ProductService} from './product.service';
-import {fuseAnimations} from '../../../core/animations';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ProductService } from './product.service';
+import { fuseAnimations } from '../../../core/animations';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
-import {Subscription} from 'rxjs/Subscription';
-import {Product} from '../models/product.model';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {FuseUtils} from '../../../core/fuseUtils';
-import {MatSnackBar, MatDialog, MatDialogRef} from '@angular/material';
-import {Location} from '@angular/common';
-import {FileSystemDirectoryEntry, FileSystemFileEntry, UploadEvent, UploadFile} from 'ngx-file-drop';
+import { Product } from '../models/product.model';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FuseUtils } from '../../../core/fuseUtils';
+import { MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
+import { Location } from '@angular/common';
+import {
+  FileSystemDirectoryEntry,
+  FileSystemFileEntry,
+  UploadEvent,
+  UploadFile
+} from 'ngx-file-drop';
+// import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 import { Category } from '../models/category.model';
 import { TreeModule } from 'ng2-tree';
+import { MatTableDataSource } from '@angular/material';
+import { NgSelectMultipleOption } from '@angular/forms/src/directives';
+import { FuseOptionFormDialogComponent } from './sku-form/option-form.component';
+// import * as $ from 'jquery';
+import { TreeModel } from 'ng2-tree';
+import { Router } from '@angular/router';
+
+declare var $: any;
 // import {MatTreeModule} from '@angular/material/tree';
 
-
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
@@ -31,84 +54,91 @@ import { TreeModule } from 'ng2-tree';
 })
 export class ProductComponent implements OnInit, OnDestroy {
   product = new Product();
+  supplier: Supplier = new Supplier();
+  product_variant: ProductVariant = new ProductVariant();
+  options: Options = new Options();
+  tOptions: Options[] = [];
+  option_id = -1;
+  option_set_id = -1;
+  rule_id = -1;
+
   onProductChanged: Subscription;
   category = new Category();
   onCategoryChanged: Subscription;
   viewChildren = false;
   pageType: string;
   productForm: FormGroup;
+  dataSource;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+  disableSkuAndRuleTab = false;
+  dialogRef: any;
 
   files: UploadFile[] = [];
   nodes: any;
-  // nodes = [
-  //   {
-  //     id: 1,
-  //     name: 'cat 1',
-  //     children: [
-  //       { id: 2, name: 'cat 1-1' },
-  //       { id: 3, name: 'cat 1-2' }
-  //     ]
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'cat 2',
-  //     children: [
-  //       { id: 5, name: 'cat 2-1' },
-  //       {
-  //         id: 6,
-  //         name: 'cat 2-2',
-  //         children: [
-  //           { id: 7, name: 'cat 2-2-1' }
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // ];
-  options = {};
 
-  constructor(private productService: ProductService,
-              private formBuilder: FormBuilder,
-              public snackBar: MatSnackBar,
-              private location: Location, 
-              private spinnerService: SpinnerService,
-              private snotifyService: SnotifyService,
-              private dialog: MatDialog
-            ) {
-
-  }
+  suppliers: Supplier;
+  brands;
+  taxes;
+  optionSets;
+  optionsTab = true;
+  skusTab = false;
+  rulesTab = false;
+  option_set: OptionSet = new OptionSet();
+  option_value: OptionValue = new OptionValue();
+  public tree: TreeModel;
+  category_id: any;
+  constructor(
+    private productService: ProductService,
+    private formBuilder: FormBuilder,
+    public snackBar: MatSnackBar,
+    private location: Location,
+    private spinnerService: SpinnerService,
+    private snotifyService: SnotifyService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     // Subscribe to update product on changes
-    this.onProductChanged =
-      this.productService.onProductChanged
-        .subscribe(product => {
+    this.getSupplier();
+    // this.getTaxes();
+    this.getBrands();
+    this.getOptionSets();
 
-          if (product) {
-            this.product = new Product(product);
-            this.pageType = 'edit';
-          }
-          else {
-            this.pageType = 'new';
-            this.product = new Product();
-          }
+    this.onProductChanged = this.productService.onProductChanged.subscribe(
+      product => {
+        if (product) {
+          this.product = new Product(product);
+          this.pageType = 'edit';
+        } else {
+          this.pageType = 'new';
+          this.product = new Product();
+        }
+      }
+    );
 
-          this.productForm = this.createProductForm();
-        });
+    this.onCategoryChanged = this.productService.onCategoryChanged.subscribe(
+      category => {
+        // if (category)
+        this.category = category;
+        // this.tree.id = this.category.id;
+        // this.tree.value = this.category.value;
+        // let temp: TreeModel = {
+        //   value: category[0].value,
+        //   id: category[0].id
+        // };
+        //
 
-        this.onCategoryChanged =
-        this.productService.onCategoryChanged
-          .subscribe(category => {
-  
-            // if (category) 
-              this.category = category;
+        const temp = this.changeFieldName(category);
 
-         
-            console.log(this.category);
-  
-            // this.productForm = this.createProductForm();
-          });
-
+        this.tree = {
+          value: 'Categories',
+          children: temp
+        };
+        // console.log(temp);
+        // this.productForm = this.createProductForm();
+      }
+    );
   }
 
   enableChildren() {
@@ -119,132 +149,156 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.viewChildren = false;
   }
 
-
   deleteProduct() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
     });
-    this.confirmDialogRef.componentInstance.confirmMessage = 'Are you sure you want to delete?';
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      'Are you sure you want to delete?';
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         const data = this.productForm.getRawValue();
         data.handle = FuseUtils.handleize(data.name);
-        this.productService.deleteProduct(data)
-          .then(() => {
-            this.productService.onProductChanged.next(data);
-          });
+        this.productService.deleteProduct(data).then(() => {
+          this.productService.onProductChanged.next(data);
+        });
       }
       this.confirmDialogRef = null;
     });
   }
 
-  createProductForm() {
-    return this.formBuilder.group({
-      id: [this.product.id],
-      name: [this.product.name],
-      handle: [this.product.handle],
-      description: [this.product.description],
-      categories: [this.product.categories],
-      tags: [this.product.tags],
-      images: [this.product.images],
-      priceTaxExcl: [this.product.priceTaxExcl],
-      priceTaxIncl: [this.product.priceTaxIncl],
-      price: [this.product.price],
-      taxRate: [this.product.taxRate],
-      comparedPrice: [this.product.comparedPrice],
-      quantity: [this.product.quantity],
-      sku: [this.product.sku],
-      width: [this.product.width],
-      height: [this.product.height],
-      depth: [this.product.depth],
-      weight: [this.product.weight],
-      extraShippingFee: [this.product.extraShippingFee],
-      active: [this.product.active]
-    });
+  newOptionAdded() {
+    // $('#addOptionModal').modal('show');
+    this.newContact();
   }
-
-  // createCategoryForm() {
-  //   return this.formBuilder.group({
-  //     id: [this.category.id],
-  //     name: [this.category.name],
-  //     handle: [this.product.handle],
-  //     description: [this.product.description],
-  //     categories: [this.product.categories],
-  //     tags: [this.product.tags],
-  //     images: [this.product.images],
-  //     priceTaxExcl: [this.product.priceTaxExcl],
-  //     priceTaxIncl: [this.product.priceTaxIncl],
-  //     price: [this.product.price],
-  //     taxRate: [this.product.taxRate],
-  //     comparedPrice: [this.product.comparedPrice],
-  //     quantity: [this.product.quantity],
-  //     sku: [this.product.sku],
-  //     width: [this.product.width],
-  //     height: [this.product.height],
-  //     depth: [this.product.depth],
-  //     weight: [this.product.weight],
-  //     extraShippingFee: [this.product.extraShippingFee],
-  //     active: [this.product.active]
-  //   });
-  // }
 
   saveProduct() {
     this.spinnerService.requestInProcess(true);
 
     const data = this.productForm.getRawValue();
     data.handle = FuseUtils.handleize(data.name);
-    this.productService.saveProduct(data)
-      .then(() => {
+    this.productService.saveProduct(data).then(() => {
+      // Trigger the subscription with new data
+      this.productService.onProductChanged.next(data);
 
-        // Trigger the subscription with new data
-        this.productService.onProductChanged.next(data);
+      // Show the success message
+      this.snotifyService.success('Product added', 'Success !');
+      // Change the location with new one
+      this.spinnerService.requestInProcess(false);
 
-        // Show the success message
-        this.snotifyService.success('Product added','Success !');
-        // Change the location with new one
-        this.spinnerService.requestInProcess(false);
-
-        this.location.go('/products');
-      });
+      this.location.go('/products');
+    });
   }
 
-  addProduct() {
+  addProduct(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning('Please Fill All Fields');
+      return;
+    }
+    this.product.suppliers.push(this.supplier);
+    this.product.category_id = this.category_id;
+    // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
-    const data = this.productForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.productService.addProduct(data)
-      .then(() => {
 
-        // Trigger the subscription with new data
-        this.productService.onProductChanged.next(data);
-
-        // Show the success message
-        // this.snackBar.open('Product added', 'OK', {
-        //   verticalPosition: 'top',
-        //   duration: 2000
-        // });
-
-        this.snotifyService.success('Product added','Success !');
+    this.productService.addProduct(this.product).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, 'Success !');
         this.spinnerService.requestInProcess(false);
-        // Change the location with new one
-        this.location.go('/products');
-        // Change the location with new one
-        // this.location.go('apps/e-commerce/products/' + this.product.id + '/' + this.product.handle);
-      });
+        this.product = new Product();
+        this.supplier = new Supplier();
+        this.router.navigate(['/products']);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, 'Error !');
+      }
+    );
+  }
+
+  getSupplier() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getSupplier().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.suppliers = res.res.data.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getTaxes() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getTaxes().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.taxes = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getBrands() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getBrands().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.brands = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  getOptionSets() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getOptionSets().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.optionSets = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
   }
 
   dropped(event: UploadEvent) {
     this.files = event.files;
     for (const droppedFile of event.files) {
-
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
-
           // Here you can access the real file
-          console.log(droppedFile.relativePath, file);
-
           /**
            // You could upload it like this:
            const formData = new FormData()
@@ -260,24 +314,186 @@ export class ProductComponent implements OnInit, OnDestroy {
             // Sanitized logo returned from backend
           })
            **/
-
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
   }
 
-  fileOver(event) {
-    console.log(event);
+  fileOver(event) {}
+
+  fileLeave(event) {}
+  checkMyOptions(val) {
+    const result = this.optionSets.find(option => option.id === val);
+    if (result !== undefined) {
+      this.setDataSuorce(result.options);
+      this.option_set.id = result.id;
+      this.disableSkuAndRuleTab = true;
+    } else {
+      this.dataSource = [];
+      this.disableSkuAndRuleTab = false;
+    }
   }
 
-  fileLeave(event) {
-    console.log(event);
+  newContact() {
+    this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
+      panelClass: 'contact-form-dialog',
+      data: {
+        action: 'new'
+      }
+    });
+
+    this.dialogRef.afterClosed().subscribe((response: FormGroup) => {
+      if (!response) {
+        return;
+      }
+    });
   }
 
+  setDataSuorce(obj) {
+    this.dataSource = obj;
+  }
+  openRelatedTab(val: string) {
+    switch (val) {
+      case 'rulesTab':
+        this.rulesTab = true;
+        this.optionsTab = false;
+        this.skusTab = false;
+        break;
+      case 'skusTab':
+        this.rulesTab = false;
+        this.optionsTab = false;
+        this.skusTab = true;
+        break;
+      default:
+        this.rulesTab = false;
+        this.optionsTab = true;
+        this.skusTab = false;
+    }
+  }
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+  selectCategory(event, cId) {
+    if (event.checked) {
+      this.product.category_id = cId;
+    }
+  }
+  handleSelection(event) {
+    if (event.option.selected) {
+      event.source.deselectAll();
+      event.option._setSelected(true);
+    }
+  }
+  setSelection(val) {
+    this.option_id = val.selectedOptions.selected[0].value;
+  }
+  addRelatedvalue(check?: string) {
+    if (check === 'addOption') {
+      if (this.option_id === -1) {
+        this.snotifyService.warning(
+          'Please select option set and option before !'
+        );
+        return;
+      }
+      // this.product.suppliers[0].productVariants .push(new OptionValue(this.option_value));
+
+      this.options.option_id = this.option_id;
+      this.options.option_rule_id = this.rule_id;
+      this.options.option_set_id = this.option_set_id;
+      this.tOptions.push(this.options);
+      this.option_set_id = this.rule_id = this.option_id = -1;
+      this.options = new Options();
+      this.checkMyOptions(-1);
+      this.disableSkuAndRuleTab = true;
+    } else {
+      if (
+        this.product_variant.depth === undefined ||
+        this.product_variant.ean === undefined ||
+        this.product_variant.height === undefined ||
+        this.product_variant.sku === undefined ||
+        this.product_variant.upc === undefined ||
+        this.product_variant.weight === undefined ||
+        this.product_variant.width === undefined
+      ) {
+        this.snotifyService.warning('Please add all fields !');
+        return;
+      }
+      if (this.tOptions.length > 0) {
+        this.product_variant.options = this.tOptions;
+        this.supplier.productVariants.push(this.product_variant);
+        this.product_variant = new ProductVariant();
+        this.tOptions = [];
+      } else {
+        this.snotifyService.warning(
+          'Please add option set and option before !'
+        );
+      }
+    }
+  }
+  getOptionSetName(id) {
+    const result = this.optionSets.find(option => option.id === id);
+    if (result) {
+      return result.name;
+    }
+  }
+  getOptionName(id, pid) {
+    const res = this.optionSets.find(option => option.id === pid);
+    if (res) {
+      // console.log(res);
+      const result = res.options.find(option => option.id === id);
+      if (result) {
+        return result.value;
+      }
+    }
+  }
+
+  // deleteOption(index) {
+  //   this.product.option_values.splice(index, 1);
+  //   if (this.product.option_values.length === 0) {
+  //     this.disableSkuAndRuleTab = false;
+  //   }
+  //   console.log(this.product.option_values);
+  // }
+
+  changeFieldName(categories: Category[]) {
+    const res: TreeModel[] = [];
+    categories.forEach(category => {
+      category.value = category.name;
+      // delete element.name;
+      const tempTree: TreeModel = {
+        id: category.id,
+        value: category.name,
+        children: []
+      };
+      if (category.children.length > 0) {
+        category.children.forEach(ele => {
+          ele.value = ele.name;
+          // delete ele.name;
+          const tTree: TreeModel = {
+            id: ele.id,
+            value: ele.name
+          };
+          tempTree.children.push(tTree);
+        });
+      }
+      res.push(tempTree);
+    });
+    return res;
+  }
+  handleSelected(event) {
+    console.log(event);
+    this.category_id = event.node.node.id;
+  }
 
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();

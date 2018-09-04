@@ -14,6 +14,7 @@ import 'rxjs/add/observable/fromEvent';
 import { FuseUtils } from '../../../core/fuseUtils';
 import { SpinnerService } from '../../../spinner/spinner.service';
 import { SnotifyService } from 'ng-snotify';
+import { GLOBAL } from '../../../shared/globel';
 
 @Component({
   selector: 'app-suppliers',
@@ -22,9 +23,13 @@ import { SnotifyService } from 'ng-snotify';
   animations: fuseAnimations
 })
 export class SuppliersComponent implements OnInit {
+  supplier;
+  supplier_contact;
   dataSource: any;
-  displayedColumns = ['id', 'image', 'name', 'email', 'phone', 'address', 'action'];
+  displayedColumns = ['id', 'image', 'name', 'email', 'phone', 'address'];
   suppliers;
+  baseURL = GLOBAL.USER_IMAGE_API;
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('filter') filter: ElementRef;
@@ -56,8 +61,9 @@ export class SuppliersComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     this.suppliersService.getSuppliers()
       .subscribe((res: any) => {
-        this.suppliers = res.res.data.data;
-    // console.log(res.res.data.data);
+        this.supplier = res.res.data.data;
+        this.supplier_contact = res.res.data.data.contact;
+        console.log(res.res.data.data);
         this.setDataSuorce(res.res.data.data);
         this.spinnerService.requestInProcess(false);
       }, errors => {

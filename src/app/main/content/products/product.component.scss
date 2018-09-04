@@ -1,79 +1,116 @@
 #product {
+  .colorShow {
+    color: rgb(35, 155, 35) !important;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: -27px;
+  }
 
-    .colorShow{
-        color: rgb(35, 155, 35) !important;
-        cursor: pointer;
-        font-size: 15px;
-        margin-left: -27px;
-    }
+  .colorHide {
+    color: rgb(212, 57, 46) !important;
+    cursor: pointer;
+    font-size: 15px;
+    margin-left: -27px;
+  }
 
-    .colorHide{
-        color: rgb(212, 57, 46) !important;
-        cursor: pointer;
-        font-size: 15px;
-        margin-left: -27px;
+  .header {
+    .product-image {
+      overflow: hidden;
+      width: 56px;
+      height: 56px;
+      border: 3px solid rgba(0, 0, 0, 0.12);
 
-    }
-
-    .header {
-
-        .product-image {
-            overflow: hidden;
-            width: 56px;
-            height: 56px;
-            border: 3px solid rgba(0, 0, 0, 0.12);
-
-            img {
-                height: 100%;
-                width: auto;
-                max-width: none;
-            }
-        }
-
-        .subtitle {
-            margin: 6px 0 0 0;
-        }
-    }
-
-    .content {
-
-        .mat-tab-group,
-        .mat-tab-body-wrapper,
-        .tab-content{
-            flex: 1 1 auto;
-            max-width: 100%;
-        }
-
-        .mat-tab-body-content {
-            display: flex;
-        }
-
-        .mat-tab-label {
-            height: 64px;
-        }
-
-      .angular-tree-component{
-        margin-bottom: 10px;
+      img {
+        height: 100%;
+        width: auto;
+        max-width: none;
       }
-      tree-viewport{
-        display: inline;
-      }
-
-        .product-image {
-            overflow: hidden;
-            width: 128px;
-            height: 128px;
-            margin-right: 16px;
-            margin-bottom: 16px;
-            border: 3px solid rgba(0, 0, 0, 0.12);
-
-            img {
-                height: 100%;
-                width: auto;
-                max-width: none;
-            }
-        }
-
     }
 
+    .subtitle {
+      margin: 6px 0 0 0;
+    }
+  }
+
+  .content {
+    .mat-tab-group,
+    .mat-tab-body-wrapper,
+    .tab-content {
+      flex: 1 1 auto;
+      max-width: 100%;
+    }
+
+    .mat-tab-body-content {
+      display: flex;
+    }
+
+    .mat-tab-label {
+      height: 64px;
+    }
+
+    .angular-tree-component {
+      margin-bottom: 10px;
+    }
+    tree-viewport {
+      display: inline;
+    }
+
+    .product-image {
+      overflow: hidden;
+      width: 128px;
+      height: 128px;
+      margin-right: 16px;
+      margin-bottom: 16px;
+      border: 3px solid rgba(0, 0, 0, 0.12);
+
+      img {
+        height: 100%;
+        width: auto;
+        max-width: none;
+      }
+    }
+  }
+}
+.mat-tab-links {
+  display: flex;
+  position: relative;
+  flex-direction: column; //can`t change this filed by myself
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  border: 1px solid #dee2e6;
+  border-right: 1px solid #ffffff;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: transparent;
+  color: #007bff;
+  z-index: 1000;
+  margin-right: -1px;
+  padding: 13px;
+}
+.col-md-2 {
+  margin: 0;
+  padding: 0;
+}
+.col-md-10 {
+  margin: 0;
+  padding: 0;
+}
+
+.tab-content > .tab-pane {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 10px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.error {
+  color: #f20025;
+}
+
+.xb-checkbox .mat-checkbox-inner-container {
+  height: 10px !important;
+  width: 10px !important;
 }

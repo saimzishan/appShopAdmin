@@ -60,14 +60,11 @@
 
         <!-- Image Column -->
         <ng-container cdkColumnDef="image">
-          <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
           <mat-cell *cdkCellDef="let supplier">
-            <img class="supplier"
-                 *ngIf="supplier.contact.profile_image" [alt]="supplier.name"
-                 [src]="supplier.contact.profile_image"/>
-            <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+              <img src="{{ supplier.image? baseURL+supplier.image.url: '' }}" alt="Supplier Image">
           </mat-cell>
-        </ng-container>
+      </ng-container>
 
         <!-- Name Column -->
         <ng-container cdkColumnDef="name">
@@ -125,22 +122,15 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Active Column -->
-        <ng-container cdkColumnDef="action">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <mat-icon class="active-icon mat-green-600-bg">edit</mat-icon>
-            <!--<mat-icon *ngIf="supplier.active" class="active-icon mat-green-600-bg s-16">check</mat-icon>
-            <mat-icon *ngIf="!supplier.active" class="active-icon mat-red-500-bg s-16">close</mat-icon>-->
-          </mat-cell>
-        </ng-container>
-
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
-                 class="product"
+        <!-- <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
+                 class="supplier"
                  matRipple
                  [routerLink]="'/suppliers/'+supplier.id">
+        </mat-row> -->
+
+        <mat-row *cdkRowDef="let supplier; columns: displayedColumns;" class="supplier" matRipple [routerLink]="'/suppliers/'+supplier.id">
         </mat-row>
 
       </mat-table>

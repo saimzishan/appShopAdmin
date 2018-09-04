@@ -1,23 +1,28 @@
-import {Contact} from './contact.model';
-import {Product} from './product.model';
+import { Contact } from './contact.model';
+import { Product } from './product.model';
 
-export class Supplier
-{
+export class Supplier {
   id: number;
   name: string;
-  type = '';
+  type: number;
   contact: Contact;
   products: Product[];
   handle: string;
+  image: string; // base64string
+  images: {
+    id: string;
+    url: string;
+  }[];
+  content_type: string; // '.png/.jpg' etc...
 
-  constructor(supplier?)
-  {
+
+  constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id || -1;
-    this.name = supplier.name || '';
-    this.type = supplier.type || '';
+    this.name = supplier.name || "";
+    this.type = supplier.type || "";
     this.contact = supplier.contact || {};
     this.products = supplier.products || [];
-    this.handle = supplier.handle || '';
+    this.handle = supplier.handle || "";
   }
 }
