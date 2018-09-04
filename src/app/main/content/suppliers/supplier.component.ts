@@ -127,16 +127,26 @@ export class SupplierComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.supplier.content_type) {
-      let preImageName: any = this.supplier.image;
-      preImageName = preImageName.url.split("/");
-      this.supplier.image_name = preImageName[3];
+      let preImageName: any;
+      if (this.supplier.image) {
+        let preImageName: any = this.supplier.image;
+        preImageName = preImageName.url.split("/");
+        this.supplier.image_name = preImageName[3];
+      } else {
+        let date = new Date(null);
+        date.setSeconds(45); // specify value for SECONDS here
+        let timeString = date.toISOString().substr(11, 8);
+        this.supplier.image_name = timeString + this.supplier.content_type;
+      }
+
       this.supplier.image = this.base64textString;
     } else {
       delete this.supplier.image;
     }
     const data = this.supplier;
     this.supplierService.saveSupplier(data).then(() => {
-      this.supplierService.onSupplierChanged.next(data);
+      this.router.navigate(["/suppliers"]);
+      // this.supplierService.onSupplierChanged.next(data);
       // this.snotifyService.success("Supplier saved", "Success !");
     });
   }
