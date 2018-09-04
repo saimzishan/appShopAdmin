@@ -35,6 +35,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
   supplierForm: FormGroup;
   stateJSON;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+  base64textString;
 
   constructor(
     private supplierService: SupplierService,
@@ -144,14 +145,14 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addSupplier(form) {
-    this.supplier.contact = this.supplier_contact;
+    // this.supplier.contact = this.supplier_contact;
+    // this.supplier.contact = this.supplier_contact;
     console.log(this.supplier);
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning('Please Fill All Fields');
       return;
     }
-    this.supplier.contact = this.supplier_contact;
     // this.product.category_id = this.category_id;
     // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
@@ -171,6 +172,24 @@ export class SupplierComponent implements OnInit, OnDestroy {
         this.snotifyService.error(e, 'Error !');
       }
     );
+  }
+
+  handleFileSelect(evt) {
+    const files = evt.target.files;
+    const file = files[0];
+    if (files && file) {
+      const reader = new FileReader();
+      this.supplier.content_type = '.' + file.type.split('/')[1];
+      reader.onload = this._handleReaderLoaded.bind(this);
+
+      reader.readAsBinaryString(file);
+    }
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    const binaryString = readerEvt.target.result;
+    this.base64textString = btoa(binaryString);
+    this.supplier.image = this.base64textString;
   }
 
   deleteSupplier() {

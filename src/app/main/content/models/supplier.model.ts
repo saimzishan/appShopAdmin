@@ -8,6 +8,13 @@ export class Supplier {
   contact: Contact;
   products: Product[];
   handle: string;
+  image: string; // base64string
+  images: {
+    id: string;
+    url: string;
+  }[];
+  content_type: string; // '.png/.jpg' etc...
+
 
   constructor(supplier?) {
     supplier = supplier || {};
