@@ -7,6 +7,7 @@ export class Brand {
   notes: string;
   image: string; // base64string
   content_type: string; // '.png/.jpg' etc...
+  image_name;
   images: {
     id: string;
     url: string;

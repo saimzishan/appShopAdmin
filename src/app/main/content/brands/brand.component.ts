@@ -6,47 +6,47 @@ import {
   Inject,
   ViewChild,
   TemplateRef
-} from '@angular/core';
-import { BrandService } from './brand.service';
-import { fuseAnimations } from '../../../core/animations';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
-import { Subscription } from 'rxjs/Subscription';
-import { Brand } from '../models/brand.model';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { FuseUtils } from '../../../core/fuseUtils';
+} from "@angular/core";
+import { BrandService } from "./brand.service";
+import { fuseAnimations } from "../../../core/animations";
+import "rxjs/add/operator/startWith";
+import "rxjs/add/observable/merge";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/observable/fromEvent";
+import { Subscription } from "rxjs/Subscription";
+import { Brand } from "../models/brand.model";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { FuseUtils } from "../../../core/fuseUtils";
 import {
   MatSnackBar,
   MatDialog,
   MAT_DIALOG_DATA,
   MatDialogRef
-} from '@angular/material';
-import { Location } from '@angular/common';
+} from "@angular/material";
+import { Location } from "@angular/common";
 import {
   FileSystemDirectoryEntry,
   FileSystemFileEntry,
   UploadEvent,
   UploadFile
-} from 'ngx-file-drop';
-import { GLOBAL } from '../../../shared/globel';
-import { SnotifyService } from 'ng-snotify';
-import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
+} from "ngx-file-drop";
+import { GLOBAL } from "../../../shared/globel";
+import { SnotifyService } from "ng-snotify";
+import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 // import { $ } from 'protractor';
 declare var $: any;
 
 @Component({
-  selector: 'app-brand',
-  templateUrl: './brand.component.html',
-  styleUrls: ['./brand.component.scss'],
+  selector: "app-brand",
+  templateUrl: "./brand.component.html",
+  styleUrls: ["./brand.component.scss"],
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
 export class BrandComponent implements OnInit, OnDestroy {
-  @ViewChild('dialogContent')
+  @ViewChild("dialogContent")
   dialogContent: TemplateRef<any>;
 
   brand = new Brand();
@@ -55,7 +55,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   brandForm: FormGroup;
   files: UploadFile[] = [];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-
+  baseURL = GLOBAL.USER_IMAGE_API;
   // nodes = [
   //   {
   //     id: 1,
@@ -97,9 +97,9 @@ export class BrandComponent implements OnInit, OnDestroy {
     this.onBrandChanged = this.brandService.onBrandChanged.subscribe(brand => {
       if (brand) {
         this.brand = new Brand(brand);
-        this.pageType = 'edit';
+        this.pageType = "edit";
       } else {
-        this.pageType = 'new';
+        this.pageType = "new";
         this.brand = new Brand();
       }
 
@@ -116,12 +116,26 @@ export class BrandComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveBrand() {
-    const data = this.brandForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.brandService.saveBrand(data).then(() => {
+  saveBrand(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning('Please Fill All Required Fields');
+      return;
+    }
+    if (!this.brand.content_type) {
+      delete this.brand.image;
+      delete this.brand.content_type;
+      delete this.brand.image_name;
+
+    } else {
+      let a: any = this.brand.image;
+      a = a.url.split('/');
+      this.brand.image_name = a[3];
+      console.log(this.brand.image_name);
+    }
+    this.brandService.saveBrand(this.brand).then(() => {
       // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(data);
+      this.brandService.onBrandChanged.next(this.brand);
 
       // Show the success message
     });
@@ -134,7 +148,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     });
 
     this.confirmDialogRef.componentInstance.confirmMessage =
-      'Are you sure you want to delete?';
+      "Are you sure you want to delete?";
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -160,7 +174,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   addBrand(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill All Required Fields');
+      this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
     // const data = this.brandForm.getRawValue();
@@ -225,7 +239,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     const file = files[0];
     if (files && file) {
       const reader = new FileReader();
-      this.brand.content_type = '.' + file.type.split('/')[1];
+      this.brand.content_type = "." + file.type.split("/")[1];
       reader.onload = this._handleReaderLoaded.bind(this);
 
       reader.readAsBinaryString(file);
