@@ -116,12 +116,18 @@ export class BrandComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveBrand() {
-    const data = this.brandForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.brandService.saveBrand(data).then(() => {
+  saveBrand(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Required Fields");
+      return;
+    }
+    if (1) {
+      console.log(this.brand.image);
+    }
+    this.brandService.saveBrand(this.brand).then(() => {
       // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(data);
+      this.brandService.onBrandChanged.next(this.brand);
 
       // Show the success message
     });
