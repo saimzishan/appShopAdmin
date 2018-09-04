@@ -74,8 +74,11 @@
                         </mat-form-field>
 
                         <!-- <mat-form-field class="w-100-p"> -->
-                        <fieldset class="w-100-p" *ngIf="pageType !=='edit'">
-                            <div *ngIf="!editMode">
+                        <mat-card *ngIf="!editMode">
+                            <img src="{{ brand.image? baseURL+brand.image.url: '' }}" width="100" height="100" alt="Brand Image">
+                        </mat-card>
+                        <fieldset class="w-100-p">
+                            <div>
                                 <input type="file" name="fileUp" (change)="handleFileSelect($event)">
                             </div>
                         </fieldset>
