@@ -42,8 +42,7 @@
                 <span>DELETE</span>
             </button>
 
-            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid || brandForm.pristine"
-                *ngIf="pageType ==='edit'" (click)="saveBrand()">
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
                 <span>SAVE</span>
             </button>
         </div>
@@ -74,10 +73,17 @@
                         </mat-form-field>
 
                         <!-- <mat-form-field class="w-100-p"> -->
-                        <fieldset class="w-100-p" *ngIf="pageType !=='edit'">
-                            <div *ngIf="!editMode">
+                        <fieldset class="w-100-p" *ngIf="pageType ==='new'">
+                            <div>
                                 <input type="file" name="fileUp" (change)="handleFileSelect($event)">
                             </div>
+                        </fieldset>
+                        <br>
+                        <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
+                            <mat-card>
+                                <img src="{{ brand.image? baseURL+brand.image.url: '' }}" width="100" height="100" alt="Brand Image">
+                            </mat-card>
+                            <input type="file" name="fileUp" (change)="handleFileSelect($event)">
                         </fieldset>
                         <!-- </mat-form-field> -->
                         <!-- <mat-form-field class="w-100-p">
@@ -93,6 +99,7 @@
 
                     <!-- </mat-tab-group> -->
                     <input type="button" class="btn btn-primary" hidden #brandFormSubmition (click)="addBrand(brandForm)">
+                    <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="saveBrand(brandForm)">
                 </form>
 
             </div>
