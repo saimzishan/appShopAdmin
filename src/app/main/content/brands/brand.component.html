@@ -16,10 +16,11 @@
                 <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/brands'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">card_travel</mat-icon>
 
                 <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    <img *ngIf="brand.images[0]" [src]="brand.images[0].url">
-                    <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
+                    <!-- <img *ngIf="brand.images[0]" [src]="brand.images[0].url">
+                    <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
                 </div>
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
