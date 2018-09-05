@@ -156,32 +156,32 @@
                                 <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
                                     <span>Sku is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc" required>
+                                    <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc" [required]="!ean.valid" >
                                 </mat-form-field>
                                 <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
                                     <span>Upc is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean" required>
+                                    <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean" [required]="!upc.valid">
                                 </mat-form-field>
                                 <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
                                     <span>Ean is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #width="ngModel" name="width" [(ngModel)]="supplier.width" placeholder="Width (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width" placeholder="Width (Centimeters)" required>
                                 </mat-form-field>
                                 <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
                                     <span>Width is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight" placeholder="weight" required>
+                                    <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight" placeholder="weight" required>
                                 </mat-form-field>
                                 <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
                                     <span>Width is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #height="ngModel" name="height" [(ngModel)]="supplier.height" placeholder="Height (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height" placeholder="Height (Centimeters)" required>
                                 </mat-form-field>
                                 <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
                                     <span>Height is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)" required>
                                 </mat-form-field>
                                 <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
                                     <span>Depth is required.</span>!</span>

@@ -36,17 +36,17 @@ export class Supplier {
 
   constructor(supplier?) {
     supplier = supplier || {};
-    this.id = supplier.id || -1;
-    this.price = supplier.price || 0;
-    this.weight = supplier.weight || 0;
-    this.width = supplier.width || 0;
-    this.upc = supplier.upc || 0;
-    this.ean = supplier.ean || "";
-    this.sku = supplier.sku || "";
-    this.height = supplier.height || -1;
-    this.depth = supplier.depth || -1;
-    this.image = supplier.image || "";
-    this.content_type = supplier.content_type || "";
+    this.id = supplier.id;
+    this.price = supplier.price;
+    this.weight = supplier.weight;
+    this.width = supplier.width;
+    this.upc = supplier.upc;
+    this.ean = supplier.ean;
+    this.sku = supplier.sku || '';
+    this.height = supplier.height || '';
+    this.depth = supplier.depth || '';
+    this.image = supplier.image || '';
+    this.content_type = supplier.content_type || '';
     this.productVariants = new Array<ProductVariant>();
   }
 }

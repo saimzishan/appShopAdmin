@@ -375,6 +375,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
+      // this.supplier.upc.
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
