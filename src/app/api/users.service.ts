@@ -42,5 +42,16 @@ export class UsersService extends ApiService {
             .catch((err) => { return this.handleError(err); });
     }
 
+        forgotPassword(obj): Observable<Object> {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post(GLOBAL.USER_API + 'forgotPassword', obj, httpOptions)
+            .map(this.extractData)
+            .catch((err) => { return this.handleError(err); });
+    }
+
 }
 
