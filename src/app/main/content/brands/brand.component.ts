@@ -90,7 +90,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     private location: Location,
     private snotifyService: SnotifyService,
     private dialog: MatDialog
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -119,13 +119,21 @@ export class BrandComponent implements OnInit, OnDestroy {
   saveBrand(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill All Required Fields');
+      this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
     if (this.brand.content_type) {
-      let preImageName: any = this.brand.image;
-      preImageName = preImageName.url.split('/');
-      this.brand.image_name = preImageName[3];
+      let preImageName: any;
+      if (this.brand.image) {
+        preImageName = this.brand.image;
+        preImageName = preImageName.small.split("/");
+        this.brand.image_name = preImageName[3];
+      } else {
+        let date = new Date(null);
+        date.setSeconds(45); // specify value for SECONDS here
+        let timeString = date.toISOString().substr(11, 8);
+        this.brand.image_name = timeString + this.brand.content_type;
+      }
       this.brand.image = this.base64textString;
     } else {
       delete this.brand.image;

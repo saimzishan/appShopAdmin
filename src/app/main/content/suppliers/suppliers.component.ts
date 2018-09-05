@@ -26,7 +26,15 @@ export class SuppliersComponent implements OnInit {
   supplier;
   supplier_contact;
   dataSource: any;
-  displayedColumns = ["id", "image", "name", "email", "phone", "address"];
+  displayedColumns = [
+    "id",
+    "name",
+    "email",
+    "phone",
+    "type",
+    "image",
+    "address"
+  ];
   suppliers;
   baseURL = GLOBAL.USER_IMAGE_API;
 

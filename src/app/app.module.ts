@@ -25,6 +25,7 @@ import { AuthGuard } from "./guard/auth.guard";
 import { JwtModule } from "@auth0/angular-jwt";
 import * as $ from "jquery";
 import { ModalComponents } from "./models/modal.components";
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 
 export function tokenGetter() {
   let user: any = localStorage.getItem("currentUser");
@@ -146,6 +147,7 @@ const appRoutes: Routes = [
     UsersService,
     SpinnerService,
     { provide: "SnotifyToastConfig", useValue: ToastDefaults },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     SnotifyService,
     AuthGuard
   ],

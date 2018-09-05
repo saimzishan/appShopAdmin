@@ -81,7 +81,12 @@
                         <br>
                         <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
                             <mat-card>
-                                <img src="{{ brand.image? baseURL+brand.image.url: '' }}" width="100" height="100" alt="Brand Image">
+                                <ng-container *ngIf="brand.image">
+                                    <img src="{{baseURL+brand.image.small}}" width="100" height="100">
+                                </ng-container>
+                                <ng-container *ngIf="!brand.image">
+                                    <p> No Image</p>
+                                </ng-container>
                             </mat-card>
                             <input type="file" name="fileUp" (change)="handleFileSelect($event)">
                         </fieldset>

@@ -129,8 +129,8 @@ export class SupplierComponent implements OnInit, OnDestroy {
     if (this.supplier.content_type) {
       let preImageName: any;
       if (this.supplier.image) {
-        let preImageName: any = this.supplier.image;
-        preImageName = preImageName.url.split("/");
+        preImageName = this.supplier.image;
+        preImageName = preImageName.small.split("/");
         this.supplier.image_name = preImageName[3];
       } else {
         let date = new Date(null);
