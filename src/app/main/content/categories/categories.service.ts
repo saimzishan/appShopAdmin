@@ -58,6 +58,26 @@ export class CategoriesService extends ApiService implements Resolve<any> {
         return this.handleError(err);
       });
   }
+  getData(id) {
+    return new Promise((resolve, reject) => {
+      this.spinnerService.requestInProcess(true);
+      const httpOptions = {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      };
+      this.http
+        .get(GLOBAL.USER_API + "categories/" + id, httpOptions)
+        .subscribe((response: any) => {
+          this.spinnerService.requestInProcess(false);
+          if (!response.error) {
+            resolve(response);
+          } else {
+            this.snotifyService.error(response.error);
+          }
+        }, reject);
+    });
+  }
 
   show(id): Observable<Object> {
     const httpOptions = {

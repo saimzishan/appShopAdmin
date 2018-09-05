@@ -1,10 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GLOBAL } from '../../../shared/globel';
-import { ApiService } from '../../../api/api.service';
+import { Injectable } from "@angular/core";
+import {
+  ActivatedRouteSnapshot,
+  Resolve,
+  RouterStateSnapshot
+} from "@angular/router";
+import { Observable } from "rxjs/Observable";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { GLOBAL } from "../../../shared/globel";
+import { ApiService } from "../../../api/api.service";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 @Injectable()
 export class SuppliersService extends ApiService {
@@ -24,18 +29,14 @@ export class SuppliersService extends ApiService {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-
+  resolve(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<any> | Promise<any> | any {
     return new Promise((resolve, reject) => {
-
-      Promise.all([
-        this.getSuppliers()
-      ]).then(
-        () => {
-          resolve();
-        },
-        reject
-      );
+      Promise.all([this.getSuppliers()]).then(() => {
+        resolve();
+      }, reject);
     });
   }
 
@@ -52,19 +53,24 @@ export class SuppliersService extends ApiService {
   // }
 
   getSuppliers() {
-    const currntUser = JSON.parse(localStorage.getItem('currentUser'));
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + currntUser.access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.get(GLOBAL.USER_API + 'suppliers', httpOptions)
+    return this.http
+      .get(GLOBAL.USER_API + "suppliers", httpOptions)
       .map(this.extractData)
-      .catch((err) => {
+      .catch(err => {
         return this.handleError(err);
-      }
-      );
-
+      });
   }
 }

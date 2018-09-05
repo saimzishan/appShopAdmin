@@ -13,7 +13,7 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/observable/fromEvent";
 import { FuseUtils } from "../../../core/fuseUtils";
-import { ITreeOptions, TreeNode } from "angular-tree-component";
+import { ITreeOptions, TreeNode, TreeComponent } from "angular-tree-component";
 import { SpinnerService } from "../../../spinner/spinner.service";
 
 @Component({
@@ -31,6 +31,8 @@ export class CategoriesComponent implements OnInit {
   filter: ElementRef;
   @ViewChild(MatSort)
   sort: MatSort;
+  @ViewChild(TreeComponent)
+  private tree: TreeComponent;
   category;
   options: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
@@ -119,11 +121,9 @@ export class CategoriesComponent implements OnInit {
     return tempNode;
   }
   getChildren(node: any) {
-    this.spinnerService.requestInProcess(true);
     this.show(node.data.my_id);
     return new Promise((resolve, reject) => {
       setTimeout(() => resolve(this.newNodes), 4000);
-      this.spinnerService.requestInProcess(false);
     });
   }
 
@@ -156,6 +156,8 @@ export class CategoriesComponent implements OnInit {
           this.category = res.res.data;
 
           this.asyncChildren = this.createNode(this.category);
+          // this.tree.treeModel.update();
+
           this.newNodes = this.asyncChildren.map(c => Object.assign({}, c));
         }
       },

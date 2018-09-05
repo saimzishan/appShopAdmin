@@ -119,19 +119,24 @@ export class BrandComponent implements OnInit, OnDestroy {
   saveBrand(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill All Required Fields');
+      this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-    if (!this.brand.content_type) {
-      delete this.brand.image;
-      delete this.brand.content_type;
-      delete this.brand.image_name;
-
+    if (this.brand.content_type) {
+      let preImageName: any;
+      if (this.brand.image) {
+        preImageName = this.brand.image;
+        preImageName = preImageName.small.split("/");
+        this.brand.image_name = preImageName[3];
+      } else {
+        let date = new Date(null);
+        date.setSeconds(45); // specify value for SECONDS here
+        let timeString = date.toISOString().substr(11, 8);
+        this.brand.image_name = timeString + this.brand.content_type;
+      }
+      this.brand.image = this.base64textString;
     } else {
-      let a: any = this.brand.image;
-      a = a.url.split('/');
-      this.brand.image_name = a[3];
-      console.log(this.brand.image_name);
+      delete this.brand.image;
     }
     this.brandService.saveBrand(this.brand).then(() => {
       // Trigger the subscription with new data
@@ -176,6 +181,9 @@ export class BrandComponent implements OnInit, OnDestroy {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
+    }
+    if (this.base64textString) {
+      this.brand.image = this.base64textString;
     }
     // const data = this.brandForm.getRawValue();
     // data.handle = FuseUtils.handleize(data.name);
@@ -249,7 +257,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   _handleReaderLoaded(readerEvt) {
     const binaryString = readerEvt.target.result;
     this.base64textString = btoa(binaryString);
-    this.brand.image = this.base64textString;
+    // this.brand.image = this.base64textString;
   }
 
   ngOnDestroy() {

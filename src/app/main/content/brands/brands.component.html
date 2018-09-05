@@ -94,7 +94,12 @@
                 <ng-container cdkColumnDef="image">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Name</mat-header-cell>
                     <mat-cell *cdkCellDef="let brand">
-                        <img src="{{ brand.image? baseURL+brand.image.url: '' }}" alt="Brand Image">
+                        <ng-container *ngIf="brand.image">
+                            <img src="{{baseURL+brand.image.small}}" height="100" width="100">
+                        </ng-container>
+                        <ng-container *ngIf="!brand.image">
+                            <p> No Image</p>
+                        </ng-container>
                     </mat-cell>
                 </ng-container>
 
