@@ -16,7 +16,7 @@ export class Product {
   constructor(product?) {
     product = product || {};
     this.id = product.id || -1;
-    this.name = product.name || "";
+    this.name = product.name || '';
     this.suppliers = new Array<Supplier>();
   }
 }

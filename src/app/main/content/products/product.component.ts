@@ -61,6 +61,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   option_id = -1;
   option_set_id = -1;
   rule_id = -1;
+  disableRequired = false;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -96,7 +97,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -322,9 +323,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  fileOver(event) {}
+  fileOver(event) { }
 
-  fileLeave(event) {}
+  fileLeave(event) { }
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
@@ -426,7 +427,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant.weight === undefined ||
         this.product_variant.width === undefined
       ) {
-        this.snotifyService.warning("Please add all fields !");
+        this.snotifyService.warning('Please add all fields !');
         return;
       }
       if (this.tOptions.length > 0) {
@@ -435,12 +436,22 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant = new ProductVariant();
         this.tOptions = [];
       } else {
-        this.snotifyService.warning(
-          "Please add option set and option before !"
-        );
+        this.snotifyService.warning('Please add option set and option before !');
       }
     }
   }
+
+  addAnotherSupplier() {
+    this.product.suppliers.push(this.supplier);
+    this.supplier = new Supplier();
+    this.disableRequired = true;
+    // document.getElementById("city").required() = false;
+  }
+
+  enableRequired() {
+    this.disableRequired = false;
+  }
+
   getOptionSetName(id) {
     const result = this.optionSets.find(option => option.id === id);
     if (result) {
