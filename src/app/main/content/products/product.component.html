@@ -240,7 +240,7 @@
                                         <div class="tab-content" id="v-pills-tabContent">
                                             <div *ngIf="optionsTab" [ngClass]="{'show active' : optionsTab}" class="tab-pane fade" id="v-pills-home" role="tabpanel"
                                                 aria-labelledby="v-pills-home-tab">
-                                                <div class="row">
+                                                <!-- <div class="row">
                                                     <div class="col-md-12">
                                                         <button mat-raised-button color="accent">
                                                             Create SKU
@@ -268,9 +268,7 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
-                                                                        <!-- <mat-form-field fxFlex class="w-100-p">
-                                                                            <input matInput name="width" [(ngModel)]="supplier.width" placeholder="">
-                                                                        </mat-form-field> -->
+                                                                        
                                                                     </td>
                                                                     <td>
                                                                         <input class="form-control" type="text" name="SKUas" [(ngModel)]="product_variant.sku" placeholder="SKU">
@@ -300,14 +298,14 @@
                                                         </table>
 
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <br>
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <label style="border-bottom: 2px solid;
                                                             border-bottom-style: dashed;">Option Set
                                                         </label>
-                                                        <mat-select placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id" (change)="checkMyOptions($event.value)">
+                                                        <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id" (change)="checkMyOptions($event.value)">
                                                             <mat-option value="-1">--None--</mat-option>
                                                             <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
                                                                 {{optionSet.name}}
@@ -317,11 +315,11 @@
 
 
 
-                                                    <div class="col-md-4">
-                                                        <!-- <input matInput name="height" [(ngModel)]="supplier.height" hidden> -->
-                                                        <!-- <a>Create new Option set</a> -->
-                                                        <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
-                                                        <label style="color: #939393">Options</label>
+                                                    <!-- <div class="col-md-4"> -->
+                                                    <!-- <input matInput name="height" [(ngModel)]="supplier.height" hidden> -->
+                                                    <!-- <a>Create new Option set</a> -->
+                                                    <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
+                                                    <!-- <label style="color: #939393">Options</label>
                                                         <br>
                                                         <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
 
@@ -332,8 +330,8 @@
                                                             </mat-selection-list>
 
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-4">
+                                                    </div> -->
+                                                    <!-- <div class="col-md-4">
                                                         <label style="border-bottom: 2px solid;
                                                             border-bottom-style: dashed;">Rule</label>
 
@@ -344,7 +342,7 @@
                                                             <mat-option value="3">Disable Selected</mat-option>
                                                         </mat-select>
 
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <br>
@@ -353,9 +351,9 @@
                                                     <div class="col-md-1">
                                                         <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option</button>
                                                     </div>
-                                                    <div>
+                                                    <!-- <div>
                                                         <button (click)="addRelatedvalue('addPV')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add PV</button>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <br>
                                                 <div class="row">
