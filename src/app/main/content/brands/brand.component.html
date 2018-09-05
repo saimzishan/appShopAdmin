@@ -16,11 +16,10 @@
                 <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/brands'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
-                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">card_travel</mat-icon>
 
                 <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-                    <!-- <img *ngIf="brand.images[0]" [src]="brand.images[0].url">
-                    <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
+                    <img *ngIf="brand.images[0]" [src]="brand.images[0].url">
+                    <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
                 </div>
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
@@ -43,13 +42,11 @@
                 <span>DELETE</span>
             </button>
 
-            <<<<<<< HEAD <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid || brandForm.pristine"
-                *ngIf="pageType ==='edit'" (click)="editBrandFormSubmition.click()">
-                =======
-                <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
-                    >>>>>>> 5c1e19b9a12969b8446e6d4b31186f570c4b92f3
-                    <span>SAVE</span>
-                </button>
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
+
+                <span>SAVE</span>
+            </button>
         </div>
         <!-- / HEADER -->
 
@@ -109,9 +106,9 @@
 
                     <!-- </mat-tab-group> -->
                     <input type="button" class="btn btn-primary" hidden #brandFormSubmition (click)="addBrand(brandForm)">
-                    <<<<<<< HEAD <input type="button" class="btn btn-primary" hidden #editBrandFormSubmition (click)="saveBrand(brandForm)">
-                        =======
-                        <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="saveBrand(brandForm)"> >>>>>>> 5c1e19b9a12969b8446e6d4b31186f570c4b92f3
+                    <input type="button" class="btn btn-primary" hidden #editBrandFormSubmition (click)="saveBrand(brandForm)">
+
+                    <!-- <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="saveBrand(brandForm)"> -->
                 </form>
 
             </div>
