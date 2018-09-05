@@ -13,7 +13,7 @@
             <form name="loginForm" [formGroup]="loginForm" novalidate>
 
                 <mat-form-field>
-                    <input matInput placeholder="Email" formControlName="email" [(ngModel)]="userModel.email" >
+                    <input matInput placeholder="Email" formControlName="email" [(ngModel)]="userModel.email">
                     <mat-error *ngIf="loginFormErrors.email.required">
                         Email is required
                     </mat-error>
@@ -28,10 +28,8 @@
                         Password is required
                     </mat-error>
                 </mat-form-field>
-
-                <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column"
-                     fxLayoutAlign="space-between center">
-                    <mat-checkbox class="remember-me" aria-label="Remember Me">
+                <div class="remember-forgot-password" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-between center">
+                    <mat-checkbox name="rememberMe" formControlName="rememberMe" [(ngModel)]="userModel.rememberMe" class="remember-me" aria-label="Remember Me">
                         Remember Me
                     </mat-checkbox>
 
@@ -40,8 +38,7 @@
                     </a>
                 </div>
 
-                <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN"
-                        [disabled]="loginForm.invalid"  (click)="getLogin()">
+                <button mat-raised-button color="accent" class="submit-button" aria-label="LOG IN" [disabled]="loginForm.invalid" (click)="getLogin()">
                     LOGIN
                 </button>
 

@@ -1,3 +1,4 @@
+import { AuthGuard } from "./../../../../../guard/auth.guard";
 import { SpinnerService } from "./../../../../../spinner/spinner.service";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -43,9 +44,16 @@ export class FuseLoginComponent implements OnInit {
 
   ngOnInit() {
     // this.snotifyService.success('Wao', ' !');
+    let rememberMe = localStorage.getItem("rememberMe");
+    if (rememberMe) {
+      if (rememberMe === "true" && AuthGuard.isLoggedIn()) {
+        this.router.navigate(["/user-management"]);
+      }
+    }
     this.loginForm = this.formBuilder.group({
       email: ["", [Validators.required, Validators.email]],
-      password: ["", Validators.required]
+      password: ["", Validators.required],
+      rememberMe: ["", ""]
     });
 
     this.loginForm.valueChanges.subscribe(() => {
@@ -77,6 +85,10 @@ export class FuseLoginComponent implements OnInit {
       (res: any) => {
         if (res.status === 200) {
           localStorage.setItem("currentUser", JSON.stringify(res.res));
+          localStorage.setItem(
+            "rememberMe",
+            this.userModel.rememberMe.toString()
+          );
           this.snotifyService.success("Login sucessfully", "Success !");
           this.router.navigate(["/user-management"]);
         }
