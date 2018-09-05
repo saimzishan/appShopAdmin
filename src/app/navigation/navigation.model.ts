@@ -48,7 +48,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
         'title': 'Suppliers',
         'translate': 'NAV.SUPPLIERS',
         'type': 'collapse',
-        'icon': 'people',
+        'icon': 'supervisor_account',
         'children': [
           /*{
             'id'   : 'dashboard',
@@ -86,7 +86,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
         'title': 'Categories',
         'translate': 'NAV.CATEGORIES',
         'type': 'collapse',
-        'icon': 'label',
+        'icon': 'category',
         'children': [
           /*{
             'id'   : 'dashboard',
@@ -124,7 +124,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
         'title': 'Brands',
         'translate': 'NAV.BRANDS',
         'type': 'collapse',
-        'icon': 'label',
+        'icon': 'card_travel',
         'children': [
           /*{
             'id'   : 'dashboard',
@@ -162,7 +162,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
         'title': 'User Management',
         'translate': 'NAV.BRANDS',
         'type': 'collapse',
-        'icon': 'label',
+        'icon': 'supervised_user_circle',
         'children': [
           /*{
             'id'   : 'dashboard',
@@ -174,7 +174,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
             'id': 'view',
             'title': 'Manage Users',
             'type': 'item',
-            'icon': 'visibility',
+            'icon': 'people',
             'url': '/user-management/manage-users',
             'exactMatch': true
           },
@@ -182,7 +182,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
             'id': 'add',
             'title': 'Manage Roles',
             'type': 'item',
-            'icon': 'add_circle',
+            'icon': 'center_focus_strong',
             'url': 'user-management/manage-roles',
             'exactMatch': true
           },
@@ -190,7 +190,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
             'id'        : 'productDetail',
             'title'     : 'Manage Permissions',
             'type'      : 'item',
-            'icon': 'add_circle',
+            'icon': 'verified_user',
             'url'       : '/user-management/manage-permissions',
             'exactMatch': true
           },
@@ -198,7 +198,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
             'id': 'add',
             'title': 'Manage Product',
             'type': 'item',
-            'icon': 'add_circle',
+            'icon': 'add_shopping_cart',
             'url': '/user-management/manage-products',
             'exactMatch': true
           },
