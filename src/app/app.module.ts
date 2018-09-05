@@ -16,19 +16,22 @@ import { FuseNavigationService } from "./core/components/navigation/navigation.s
 import { TranslateModule } from "@ngx-translate/core";
 import { AppStoreModule } from "./store/store.module";
 import { FileDropModule } from "ngx-file-drop";
-import { TreeModule } from "angular-tree-component";
+import { TreeModule } from "ng2-tree";
 import { ApiService } from "./api/api.service";
 import { UsersService } from "./api/users.service";
 import { SpinnerComponent } from "./spinner/spinner.component";
 import { SnotifyModule, SnotifyService, ToastDefaults } from "ng-snotify";
 import { AuthGuard } from "./guard/auth.guard";
-
 import { JwtModule } from "@auth0/angular-jwt";
+import * as $ from "jquery";
+import { ModalComponents } from "./models/modal.components";
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 
 export function tokenGetter() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
+  let user: any = localStorage.getItem("currentUser");
   let token;
   if (user) {
+    user = JSON.parse(user);
     token = user.access_token;
   }
   return token;
@@ -112,7 +115,7 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, SpinnerComponent],
+  declarations: [AppComponent, SpinnerComponent, ModalComponents],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -144,9 +147,11 @@ const appRoutes: Routes = [
     UsersService,
     SpinnerService,
     { provide: "SnotifyToastConfig", useValue: ToastDefaults },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     SnotifyService,
     AuthGuard
   ],
+  entryComponents: [ModalComponents],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,55 +1,62 @@
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../../../core/modules/shared.module';
-import { RouterModule } from '@angular/router';
-import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
-import {ProductsComponent} from './products.component';
-import {ProductComponent} from './product.component';
-import {ProductsService} from './products.service';
-import {ProductService} from './product.service';
-import {FileDropModule} from 'ngx-file-drop';
-import {TreeModule} from 'angular-tree-component';
+import { NgModule } from "@angular/core";
+import { SharedModule } from "../../../core/modules/shared.module";
+import { RouterModule } from "@angular/router";
+import { FuseAngularMaterialModule } from "../components/angular-material/angular-material.module";
+import { ProductsComponent } from "./products.component";
+import { ProductComponent } from "./product.component";
+import { ProductsService } from "./products.service";
+import { ProductService } from "./product.service";
+import { FileDropModule } from "ngx-file-drop";
+import { TreeModule } from "ng2-tree";
+import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import {FileDropModule} from 'ngx-file-drop';
-// import {TreeModule} from "angular-tree-component";
-import { AuthGuard } from '../../../guard/auth.guard';
+// import {TreeModule} from 'angular-tree-component';
+import { AuthGuard } from "../../../guard/auth.guard";
+// import { TreeviewModule } from "ngx-treeview";
+
+import * as $ from "jquery";
 
 const routes = [
   {
     canActivate: [AuthGuard],
-    path     : '',
+    path: "",
     component: ProductsComponent,
-    resolve  : {
+    resolve: {
       academy: ProductsService
     }
   },
   {
     canActivate: [AuthGuard],
-    path     : ':id',
+    path: ":id",
     component: ProductComponent,
-    resolve  : {
+    resolve: {
       academy: ProductService
     }
   },
   {
     canActivate: [AuthGuard],
-    path     : ':id/:handle',
+    path: ":id/:handle",
     component: ProductComponent,
-    resolve  : {
+    resolve: {
       academy: ProductService
     }
-  },
+  }
 ];
 
 @NgModule({
-  imports     : [
+  imports: [
     SharedModule,
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
     FileDropModule,
     TreeModule
   ],
-  declarations: [ProductsComponent, ProductComponent],
-  providers: [ProductsService, ProductService]
+  declarations: [
+    ProductsComponent,
+    ProductComponent,
+    FuseOptionFormDialogComponent
+  ],
+  providers: [ProductsService, ProductService],
+  entryComponents: [FuseOptionFormDialogComponent]
 })
-export class ProductsModule
-{
-}
+export class ProductsModule {}

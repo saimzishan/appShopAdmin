@@ -8,21 +8,17 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg"
-         fxLayout="column" fxLayoutAlign="center center"
-         fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
-      <div class="logo my-12 m-sm-0"
-           fxLayout="row" fxLayoutAlign="start center">
+      <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
         <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
         <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Suppliers</span>
       </div>
       <!-- / APP TITLE -->
 
       <!-- SEARCH -->
-      <div class="search-input-wrapper mx-12 m-md-0"
-           fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+      <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
         <label for="search" class="mr-8">
           <mat-icon class="secondary-text">search</mat-icon>
         </label>
@@ -32,9 +28,7 @@
       </div>
       <!-- / SEARCH -->
 
-      <button mat-raised-button
-              [routerLink]="'/suppliers/new'"
-              class="add-product-button mat-white-bg my-12 mt-sm-0">
+      <button mat-raised-button [routerLink]="'/suppliers/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
         <span>ADD NEW SUPPLIER</span>
       </button>
 
@@ -44,28 +38,13 @@
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
 
-      <mat-table class="products-table"
-                 #table [dataSource]="dataSource"
-                 matSort
-                 [@animateStagger]="{value:'50'}"
-                 fusePerfectScrollbar>
+      <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
 
         <!-- ID Column -->
         <ng-container cdkColumnDef="id">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
           <mat-cell *cdkCellDef="let supplier">
             <p class="text-truncate">{{supplier.id}}</p>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Image Column -->
-        <ng-container cdkColumnDef="image">
-          <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
-            <img class="supplier"
-                 *ngIf="supplier.contact.profile_image" [alt]="supplier.name"
-                 [src]="supplier.contact.profile_image"/>
-            <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
           </mat-cell>
         </ng-container>
 
@@ -113,6 +92,27 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container cdkColumnDef="type">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Supplier Type</mat-header-cell>
+          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
+            <p class="price text-truncate">
+              {{supplier.type}}
+            </p>
+          </mat-cell>
+        </ng-container>
+        <!-- Image Column -->
+        <ng-container cdkColumnDef="image">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
+          <mat-cell *cdkCellDef="let supplier">
+            <ng-container *ngIf="supplier.image">
+              <img src="{{baseURL+supplier.image.small}}" width="100" height="100">
+            </ng-container>
+            <ng-container *ngIf="!supplier.image">
+              <p> No Image</p>
+            </ng-container>
+
+          </mat-cell>
+        </ng-container>
         <!-- Quantity Column -->
         <ng-container cdkColumnDef="address">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Address</mat-header-cell>
@@ -125,30 +125,20 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Active Column -->
-        <ng-container cdkColumnDef="action">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <mat-icon class="active-icon mat-green-600-bg">edit</mat-icon>
-            <!--<mat-icon *ngIf="supplier.active" class="active-icon mat-green-600-bg s-16">check</mat-icon>
-            <mat-icon *ngIf="!supplier.active" class="active-icon mat-red-500-bg s-16">close</mat-icon>-->
-          </mat-cell>
-        </ng-container>
-
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
-                 class="product"
+        <!-- <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
+                 class="supplier"
                  matRipple
                  [routerLink]="'/suppliers/'+supplier.id">
+        </mat-row> -->
+
+        <mat-row *cdkRowDef="let supplier; columns: displayedColumns;" class="supplier" matRipple [routerLink]="'/suppliers/'+supplier.id">
         </mat-row>
 
       </mat-table>
 
-      <mat-paginator #paginator
-                     [pageIndex]="0"
-                     [pageSize]="10"
-                     [pageSizeOptions]="[5, 10, 25, 100]">
+      <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
       </mat-paginator>
 
     </div>

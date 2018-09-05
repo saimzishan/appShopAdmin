@@ -12,7 +12,8 @@
 
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
-                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon>
+                <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">card_travel</mat-icon>
                 <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Brands</span>
             </div>
             <!-- / APP TITLE -->
@@ -28,7 +29,7 @@
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button [routerLink]="'/brands/new'"  class="add-brand-button mat-white-bg my-12 mt-sm-0">
+            <button mat-raised-button [routerLink]="'/brands/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW BRAND</span>
             </button>
 
@@ -85,21 +86,28 @@
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Notes</mat-header-cell>
                     <mat-cell *cdkCellDef="let brand" fxHide fxShow.gt-md>
                         <p class="category text-truncate">
-                            {{brand.notes}}
+                            {{(brand.notes && brand.notes.length>15)? (brand.notes | slice:0:15)+'..':(brand.notes)}}
                         </p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container cdkColumnDef="image">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Name</mat-header-cell>
+                    <mat-cell *cdkCellDef="let brand">
+                        <ng-container *ngIf="brand.image">
+                            <img src="{{baseURL+brand.image.small}}" height="100" width="100">
+                        </ng-container>
+                        <ng-container *ngIf="!brand.image">
+                            <p> No Image</p>
+                        </ng-container>
                     </mat-cell>
                 </ng-container>
 
                 <br>
 
                 <!-- Action Column -->
-                <ng-container cdkColumnDef="action">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</mat-header-cell>
-                    <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-                        <mat-icon class="active-icon mat-green-300-bg" [routerLink]="'/brands/new'">edit</mat-icon>
-                        <mat-icon class="active-icon mat-red-500-bg s-16" (click)="deleteBrand()">close</mat-icon>
-                    </mat-cell>
-                </ng-container>
+
 
                 <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 

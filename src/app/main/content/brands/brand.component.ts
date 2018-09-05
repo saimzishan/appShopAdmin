@@ -17,7 +17,7 @@ import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/observable/fromEvent";
 import { Subscription } from "rxjs/Subscription";
 import { Brand } from "../models/brand.model";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { FuseUtils } from "../../../core/fuseUtils";
 import {
   MatSnackBar,
@@ -55,7 +55,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   brandForm: FormGroup;
   files: UploadFile[] = [];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-
+  baseURL = GLOBAL.USER_IMAGE_API;
   // nodes = [
   //   {
   //     id: 1,
@@ -81,6 +81,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   //   }
   // ];
   options = {};
+  base64textString: string;
 
   constructor(
     private brandService: BrandService,
@@ -115,12 +116,31 @@ export class BrandComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveBrand() {
-    const data = this.brandForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.brandService.saveBrand(data).then(() => {
+  saveBrand(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Required Fields");
+      return;
+    }
+    if (this.brand.content_type) {
+      let preImageName: any;
+      if (this.brand.image) {
+        preImageName = this.brand.image;
+        preImageName = preImageName.small.split("/");
+        this.brand.image_name = preImageName[3];
+      } else {
+        let date = new Date(null);
+        date.setSeconds(45); // specify value for SECONDS here
+        let timeString = date.toISOString().substr(11, 8);
+        this.brand.image_name = timeString + this.brand.content_type;
+      }
+      this.brand.image = this.base64textString;
+    } else {
+      delete this.brand.image;
+    }
+    this.brandService.saveBrand(this.brand).then(() => {
       // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(data);
+      this.brandService.onBrandChanged.next(this.brand);
 
       // Show the success message
     });
@@ -146,13 +166,30 @@ export class BrandComponent implements OnInit, OnDestroy {
       this.confirmDialogRef = null;
     });
   }
-
-  addBrand() {
-    const data = this.brandForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.brandService.addBrand(data).then(() => {
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+  addBrand(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Required Fields");
+      return;
+    }
+    if (this.base64textString) {
+      this.brand.image = this.base64textString;
+    }
+    // const data = this.brandForm.getRawValue();
+    // data.handle = FuseUtils.handleize(data.name);
+    this.brandService.addBrand(this.brand).then(() => {
       // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(data);
+      this.brandService.onBrandChanged.next(this.brand);
       // Show the success message
       // this.snackBar.open('Brand added', 'OK', {
       //   verticalPosition: 'top',
@@ -203,6 +240,24 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   fileLeave(event) {
     console.log(event);
+  }
+
+  handleFileSelect(evt) {
+    const files = evt.target.files;
+    const file = files[0];
+    if (files && file) {
+      const reader = new FileReader();
+      this.brand.content_type = "." + file.type.split("/")[1];
+      reader.onload = this._handleReaderLoaded.bind(this);
+
+      reader.readAsBinaryString(file);
+    }
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    const binaryString = readerEvt.target.result;
+    this.base64textString = btoa(binaryString);
+    // this.brand.image = this.base64textString;
   }
 
   ngOnDestroy() {

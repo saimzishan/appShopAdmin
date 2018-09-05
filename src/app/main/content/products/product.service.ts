@@ -13,11 +13,12 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { AuthGuard } from "../../../guard/auth.guard";
 import { SnotifyService } from "ng-snotify";
+import { Product } from "../models/product.model";
 
 @Injectable()
 export class ProductService extends ApiService implements Resolve<any> {
   routeParams: any;
-  product: any;
+  product: Product = new Product();
   category: any;
   onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
   onCategoryChanged: BehaviorSubject<any> = new BehaviorSubject({});
@@ -153,6 +154,97 @@ export class ProductService extends ApiService implements Resolve<any> {
     // });
     return this.http
       .post(GLOBAL.USER_API + "products", product, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getSupplier() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "suppliers", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+  getTaxes() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "taxes", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getBrands() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "brands", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getOptionSets() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "optionsets", httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

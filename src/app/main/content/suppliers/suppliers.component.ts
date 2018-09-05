@@ -1,41 +1,55 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SuppliersService } from './suppliers.service';
-import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import { fuseAnimations } from '../../../core/animations';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
-import { FuseUtils } from '../../../core/fuseUtils';
-import { SpinnerService } from '../../../spinner/spinner.service';
-import { SnotifyService } from 'ng-snotify';
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { SuppliersService } from "./suppliers.service";
+import { DataSource } from "@angular/cdk/collections";
+import { Observable } from "rxjs/Observable";
+import { fuseAnimations } from "../../../core/animations";
+import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/startWith";
+import "rxjs/add/observable/merge";
+import "rxjs/add/operator/map";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
+import "rxjs/add/observable/fromEvent";
+import { FuseUtils } from "../../../core/fuseUtils";
+import { SpinnerService } from "../../../spinner/spinner.service";
+import { SnotifyService } from "ng-snotify";
+import { GLOBAL } from "../../../shared/globel";
 
 @Component({
-  selector: 'app-suppliers',
-  templateUrl: './suppliers.component.html',
-  styleUrls: ['./suppliers.component.scss'],
+  selector: "app-suppliers",
+  templateUrl: "./suppliers.component.html",
+  styleUrls: ["./suppliers.component.scss"],
   animations: fuseAnimations
 })
 export class SuppliersComponent implements OnInit {
+  supplier;
+  supplier_contact;
   dataSource: any;
-  displayedColumns = ['id', 'image', 'name', 'email', 'phone', 'address', 'action'];
+  displayedColumns = [
+    "id",
+    "name",
+    "email",
+    "phone",
+    "type",
+    "image",
+    "address"
+  ];
   suppliers;
+  baseURL = GLOBAL.USER_IMAGE_API;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('filter') filter: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  @ViewChild("filter")
+  filter: ElementRef;
+  @ViewChild(MatSort)
+  sort: MatSort;
 
   constructor(
     private suppliersService: SuppliersService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.getSuppliers();
@@ -54,18 +68,20 @@ export class SuppliersComponent implements OnInit {
 
   getSuppliers() {
     this.spinnerService.requestInProcess(true);
-    this.suppliersService.getSuppliers()
-      .subscribe((res: any) => {
-        this.suppliers = res.res.data.data;
-    // console.log(res.res.data.data);
+    this.suppliersService.getSuppliers().subscribe(
+      (res: any) => {
+        this.supplier = res.res.data.data;
+        this.supplier_contact = res.res.data.data.contact;
         this.setDataSuorce(res.res.data.data);
         this.spinnerService.requestInProcess(false);
-      }, errors => {
+      },
+      errors => {
         this.spinnerService.requestInProcess(false);
         let e = errors.error.message;
-        this.snotifyService.error(e, 'Error !');
+        this.snotifyService.error(e, "Error !");
         // this.notificationServiceBus.launchNotification(true, e);
-      });
+      }
+    );
   }
 
   setDataSuorce(obj) {
@@ -74,10 +90,9 @@ export class SuppliersComponent implements OnInit {
   }
 }
 
-export class FilesDataSource extends DataSource<any>
-{
-  _filterChange = new BehaviorSubject('');
-  _filteredDataChange = new BehaviorSubject('');
+export class FilesDataSource extends DataSource<any> {
+  _filterChange = new BehaviorSubject("");
+  _filteredDataChange = new BehaviorSubject("");
 
   get filteredData(): any {
     return this._filteredDataChange.value;
@@ -136,31 +151,31 @@ export class FilesDataSource extends DataSource<any>
   }
 
   sortData(data): any[] {
-    if (!this._sort.active || this._sort.direction === '') {
+    if (!this._sort.active || this._sort.direction === "") {
       return data;
     }
 
     return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
+      let propertyA: number | string = "";
+      let propertyB: number | string = "";
 
       switch (this._sort.active) {
-        case 'id':
+        case "id":
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'name':
+        case "name":
           [propertyA, propertyB] = [a.name, b.name];
           break;
-        case 'categories':
+        case "categories":
           [propertyA, propertyB] = [a.categories[0], b.categories[0]];
           break;
-        case 'price':
+        case "price":
           [propertyA, propertyB] = [a.priceTaxIncl, b.priceTaxIncl];
           break;
-        case 'quantity':
+        case "quantity":
           [propertyA, propertyB] = [a.quantity, b.quantity];
           break;
-        case 'active':
+        case "active":
           [propertyA, propertyB] = [a.active, b.active];
           break;
       }
@@ -168,10 +183,11 @@ export class FilesDataSource extends DataSource<any>
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
 
-      return (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1);
+      return (
+        (valueA < valueB ? -1 : 1) * (this._sort.direction === "asc" ? 1 : -1)
+      );
     });
   }
 
-  disconnect() {
-  }
+  disconnect() {}
 }

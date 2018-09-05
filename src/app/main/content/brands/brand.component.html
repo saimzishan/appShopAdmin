@@ -34,8 +34,7 @@
             </div>
             <!-- / APP TITLE -->
 
-            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid" *ngIf="pageType ==='new'"
-                (click)="addBrand()">
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="brandFormSubmition.click()">
                 <span>ADD</span>
             </button>
 
@@ -43,8 +42,9 @@
                 <span>DELETE</span>
             </button>
 
-            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" [disabled]="brandForm.invalid || brandForm.pristine"
-                *ngIf="pageType ==='edit'" (click)="saveBrand()">
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
+
                 <span>SAVE</span>
             </button>
         </div>
@@ -56,7 +56,7 @@
             <!-- CONTENT -->
             <div class="content">
 
-                <form name="brandForm" [formGroup]="brandForm" class="brand w-100-p" fxLayout="column" fxFlex>
+                <form name="brandForm" #brandForm="ngForm" class="brand w-100-p" fxLayout="column" fxFlex>
 
                     <!-- <mat-tab-group> -->
 
@@ -64,13 +64,35 @@
                     <div class="tab-content p-24" fusePerfectScrollbar>
 
                         <mat-form-field class="w-100-p">
-                            <input matInput name="name" formControlName="name" placeholder="Brand Name" required>
+                            <input matInput name="bName" [(ngModel)]="brand.name" #bName="ngModel" placeholder="Brand Name" required>
                         </mat-form-field>
+                        <span *ngIf="bName.touched && bName.errors?.required" class="error">
+                            <span>Brand Name id required.</span>!
+                        </span>
 
                         <mat-form-field class="w-100-p">
-                            <textarea matInput name="notes" formControlName="notes" placeholder="Notes"></textarea>
+                            <textarea matInput name="notes" [(ngModel)]="brand.notes" #notes="ngModel" placeholder="Notes"></textarea>
                         </mat-form-field>
 
+                        <!-- <mat-form-field class="w-100-p"> -->
+                        <fieldset class="w-100-p" *ngIf="pageType ==='new'">
+                            <div>
+                                <input type="file" name="fileUp" (change)="handleFileSelect($event)">
+                            </div>
+                        </fieldset>
+                        <br>
+                        <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
+                            <mat-card>
+                                <ng-container *ngIf="brand.image">
+                                    <img src="{{baseURL+brand.image.small}}" width="100" height="100">
+                                </ng-container>
+                                <ng-container *ngIf="!brand.image">
+                                    <p> No Image</p>
+                                </ng-container>
+                            </mat-card>
+                            <input type="file" name="fileUp" (change)="handleFileSelect($event)">
+                        </fieldset>
+                        <!-- </mat-form-field> -->
                         <!-- <mat-form-field class="w-100-p">
                                     <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
                                 </mat-form-field> -->
@@ -83,6 +105,10 @@
 
 
                     <!-- </mat-tab-group> -->
+                    <input type="button" class="btn btn-primary" hidden #brandFormSubmition (click)="addBrand(brandForm)">
+                    <input type="button" class="btn btn-primary" hidden #editBrandFormSubmition (click)="saveBrand(brandForm)">
+
+                    <!-- <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="saveBrand(brandForm)"> -->
                 </form>
 
             </div>
