@@ -1,0 +1,160 @@
+<div id="option" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/options'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">local_mall</mat-icon>
+
+                <!-- <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+
+                </div> -->
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        New Option
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Option Detail</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="optionFormSubmition.click()">
+                <span>ADD</span>
+            </button>
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteBrand()">
+                <span>DELETE</span>
+            </button>
+
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
+
+                <span>SAVE</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="optionForm" #optionForm="ngForm" class="option w-100-p" fxLayout="column" fxFlex>
+
+                    <!-- <mat-tab-group> -->
+
+                    <!-- <mat-tab label="Details"> -->
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+
+                        <mat-form-field class="w-100-p">
+                            <input matInput name="oName" [(ngModel)]="option.name" placeholder="Option Name" required>
+                        </mat-form-field>
+                        <!-- <span *ngIf="oName.touched && oName.errors?.required" class="error">
+                            <span>Option Name required.</span>!
+                        </span> -->
+                        <!-- <mat-card *ngIf="pageType ==='edit'">
+                            <ng-container>
+                                {{option.options.value}}
+                            </ng-container>
+                        </mat-card> -->
+                        <mat-form-field class="w-100-p">
+                            <input matInput name="option_values" [(ngModel)]="option_values.value" placeholder="Option Value">
+                        </mat-form-field>
+                        <!-- <label *ngIf="optionValues.length > 0">
+                            <p *ngFor="let ov of optionValues">
+                                {{ov}}
+                            </p>
+                        </label> -->
+                        <!-- <mat-card *ngIf="optionsCardEnable">
+                            {{option.options.value}}
+                        </mat-card> -->
+                        <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" (click)="addOptionValue()">
+                            <mat-icon>add</mat-icon>
+                            <span>Add Another Option Value</span>
+                        </button>
+                        <table class="table table-bordered" *ngIf="optionsCardEnable">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">
+                                        Option Values
+                                    </th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let o of option.options ; let i = index">
+                                    <td>
+                                        {{o.value}}
+                                    </td>
+                                    <td>
+                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;">delete</mat-icon>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+
+                        <!-- <mat-form-field class="w-100-p"> -->
+                        <!-- <fieldset class="w-100-p" *ngIf="pageType ==='new'">
+                            <div>
+                                <input type="file" name="fileUp" (change)="handleFileSelect($event)">
+                            </div>
+                        </fieldset> -->
+                        <br>
+                        <!-- <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
+                            <mat-card>
+                                <ng-container *ngIf="brand.image">
+                                    <img src="{{baseURL+brand.image.small}}" width="100" height="100">
+                                </ng-container>
+                                <ng-container *ngIf="!brand.image">
+                                    <p> No Image</p>
+                                </ng-container>
+                            </mat-card>
+                            <input type="file" name="fileUp" (change)="handleFileSelect($event)">
+                        </fieldset> -->
+                        <!-- </mat-form-field> -->
+                        <!-- <mat-form-field class="w-100-p">
+                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
+                                </mat-form-field> -->
+
+                        <!-- <h3 class="mb-0">Categories</h3> -->
+
+                        <!-- <tree-root [nodes]="nodes" [options]="options"></tree-root> -->
+                    </div>
+                    <!-- </mat-tab> -->
+
+
+                    <!-- </mat-tab-group> -->
+                    <input type="button" class="btn btn-primary" hidden #optionFormSubmition (click)="addOption(optionForm)">
+                    <input type="button" class="btn btn-primary" hidden #editoptionFormSubmition (click)="saveOption(optionForm)">
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>

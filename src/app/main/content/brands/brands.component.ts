@@ -134,19 +134,19 @@ export class FilesDataSource extends DataSource<any> {
       this._sort.sortChange
     ];
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      let data = this.brandsService.brands.slice();
+    // return Observable.merge(...displayDataChanges).map(() => {
+    //   let data = this.brandsService.brands.slice();
 
-      data = this.filterData(data);
+    //   data = this.filterData(data);
 
-      this.filteredData = [...data];
+    //   this.filteredData = [...data];
 
-      data = this.sortData(data);
+    //   data = this.sortData(data);
 
-      // Grab the page's slice of data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      return data.splice(startIndex, this._paginator.pageSize);
-    });
+    //   // Grab the page's slice of data.
+    //   const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+    //   return data.splice(startIndex, this._paginator.pageSize);
+    // });
   }
 
   filterData(data) {
