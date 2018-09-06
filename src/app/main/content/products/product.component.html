@@ -211,14 +211,101 @@
 
                         <mat-tab label="Options & SKUs">
                             <div class="tab-content p-24" fusePerfectScrollbar>
-                                <label>Attach Option Set
-                                </label>
-                                <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id" (change)="checkMyOptions($event.value)">
-                                    <!-- <mat-option value="-1">--None--</mat-option> -->
-                                    <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
-                                        {{optionSet.name}}
-                                    </mat-option>
-                                </mat-select>
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Attach Option Set
+                                        </label>
+                                        <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id">
+                                            <!-- <mat-option value="-1">--None--</mat-option> -->
+                                            <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                                                {{optionSet.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col-md-8"></div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <table class="table table-bordered" *ngIf='option_set_id.length > 0'>
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">
+                                                        Option set
+                                                    </th>
+                                                    <th scope="col">
+                                                        Option value Rules
+                                                    </th>
+
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr *ngFor="let row of option_set_id">
+                                                    <td>
+                                                        {{getOptionSetName(row)}}
+                                                    </td>
+                                                    <td>
+                                                        <div class="row" *ngFor="let option of getOptionName(row); let i=index">
+                                                            <ng-container>
+                                                                <!-- <form> -->
+                                                                <div class="col-md-3">
+                                                                    <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <mat-select placeholder="Set Rule" name="rule_id">
+                                                                        <mat-option value="-1">None</mat-option>
+                                                                        <mat-option value="1">Add</mat-option>
+                                                                        <mat-option value="2">Subtract</mat-option>
+                                                                    </mat-select>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <mat-select placeholder="Change By" name="rule_id">
+                                                                        <mat-option value="1">Percentage</mat-option>
+                                                                        <mat-option value="2">Absolute</mat-option>
+                                                                    </mat-select>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <input min="0" class="form-control" type="number" placeholder="Value">
+                                                                </div>
+                                                                <div class="col-md-2" style="padding-left: 10px;">
+                                                                    <button class="btn btn-primary">Save</button>
+                                                                </div>
+                                                                <!-- </form> -->
+                                                            </ng-container>
+                                                            <!-- <div class="col-md-8">
+                                                                <mat-selection-list name="option_id" #option_val>
+                                                                    <mat-list-option (clic)="setSelection(option_val)" *ngFor="let option of getOptionName(row)" [value]="option.id">
+                                                                        {{option.value}}
+                                                                    </mat-list-option>
+                                                                </mat-selection-list>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <ng-container *ngFor="let option of getOptionName(row)">
+                                                                    <mat-select placeholder="Set Rule" name="rule_id" style="padding-bottom: 10px;
+                                                                    padding-top: 18px;">
+                                                                        <mat-option value="-1">None</mat-option>
+                                                                        <mat-option value="1">Add</mat-option>
+                                                                        <mat-option value="2">Subtract</mat-option>
+                                                                    </mat-select>
+                                                                </ng-container>
+                                                            </div> -->
+                                                        </div>
+
+
+
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+
                                 <!-- <div class="row">
                                     <div class="col-md-10"></div>
                                     <div class="col-md-1">
@@ -227,24 +314,7 @@
                                         </button>
                                     </div>
                                 </div> -->
-                                <table *ngIf="enableOptionTable" class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Option Set</th>
-                                                <th scope="col">Option</th>
-                                                <th scope="col">Rules</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <!-- <input class="form-control" type="number" name="UPCas" [(ngModel)]="product_variant.upc" placeholder="UPC"> -->
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
 
 
                                 <div class="row">
@@ -332,8 +402,7 @@
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <label style="border-bottom: 2px solid;
-                                                            border-bottom-style: dashed;">Option
-                                                            Set
+                                                            border-bottom-style: dashed;">Option Set
                                                         </label>
                                                         <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id" (change)="checkMyOptions($event.value)">
                                                             <mat-option value="-1">--None--</mat-option>
@@ -379,8 +448,7 @@
                                                 <div class="row">
                                                     <div class="col-md-10"></div>
                                                     <div class="col-md-1">
-                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add
-                                                            Option
+                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option
                                                         </button>
                                                     </div>
                                                     <!-- <div>

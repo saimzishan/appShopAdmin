@@ -462,14 +462,11 @@ export class ProductComponent implements OnInit, OnDestroy {
       return result.name;
     }
   }
-  getOptionName(id, pid) {
-    const res = this.optionSets.find(option => option.id === pid);
+  getOptionName(id) {
+    const res = this.optionSets.find(option => option.id === id);
     if (res) {
       // console.log(res);
-      const result = res.options.find(option => option.id === id);
-      if (result) {
-        return result.value;
-      }
+        return res.options;
     }
   }
 
