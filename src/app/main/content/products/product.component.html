@@ -137,7 +137,8 @@
                         <mat-tab label="Supplier">
                             <div class="tab-content p-24" fusePerfectScrollbar>
                                 <mat-form-field class="w-100-p">
-                                    <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id" required>
+                                    <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" (change)="enableRequired()" [(ngModel)]="supplier.id"
+                                        [required]="!disableRequired">
                                         <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
                                             {{supplier.name}}
                                         </mat-option>
@@ -146,42 +147,46 @@
                                 <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
                                     <span>Pleae Select a Supplier.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price" required>
+                                    <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price" [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
                                     <span>Price is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU" required>
+                                    <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU" [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
                                     <span>Sku is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc" required>
+                                    <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc" [required]="!ean.valid">
                                 </mat-form-field>
                                 <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
                                     <span>Upc is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean" required>
+                                    <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean" [required]="!upc.valid">
                                 </mat-form-field>
                                 <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
                                     <span>Ean is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #width="ngModel" name="width" [(ngModel)]="supplier.width" placeholder="Width (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width" placeholder="Width (Centimeters)"
+                                        [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
                                     <span>Width is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight" placeholder="weight" required>
+                                    <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight" placeholder="weight"
+                                        [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
                                     <span>Width is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #height="ngModel" name="height" [(ngModel)]="supplier.height" placeholder="Height (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height" placeholder="Height (Centimeters)"
+                                        [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
                                     <span>Height is required.</span>!</span>
                                 <mat-form-field class="w-100-p">
-                                    <input matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)" required>
+                                    <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)"
+                                        [required]="!disableRequired">
                                 </mat-form-field>
                                 <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
                                     <span>Depth is required.</span>!</span>
@@ -189,26 +194,14 @@
                                 <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-                                            style="width: 100%;">
-                                            <!--<span>optional content (don't set headertext then)</span>-->
-                                        </file-drop>
-                                        <div class="upload-table">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="upload-name-style">
-                                                    <tr *ngFor="let item of files; let i=index">
-                                                        <td>
-                                                            <strong>{{ item.relativePath }}</strong>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="margin-left: 312px" color="accent"
+                                            (click)="addAnotherSupplier()">
+                                            <span>Add Another Supplier</span>
+                                        </button>
                                     </div>
                                 </div>
                                 <!-- </div> -->
@@ -349,7 +342,8 @@
                                                 <div class="row">
                                                     <div class="col-md-10"></div>
                                                     <div class="col-md-1">
-                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option</button>
+                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option
+                                                        </button>
                                                     </div>
                                                     <!-- <div>
                                                         <button (click)="addRelatedvalue('addPV')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add PV</button>
@@ -491,6 +485,95 @@
                                     </div>
 
                                 </div>
+
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab label="Images / Videos">
+                            <div class="tab-content p-24" fusePerfectScrollbar>
+                                <mat-form-field class="w-100-p">
+                                    <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id" required>
+                                        <mat-option *ngFor="let supplier" [value]="supplier.id">
+                                            {{supplier.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
+                                    <span>Pleae Select a Supplier.</span>!</span>
+
+                                <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                                            style="width: 100%;">
+                                            <!--<span>optional content (don't set headertext then)</span>-->
+                                        </file-drop>
+                                        <br>
+                                        <div class="upload-table">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>Name</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="upload-name-style">
+                                                    <tr *ngFor="let item of files; let i=index">
+                                                        <td>
+                                                            <strong>{{ item.relativePath }}</strong>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                                            style="width: 100%;">
+                                            <!--<span>optional content (don't set headertext then)</span>-->
+                                        </file-drop>
+                                        <br>
+                                        <div class="upload-table">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>Name</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="upload-name-style">
+                                                    <tr *ngFor="let item of files; let i=index">
+                                                        <td>
+                                                            <strong>{{ item.relativePath }}</strong>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                                            style="width: 100%;">
+                                            <!--<span>optional content (don't set headertext then)</span>-->
+                                        </file-drop>
+                                        <br>
+                                        <div class="upload-table">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>Name</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="upload-name-style">
+                                                    <tr *ngFor="let item of files; let i=index">
+                                                        <td>
+                                                            <strong>{{ item.relativePath }}</strong>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- </div> -->
 
                             </div>
                         </mat-tab>

@@ -38,7 +38,9 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-      <tree-root #tree [options]="options" [nodes]="nodes"></tree-root>
+      <mat-card>
+        <tree-root #tree [options]="options" [nodes]="nodes"></tree-root>
+      </mat-card>
 
       <!--<mat-table class="products-table"
                  #table [dataSource]="dataSource"
