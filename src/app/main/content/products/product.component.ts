@@ -74,6 +74,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   disableSkuAndRuleTab = false;
   dialogRef: any;
 
+  enableOptionTable = false;
+
   files: UploadFile[] = [];
   nodes: any;
 
@@ -332,17 +334,19 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.setDataSuorce(result.options);
       this.option_set.id = result.id;
       this.disableSkuAndRuleTab = true;
+      this.enableOptionTable = true;
     } else {
       this.dataSource = [];
       this.disableSkuAndRuleTab = false;
+      this.enableOptionTable = false;
     }
   }
 
   newContact() {
     this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
-      panelClass: "contact-form-dialog",
+      panelClass: 'contact-form-dialog',
       data: {
-        action: "new"
+        action: 'new'
       }
     });
 
