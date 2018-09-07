@@ -59,9 +59,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   options: Options = new Options();
   tOptions: Options[] = [];
   option_id = -1;
-  option_set_id = -1;
+  option_set_id = [];
   rule_id = -1;
   disableRequired = false;
+  isAddorEditSKU = false;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -99,7 +100,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -143,6 +144,23 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  // start
+
+  addorEditSKU() {
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  toogleChild(id, event) {
+    let temp = document.getElementsByTagName("ul");
+    temp = temp[id].children;
+    for (let index = 1; index < temp.length; index++) {
+      const element = temp[index];
+      element.hidden = !element.hidden;
+    }
+  }
+
+  // end
 
   enableChildren() {
     this.viewChildren = true;
@@ -325,9 +343,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  fileOver(event) { }
+  fileOver(event) {}
 
-  fileLeave(event) { }
+  fileLeave(event) {}
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
@@ -344,9 +362,9 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   newContact() {
     this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
-      panelClass: 'contact-form-dialog',
+      panelClass: "contact-form-dialog",
       data: {
-        action: 'new'
+        action: "new"
       }
     });
 
@@ -431,7 +449,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant.weight === undefined ||
         this.product_variant.width === undefined
       ) {
-        this.snotifyService.warning('Please add all fields !');
+        this.snotifyService.warning("Please add all fields !");
         return;
       }
       if (this.tOptions.length > 0) {
@@ -440,7 +458,9 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant = new ProductVariant();
         this.tOptions = [];
       } else {
-        this.snotifyService.warning('Please add option set and option before !');
+        this.snotifyService.warning(
+          "Please add option set and option before !"
+        );
       }
     }
   }
@@ -466,7 +486,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     const res = this.optionSets.find(option => option.id === id);
     if (res) {
       // console.log(res);
-        return res.options;
+      return res.options;
     }
   }
 

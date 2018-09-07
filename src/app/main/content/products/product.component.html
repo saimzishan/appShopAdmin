@@ -53,303 +53,301 @@
             <!-- CONTENT -->
             <div class="content">
 
-                <form name="productForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                <mat-tab-group>
 
-                    <mat-tab-group>
-
-                        <mat-tab label="Details">
+                    <mat-tab label="Details">
+                        <form name="productForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
                             <div class="tab-content p-24" fusePerfectScrollbar>
-
-                                <mat-form-field class="w-100-p">
-                                    <input matInput required #name="ngModel" name="name" [(ngModel)]="product.name" placeholder="Product Name">
-                                </mat-form-field>
-                                <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
-                                    <span>Product name is required.</span>!</span>
-
-                                <!-- <h3 class="mb-0">Categories</h3> -->
-                                <!-- <div class="row" *ngFor="let c of category">
-
-
-
-                                    <ul style="list-style-type:none; margin-bottom: -1.5rem;">
-                                        <li>
-                                            <mat-icon *ngIf="c.children.length>0 && !viewChildren" (click)="enableChildren()" class="secondary-text s-15 mat-icon material-icons colorShow"
-                                                role="img" aria-hidden="true">expand_more</mat-icon>
-                                            <mat-icon *ngIf="c.children.length>0 && viewChildren" (click)="disableChildren()" class="secondary-text s-15 mat-icon material-icons colorHide"
-                                                role="img" aria-hidden="true">expand_less</mat-icon>
-                                            <mat-checkbox (change)="selectCategory($event, c.id)" class="xb-checkbox" style="font-size: small">
-                                                <mat-icon style="font-size: small" class="secondary-text s-25 mat-icon material-icons" role="img" aria-hidden="true">folder</mat-icon>
-                                                {{c.name}}
-                                            </mat-checkbox>
-                                        </li>
-                                        <ul *ngIf="c.children.length>0 && viewChildren" style="list-style-type:none; margin-bottom: -1.5rem;">
-                                            <ng-container *ngFor="let a of c.children">
-                                                <li>
-                                                    <mat-checkbox class="xb-checkbox">
-                                                        {{a.name}}
-                                                    </mat-checkbox>
-                                                </li>
-                                            </ng-container>
-                                        </ul>
-                                    </ul>
-
-                                </div> -->
-                                <ng-container *ngIf="tree">
-                                    <tree [tree]="tree" (nodeRemoved)="handleRemoved($event)" (nodeRenamed)="handleRenamed($event)" (nodeSelected)="handleSelected($event)"
-                                        (nodeMoved)="handleMoved($event)"></tree>
-                                </ng-container>
-                                <br>
-
-
-                                <mat-form-field class="w-100-p">
-                                    <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
-                                        <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                                            {{brand.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
-                                    <span>Please Select a brand.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id" required>
-                                        <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                                            {{brand.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
-                                    <span>Please Select texes.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <textarea required matInput #short_description="ngModel" name="short_description" rows="3" [(ngModel)]="product.short_description"
-                                        placeholder="Product Short Description">
-                                     </textarea>
-                                </mat-form-field>
-                                <span *ngIf="short_description.touched && short_description.errors?.required;" class="inline-icon error">
-                                    <span>Short description is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <textarea matInput #long_description="ngModel" name="long_description" rows="5" [(ngModel)]="product.long_description" placeholder="Product Long Description">
-                                     </textarea>
-                                </mat-form-field>
-                            </div>
-                        </mat-tab>
-
-
-                        <mat-tab label="Supplier">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <mat-form-field class="w-100-p">
-                                    <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" (change)="enableRequired()" [(ngModel)]="supplier.id"
-                                        [required]="!disableRequired">
-                                        <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                                            {{supplier.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
-                                    <span>Pleae Select a Supplier.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price" [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
-                                    <span>Price is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU" [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
-                                    <span>Sku is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc" [required]="!ean.valid">
-                                </mat-form-field>
-                                <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
-                                    <span>Upc is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean" [required]="!upc.valid">
-                                </mat-form-field>
-                                <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
-                                    <span>Ean is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width" placeholder="Width (Centimeters)"
-                                        [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
-                                    <span>Width is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight" placeholder="weight"
-                                        [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
-                                    <span>Width is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height" placeholder="Height (Centimeters)"
-                                        [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
-                                    <span>Height is required.</span>!</span>
-                                <mat-form-field class="w-100-p">
-                                    <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)"
-                                        [required]="!disableRequired">
-                                </mat-form-field>
-                                <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
-                                    <span>Depth is required.</span>!</span>
-
-                                <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput required #name="ngModel" name="name" [(ngModel)]="product.name" placeholder="Product Name">
+                                        </mat-form-field>
+                                        <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
+                                            <span>Product name is required.</span>!</span>
+
                                     </div>
-                                    <div class="col-md-4">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="margin-left: 312px" color="accent"
-                                            (click)="addAnotherSupplier()">
-                                            <span>Add Another Supplier</span>
-                                        </button>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
+                                                <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                                    {{brand.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
+                                            <span>Please Select a brand.</span>!</span>
                                     </div>
                                 </div>
-                                <!-- </div> -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id" required>
+                                                <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                                    {{brand.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
+                                            <span>Please Select texes.</span>!</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <textarea required matInput #short_description="ngModel" name="short_description" rows="3" [(ngModel)]="product.short_description"
+                                                placeholder="Product Short Description">
+                                                                 </textarea>
+                                        </mat-form-field>
+                                        <span *ngIf="short_description.touched && short_description.errors?.required;" class="inline-icon error">
+                                            <span>Short description is required.</span>!</span>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6">
+                                        <ng-container *ngIf="tree">
+                                            <tree [tree]="tree" (nodeRemoved)="handleRemoved($event)" (nodeRenamed)="handleRenamed($event)" (nodeSelected)="handleSelected($event)"
+                                                (nodeMoved)="handleMoved($event)"></tree>
+                                        </ng-container>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <textarea matInput #long_description="ngModel" name="long_description" rows="5" [(ngModel)]="product.long_description" placeholder="Product Long Description">
+                                                                             </textarea>
+                                        </mat-form-field>
+                                    </div>
+
+                                </div>
+
 
                             </div>
-                        </mat-tab>
+                        </form>
 
-                        <mat-tab label="Options & SKUs">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
+                    </mat-tab>
 
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <label>Attach Option Set
-                                        </label>
-                                        <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id">
-                                            <!-- <mat-option value="-1">--None--</mat-option> -->
-                                            <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
-                                                {{optionSet.name}}
-                                            </mat-option>
-                                        </mat-select>
+                    <mat-tab label="Supplier">
+                        <form name="supplierForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+
+                        </form>
+
+                    </mat-tab>
+                    <mat-tab label="Options & SKUs">
+                        <!-- <form name="optionSkuForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex> -->
+                        <div class="tab-content p-24" fusePerfectScrollbar>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                        <a class="nav-link" style="cursor: pointer" [ngClass]="{'active' : optionsTab}" id="v-pills-home-tab" data-toggle="pill"
+                                            (click)="openRelatedTab('optionsTab')" role="tab" aria-controls="v-pills-home" aria-selected="true">Options</a>
+                                        <a *ngIf='option_set_id.length > 0' style="cursor: pointer" class="nav-link" [ngClass]="{'active' : skusTab}" id="v-pills-profile-tab"
+                                            data-toggle="pill" (click)="openRelatedTab('skusTab')" role="tab" aria-controls="v-pills-profile"
+                                            aria-selected="false">SKUs</a>
+                                        <a *ngIf='option_set_id.length > 0' style="cursor: pointer" class="nav-link" id="v-pills-messages-tab" data-toggle="pill"
+                                            (click)="openRelatedTab('rulesTab')" role="tab" aria-controls="v-pills-messages"
+                                            aria-selected="false" [ngClass]="{'active' : rulesTab}">Rules</a>
+
                                     </div>
-                                    <div class="col-md-8"></div>
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <table class="table table-bordered" *ngIf='option_set_id.length > 0'>
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">
-                                                        Option set
-                                                    </th>
-                                                    <th scope="col">
-                                                        Option value Rules
-                                                    </th>
+                                <div class="col-md-10">
+                                    <div class="tab-content" id="v-pills-tabContent">
+                                        <div *ngIf="optionsTab" [ngClass]="{'show active' : optionsTab}" class="tab-pane fade" id="v-pills-home" role="tabpanel"
+                                            aria-labelledby="v-pills-home-tab">
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-6">
+                                                    <label>Attach Option Set
+                                                    </label>
+                                                    <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id">
+                                                        <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                                                            {{optionSet.name}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </div>
+                                                <div class="col-md-5"></div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-1"></div>
+                                                <div class="col-md-10">
+                                                    <table class="table table-bordered" *ngIf='option_set_id.length > 0'>
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">
+                                                                    Option set
+                                                                </th>
+                                                                <th scope="col">
+                                                                    Option value Rules
+                                                                </th>
 
 
-                                                </tr>
-                                            </thead>
+                                                            </tr>
+                                                        </thead>
 
-                                            <tbody>
-                                                <tr *ngFor="let row of option_set_id">
-                                                    <td>
-                                                        {{getOptionSetName(row)}}
-                                                    </td>
-                                                    <td>
-                                                        <div class="row" *ngFor="let option of getOptionName(row); let i=index">
-                                                            <ng-container>
-                                                                <!-- <form> -->
-                                                                <div class="col-md-3">
-                                                                    <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <mat-select placeholder="Set Rule" name="rule_id">
-                                                                        <mat-option value="-1">None</mat-option>
-                                                                        <mat-option value="1">Add</mat-option>
-                                                                        <mat-option value="2">Subtract</mat-option>
-                                                                    </mat-select>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <mat-select placeholder="Change By" name="rule_id">
-                                                                        <mat-option value="1">Percentage</mat-option>
-                                                                        <mat-option value="2">Absolute</mat-option>
-                                                                    </mat-select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <input min="0" class="form-control" type="number" placeholder="Value">
-                                                                </div>
-                                                                <div class="col-md-2" style="padding-left: 10px;">
-                                                                    <button class="btn btn-primary">Save</button>
-                                                                </div>
-                                                                <!-- </form> -->
-                                                            </ng-container>
-                                                            <!-- <div class="col-md-8">
-                                                                <mat-selection-list name="option_id" #option_val>
-                                                                    <mat-list-option (clic)="setSelection(option_val)" *ngFor="let option of getOptionName(row)" [value]="option.id">
-                                                                        {{option.value}}
-                                                                    </mat-list-option>
-                                                                </mat-selection-list>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <ng-container *ngFor="let option of getOptionName(row)">
-                                                                    <mat-select placeholder="Set Rule" name="rule_id" style="padding-bottom: 10px;
-                                                                    padding-top: 18px;">
-                                                                        <mat-option value="-1">None</mat-option>
-                                                                        <mat-option value="1">Add</mat-option>
-                                                                        <mat-option value="2">Subtract</mat-option>
-                                                                    </mat-select>
-                                                                </ng-container>
-                                                            </div> -->
-                                                        </div>
+                                                        <tbody>
+                                                            <tr *ngFor="let row of option_set_id">
+                                                                <td>
+                                                                    {{getOptionSetName(row)}}
+                                                                </td>
+                                                                <td>
+                                                                    <div class="row" *ngFor="let option of getOptionName(row); let i=index">
+                                                                        <ng-container>
+                                                                            <div class="col-md-3">
+                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <mat-select placeholder="Set Rule" name="rule_id">
+                                                                                    <mat-option value="-1">None</mat-option>
+                                                                                    <mat-option value="1">Add</mat-option>
+                                                                                    <mat-option value="2">Subtract</mat-option>
+                                                                                </mat-select>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <mat-select placeholder="Change By" name="rule_id">
+                                                                                    <mat-option value="1">Percentage</mat-option>
+                                                                                    <mat-option value="2">Absolute</mat-option>
+                                                                                </mat-select>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <input min="0" class="form-control" type="number" placeholder="Value">
+                                                                            </div>
+                                                                            <div class="col-md-2" style="padding-left: 10px;">
+                                                                                <button class="btn btn-primary">Save</button>
+                                                                            </div>
+                                                                        </ng-container>
 
-
-
-                                                    </td>
-
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-
-
-                                <!-- <div class="row">
-                                    <div class="col-md-10"></div>
-                                    <div class="col-md-1">
-                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add
-                                            Option
-                                        </button>
-                                    </div>
-                                </div> -->
+                                                                    </div>
 
 
 
-                                <div class="row">
+                                                                </td>
 
-
-
-                                    <div class="col-md-2">
-                                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                            <a class="nav-link" style="cursor: pointer" [ngClass]="{'active' : optionsTab}" id="v-pills-home-tab" data-toggle="pill"
-                                                (click)="openRelatedTab('optionsTab')" role="tab" aria-controls="v-pills-home"
-                                                aria-selected="true">Options</a>
-                                            <!-- <a *ngIf="disableSkuAndRuleTab" style="cursor: pointer" class="nav-link" [ngClass]="{'active' : skusTab}" id="v-pills-profile-tab"
-                                                data-toggle="pill" (click)="openRelatedTab('skusTab')" role="tab" aria-controls="v-pills-profile"
-                                                aria-selected="false">SKUs</a> -->
-                                            <a *ngIf="disableSkuAndRuleTab" style="cursor: pointer" class="nav-link" id="v-pills-messages-tab" data-toggle="pill" (click)="openRelatedTab('rulesTab')"
-                                                role="tab" aria-controls="v-pills-messages" aria-selected="false" [ngClass]="{'active' : rulesTab}">Rules</a>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
 
                                         </div>
-                                    </div>
-                                    <div class="col-md-10">
 
-                                        <div class="tab-content" id="v-pills-tabContent">
-                                            <div *ngIf="optionsTab" [ngClass]="{'show active' : optionsTab}" class="tab-pane fade" id="v-pills-home" role="tabpanel"
-                                                aria-labelledby="v-pills-home-tab">
-                                                <!-- <div class="row">
-                                                    <div class="col-md-12">
-                                                        <button mat-raised-button color="accent">
+
+                                        <div *ngIf="skusTab" [ngClass]="{'show active' : skusTab}" class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="well" style="background-color: #FBFBFC; border: 1px solid; border-color: #DDE1E6">
+                                                        <button mat-raised-button color="accent" (click)="addorEditSKU()">
                                                             Create SKU
                                                         </button>
                                                         <button mat-raised-button color="accent">
                                                             Generate SKUs
                                                         </button>
-                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" *ngIf="isAddorEditSKU">
+                                                <div class="col-md-12">
+                                                    <div class="well">
+
+                                                        <mat-card>
+                                                            <mat-card-header>
+                                                                <mat-card-title>Create a SKU</mat-card-title>
+                                                                <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+                                                            </mat-card-header>
+                                                            <mat-card-content>
+                                                                <form>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="SKUas" [(ngModel)]="product_variant.sku" placeholder="SKU">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="UPCas" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="Depthas" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="Weightas" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="Widthas" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="Heightas" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-2">
+                                                                            <label for="email">Options for this SKU:</label>
+                                                                        </div>
+                                                                        <div class="col-md-4" style="margin-top: 20px;">
+                                                                            <div>
+
+                                                                                <div class="row" *ngFor="let row of option_set_id; let i=index">
+                                                                                    <div style="padding: 10px;">
+
+                                                                                        <ul style="list-style: none; cursor: pointer;" (click)="toogleChild(i, $event)">
+                                                                                            {{getOptionSetName(row)}}
+                                                                                            <i class="material-icons">
+                                                                                                add_to_queue
+                                                                                            </i>
+                                                                                            <li *ngFor="let option of getOptionName(row)" id="ulLi{{i}}" hidden>
+                                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                    <!-- <div id="demo{{i}}" class="collapse">
+                                                                                        <div class="row" *ngFor="let option of getOptionName(row)">
+
+                                                                                            <div class="col-md-3">
+                                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div> -->
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                </form>
+                                                            </mat-card-content>
+                                                            <mat-card-actions style="text-align: right;">
+                                                                <button class="btn btn-primary" mat-button (click)="addorEditSKU()">Cancel</button>
+                                                                <button class="btn btn-info" mat-button>Save & Close</button>
+                                                            </mat-card-actions>
+                                                        </mat-card>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12" *ngIf="!isAddorEditSKU">
+                                                    <div class="well">
                                                         <table class="table table-bordered">
-                                                            <thead>
+                                                            <thead style="background-color: #FBFBFC">
                                                                 <tr>
 
                                                                     <th scope="col">
@@ -364,328 +362,43 @@
                                                                     <th scope="col">Depth</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="text" name="SKUas" [(ngModel)]="product_variant.sku" placeholder="SKU">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="number" name="UPCas" [(ngModel)]="product_variant.upc" placeholder="UPC">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="text" name="EANas" [(ngModel)]="product_variant.ean" placeholder="EAN">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="number" name="Weightas" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="number" name="Widthas" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="number" name="Heightas" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="number" name="Depthas" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
-                                                                    </td>
-
-
-                                                                </tr>
-                                                            </tbody>
+                                                            <tbody></tbody>
                                                         </table>
-
-                                                    </div>
-                                                </div> -->
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <label style="border-bottom: 2px solid;
-                                                            border-bottom-style: dashed;">Option Set
-                                                        </label>
-                                                        <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id" (change)="checkMyOptions($event.value)">
-                                                            <mat-option value="-1">--None--</mat-option>
-                                                            <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
-                                                                {{optionSet.name}}
-                                                            </mat-option>
-                                                        </mat-select>
-                                                    </div>
-
-
-
-                                                    <!-- <div class="col-md-4"> -->
-                                                    <!-- <input matInput name="height" [(ngModel)]="supplier.height" hidden> -->
-                                                    <!-- <a>Create new Option set</a> -->
-                                                    <!-- <a  (click)="newOptionAdded()">Create new Option set</a> -->
-                                                    <!-- <label style="color: #939393">Options</label>
-                                                        <br>
-                                                        <div class="fuse-card" style="min-width: 65% !important; padding: 10px;">
-
-                                                            <mat-selection-list name="option_id" #option_val (selectionChange)="handleSelection($event)">
-                                                                <mat-list-option (click)="setSelection(option_val)" *ngFor="let row of dataSource" [value]="row.id">
-                                                                    {{row.value}}
-                                                                </mat-list-option>
-                                                            </mat-selection-list>
-
-                                                        </div>
-                                                    </div> -->
-                                                    <!-- <div class="col-md-4">
-                                                        <label style="border-bottom: 2px solid;
-                                                            border-bottom-style: dashed;">Rule</label>
-
-                                                        <mat-select placeholder="Choose" #rules_id="ngModel" name="rule_id" [(ngModel)]="rule_id">
-                                                            <mat-option value="-1">--Choose An Action--</mat-option>
-                                                            <mat-option value="1">Deleted Selected</mat-option>
-                                                            <mat-option value="2">Enable Selected</mat-option>
-                                                            <mat-option value="3">Disable Selected</mat-option>
-                                                        </mat-select>
-
-                                                    </div> -->
-                                                </div>
-
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-10"></div>
-                                                    <div class="col-md-1">
-                                                        <button (click)="addRelatedvalue('addOption')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add Option
-                                                        </button>
-                                                    </div>
-                                                    <!-- <div>
-                                                        <button (click)="addRelatedvalue('addPV')" class="btn btn-primary pull-right" style="margin-top: 10px;">Add PV</button>
-                                                    </div> -->
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-md-2"></div>
-                                                    <div class="col-md-4">
-                                                        <!-- <table class="table table-bordered" *ngIf='product_variants.length > 0'>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">
-                                                                        Option set
-                                                                    </th>
-                                                                    <th scope="col">
-                                                                        Option value
-                                                                    </th>
-                                                                    <th scope="col">
-                                                                        Action
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody *ngFor="let row of product_variants">
-                                                                <tr>
-                                                                    <td>
-                                                                        {{getOptionSetName(row.option_set_id)}}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{getOptionName(row.id, row.option_set_id)}}
-                                                                    </td>
-                                                                    <th scope="col">
-                                                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;" (click)="deleteOption(i)">
-                                                                            delete
-                                                                        </mat-icon>
-                                                                    </th>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table> -->
                                                     </div>
                                                 </div>
+
                                             </div>
 
-                                            <div *ngIf="rulesTab && disableSkuAndRuleTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages"
-                                                role="tabpanel" aria-labelledby="v-pills-messages-tab">
 
-                                                <!-- <mat-form-field class="w-50-p">
-                                                    <mat-select placeholder="Choose" #rules_id="ngModel" name="rule_id" [(ngModel)]="product.rule_id">
-                                                        <mat-option value="-1">--Choose An Action--</mat-option>
-                                                        <mat-option value="1">Deleted Selected</mat-option>
-                                                        <mat-option value="2">Enable Selected</mat-option>
-                                                        <mat-option value="3">Disable Selected</mat-option>
-                                                    </mat-select>
-                                                </mat-form-field> -->
+                                            <br>
+                                            <br>
+                                            <br>
+                                        </div>
+                                        <div *ngIf="rulesTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                                            aria-labelledby="v-pills-messages-tab">
+                                            <p>rule</p>
 
-                                                <br>
-                                                <br>
-                                                <br>
-                                            </div>
+
+                                            <br>
+                                            <br>
+                                            <br>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </mat-tab>
-
-                        <mat-tab label="Other Details">
-                            <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
-                                <div>
-                                    <legend style="padding: 10px">
-                                        <h2>Product Identifiers</h2>
-                                    </legend>
-                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
-                                        <div class="py-16" fxLayout="row">
-                                            <mat-form-field fxFlex class="w-50-p">
-                                                <input matInput name="width" [(ngModel)]="supplier.width" placeholder="Global Trade Item Number">
-                                            </mat-form-field>
-                                            <mat-form-field fxFlex class="w-50-p">
-                                                <input matInput name="Height" [(ngModel)]="supplier.height" placeholder="Manufacturer Part Number">
-                                            </mat-form-field>
-                                        </div>
-
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput name="Depth" [(ngModel)]="supplier.depth" placeholder="Brand Name">
-                                        </mat-form-field>
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput name="weight" [(ngModel)]="supplier.weight" placeholder="Product UPC/EAN">
-                                        </mat-form-field>
-
-                                    </div>
-
-                                </div>
-                                <div>
-                                    <legend style="padding: 10px">
-                                        <h2>Related Products</h2>
-                                    </legend>
-                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
-                                        Related Products
-                                        <mat-checkbox [(ngModel)]="supplier.weight"></mat-checkbox>
-                                        Find and show related products automatically
-                                    </div>
-
-
-                                </div>
-                                <div>
-
-                                    <legend style="padding: 10px">
-                                        <h2>Other Details</h2>
-                                    </legend>
-                                    <div class="fuse-card" style="min-width: 100% !important; padding: 50px;">
-                                        <div class="py-16" fxLayout="row">
-                                            <mat-form-field fxFlex class="w-50-p">
-                                                <input matInput name="Width" [(ngModel)]="supplier.width" placeholder="Bin Picking Number">
-                                            </mat-form-field>
-                                            <mat-form-field fxFlex class="w-50-p">
-                                                <textarea matInput name="Height" [(ngModel)]="supplier.height" placeholder="Warranty Information"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                        <br>
-                                        <mat-form-field class="w-100-p">
-                                            <mat-select name="Width" placeholder="Select" [(ngModel)]="product.brand_id">
-                                                <mat-option value="option" selected>Default</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput name="Weight" [(ngModel)]="supplier.weight" placeholder="Search Keywords">
-                                        </mat-form-field>
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput name="Weight" [(ngModel)]="supplier.weight" placeholder="Availability">
-                                        </mat-form-field>
-                                        Visible
-                                        <mat-checkbox name="Width" [(ngModel)]="supplier.weight"></mat-checkbox>
-                                        Yes, this product should be visible on my web site
-                                        <br>
-                                        <br> Featured Product
-                                        <mat-checkbox name="Width" [(ngModel)]="supplier.weight"></mat-checkbox>
-                                        Yes, this is a featured product
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </mat-tab>
-
-                        <mat-tab label="Images / Videos">
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <mat-form-field class="w-100-p">
-                                    <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id" required>
-                                        <mat-option *ngFor="let supplier" [value]="supplier.id">
-                                            {{supplier.name}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
-                                    <span>Pleae Select a Supplier.</span>!</span>
-
-                                <!-- <div class="tab-content p-24" fusePerfectScrollbar> -->
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-                                            style="width: 100%;">
-                                            <!--<span>optional content (don't set headertext then)</span>-->
-                                        </file-drop>
-                                        <br>
-                                        <div class="upload-table">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <!-- <th>Name</th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="upload-name-style">
-                                                    <tr *ngFor="let item of files; let i=index">
-                                                        <td>
-                                                            <strong>{{ item.relativePath }}</strong>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-                                            style="width: 100%;">
-                                            <!--<span>optional content (don't set headertext then)</span>-->
-                                        </file-drop>
-                                        <br>
-                                        <div class="upload-table">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <!-- <th>Name</th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="upload-name-style">
-                                                    <tr *ngFor="let item of files; let i=index">
-                                                        <td>
-                                                            <strong>{{ item.relativePath }}</strong>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
-                                            style="width: 100%;">
-                                            <!--<span>optional content (don't set headertext then)</span>-->
-                                        </file-drop>
-                                        <br>
-                                        <div class="upload-table">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <!-- <th>Name</th> -->
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="upload-name-style">
-                                                    <tr *ngFor="let item of files; let i=index">
-                                                        <td>
-                                                            <strong>{{ item.relativePath }}</strong>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- </div> -->
-
-                            </div>
-                        </mat-tab>
-                    </mat-tab-group>
-                    <input type="button" class="btn btn-primary" hidden #productFormSubmition (click)="addProduct(productForm)">
-                </form>
+                        </div>
+                        <!-- </form> -->
+                    </mat-tab>
+                    <mat-tab label="Other Details">
+                        <form name="otherDetailForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                        </form>
+                    </mat-tab>
+                    <mat-tab label="Images / Videos">
+                        <form name="imageVideoForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                        </form>
+                    </mat-tab>
+                </mat-tab-group>
+                <input type="button" class="btn btn-primary" hidden #productFormSubmition (click)="addProduct(productForm)">
 
             </div>
             <!-- / CONTENT -->
