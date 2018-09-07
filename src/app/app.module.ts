@@ -80,6 +80,21 @@ const appRoutes: Routes = [
     loadChildren: './main/content/categories/categories.module#CategoriesModule'
   },
   {
+    canActivate: [AuthGuard],
+    path: 'options',
+    loadChildren: './main/content/options/options.module#OptionsModule'
+  },
+  {
+    canActivate: [AuthGuard],
+    path: 'taxes',
+    loadChildren: './main/content/taxes/taxes.module#TaxesModule'
+  },
+  {
+    canActivate: [AuthGuard],
+    path: 'tags',
+    loadChildren: './main/content/tags/tags.module#TagsModule'
+  },
+  {
     path: 'apps',
     loadChildren: './main/content/apps/apps.module#FuseAppsModule'
   },
@@ -93,10 +108,7 @@ const appRoutes: Routes = [
       './main/content/user-management-admin/user-management.module#UserManagementModule'
   },
   
-  {
-    path: 'options',
-    loadChildren: './main/content/options/options.module#OptionsModule'
-  },
+
   /*,
   {
     path: 'services',

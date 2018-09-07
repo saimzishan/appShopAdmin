@@ -110,6 +110,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       product => {
         if (product) {
           this.product = new Product(product);
+          console.log(this.product);
           this.pageType = "edit";
         } else {
           this.pageType = "new";

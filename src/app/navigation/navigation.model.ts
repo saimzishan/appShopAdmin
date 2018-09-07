@@ -146,6 +146,56 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 ]
             },
             {
+                'id': 'products',
+                'title': 'Taxes',
+                'translate': 'NAV.ECOMMERCE',
+                'type': 'collapse',
+                'icon': 'monetization_on',
+                'children': [
+                    {
+                        'id': 'view',
+                        'title': 'View',
+                        'type': 'item',
+                        'icon': 'visibility',
+                        'url': '/taxes',
+                        'exactMatch': true
+                    },
+                    {
+                        'id': 'add',
+                        'title': 'Add',
+                        'type': 'item',
+                        'icon': 'add_circle',
+                        'url': '/taxes/new',
+                        'exactMatch': true
+                    },
+                ]
+            },
+            {
+                'id': 'products',
+                'title': 'Tags',
+                'translate': 'NAV.ECOMMERCE',
+                'type': 'collapse',
+                'icon': 'loyalty',
+                'children': [
+                    {
+                        'id': 'view',
+                        'title': 'View',
+                        'type': 'item',
+                        'icon': 'visibility',
+                        'url': '/tags',
+                        'exactMatch': true
+                    },
+                    {
+                        'id': 'add',
+                        'title': 'Add',
+                        'type': 'item',
+                        'icon': 'add_circle',
+                        'url': '/tags/new',
+                        'exactMatch': true
+                    },
+                ]
+            },
+            {
                 'id': 'brands',
                 'title': 'Brands',
                 'translate': 'NAV.BRANDS',

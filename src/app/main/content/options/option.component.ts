@@ -49,7 +49,7 @@ declare var $: any;
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
-export class OptionComponent implements OnInit, OnDestroy {
+export class OptionComponent implements OnInit {
   @ViewChild('dialogContent')
   dialogContent: TemplateRef<any>;
 
@@ -65,6 +65,7 @@ export class OptionComponent implements OnInit, OnDestroy {
   base64textString: string;
   newVal = '';
   optionsCardEnable = false;
+  o;
 
   constructor(
     private optionService: OptionService,
@@ -79,17 +80,50 @@ export class OptionComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to update product on changes
-    this.onOptionChanged = this.optionService.onOptionChanged.subscribe(option => {
-      if (option) {
-        this.option = new Option(option);
-        this.pageType = 'edit';
-      } else {
-        this.pageType = 'new';
-        this.option = new Option();
-      }
+    // if (this.pageType === 'new') {
+      if (this.router.url.includes('/options/new')) {
+      this.option = new Option();
+      this.optionsCardEnable = false;
 
-      // this.brandForm = this.createBrandForm();
-    });
+    } else {
+      this.getOptions();
+    }
+    // this.onOptionChanged = this.optionService.onOptionChanged.subscribe(option => {
+    //   if (option) {
+    //     console.log(option);
+    //     this.option = new Option(option);
+    //     this.o = option.options;
+    //     this.pageType = 'edit';
+    //     this.optionsCardEnable = true;
+    //   } else {
+    //     this.pageType = 'new';
+    //     this.optionsCardEnable = false;
+    //     this.option = new Option();
+    //   }
+
+    // this.brandForm = this.createBrandForm();
+    // });
+  }
+
+  getOptions() {
+    this.spinnerService.requestInProcess(true);
+    this.optionService.getOptions().subscribe(
+      (res: any) => {
+        this.option = res.res.data;
+        console.log(this.option);
+        this.pageType = 'edit';
+        this.optionsCardEnable = true;
+        // this.option_values = res.res.data;
+        // this.setDataSuorce(res.res.data);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, 'Error !');
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
   }
 
   addOptionValue() {
@@ -106,7 +140,7 @@ export class OptionComponent implements OnInit, OnDestroy {
   addOption(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill All Fields');
+      this.snotifyService.warning('Please Fill Required Field(s)');
       return;
     }
     // this.option.suppliers.push(this.supplier);
@@ -144,6 +178,11 @@ export class OptionComponent implements OnInit, OnDestroy {
 
       // Show the success message
     });
+  }
+
+  removeOptions(indexToRemove) {
+    this.option.options.splice(indexToRemove, 1);
+    console.log(this.option);
   }
 
   deleteOption() {
@@ -185,7 +224,7 @@ export class OptionComponent implements OnInit, OnDestroy {
     console.log(event);
   }
 
-  ngOnDestroy() {
-    this.onOptionChanged.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.onOptionChanged.unsubscribe();
+  // }
 }

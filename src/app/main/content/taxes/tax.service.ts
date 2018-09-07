@@ -7,26 +7,23 @@ import { GLOBAL } from '../../../shared/globel';
 import { AuthGuard } from '../../../guard/auth.guard';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from '../../../spinner/spinner.service';
-import { ApiService } from '../../../api/api.service';
-import { Option } from '../models/option.model';
 
 @Injectable()
-export class OptionService extends ApiService implements Resolve<any>
+export class TaxService implements Resolve<any>
 {
     routeParams: any;
-    option: Option;
-    option_values: any;
-    onOptionChanged: BehaviorSubject<any> = new BehaviorSubject({});
+    tax: any;
+    onTaxChanged: BehaviorSubject<any> = new BehaviorSubject({});
     // router: any;
 
-    // constructor(
-    //     private http: HttpClient,
-    //     private snotifyService: SnotifyService,
-    //     private spinnerService: SpinnerService,
-    //     private router: Router
+    constructor(
+        private http: HttpClient,
+        private snotifyService: SnotifyService,
+        private spinnerService: SpinnerService,
+        private router: Router
 
-    // ) {
-    // }
+    ) {
+    }
 
     /**
      * Resolve
@@ -41,7 +38,7 @@ export class OptionService extends ApiService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getOption()
+                this.getTax()
             ]).then(
                 () => {
                     resolve();
@@ -51,11 +48,11 @@ export class OptionService extends ApiService implements Resolve<any>
         });
     }
 
-    getOption(): Promise<any> {
+    getTax(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.routeParams.id === 'new') {
 
-                this.onOptionChanged.next(false);
+                this.onTaxChanged.next(false);
                 resolve(false);
             }
             else {
@@ -74,40 +71,18 @@ export class OptionService extends ApiService implements Resolve<any>
                         'Authorization': 'Bearer ' + access_token
                     })
                 };
-                this.http.get(GLOBAL.USER_API + 'optionsets/' + this.routeParams.id, httpOptions)
+                this.http.get(GLOBAL.USER_API + 'taxes/' + this.routeParams.id, httpOptions)
                     .subscribe((response: any) => {
                         this.spinnerService.requestInProcess(false);
-                        this.option = new Option(response.data);
-                        this.onOptionChanged.next(this.option);
+                        this.tax = response.data.brand;
+                        this.onTaxChanged.next(this.tax);
                         resolve(response);
                     }, reject);
             }
         });
     }
 
-    getOptions() {
-        const access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-          const error = {
-            message: 'Unauthorized'
-          };
-          return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + access_token
-          })
-        };
-        return this.http
-          .get(GLOBAL.USER_API + 'optionsets/' + this.routeParams.id , httpOptions)
-          .map(this.extractData)
-          .catch(err => {
-            return this.handleError(err);
-          });
-      }
-
-    saveOption(option) {
+    saveTax(tax) {
         this.spinnerService.requestInProcess(true);
         return new Promise((resolve, reject) => {
             const access_token = AuthGuard.getToken();
@@ -123,13 +98,13 @@ export class OptionService extends ApiService implements Resolve<any>
                     'Authorization': 'Bearer ' + access_token
                 })
             };
-            this.http.put(GLOBAL.USER_API + 'optionsets/' + option.id, option, httpOptions)
+            this.http.put(GLOBAL.USER_API + 'taxes/' + tax.id, tax, httpOptions)
                 .subscribe((response: any) => {
                     this.spinnerService.requestInProcess(false);
                     if (!response.error) {
                         resolve(response);
-                        this.snotifyService.success('Option Updated Successfully');
-                        this.router.navigate(['/options']);
+                        this.snotifyService.success('Tax Updated Successfully');
+                        this.router.navigate(['/taxes']);
                     }
                     else {
                         this.snotifyService.error(response.error);
@@ -138,7 +113,7 @@ export class OptionService extends ApiService implements Resolve<any>
         });
     }
 
-    deleteOptions(option) {
+    deleteTax(tax) {
         this.spinnerService.requestInProcess(true);
         return new Promise((resolve, reject) => {
             const access_token = AuthGuard.getToken();
@@ -155,13 +130,13 @@ export class OptionService extends ApiService implements Resolve<any>
                 })
             };
 
-            this.http.delete(GLOBAL.USER_API + 'optionsets/' + option.id, httpOptions)
+            this.http.delete(GLOBAL.USER_API + 'taxes/' + tax.id, httpOptions)
                 .subscribe((response: any) => {
                     this.spinnerService.requestInProcess(false);
                     if (!response.error) {
                         resolve(response);
-                        this.snotifyService.success('Option Deleted Successfully');
-                        this.router.navigate(['/options']);
+                        this.snotifyService.success('Brand Deleted Successfully');
+                        this.router.navigate(['/taxes']);
                     }
                     else {
                         this.snotifyService.error(response.error);
@@ -170,36 +145,35 @@ export class OptionService extends ApiService implements Resolve<any>
         });
     }
 
-    addOption(option) {
-        // return new Promise((resolve, reject) => {
-        const access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-            const error = {
-                message: 'Unauthorized'
+    addTax(tax) {
+        this.spinnerService.requestInProcess(true);
+        return new Promise((resolve, reject) => {
+            const access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                const error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
             };
-            return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + access_token
-            })
-        };
 
-        //   this.http
-        //     .post(GLOBAL.USER_API + 'products', product, httpOptions)
-        //     .subscribe((response: any) => {
-        //       console.log(response);
-        //       resolve(response);
-        //       this.router.navigate(['/products']);
-        //     }, reject);
-        // });
-        return this.http
-            .post(GLOBAL.USER_API + 'optionsets', option, httpOptions)
-            // .post('http://61e9290d.ngrok.io/api/auth/' + 'optionsets', option, httpOptions)
-            .map(this.extractData)
-            .catch(err => {
-                return this.handleError(err);
-            });
+            this.http.post(GLOBAL.USER_API + 'taxes', tax, httpOptions)
+                .subscribe((response: any) => {
+                    this.spinnerService.requestInProcess(false);
+                    if (!response.error) {
+                        resolve(response);
+                        this.snotifyService.success('Tax Added');
+                        this.router.navigate(['/taxes']);
+                    }
+                    else {
+                        this.snotifyService.error(response.error);
+                    }
+                }, reject);
+        });
     }
 }

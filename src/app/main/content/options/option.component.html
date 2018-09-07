@@ -23,9 +23,12 @@
                 </div> -->
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                    <div class="h2" *ngIf="pageType ==='edit'">
+                        {{option.name}}
+                    </div>
 
                     <div class="h2" *ngIf="pageType ==='new'">
-                        New Option
+                        New Option Set
                     </div>
                     <div class="subtitle secondary-text">
                         <span>Option Detail</span>
@@ -43,7 +46,7 @@
             </button>
 
 
-            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editoptionFormSubmition.click()">
 
                 <span>SAVE</span>
             </button>
@@ -64,18 +67,19 @@
                     <div class="tab-content p-24" fusePerfectScrollbar>
 
                         <mat-form-field class="w-100-p">
-                            <input matInput name="oName" [(ngModel)]="option.name" placeholder="Option Name" required>
+                            <input matInput name="name" #name="ngModel" [(ngModel)]="option.name" placeholder="Option Set" required>
                         </mat-form-field>
-                        <!-- <span *ngIf="oName.touched && oName.errors?.required" class="error">
+                        <span *ngIf="name.touched && name.errors?.required" class="error">
                             <span>Option Name required.</span>!
-                        </span> -->
+                        </span>
+                        <br>
                         <!-- <mat-card *ngIf="pageType ==='edit'">
                             <ng-container>
                                 {{option.options.value}}
                             </ng-container>
                         </mat-card> -->
-                        <mat-form-field class="w-100-p">
-                            <input matInput name="option_values" [(ngModel)]="option_values.value" placeholder="Option Value">
+                        <mat-form-field class="w-50-p">
+                            <input matInput name="option_values" [(ngModel)]="option_values.value" placeholder="Option">
                         </mat-form-field>
                         <!-- <label *ngIf="optionValues.length > 0">
                             <p *ngFor="let ov of optionValues">
@@ -85,16 +89,15 @@
                         <!-- <mat-card *ngIf="optionsCardEnable">
                             {{option.options.value}}
                         </mat-card> -->
-                        <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" (click)="addOptionValue()">
+                        <button mat-raised-button style="margin-left: 20px" class="save-brand-button mat-white-bg mt-16 mt-sm-0" (click)="addOptionValue()">
                             <mat-icon>add</mat-icon>
-                            <span>Add Another Option Value</span>
+                            <span>Add Option</span>
                         </button>
                         <table class="table table-bordered" *ngIf="optionsCardEnable">
                             <thead>
                                 <tr>
-
                                     <th scope="col">
-                                        Option Values
+                                        Options
                                     </th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -105,7 +108,7 @@
                                         {{o.value}}
                                     </td>
                                     <td>
-                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;">delete</mat-icon>
+                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;" (click)="removeOptions(i)">delete</mat-icon>
                                     </td>
                                 </tr>
                             </tbody>

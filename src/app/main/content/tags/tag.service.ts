@@ -8,15 +8,13 @@ import { AuthGuard } from '../../../guard/auth.guard';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from '../../../spinner/spinner.service';
 import { ApiService } from '../../../api/api.service';
-import { Option } from '../models/option.model';
 
 @Injectable()
-export class OptionService extends ApiService implements Resolve<any>
+export class TagService extends ApiService implements Resolve<any>
 {
     routeParams: any;
-    option: Option;
-    option_values: any;
-    onOptionChanged: BehaviorSubject<any> = new BehaviorSubject({});
+    tag: any;
+    onTagChanged: BehaviorSubject<any> = new BehaviorSubject({});
     // router: any;
 
     // constructor(
@@ -41,7 +39,7 @@ export class OptionService extends ApiService implements Resolve<any>
         return new Promise((resolve, reject) => {
 
             Promise.all([
-                this.getOption()
+                this.getTag()
             ]).then(
                 () => {
                     resolve();
@@ -51,11 +49,11 @@ export class OptionService extends ApiService implements Resolve<any>
         });
     }
 
-    getOption(): Promise<any> {
+    getTag(): Promise<any> {
         return new Promise((resolve, reject) => {
             if (this.routeParams.id === 'new') {
 
-                this.onOptionChanged.next(false);
+                this.onTagChanged.next(false);
                 resolve(false);
             }
             else {
@@ -74,18 +72,82 @@ export class OptionService extends ApiService implements Resolve<any>
                         'Authorization': 'Bearer ' + access_token
                     })
                 };
-                this.http.get(GLOBAL.USER_API + 'optionsets/' + this.routeParams.id, httpOptions)
+                this.http.get(GLOBAL.USER_API + 'tags/' + this.routeParams.id, httpOptions)
                     .subscribe((response: any) => {
                         this.spinnerService.requestInProcess(false);
-                        this.option = new Option(response.data);
-                        this.onOptionChanged.next(this.option);
+                        this.tag = response.data;
+                        this.onTagChanged.next(this.tag);
                         resolve(response);
                     }, reject);
             }
         });
     }
 
-    getOptions() {
+    saveTag(tag) {
+        this.spinnerService.requestInProcess(true);
+        return new Promise((resolve, reject) => {
+            const access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                const error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+            this.http.put(GLOBAL.USER_API + 'tags/' + tag.id , tag , httpOptions)
+                .subscribe((response: any) => {
+                    this.spinnerService.requestInProcess(false);
+                    if (!response.error) {
+                        resolve(response);
+                        this.snotifyService.success('Tag Updated Successfully');
+                        this.router.navigate(['/brands']);
+                    }
+                    else {
+                        this.snotifyService.error(response.error);
+                    }
+                }, reject);
+        });
+    }
+
+    deleteTag(tag) {
+        this.spinnerService.requestInProcess(true);
+        return new Promise((resolve, reject) => {
+            const access_token = AuthGuard.getToken();
+            if (access_token === undefined) {
+                const error = {
+                    message: 'Unauthorized'
+                }
+                return Observable.throw({ error: error });
+            }
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                })
+            };
+
+            this.http.delete(GLOBAL.USER_API + 'tags/' + tag.id , httpOptions)
+                .subscribe((response: any) => {
+                    this.spinnerService.requestInProcess(false);
+                    if (!response.error) {
+                        resolve(response);
+                        this.snotifyService.success('Tag Deleted Successfully');
+                        this.router.navigate(['/tags']);
+                    }
+                    else {
+                        this.snotifyService.error(response.error);
+                    }
+                }, reject);
+        });
+    }
+
+    addTag(tag) {
+        // return new Promise((resolve, reject) => {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
           const error = {
@@ -99,93 +161,7 @@ export class OptionService extends ApiService implements Resolve<any>
             Authorization: 'Bearer ' + access_token
           })
         };
-        return this.http
-          .get(GLOBAL.USER_API + 'optionsets/' + this.routeParams.id , httpOptions)
-          .map(this.extractData)
-          .catch(err => {
-            return this.handleError(err);
-          });
-      }
-
-    saveOption(option) {
-        this.spinnerService.requestInProcess(true);
-        return new Promise((resolve, reject) => {
-            const access_token = AuthGuard.getToken();
-            if (access_token === undefined) {
-                const error = {
-                    message: 'Unauthorized'
-                }
-                return Observable.throw({ error: error });
-            }
-            const httpOptions = {
-                headers: new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + access_token
-                })
-            };
-            this.http.put(GLOBAL.USER_API + 'optionsets/' + option.id, option, httpOptions)
-                .subscribe((response: any) => {
-                    this.spinnerService.requestInProcess(false);
-                    if (!response.error) {
-                        resolve(response);
-                        this.snotifyService.success('Option Updated Successfully');
-                        this.router.navigate(['/options']);
-                    }
-                    else {
-                        this.snotifyService.error(response.error);
-                    }
-                }, reject);
-        });
-    }
-
-    deleteOptions(option) {
-        this.spinnerService.requestInProcess(true);
-        return new Promise((resolve, reject) => {
-            const access_token = AuthGuard.getToken();
-            if (access_token === undefined) {
-                const error = {
-                    message: 'Unauthorized'
-                }
-                return Observable.throw({ error: error });
-            }
-            const httpOptions = {
-                headers: new HttpHeaders({
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + access_token
-                })
-            };
-
-            this.http.delete(GLOBAL.USER_API + 'optionsets/' + option.id, httpOptions)
-                .subscribe((response: any) => {
-                    this.spinnerService.requestInProcess(false);
-                    if (!response.error) {
-                        resolve(response);
-                        this.snotifyService.success('Option Deleted Successfully');
-                        this.router.navigate(['/options']);
-                    }
-                    else {
-                        this.snotifyService.error(response.error);
-                    }
-                }, reject);
-        });
-    }
-
-    addOption(option) {
-        // return new Promise((resolve, reject) => {
-        const access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-            const error = {
-                message: 'Unauthorized'
-            };
-            return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + access_token
-            })
-        };
-
+    
         //   this.http
         //     .post(GLOBAL.USER_API + 'products', product, httpOptions)
         //     .subscribe((response: any) => {
@@ -195,11 +171,10 @@ export class OptionService extends ApiService implements Resolve<any>
         //     }, reject);
         // });
         return this.http
-            .post(GLOBAL.USER_API + 'optionsets', option, httpOptions)
-            // .post('http://61e9290d.ngrok.io/api/auth/' + 'optionsets', option, httpOptions)
-            .map(this.extractData)
-            .catch(err => {
-                return this.handleError(err);
-            });
-    }
+          .post(GLOBAL.USER_API + 'tags', tag, httpOptions)
+          .map(this.extractData)
+          .catch(err => {
+            return this.handleError(err);
+          });
+      }
 }
