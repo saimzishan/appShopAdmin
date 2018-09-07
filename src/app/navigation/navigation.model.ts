@@ -121,6 +121,44 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 ]
             },
             {
+                'id': 'brands',
+                'title': 'Brands',
+                'translate': 'NAV.BRANDS',
+                'type': 'collapse',
+                'icon': 'card_travel',
+                'children': [
+                    /*{
+                      'id'   : 'dashboard',
+                      'title': 'Dashboard',
+                      'type' : 'item',
+                      'url'  : '/apps/e-commerce/dashboard'
+                    },*/
+                    {
+                        'id': 'view',
+                        'title': 'View',
+                        'type': 'item',
+                        'icon': 'visibility',
+                        'url': '/brands',
+                        'exactMatch': true
+                    },
+                    {
+                        'id': 'add',
+                        'title': 'Add',
+                        'type': 'item',
+                        'icon': 'add_circle',
+                        'url': '/brands/new',
+                        'exactMatch': true
+                    },
+                    /*{
+                      'id'        : 'productDetail',
+                      'title'     : 'Product Detail',
+                      'type'      : 'item',
+                      'url'       : '/products/:id/:handle',
+                      'exactMatch': true
+                    },*/
+                ]
+            },
+            {
                 'id': 'products',
                 'title': 'Options',
                 'translate': 'NAV.ECOMMERCE',
@@ -193,44 +231,6 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'url': '/tags/new',
                         'exactMatch': true
                     },
-                ]
-            },
-            {
-                'id': 'brands',
-                'title': 'Brands',
-                'translate': 'NAV.BRANDS',
-                'type': 'collapse',
-                'icon': 'card_travel',
-                'children': [
-                    /*{
-                      'id'   : 'dashboard',
-                      'title': 'Dashboard',
-                      'type' : 'item',
-                      'url'  : '/apps/e-commerce/dashboard'
-                    },*/
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/brands',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/brands/new',
-                        'exactMatch': true
-                    },
-                    /*{
-                      'id'        : 'productDetail',
-                      'title'     : 'Product Detail',
-                      'type'      : 'item',
-                      'url'       : '/products/:id/:handle',
-                      'exactMatch': true
-                    },*/
                 ]
             },
             {
