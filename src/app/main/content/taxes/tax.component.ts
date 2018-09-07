@@ -91,7 +91,7 @@ export class TaxComponent implements OnInit, OnDestroy {
     private location: Location,
     private snotifyService: SnotifyService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -162,6 +162,7 @@ export class TaxComponent implements OnInit, OnDestroy {
     });
   }
   addTax(form) {
+
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning('Please Fill All Required Fields');
@@ -177,6 +178,16 @@ export class TaxComponent implements OnInit, OnDestroy {
 
     // Change the location with new one
     // this.location.go('/brands');
+  }
+
+  checkLength() {
+    if (this.tax.value >= '100') {
+      $('#length').html('Not Greater than 99.9');
+      return false;
+    } else {
+      $('#length').html('');
+      return true;
+    }
   }
 
   dropped(event: UploadEvent) {
