@@ -38,9 +38,11 @@ import { MatTableDataSource } from "@angular/material";
 import { NgSelectMultipleOption } from "@angular/forms/src/directives";
 import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import * as $ from 'jquery';
-import { TreeModel } from "ng2-tree";
+import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
-
+const treeSettings: Ng2TreeSettings = {
+  rootIsVisible: false
+};
 declare var $: any;
 // import {MatTreeModule} from '@angular/material/tree';
 
@@ -151,13 +153,14 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.isAddorEditSKU = !this.isAddorEditSKU;
   }
 
-  toogleChild(id, event) {
-    let temp = document.getElementsByTagName("ul");
-    temp = temp[id].children;
-    for (let index = 1; index < temp.length; index++) {
-      const element = temp[index];
-      element.hidden = !element.hidden;
-    }
+  toogleChild(id) {
+    let temp: any = document.getElementById("ulLi" + id);
+    temp.hidden = !temp.hidden;
+    // temp = temp[id].children;
+    // for (let index = 1; index < temp.length; index++) {
+    //   const element = temp[index];
+    //   element.hidden = !element.hidden;
+    // }
   }
 
   // end
@@ -420,49 +423,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   setSelection(val) {
     this.option_id = val.selectedOptions.selected[0].value;
-  }
-  addRelatedvalue(check?: string) {
-    if (check === "addOption") {
-      if (this.option_id === -1) {
-        this.snotifyService.warning(
-          "Please select option set and option before !"
-        );
-        return;
-      }
-      // this.product.suppliers[0].productVariants .push(new OptionValue(this.option_value));
-
-      this.options.option_id = this.option_id;
-      this.options.option_rule_id = this.rule_id;
-      this.options.option_set_id = this.option_set_id;
-      this.tOptions.push(this.options);
-      this.option_set_id = this.rule_id = this.option_id = -1;
-      this.options = new Options();
-      this.checkMyOptions(-1);
-      this.disableSkuAndRuleTab = true;
-    } else {
-      if (
-        this.product_variant.depth === undefined ||
-        this.product_variant.ean === undefined ||
-        this.product_variant.height === undefined ||
-        this.product_variant.sku === undefined ||
-        this.product_variant.upc === undefined ||
-        this.product_variant.weight === undefined ||
-        this.product_variant.width === undefined
-      ) {
-        this.snotifyService.warning("Please add all fields !");
-        return;
-      }
-      if (this.tOptions.length > 0) {
-        this.product_variant.options = this.tOptions;
-        this.supplier.productVariants.push(this.product_variant);
-        this.product_variant = new ProductVariant();
-        this.tOptions = [];
-      } else {
-        this.snotifyService.warning(
-          "Please add option set and option before !"
-        );
-      }
-    }
   }
 
   addAnotherSupplier() {

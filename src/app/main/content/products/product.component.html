@@ -237,7 +237,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="well" style="background-color: #FBFBFC; border: 1px solid; border-color: #DDE1E6">
-                                                        <button mat-raised-button color="accent" (click)="addorEditSKU()">
+                                                        <button mat-raised-button color="accent" disabled="{{isAddorEditSKU}}" (click)="addorEditSKU()">
                                                             Create SKU
                                                         </button>
                                                         <button mat-raised-button color="accent">
@@ -249,14 +249,13 @@
                                             <div class="row" *ngIf="isAddorEditSKU">
                                                 <div class="col-md-12">
                                                     <div class="well">
+                                                        <form>
+                                                            <mat-card>
+                                                                <mat-card-header>
+                                                                    <mat-card-title>Create a SKU</mat-card-title>
+                                                                </mat-card-header>
+                                                                <mat-card-content>
 
-                                                        <mat-card>
-                                                            <mat-card-header>
-                                                                <mat-card-title>Create a SKU</mat-card-title>
-                                                                <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
-                                                            </mat-card-header>
-                                                            <mat-card-content>
-                                                                <form>
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
@@ -306,24 +305,21 @@
                                                                                 <div class="row" *ngFor="let row of option_set_id; let i=index">
                                                                                     <div style="padding: 10px;">
 
-                                                                                        <ul style="list-style: none; cursor: pointer;" (click)="toogleChild(i, $event)">
-                                                                                            {{getOptionSetName(row)}}
-                                                                                            <i class="material-icons">
-                                                                                                add_to_queue
-                                                                                            </i>
-                                                                                            <li *ngFor="let option of getOptionName(row)" id="ulLi{{i}}" hidden>
-                                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
-                                                                                            </li>
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                    <!-- <div id="demo{{i}}" class="collapse">
-                                                                                        <div class="row" *ngFor="let option of getOptionName(row)">
+                                                                                        <div style="list-style: none; cursor: pointer;">
+                                                                                            <button (click)="toogleChild(i)"> {{getOptionSetName(row)}}
+                                                                                                <i class="material-icons">
+                                                                                                    add_to_queue
+                                                                                                </i>
+                                                                                            </button>
 
-                                                                                            <div class="col-md-3">
-                                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
-                                                                                            </div>
+                                                                                            <mat-selection-list id="ulLi{{i}}" hidden>
+                                                                                                <mat-list-option role="listitem" *ngFor="let option of getOptionName(row)">
+                                                                                                    {{option.value}}
+                                                                                                </mat-list-option>
+                                                                                            </mat-selection-list>
                                                                                         </div>
-                                                                                    </div> -->
+                                                                                    </div>
+
 
                                                                                 </div>
                                                                             </div>
@@ -332,14 +328,14 @@
                                                                     </div>
 
 
-                                                                </form>
-                                                            </mat-card-content>
-                                                            <mat-card-actions style="text-align: right;">
-                                                                <button class="btn btn-primary" mat-button (click)="addorEditSKU()">Cancel</button>
-                                                                <button class="btn btn-info" mat-button>Save & Close</button>
-                                                            </mat-card-actions>
-                                                        </mat-card>
 
+                                                                </mat-card-content>
+                                                                <mat-card-actions style="text-align: right;">
+                                                                    <button class="btn btn-primary" mat-button (click)="addorEditSKU()">Cancel</button>
+                                                                    <button class="btn btn-info" mat-button>Save & Close</button>
+                                                                </mat-card-actions>
+                                                            </mat-card>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
