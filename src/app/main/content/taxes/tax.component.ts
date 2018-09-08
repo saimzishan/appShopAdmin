@@ -181,7 +181,7 @@ export class TaxComponent implements OnInit, OnDestroy {
   }
 
   checkLength() {
-    if (this.tax.value >= '100') {
+    if (this.tax.value >='100') {
       $('#length').html('Not Greater than 99.9');
       return false;
     } else {
