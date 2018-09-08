@@ -342,7 +342,7 @@
                                             <div class="row" *ngIf="isAddorEditSKU">
                                                 <div class="col-md-12">
                                                     <div class="well">
-                                                        <form name="skuForm" #skuForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                                                        <form name="skuForm" #skuForm="ngForm" fxLayout="column" fxFlex>
                                                             <mat-card>
                                                                 <mat-card-header>
                                                                     <mat-card-title>Create a SKU</mat-card-title>
@@ -352,7 +352,7 @@
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
-                                                                                <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU">
+                                                                                <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU" required>
                                                                             </mat-form-field>
                                                                         </div>
                                                                         <div class="col-md-6">
@@ -405,7 +405,7 @@
                                                                                                 </i>
                                                                                             </button>
 
-                                                                                            <mat-selection-list [(ngModel)]="" id="ulLi{{i}}" hidden>
+                                                                                            <mat-selection-list id="ulLi{{i}}" hidden>
                                                                                                 <mat-list-option role="listitem" *ngFor="let option of getOptionName(row)">
                                                                                                     {{option.value}}
                                                                                                 </mat-list-option>
@@ -419,7 +419,28 @@
                                                                         </div>
 
                                                                     </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="pvPrice" [(ngModel)]="product_variant.price" min="0" placeholder="Price" required>
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="pvWeight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-list class="w-100-p">
+                                                                                <mat-list-item>
+                                                                                    <input type="file">
+                                                                                </mat-list-item>
+                                                                            </mat-list>
+                                                                        </div>
 
+                                                                    </div>
 
 
                                                                 </mat-card-content>

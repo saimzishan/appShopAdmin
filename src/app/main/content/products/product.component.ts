@@ -1,3 +1,4 @@
+import { NgForm } from "@angular/forms/src/forms";
 import { Contact } from "./../apps/contacts/contact.model";
 import {
   Supplier,
@@ -178,15 +179,15 @@ export class ProductComponent implements OnInit, OnDestroy {
     console.log(this.product.suppliers);
   }
 
-  addSKU(form) {
+  addSKU(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
+    form.resetForm();
     this.supplier.productVariants.push(this.product_variant);
     this.isAddorEditSKU = !this.isAddorEditSKU;
-    console.log(this.supplier.productVariants);
   }
 
   // end
