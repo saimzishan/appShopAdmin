@@ -63,13 +63,14 @@ export class ProductComponent implements OnInit, OnDestroy {
   rule_id = -1;
   disableRequired = false;
   isAddorEditSKU = false;
+  productForm: FormGroup;
+  supplierForm: FormGroup;
 
   onProductChanged: Subscription;
   category = new Category();
   onCategoryChanged: Subscription;
   viewChildren = false;
   pageType: string;
-  productForm: FormGroup;
   dataSource;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   disableSkuAndRuleTab = false;
@@ -100,7 +101,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -161,6 +162,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
+  addAnotherSupplier() {
+    this.product.suppliers.push(this.supplier);
+    this.supplier = new Supplier();
+    this.supplierForm.reset();
+    console.log(this.product.suppliers);
+  }
+
   // end
 
   enableChildren() {
@@ -176,7 +184,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       disableClose: false
     });
     this.confirmDialogRef.componentInstance.confirmMessage =
-      "Are you sure you want to delete?";
+      'Are you sure you want to delete?';
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         const data = this.productForm.getRawValue();
@@ -344,9 +352,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  fileOver(event) {}
+  fileOver(event) { }
 
-  fileLeave(event) {}
+  fileLeave(event) { }
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
@@ -466,16 +474,11 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  addAnotherSupplier() {
-    this.product.suppliers.push(this.supplier);
-    this.supplier = new Supplier();
-    this.disableRequired = true;
-    // document.getElementById("city").required() = false;
-  }
 
-  enableRequired() {
-    this.disableRequired = false;
-  }
+
+  // enableRequired() {
+  //   this.disableRequired = false;
+  // }
 
   getOptionSetName(id) {
     const result = this.optionSets.find(option => option.id === id);
