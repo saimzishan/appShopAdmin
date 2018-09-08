@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { fuseAnimations } from '../../../core/animations';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource ,  } from '@angular/material';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/observable/merge';
@@ -12,27 +12,29 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/observable/fromEvent';
 import { FuseUtils } from '../../../core/fuseUtils';
-import { BrandService } from './brand.service';
-import { BrandsService } from './brands.service';
-import { Brand } from '../models/brand.model';
+import { OptionService } from './option.service';
+import { OptionsService } from './options.service';
+import { Option , OptionValues } from '../models/option.model';
 // import { PeriodicElement } from '../user-management-admin/user-management/user-management.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SpinnerService } from '../../../spinner/spinner.service';
 import { SnotifyService } from 'ng-snotify';
 
+
 @Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'app-brands',
-  templateUrl: './brands.component.html',
-  styleUrls: ['./brands.component.scss'],
+  selector: 'app-options',
+  templateUrl: './options.component.html',
+  styleUrls: ['./options.component.scss'],
   animations: fuseAnimations
 })
-export class BrandsComponent implements OnInit {
+export class OptionsComponent implements OnInit {
   dataSource: any;
-  displayedColumns = ['id', 'name', 'notes', 'image'];
-  selection = new SelectionModel<Brand>(true, []);
-  brands;
+  displayedColumns = ['id', 'option_set', 'option_values'];
+  selection = new SelectionModel<Option>(true, []);
+  options;
+  option_values;
   baseURL = GLOBAL.USER_IMAGE_API;
+  newVal;
 
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
@@ -42,14 +44,14 @@ export class BrandsComponent implements OnInit {
   sort: MatSort;
 
   constructor(
-    private brandsService: BrandsService,
+    private optionsService: OptionsService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {}
 
   ngOnInit() {
-    this.getBrands();
-    // this.dataSource = new FilesDataSource(this.brandsService, this.paginator, this.sort);
+    this.getOptions();
+    // this.dataSource = new FilesDataSource(this.optionsService, this.paginator, this.sort);
     // Observable.fromEvent(this.filter.nativeElement, 'keyup')
     //     .debounceTime(150)
     //     .distinctUntilChanged()
@@ -61,17 +63,18 @@ export class BrandsComponent implements OnInit {
     //     });
   }
 
-  getBrands() {
+  getOptions() {
     this.spinnerService.requestInProcess(true);
-    this.brandsService.getBrands().subscribe(
+    this.optionsService.getOptions().subscribe(
       (res: any) => {
-        this.brands = res.res.data;
+        this.options = res.res.data;
+        this.option_values = res.res.data;
         this.setDataSuorce(res.res.data);
         this.spinnerService.requestInProcess(false);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
-        const e = errors.error.message;
+        let e = errors.error.message;
         this.snotifyService.error(e, 'Error !');
         // this.notificationServiceBus.launchNotification(true, e);
       }
@@ -81,6 +84,14 @@ export class BrandsComponent implements OnInit {
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
     this.dataSource.paginator = this.paginator;
+  }
+
+  OptionValuesinDisplayRow(val) {
+    this.newVal = [];
+    val.forEach(element => {
+      this.newVal.push(element.option_value);
+    });
+    this.newVal = this.newVal.toString();
   }
 
   // isAllSelected() {
@@ -118,37 +129,38 @@ export class BrandsComponent implements OnInit {
 //   }
 
 //   constructor(
-//     private brandsService: BrandsService,
+//     private optionsService: OptionsService,
 //     private _paginator: MatPaginator,
 //     private _sort: MatSort
 //   ) {
 //     super();
-//     this.filteredData = this.brandsService.brands;
+//     this.filteredData = this.optionsService.options;
 //   }
 
 //   /** Connect function called by the table to retrieve one stream containing the data to render. */
-//   // connect(): Observable<any[]> {
-//   //   const displayDataChanges = [
-//   //     this.brandsService.onBrandsChanged,
-//   //     this._paginator.page,
-//   //     this._filterChange,
-//   //     this._sort.sortChange
-//   //   ];
+//   connect(): Observable<any[]> {
+//     const displayDataChanges = [
+//       this.optionsService.onOptionsChanged,
+//       this._paginator.page,
+//       this._filterChange,
+//       this._sort.sortChange
+//     ];
 
-//     // return Observable.merge(...displayDataChanges).map(() => {
-//     //   let data = this.brandsService.brands.slice();
+//     return Observable.merge(...displayDataChanges).map(() => {
+//       // console.log(this.optionsService.options);
+//       let data = this.optionsService.options.slice();
 
-//     //   data = this.filterData(data);
+//       data = this.filterData(data);
 
-//     //   this.filteredData = [...data];
+//       this.filteredData = [...data];
 
-//     //   data = this.sortData(data);
+//       data = this.sortData(data);
 
-//     //   // Grab the page's slice of data.
-//     //   const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-//     //   return data.splice(startIndex, this._paginator.pageSize);
-//     // });
-//   //}
+//       // Grab the page's slice of data.
+//       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+//       return data.splice(startIndex, this._paginator.pageSize);
+//     });
+//   }
 
 //   filterData(data) {
 //     if (!this.filter) {

@@ -59,6 +59,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   supplier: Supplier = new Supplier();
   product_variant: ProductVariant = new ProductVariant();
   options: Options = new Options();
+  sku_options: Options[];
   tOptions: Options[] = [];
   option_id = -1;
   option_set_id = [];
@@ -66,13 +67,14 @@ export class ProductComponent implements OnInit, OnDestroy {
   disableRequired = false;
   isAddorEditSKU = false;
   isAddorEditRules: boolean = false;
+  productForm: FormGroup;
+  supplierForm: FormGroup;
 
   onProductChanged: Subscription;
   category = new Category();
   onCategoryChanged: Subscription;
   viewChildren = false;
   pageType: string;
-  productForm: FormGroup;
   dataSource;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   disableSkuAndRuleTab = false;
@@ -116,6 +118,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       product => {
         if (product) {
           this.product = new Product(product);
+          console.log(this.product);
           this.pageType = "edit";
         } else {
           this.pageType = "new";
@@ -159,13 +162,31 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   toogleChild(id) {
-    let temp: any = document.getElementById("ulLi" + id);
+    const temp: any = document.getElementById("ulLi" + id);
     temp.hidden = !temp.hidden;
     // temp = temp[id].children;
     // for (let index = 1; index < temp.length; index++) {
     //   const element = temp[index];
     //   element.hidden = !element.hidden;
     // }
+  }
+
+  addAnotherSupplier() {
+    this.product.suppliers.push(this.supplier);
+    this.supplier = new Supplier();
+    this.supplierForm.reset();
+    console.log(this.product.suppliers);
+  }
+
+  addSKU(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
+    }
+    this.supplier.productVariants.push(this.product_variant);
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+    console.log(this.supplier.productVariants);
   }
 
   // end
@@ -430,16 +451,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.option_id = val.selectedOptions.selected[0].value;
   }
 
-  addAnotherSupplier() {
-    this.product.suppliers.push(this.supplier);
-    this.supplier = new Supplier();
-    this.disableRequired = true;
-    // document.getElementById("city").required() = false;
-  }
-
-  enableRequired() {
-    this.disableRequired = false;
-  }
+  // enableRequired() {
+  //   this.disableRequired = false;
+  // }
 
   getOptionSetName(id) {
     const result = this.optionSets.find(option => option.id === id);

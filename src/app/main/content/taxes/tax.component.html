@@ -1,0 +1,107 @@
+<div id="tax" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/taxes'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">monetization_on</mat-icon>
+
+                <!-- <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+
+                </div> -->
+
+                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+
+                    <div class="h2" *ngIf="pageType ==='new'">
+                        New Tax
+                    </div>
+                    <div class="subtitle secondary-text">
+                        <span>Tax Detail</span>
+                    </div>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="edittaxFormSubmition.click()">
+                <span>ADD</span>
+            </button>
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteTax()">
+                <span>DELETE</span>
+            </button>
+
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="taxFormSubmition.click()">
+
+                <span>SAVE</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="taxForm" #taxForm="ngForm" class="brand w-100-p" fxLayout="column" fxFlex>
+
+                    <!-- <mat-tab-group> -->
+
+                    <!-- <mat-tab label="Details"> -->
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+
+                        <mat-form-field class="w-100-p">
+                            <input matInput name="title" #title="ngModel" [(ngModel)]="tax.title" placeholder="Tax Title" required>
+                        </mat-form-field>
+                        <!-- <span *ngIf="bName.touched && bName.errors?.required" class="error">
+                            <span>Brand Name id required.</span>!
+                        </span> -->
+
+                        <mat-form-field class="w-100-p">
+                            <input matInput (keyup)="checkLength()" type="number" min="0.1" max="99.9" step="0.1" name="value" #value="ngModel" [(ngModel)]="tax.value"
+                                placeholder="Tax Value">
+                        </mat-form-field>
+                        <b class="error" id="length">
+                        </b>
+
+                        <!-- <mat-form-field class="w-100-p"> -->
+
+                        <!-- </mat-form-field> -->
+                        <!-- <mat-form-field class="w-100-p">
+                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
+                                </mat-form-field> -->
+
+                        <!-- <h3 class="mb-0">Categories</h3> -->
+
+                        <!-- <tree-root [nodes]="nodes" [options]="options"></tree-root> -->
+                    </div>
+                    <!-- </mat-tab> -->
+
+
+                    <!-- </mat-tab-group> -->
+                    <input type="button" class="btn btn-primary" hidden #taxFormSubmition (click)="addTax(taxForm)">
+                    <input type="button" class="btn btn-primary" hidden #edittaxFormSubmition (click)="saveTax(taxForm)">
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>
