@@ -394,17 +394,14 @@
                                                                         </div>
                                                                         <div class="col-md-4" style="margin-top: 20px;">
                                                                             <div>
-
                                                                                 <div class="row" *ngFor="let row of option_set_id; let i=index">
                                                                                     <div style="padding: 10px;">
-
                                                                                         <div style="list-style: none; cursor: pointer;">
                                                                                             <button (click)="toogleChild(i)"> {{getOptionSetName(row)}}
                                                                                                 <i class="material-icons">
                                                                                                     add_circle
                                                                                                 </i>
                                                                                             </button>
-
                                                                                             <mat-selection-list id="ulLi{{i}}" hidden>
                                                                                                 <mat-list-option role="listitem" *ngFor="let option of getOptionName(row)">
                                                                                                     {{option.value}}
@@ -412,12 +409,9 @@
                                                                                             </mat-selection-list>
                                                                                         </div>
                                                                                     </div>
-
-
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-md-6">
@@ -499,40 +493,66 @@
                                             <div class="row" *ngIf="isAddorEditRules">
                                                 <div class="col-md-12">
                                                     <div class="well">
-                                                        <form>
+                                                        <form name="ruleForm" #ruleForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
                                                             <mat-card>
                                                                 <mat-card-header>
-                                                                    <mat-card-title>Create a SKU</mat-card-title>
+                                                                    <label for="email">Option Sets</label>
                                                                 </mat-card-header>
                                                                 <mat-card-content>
-
+                                                                    <div class="row">
+                                                                        <div class="col-md-2">
+                                                                        </div>
+                                                                        <div class="col-md-4" style="margin-top: 20px;">
+                                                                            <div>
+                                                                                <div class="row" *ngFor="let row of option_set_id; let i=index">
+                                                                                    <div style="padding: 10px;">
+                                                                                        <div style="list-style: none; cursor: pointer;">
+                                                                                            <button (click)="toogleChild(i)"> {{getOptionSetName(row)}}
+                                                                                                <i class="material-icons">
+                                                                                                    add_circle
+                                                                                                </i>
+                                                                                            </button>
+                                                                                            <mat-selection-list id="ulLi{{i}}" name="options" [(ngModel)]="rule.options" hidden>
+                                                                                                <mat-list-option role="listitem" [value]="option.id" *ngFor="let option of getOptionName(row)">
+                                                                                                    {{option.value}}
+                                                                                                </mat-list-option>
+                                                                                            </mat-selection-list>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </mat-card-content>
+                                                            </mat-card>
+                                                            <mat-card>
+                                                                <mat-card-header>
+                                                                    <mat-card-title>Product Rules</mat-card-title>
+                                                                </mat-card-header>
+                                                                <mat-card-content>
                                                                     <div class="row">
                                                                         <ng-container>
-
                                                                             <div class="col-md-2">
-                                                                                <mat-select placeholder="Set Rule" name="rule_id">
-                                                                                    <mat-option value="-1">None</mat-option>
+                                                                                <mat-select placeholder="Set Rule" [(ngModel)]="rule.set_rule" name="rule_id">
                                                                                     <mat-option value="1">Add</mat-option>
                                                                                     <mat-option value="2">Subtract</mat-option>
                                                                                 </mat-select>
                                                                             </div>
                                                                             <div class="col-md-3">
-                                                                                <mat-select placeholder="Change By" name="rule_id">
+                                                                                <mat-select placeholder="Change By" [(ngModel)]="rule.change_by" name="rule_id">
                                                                                     <mat-option value="1">Percentage</mat-option>
                                                                                     <mat-option value="2">Absolute</mat-option>
                                                                                 </mat-select>
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                <input min="0" class="form-control" type="number" placeholder="Value">
+                                                                                <input min="0" class="form-control" name="value" [(ngModel)]=rule.value type="number" placeholder="Value">
                                                                             </div>
-
                                                                         </ng-container>
                                                                     </div>
-
                                                                 </mat-card-content>
                                                                 <mat-card-actions style="text-align: right;">
                                                                     <button class="btn btn-primary" mat-button (click)="addorEditRULES()">Cancel</button>
-                                                                    <button class="btn btn-info" mat-button>Save & Close</button>
+                                                                    <button class="btn btn-info" (click)="addRules(ruleForm)" mat-button>Save & Close</button>
                                                                 </mat-card-actions>
                                                             </mat-card>
                                                         </form>

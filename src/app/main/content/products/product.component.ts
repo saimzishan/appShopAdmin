@@ -64,12 +64,16 @@ export class ProductComponent implements OnInit, OnDestroy {
   tOptions: Options[] = [];
   option_id = -1;
   option_set_id = [];
+  rule: Rules = new Rules();
+  rules: Rules[] = [];
   rule_id = -1;
   disableRequired = false;
   isAddorEditSKU = false;
-  isAddorEditRules: boolean = false;
+  isAddorEditRules = false;
   productForm: FormGroup;
   supplierForm: FormGroup;
+  skuForm: FormGroup;
+  rulesForm: FormGroup;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -188,6 +192,18 @@ export class ProductComponent implements OnInit, OnDestroy {
     form.resetForm();
     this.supplier.productVariants.push(this.product_variant);
     this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  addRules(form: NgForm) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
+    }
+    this.rules.push(this.rule);
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+    console.log(this.rules);
+    form.resetForm();
   }
 
   // end
@@ -511,4 +527,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
+}
+
+export class Rules {
+  id = -1;
+  options;
+  set_rule = "";
+  change_by = "";
+  value = "";
 }
