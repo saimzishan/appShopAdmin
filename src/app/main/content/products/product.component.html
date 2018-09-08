@@ -342,7 +342,7 @@
                                             <div class="row" *ngIf="isAddorEditSKU">
                                                 <div class="col-md-12">
                                                     <div class="well">
-                                                        <form>
+                                                        <form name="skuForm" #skuForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
                                                             <mat-card>
                                                                 <mat-card-header>
                                                                     <mat-card-title>Create a SKU</mat-card-title>
@@ -352,25 +352,12 @@
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
-                                                                                <input matInput name="SKUas" [(ngModel)]="product_variant.sku" placeholder="SKU">
+                                                                                <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU">
                                                                             </mat-form-field>
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
-                                                                                <input matInput name="UPCas" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN">
-                                                                            </mat-form-field>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-md-6">
-                                                                            <mat-form-field class="w-100-p">
-                                                                                <input matInput name="Depthas" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
-                                                                            </mat-form-field>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <mat-form-field class="w-100-p">
-                                                                                <input matInput name="Weightas" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
+                                                                                <input matInput name="upc" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN">
                                                                             </mat-form-field>
                                                                         </div>
                                                                     </div>
@@ -378,12 +365,25 @@
                                                                     <div class="row">
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
-                                                                                <input matInput name="Widthas" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
+                                                                                <input matInput name="depth" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth">
                                                                             </mat-form-field>
                                                                         </div>
                                                                         <div class="col-md-6">
                                                                             <mat-form-field class="w-100-p">
-                                                                                <input matInput name="Heightas" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
+                                                                                <input matInput name="weight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="width" [(ngModel)]="product_variant.width" min="0" placeholder="Width">
+                                                                            </mat-form-field>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <mat-form-field class="w-100-p">
+                                                                                <input matInput name="height" [(ngModel)]="product_variant.height" min="0" placeholder="Height">
                                                                             </mat-form-field>
                                                                         </div>
                                                                     </div>
@@ -401,11 +401,11 @@
                                                                                         <div style="list-style: none; cursor: pointer;">
                                                                                             <button (click)="toogleChild(i)"> {{getOptionSetName(row)}}
                                                                                                 <i class="material-icons">
-                                                                                                    add_to_queue
+                                                                                                    add_circle
                                                                                                 </i>
                                                                                             </button>
 
-                                                                                            <mat-selection-list id="ulLi{{i}}" hidden>
+                                                                                            <mat-selection-list [(ngModel)]="" id="ulLi{{i}}" hidden>
                                                                                                 <mat-list-option role="listitem" *ngFor="let option of getOptionName(row)">
                                                                                                     {{option.value}}
                                                                                                 </mat-list-option>
@@ -425,7 +425,7 @@
                                                                 </mat-card-content>
                                                                 <mat-card-actions style="text-align: right;">
                                                                     <button class="btn btn-primary" mat-button (click)="addorEditSKU()">Cancel</button>
-                                                                    <button class="btn btn-info" mat-button>Save & Close</button>
+                                                                    <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save & Close</button>
                                                                 </mat-card-actions>
                                                             </mat-card>
                                                         </form>
