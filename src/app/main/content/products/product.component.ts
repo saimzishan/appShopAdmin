@@ -35,7 +35,7 @@ import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dia
 import { Category } from "../models/category.model";
 import { TreeModule } from "ng2-tree";
 import { MatTableDataSource } from "@angular/material";
-import { NgSelectMultipleOption } from "@angular/forms/src/directives";
+import { NgSelectMultipleOption, NgForm } from "@angular/forms/src/directives";
 import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import * as $ from 'jquery';
 import { TreeModel, Ng2TreeSettings } from "ng2-tree";
@@ -63,12 +63,16 @@ export class ProductComponent implements OnInit, OnDestroy {
   tOptions: Options[] = [];
   option_id = -1;
   option_set_id = [];
+  rule: Rules = new Rules();
+  rules: Rules[] = [];
   rule_id = -1;
   disableRequired = false;
   isAddorEditSKU = false;
-  isAddorEditRules: boolean = false;
+  isAddorEditRules = false;
   productForm: FormGroup;
   supplierForm: FormGroup;
+  skuForm: FormGroup;
+  rulesForm: FormGroup;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -105,7 +109,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -119,9 +123,9 @@ export class ProductComponent implements OnInit, OnDestroy {
         if (product) {
           this.product = new Product(product);
           console.log(this.product);
-          this.pageType = "edit";
+          this.pageType = 'edit';
         } else {
-          this.pageType = "new";
+          this.pageType = 'new';
           this.product = new Product();
         }
       }
@@ -181,12 +185,24 @@ export class ProductComponent implements OnInit, OnDestroy {
   addSKU(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning('Please Fill All Fields');
       return;
     }
     this.supplier.productVariants.push(this.product_variant);
     this.isAddorEditSKU = !this.isAddorEditSKU;
     console.log(this.supplier.productVariants);
+  }
+
+  addRules(form: NgForm) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning('Please Fill All Fields');
+      return;
+    }
+    this.rules.push(this.rule);
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+    console.log(this.rules);
+    form.resetForm();
   }
 
   // end
@@ -372,9 +388,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  fileOver(event) {}
+  fileOver(event) { }
 
-  fileLeave(event) {}
+  fileLeave(event) { }
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
@@ -510,4 +526,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
+}
+
+export class Rules {
+  id = -1;
+  options;
+  set_rule = '';
+  change_by = '';
+  value = '';
 }
