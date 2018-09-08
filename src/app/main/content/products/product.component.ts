@@ -65,6 +65,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   rule_id = -1;
   disableRequired = false;
   isAddorEditSKU = false;
+  isAddorEditRules: boolean = false;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -151,6 +152,10 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   addorEditSKU() {
     this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  addorEditRULES() {
+    this.isAddorEditRules = !this.isAddorEditRules;
   }
 
   toogleChild(id) {

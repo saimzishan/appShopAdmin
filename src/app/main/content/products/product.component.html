@@ -372,12 +372,82 @@
                                         </div>
                                         <div *ngIf="rulesTab" [ngClass]="{'show active' : rulesTab}" class="tab-pane fade" id="v-pills-messages" role="tabpanel"
                                             aria-labelledby="v-pills-messages-tab">
-                                            <p>rule</p>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="well" style="background-color: #FBFBFC; border: 1px solid; border-color: #DDE1E6">
+                                                        <button mat-raised-button color="accent" disabled="{{isAddorEditRules}}" (click)="addorEditRULES()">
+                                                            Create Rule
+                                                        </button>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" *ngIf="isAddorEditRules">
+                                                <div class="col-md-12">
+                                                    <div class="well">
+                                                        <form>
+                                                            <mat-card>
+                                                                <mat-card-header>
+                                                                    <mat-card-title>Create a SKU</mat-card-title>
+                                                                </mat-card-header>
+                                                                <mat-card-content>
 
-                                            <br>
-                                            <br>
-                                            <br>
+                                                                    <div class="row">
+                                                                        <ng-container>
+
+                                                                            <div class="col-md-2">
+                                                                                <mat-select placeholder="Set Rule" name="rule_id">
+                                                                                    <mat-option value="-1">None</mat-option>
+                                                                                    <mat-option value="1">Add</mat-option>
+                                                                                    <mat-option value="2">Subtract</mat-option>
+                                                                                </mat-select>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <mat-select placeholder="Change By" name="rule_id">
+                                                                                    <mat-option value="1">Percentage</mat-option>
+                                                                                    <mat-option value="2">Absolute</mat-option>
+                                                                                </mat-select>
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <input min="0" class="form-control" type="number" placeholder="Value">
+                                                                            </div>
+
+                                                                        </ng-container>
+                                                                    </div>
+
+                                                                </mat-card-content>
+                                                                <mat-card-actions style="text-align: right;">
+                                                                    <button class="btn btn-primary" mat-button (click)="addorEditRULES()">Cancel</button>
+                                                                    <button class="btn btn-info" mat-button>Save & Close</button>
+                                                                </mat-card-actions>
+                                                            </mat-card>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" *ngIf="!isAddorEditRules">
+                                                <div class="col-md-12">
+                                                    <div class="well">
+                                                        <table class="table table-bordered">
+                                                            <thead style="background-color: #FBFBFC">
+                                                                <tr>
+
+                                                                    <th scope="col">
+                                                                        When Selected
+                                                                    </th>
+                                                                    <th scope="col">Set Rule</th>
+                                                                    <th scope="col">Enabled</th>
+                                                                    <th scope="col">Rule Options</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
