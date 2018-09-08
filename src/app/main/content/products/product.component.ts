@@ -59,9 +59,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   options: Options = new Options();
   tOptions: Options[] = [];
   option_id = -1;
-  option_set_id = -1;
+  option_set_id = [];
   rule_id = -1;
   disableRequired = false;
+  isAddorEditSKU = false;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -73,6 +74,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   disableSkuAndRuleTab = false;
   dialogRef: any;
+
+  enableOptionTable = false;
 
   files: UploadFile[] = [];
   nodes: any;
@@ -97,7 +100,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     // Subscribe to update product on changes
@@ -142,6 +145,23 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  // start
+
+  addorEditSKU() {
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  toogleChild(id, event) {
+    let temp = document.getElementsByTagName("ul");
+    temp = temp[id].children;
+    for (let index = 1; index < temp.length; index++) {
+      const element = temp[index];
+      element.hidden = !element.hidden;
+    }
+  }
+
+  // end
 
   enableChildren() {
     this.viewChildren = true;
@@ -324,18 +344,20 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  fileOver(event) { }
+  fileOver(event) {}
 
-  fileLeave(event) { }
+  fileLeave(event) {}
   checkMyOptions(val) {
     const result = this.optionSets.find(option => option.id === val);
     if (result !== undefined) {
       this.setDataSuorce(result.options);
       this.option_set.id = result.id;
       this.disableSkuAndRuleTab = true;
+      this.enableOptionTable = true;
     } else {
       this.dataSource = [];
       this.disableSkuAndRuleTab = false;
+      this.enableOptionTable = false;
     }
   }
 
@@ -428,7 +450,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant.weight === undefined ||
         this.product_variant.width === undefined
       ) {
-        this.snotifyService.warning('Please add all fields !');
+        this.snotifyService.warning("Please add all fields !");
         return;
       }
       if (this.tOptions.length > 0) {
@@ -437,7 +459,9 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.product_variant = new ProductVariant();
         this.tOptions = [];
       } else {
-        this.snotifyService.warning('Please add option set and option before !');
+        this.snotifyService.warning(
+          "Please add option set and option before !"
+        );
       }
     }
   }
@@ -459,14 +483,11 @@ export class ProductComponent implements OnInit, OnDestroy {
       return result.name;
     }
   }
-  getOptionName(id, pid) {
-    const res = this.optionSets.find(option => option.id === pid);
+  getOptionName(id) {
+    const res = this.optionSets.find(option => option.id === id);
     if (res) {
       // console.log(res);
-      const result = res.options.find(option => option.id === id);
-      if (result) {
-        return result.value;
-      }
+      return res.options;
     }
   }
 
