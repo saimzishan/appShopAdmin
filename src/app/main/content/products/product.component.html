@@ -402,8 +402,8 @@
                                                                                                     add_circle
                                                                                                 </i>
                                                                                             </button>
-                                                                                            <mat-selection-list id="ulLi{{i}}" hidden>
-                                                                                                <mat-list-option role="listitem" *ngFor="let option of getOptionName(row)">
+                                                                                            <mat-selection-list id="ulLi{{i}}" hidden (ngModelChange)="onOptionsNgModelChange($event, i)">
+                                                                                                <mat-list-option *ngFor="let option of getOptionName(row)" [value]="option.id">
                                                                                                     {{option.value}}
                                                                                                 </mat-list-option>
                                                                                             </mat-selection-list>
@@ -419,11 +419,7 @@
                                                                                 <input matInput name="pvPrice" [(ngModel)]="product_variant.price" min="0" placeholder="Price" required>
                                                                             </mat-form-field>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <mat-form-field class="w-100-p">
-                                                                                <input matInput name="pvWeight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight">
-                                                                            </mat-form-field>
-                                                                        </div>
+
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-md-6">
@@ -458,15 +454,26 @@
                                                                         Image
                                                                     </th>
                                                                     <th scope="col">SKU</th>
-                                                                    <th scope="col">UPC</th>
-                                                                    <th scope="col">EAN</th>
+                                                                    <th scope="col">UPC/EAN</th>
+                                                                    <th scope="col">Price</th>
                                                                     <th scope="col">Weight</th>
                                                                     <th scope="col">Width</th>
                                                                     <th scope="col">Height</th>
                                                                     <th scope="col">Depth</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody></tbody>
+                                                            <tbody>
+                                                                <tr *ngFor="let row of productVariant">
+                                                                    <td></td>
+                                                                    <td>{{row.sku}}</td>
+                                                                    <td>{{row.upc}}</td>
+                                                                    <td>{{row.price}}</td>
+                                                                    <td>{{row.weight}}</td>
+                                                                    <td>{{row.width}}</td>
+                                                                    <td>{{row.height}}</td>
+                                                                    <td>{{row.depth}}</td>
+                                                                </tr>
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </div>

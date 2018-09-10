@@ -58,6 +58,8 @@ declare var $: any;
 export class ProductComponent implements OnInit, OnDestroy {
   product = new Product();
   supplier: Supplier = new Supplier();
+  suppliers: Supplier[] = new Array<Supplier>();
+  productVariant: ProductVariant[] = new Array<ProductVariant>();
   product_variant: ProductVariant = new ProductVariant();
   options: Options = new Options();
   sku_options: Options[];
@@ -90,7 +92,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   files: UploadFile[] = [];
   nodes: any;
 
-  suppliers: Supplier;
   brands;
   taxes;
   optionSets;
@@ -123,7 +124,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       product => {
         if (product) {
           this.product = new Product(product);
-          console.log(this.product);
           this.pageType = "edit";
         } else {
           this.pageType = "new";
@@ -169,18 +169,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   toogleChild(id) {
     const temp: any = document.getElementById("ulLi" + id);
     temp.hidden = !temp.hidden;
-    // temp = temp[id].children;
-    // for (let index = 1; index < temp.length; index++) {
-    //   const element = temp[index];
-    //   element.hidden = !element.hidden;
-    // }
   }
 
   addAnotherSupplier() {
-    this.product.suppliers.push(this.supplier);
+    this.suppliers.push(this.supplier);
     this.supplier = new Supplier();
     this.supplierForm.reset();
-    console.log(this.product.suppliers);
   }
 
   addSKU(form: NgForm) {
@@ -189,9 +183,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-    form.resetForm();
-    this.supplier.productVariants.push(this.product_variant);
+    this.productVariant.push(new ProductVariant(this.product_variant));
     this.isAddorEditSKU = !this.isAddorEditSKU;
+    form.resetForm();
   }
 
   addRules(form: NgForm) {
@@ -205,6 +199,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     console.log(this.rules);
     form.resetForm();
   }
+
+  onOptionsNgModelChange(event, pId) {}
 
   // end
 
