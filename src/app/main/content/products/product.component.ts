@@ -41,6 +41,7 @@ import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component"
 // import * as $ from 'jquery';
 import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
+import _ = require("lodash");
 const treeSettings: Ng2TreeSettings = {
   rootIsVisible: false
 };
@@ -196,11 +197,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
     this.rules.push(this.rule);
     this.isAddorEditSKU = !this.isAddorEditSKU;
-    console.log(this.rules);
     form.resetForm();
   }
 
   onOptionsNgModelChange(event, pId) {}
+  removeOptionSet(id) {
+    this.option_set_id = _.without(this.option_set_id, id);
+  }
 
   // end
 
