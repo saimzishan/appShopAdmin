@@ -80,7 +80,8 @@
                          required>
                 </mat-form-field>
                 <mat-label>Parent Category</mat-label>
-                <tree-root #tree [options]="options" [nodes]="nodes" (activate)="activeNodes(tree.treeModel)"></tree-root>
+                <!--<tree-root class="expand-tree" #tree [options]="options" [nodes]="nodes" (activate)="activeNodes(tree.treeModel)"></tree-root>-->
+                <tree-root class="expand-tree" #tree [options]="options" [nodes]="nodes" (activate)="activeNodes(tree.treeModel)"></tree-root>
 
 
                 <mat-form-field class="w-100-p">

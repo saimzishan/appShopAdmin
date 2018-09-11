@@ -42,6 +42,8 @@ import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component"
 import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
 import _ = require("lodash");
+import { Rules } from "../models/rule.model";
+
 const treeSettings: Ng2TreeSettings = {
   rootIsVisible: false
 };
@@ -77,6 +79,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   supplierForm: FormGroup;
   skuForm: FormGroup;
   rulesForm: FormGroup;
+  selection_value;
+  enableMultipleSelection = false;
 
   onProductChanged: Subscription;
   category = new Category();
@@ -195,14 +199,28 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    this.rules.push(this.rule);
+    this.rules.push(new Rules(this.rule));
     this.isAddorEditSKU = !this.isAddorEditSKU;
     form.resetForm();
   }
 
-  onOptionsNgModelChange(event, pId) {}
   removeOptionSet(id) {
     this.option_set_id = _.without(this.option_set_id, id);
+  }
+  handleSelection(event) {
+    if (event.option.selected) {
+      event.source.deselectAll();
+      event.option._setSelected(true);
+    }
+  }
+
+  changeSelection() {
+    if (this.selection_value === "1") {
+      this.enableMultipleSelection = false;
+    } else {
+      this.enableMultipleSelection = true;
+    }
+    console.log(this.enableMultipleSelection);
   }
 
   // end
@@ -457,14 +475,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.product.category_id = cId;
     }
   }
-  handleSelection(event) {
-    if (event.option.selected) {
-      event.source.deselectAll();
-      event.option._setSelected(true);
-    }
-  }
+
   setSelection(val) {
-    this.option_id = val.selectedOptions.selected[0].value;
+    // this.option_id = val.selectedOptions.selected[0].value;
   }
 
   // enableRequired() {
@@ -526,12 +539,4 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
   }
-}
-
-export class Rules {
-  id = -1;
-  options;
-  set_rule = "";
-  change_by = "";
-  value = "";
 }

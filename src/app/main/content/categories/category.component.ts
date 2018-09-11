@@ -127,8 +127,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
   createSupplierForm() {
     return this.formBuilder.group({
       id: [this.category.id],
-      name: [this.category.name]
-      // parentName      : [this.category.parentName],
+      name: [this.category.name],
+      parentName      : [''],
       /*email         : [this.supplier.contact.email],
       no              : [this.supplier.contact.no],
       street          : [this.supplier.contact.street],
