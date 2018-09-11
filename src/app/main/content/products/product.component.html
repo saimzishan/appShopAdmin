@@ -271,6 +271,9 @@
                                                                     Option set
                                                                 </th>
                                                                 <th scope="col">
+                                                                    Type
+                                                                </th>
+                                                                <th scope="col">
                                                                     Option value Rules
                                                                 </th>
 
@@ -284,10 +287,27 @@
                                                                     {{getOptionSetName(row)}}
                                                                 </td>
                                                                 <td>
-                                                                    <div class="row" *ngFor="let option of getOptionName(row); let i=index">
-                                                                        <ng-container>
-                                                                            <div class="col-md-3">
-                                                                                <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                    <mat-select (change)="changeSelection()" placeholder="Single" [(ngModel)]="selection_value">
+                                                                        <mat-option value="1" selected="true">Single</mat-option>
+                                                                        <mat-option value="2">Multiple</mat-option>
+                                                                    </mat-select>
+                                                                </td>
+                                                                <td>
+                                                                    <ng-container *ngFor="let option of getOptionName(row); let i=index">
+                                                                        <div class="row">
+                                                                            <div class="col-md-3" *ngIf="!enableMultipleSelection">
+                                                                                <mat-selection-list name="option_id" #option_val (selectionChange)="handleSelection($event)">
+                                                                                    <mat-list-option style="margin-top: -20px" (click)="setSelection(option_val)" class="row" [value]="option.id">
+                                                                                        {{option.value}}
+                                                                                    </mat-list-option>
+                                                                                </mat-selection-list>
+                                                                            </div>
+                                                                            <div class="col-md-3" *ngIf="enableMultipleSelection">
+                                                                                <mat-selection-list name="option_id" #option_val>
+                                                                                    <mat-list-option style="margin-top: -20px" (click)="setSelection(option_val)" [value]="option.id">
+                                                                                        {{option.value}}
+                                                                                    </mat-list-option>
+                                                                                </mat-selection-list>
                                                                             </div>
                                                                             <div class="col-md-2">
                                                                                 <mat-select placeholder="Set Rule" name="rule_id">
@@ -308,14 +328,41 @@
                                                                             <div class="col-md-2" style="padding-left: 10px;">
                                                                                 <button class="btn btn-primary">Save</button>
                                                                             </div>
-                                                                        </ng-container>
+                                                                        </div>
 
-                                                                    </div>
+                                                                    </ng-container>
 
 
 
+                                                                    <!-- <ng-container *ngIf="enableMultipleSelection">
+                                                                        <div class="row" *ngFor="let option of getOptionName(row); let i=index">
+                                                                            <ng-container>
+                                                                                <div class="col-md-3">
+                                                                                    <mat-checkbox name="optionVal{{i}}">{{option.value}}</mat-checkbox>
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    <mat-select placeholder="Set Rule" name="rule_id">
+                                                                                        <mat-option value="-1">None</mat-option>
+                                                                                        <mat-option value="1">Add</mat-option>
+                                                                                        <mat-option value="2">Subtract</mat-option>
+                                                                                    </mat-select>
+                                                                                </div>
+                                                                                <div class="col-md-3">
+                                                                                    <mat-select placeholder="Change By" name="rule_id">
+                                                                                        <mat-option value="1">Percentage</mat-option>
+                                                                                        <mat-option value="2">Absolute</mat-option>
+                                                                                    </mat-select>
+                                                                                </div>
+                                                                                <div class="col-md-2">
+                                                                                    <input min="0" class="form-control" type="number" placeholder="Value">
+                                                                                </div>
+                                                                                <div class="col-md-2" style="padding-left: 10px;">
+                                                                                    <button class="btn btn-primary">Save</button>
+                                                                                </div>
+                                                                            </ng-container>
+                                                                        </div>
+                                                                    </ng-container> -->
                                                                 </td>
-
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -436,7 +483,8 @@
                                                                 </mat-card-content>
                                                                 <mat-card-actions style="text-align: right;">
                                                                     <button class="btn btn-primary" mat-button (click)="addorEditSKU()">Cancel</button>
-                                                                    <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save & Close</button>
+                                                                    <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save
+                                                                        & Close</button>
                                                                 </mat-card-actions>
                                                             </mat-card>
                                                         </form>
@@ -552,14 +600,15 @@
                                                                                 </mat-select>
                                                                             </div>
                                                                             <div class="col-md-2">
-                                                                                <input min="0" class="form-control" name="value" [(ngModel)]=rule.value type="number" placeholder="Value">
+                                                                                <input min="0" class="form-control" name="value" [(ngModel)]="rule.value" type="number" placeholder="Value">
                                                                             </div>
                                                                         </ng-container>
                                                                     </div>
                                                                 </mat-card-content>
                                                                 <mat-card-actions style="text-align: right;">
                                                                     <button class="btn btn-primary" mat-button (click)="addorEditRULES()">Cancel</button>
-                                                                    <button class="btn btn-info" (click)="addRules(ruleForm)" mat-button>Save & Close</button>
+                                                                    <button class="btn btn-info" (click)="addRules(ruleForm)" mat-button>Save
+                                                                        & Close</button>
                                                                 </mat-card-actions>
                                                             </mat-card>
                                                         </form>
@@ -583,7 +632,11 @@
 
                                                                 </tr>
                                                             </thead>
-                                                            <tbody></tbody>
+                                                            <tbody>
+                                                                <tr *ngFor="let r of rules">
+                                                                    <td></td>
+                                                                </tr>
+                                                            </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
