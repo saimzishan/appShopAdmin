@@ -8,7 +8,8 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -17,17 +18,6 @@
       </div>
       <!-- / APP TITLE -->
 
-      <!-- SEARCH -->
-      <!--<div class="search-input-wrapper mx-12 m-md-0"
-           fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-        <label for="search" class="mr-8">
-          <mat-icon class="secondary-text">search</mat-icon>
-        </label>
-        <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-          <input id="search" matInput #filter placeholder="Search">
-        </mat-form-field>
-      </div>-->
-      <!-- / SEARCH -->
 
       <button mat-raised-button [routerLink]="'/categories/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
         <span>ADD NEW CATEGORY</span>
@@ -38,117 +28,74 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-      <mat-card>
-        <tree-root class="expand-tree" #tree [options]="options" [nodes]="nodes"></tree-root>
+      <mat-card fusePerfectScrollbar>
+        <!-- <tree-root class="expand-tree" #tree [options]="options" [nodes]="nodes"></tree-root> -->
+
+        <!-- <div class="example-container mat-elevation-z8">
+          <div class="row" style="border: 1px solid; margin-left: 0px; padding: 10px; background-color: #C1C1C1; margin-right: 0px;">
+            <div class="col-md-2 col-border">Category Name</div>
+            <div class="col-md-4 col-border">Notes</div>
+            <div class="col-md-6"></div>
+          </div>
+          <ng-container *ngFor="let category of categories">
+            <div class="row" style="border-bottom: 1px solid; margin-left: 0px; padding: 10px; margin-right: 0px;">
+
+              <div class="col-md-2 col-border">{{category.name}}</div>
+              <div class="col-md-4 col-border">{{category.notes}}</div>
+              <div class="col-md-6">
+
+              </div>
+
+
+            </div>
+            <div *ngIf="category.children.length > 0" style="cursor: pointer">
+              <i class="material-icons" (click)="show(category.id)">
+                add_circle
+              </i>
+              <ng-container *ngFor="let child of categoryChildren" >
+                <div class="row" style="border-bottom: 1px solid; margin-left: 0px; padding: 10px; margin-right: 0px;">
+                  <div class="col-md-2 col-border">{{child.name}}</div>
+                  <div class="col-md-6 col-border">{{child.notes}}</div>
+                  <div class="col-md-2"></div>
+                </div>
+              </ng-container>
+
+            </div>
+          </ng-container>
+
+        </div> -->
+        <ng-container *ngFor="let category of categories">
+          <mat-accordion>
+            <mat-expansion-panel (opened)="show(category.id)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{category.name}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{category.notes}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <ng-container *ngFor="let child of categoryChildren">
+                <mat-accordion>
+                  <mat-expansion-panel (opened)="show(category.id)">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{child.name}}
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        {{child.notes}}
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </ng-container>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
       </mat-card>
 
-      <!--<mat-table class="products-table"
-                 #table [dataSource]="dataSource"
-                 matSort
-                 [@animateStagger]="{value:'50'}"
-                 fusePerfectScrollbar>
 
-        &lt;!&ndash; ID Column &ndash;&gt;
-        <ng-container cdkColumnDef="id">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
-            <p class="text-truncate">{{supplier.id}}</p>
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Image Column &ndash;&gt;
-        <ng-container cdkColumnDef="image">
-          <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
-            <img class="supplier"
-                 *ngIf="supplier.contact.profile_image" [alt]="supplier.name"
-                 [src]="supplier.contact.profile_image"/>
-            <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Name Column &ndash;&gt;
-        <ng-container cdkColumnDef="name">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
-            <p class="text-truncate">{{supplier.name}}</p>
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Category Column &ndash;&gt;
-        &lt;!&ndash;<ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-md>
-            <p class="category text-truncate">
-              {{supplier.categories[0]}}
-            </p>
-          </mat-cell>
-        </ng-container>&ndash;&gt;
-        <ng-container cdkColumnDef="email">
-          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Email</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-md>
-            <p class="category text-truncate">
-              {{supplier.contact.email}}
-            </p>
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Price Column &ndash;&gt;
-        &lt;!&ndash;<ng-container cdkColumnDef="price">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <p class="price text-truncate">
-              {{supplier.priceTaxIncl | currency:'USD':'symbol'}}
-            </p>
-          </mat-cell>
-        </ng-container>&ndash;&gt;
-        <ng-container cdkColumnDef="phone">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Phone</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <p class="price text-truncate">
-              {{supplier.contact.ph_landline1}}
-            </p>
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Quantity Column &ndash;&gt;
-        <ng-container cdkColumnDef="address">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Address</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-sm>
-
-            <p>
-              {{supplier.contact.no}}, {{supplier.contact.street}}, {{supplier.contact.city}}, {{supplier.contact.country}}
-            </p>
-
-          </mat-cell>
-        </ng-container>
-
-        &lt;!&ndash; Active Column &ndash;&gt;
-        <ng-container cdkColumnDef="action">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <mat-icon class="active-icon mat-green-600-bg">edit</mat-icon>
-            &lt;!&ndash;<mat-icon *ngIf="supplier.active" class="active-icon mat-green-600-bg s-16">check</mat-icon>
-            <mat-icon *ngIf="!supplier.active" class="active-icon mat-red-500-bg s-16">close</mat-icon>&ndash;&gt;
-          </mat-cell>
-        </ng-container>
-
-        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-
-        <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
-                 class="product"
-                 matRipple
-                 [routerLink]="'/suppliers/'+supplier.id">
-        </mat-row>
-
-      </mat-table>
-
-      <mat-paginator #paginator
-                     [length]="dataSource.filteredData.length"
-                     [pageIndex]="0"
-                     [pageSize]="10"
-                     [pageSizeOptions]="[5, 10, 25, 100]">
-      </mat-paginator>-->
 
     </div>
     <!-- / CONTENT CARD -->
