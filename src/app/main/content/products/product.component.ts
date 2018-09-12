@@ -67,7 +67,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   options: Options = new Options();
   sku_options: Options[];
   tOptions: Options[] = [];
-  option_id = -1;
+  option_id = [];
   option_set_id = [];
   rule: Rules = new Rules();
   rules: Rules[] = [];
@@ -79,7 +79,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   supplierForm: FormGroup;
   skuForm: FormGroup;
   rulesForm: FormGroup;
-  selection_value;
+  selection_value = "1";
   enableMultipleSelection = false;
 
   onProductChanged: Subscription;
@@ -207,22 +207,22 @@ export class ProductComponent implements OnInit, OnDestroy {
   removeOptionSet(id) {
     this.option_set_id = _.without(this.option_set_id, id);
   }
-  handleSelection(event) {
-    if (event.option.selected) {
-      event.source.deselectAll();
-      event.option._setSelected(true);
+  handleSelection(event, value) {
+    // if (value === "1" || value === undefined) {
+    //   if (event.option.selected) {
+    //     event.source.deselectAll();
+    //     event.option._setSelected(true);
+    //   }
+    // }
+  }
+  saveOption(pId, type, options: []) {
+    if (type === undefined || options.length === 0) {
+      this.snotifyService.warning(
+        "Please Select option type and  option value"
+      );
+      return;
     }
   }
-
-  changeSelection() {
-    if (this.selection_value === "1") {
-      this.enableMultipleSelection = false;
-    } else {
-      this.enableMultipleSelection = true;
-    }
-    console.log(this.enableMultipleSelection);
-  }
-
   // end
 
   enableChildren() {
