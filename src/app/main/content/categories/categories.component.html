@@ -64,35 +64,18 @@
           </ng-container>
 
         </div> -->
-        <ng-container *ngFor="let category of categories">
-          <mat-accordion>
-            <mat-expansion-panel (opened)="show(category.id)">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{category.name}}
-                </mat-panel-title>
-                <mat-panel-description>
-                  {{category.notes}}
-                </mat-panel-description>
-              </mat-expansion-panel-header>
+        <div class="example-container mat-elevation-z8">
+          <div class="row" style="border: 1px solid; margin-left: 0px; padding: 10px; background-color: #C1C1C1; margin-right: 0px;">
+            <div class="col-md-3 col-border">Category Name</div>
+            <div class="col-md-3 col-border">Notes</div>
+            <div class="col-md-3 col-border">Sub Categories</div>
+          </div>
+          <ng-container *ngFor="let category of categories">
+            <category-child [category]='category'>
 
-              <ng-container *ngFor="let child of categoryChildren">
-                <mat-accordion>
-                  <mat-expansion-panel (opened)="show(category.id)">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        {{child.name}}
-                      </mat-panel-title>
-                      <mat-panel-description>
-                        {{child.notes}}
-                      </mat-panel-description>
-                    </mat-expansion-panel-header>
-                  </mat-expansion-panel>
-                </mat-accordion>
-              </ng-container>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </ng-container>
+            </category-child>
+          </ng-container>
+        </div>
       </mat-card>
 
 

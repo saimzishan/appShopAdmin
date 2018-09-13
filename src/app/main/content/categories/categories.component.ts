@@ -1,3 +1,4 @@
+import { Category } from "./../models/category.model";
 import { SnotifyService } from "ng-snotify";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { CategoriesService } from "./categories.service";
@@ -52,8 +53,8 @@ export class CategoriesComponent implements OnInit {
       name: "child2"
     }
   ];
-  categories: any;
-  categoryChildren: any;
+  categories: Array<Category> = new Array<Category>();
+  categoryChildren: Category;
 
   constructor(
     private categoriesService: CategoriesService,

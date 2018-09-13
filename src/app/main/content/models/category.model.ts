@@ -4,13 +4,13 @@ export class Category {
   value = "";
   parent_id: number;
   notes = "";
-  children: Category[];
+  children: Array<Category> = new Array<Category>();
 
   constructor(category?) {
     category = category || {};
     this.id = category.id || -1;
     this.name = category.name || "";
     this.value = category.name || "";
-    this.parent_id = category.parentName || "";
+    this.parent_id = category.parent_id || -1;
   }
 }

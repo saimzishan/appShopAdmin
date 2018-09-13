@@ -215,7 +215,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     //   }
     // }
   }
-  saveOption(pId, type, options: []) {
+  saveOption(pId, type, options) {
     if (type === undefined || options.length === 0) {
       this.snotifyService.warning(
         "Please Select option type and  option value"
