@@ -1,3 +1,5 @@
+import { GLOBAL } from "./../../../shared/globel";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
@@ -31,7 +33,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   category = new Category();
   supplier = new Supplier();
   onSupplierChanged: Subscription;
-  pageType: string;
+  pageType: boolean;
   categoryForm: FormGroup;
   private sub: Subscription;
 
@@ -69,23 +71,32 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private route: ActivatedRoute,
-    private router: Router
-  ) {
-    router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.pageType = event.url.split("/")[2].toString();
-        if (this.pageType !== "new") {
-          this.pageType = "edit";
-        }
-      }
-    });
-  }
+    private router: Router,
+    protected http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.index();
     this.categoryForm = this.createcategoryForm();
   }
 
+  checkPageType(): boolean {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        let pageType: any = event.url.split("/");
+
+        if (pageType.length > 2) {
+          pageType = pageType[2].toString();
+          if (pageType !== "new") {
+            this.pageType = false;
+          } else {
+            this.pageType = true;
+          }
+        }
+      }
+    });
+    return this.pageType;
+  }
   addNode(tree: any) {
     // console.log(tree);
     const data = this.categoryForm.getRawValue();
@@ -106,9 +117,23 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   getChildren(node: any) {
-    this.show(node.data.my_id);
     return new Promise((resolve, reject) => {
-      setTimeout(() => resolve(this.newNodes), 4000);
+      this.spinnerService.requestInProcess(true);
+      const httpOptions = {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      };
+      this.http
+        .get(GLOBAL.USER_API + "categories/" + node.data.my_id, httpOptions)
+        .subscribe((response: any) => {
+          if (!response.error) {
+            resolve(this.createNode(response.data));
+          } else {
+            this.snotifyService.error(response.error);
+          }
+          this.spinnerService.requestInProcess(false);
+        }, reject);
     });
   }
   createNode(obj) {

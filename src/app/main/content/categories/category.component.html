@@ -38,7 +38,7 @@
       <!-- / APP TITLE -->
 
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="categoryForm.invalid"
-        *ngIf="pageType ==='new'" (click)="store()">
+        *ngIf="!checkPageType()" (click)="store()">
         <span>ADD</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
@@ -46,7 +46,7 @@
         <span>Delete</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="categoryForm.invalid || categoryForm.pristine"
-        *ngIf="pageType ==='edit'" (click)="store()">
+        *ngIf="checkPageType()" (click)="store()">
         <span>SAVE</span>
       </button>
     </div>
@@ -66,20 +66,20 @@
           <div class="tab-content p-24" fusePerfectScrollbar>
 
             <mat-form-field class="w-100-p">
-              <mat-label>Name</mat-label>
+              <mat-label>Category Name</mat-label>
               <input matInput name="name" formControlName="name" placeholder="Category Name" required>
             </mat-form-field>
             <mat-label>Parent Category</mat-label>
             <tree-root class="expand-tree" #tree [options]="options" [nodes]="nodes" (activate)="activeNodes(tree.treeModel)"></tree-root>
 
             <mat-form-field class="w-100-p">
-              <mat-label>Parent Category Name</mat-label>
-              <input matInput name="parentName" formControlName="parentName" placeholder="Parent Name" value="{{parentCat}}" />
+              <mat-label>Select Parent Category Above</mat-label>
+              <input matInput name="parentName" readonly formControlName="parentName" placeholder="Parent Name" value="{{parentCat}}" />
             </mat-form-field>
 
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" (click)="addNode(tree.treeModel)">
+            <!-- <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" (click)="addNode(tree.treeModel)">
               <span>ADD</span>
-            </button>
+            </button> -->
 
           </div>
           <!--</mat-tab>

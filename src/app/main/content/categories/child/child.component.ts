@@ -40,14 +40,14 @@ import { CategoriesService } from "../categories.service";
 export class CategoryChildComponent implements OnInit {
   @Input()
   category: Category;
-  categoryChildren: Category;
+  categoryChildren: any;
 
   constructor(
     private categoriesService: CategoriesService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {
-    this.categoryChildren = new Category();
+    this.categoryChildren = [];
   }
   ngOnInit() {}
   hasChild(category: Category): boolean {
