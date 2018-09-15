@@ -1,0 +1,183 @@
+<form name="supplierForm" #supplierForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+    <div class="tab-content p-24" fusePerfectScrollbar>
+        <mat-card>
+            <legend style="padding: 10px">
+                <h2>Product Details</h2>
+            </legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input matInput required #name="ngModel" name="name" [(ngModel)]="product.name" placeholder="Product Name">
+                    </mat-form-field>
+                    <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
+                        <span>Product name is required.</span>!</span>
+
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
+                            <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                {{brand.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
+                        <span>Please Select a brand.</span>!</span>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <textarea matInput #long_description="ngModel" name="long_description" rows="3" [(ngModel)]="product.long_description"
+                            placeholder="Product Long Description"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <textarea required matInput #short_description="ngModel" name="short_description" rows="3"
+                            [(ngModel)]="product.short_description" placeholder="Product Short Description"></textarea>
+                    </mat-form-field>
+                    <span *ngIf="short_description.touched && short_description.errors?.required;" class="inline-icon error">
+                        <span>Short description is required.</span>!</span>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <ng-container *ngIf="tree">
+                        <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes"
+                            (activate)="activeNodes(tree.treeModel)"></tree-root>
+
+                    </ng-container>
+
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id"
+                            required>
+                            <mat-option *ngFor="let brand of brands" [value]="brand.id">
+                                {{brand.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
+                        <span>Please Select taxes.</span>!</span>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6" fusePerfectScrollbar>
+                    <mat-form-field class="w-25-p">
+                        <mat-label>Select Category Above</mat-label>
+                        <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+
+
+    <div class="tab-content p-24" fusePerfectScrollbar>
+        <mat-card>
+            <legend style="padding: 10px">
+                <h2>Supplier Details</h2>
+            </legend>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id"
+                            required>
+                            <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                                {{supplier.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
+                        <span>Please Select a Supplier.</span>!</span>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price"
+                            required>
+                    </mat-form-field>
+                    <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
+                        <span>Price is required.</span>!</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU"
+                            [required]="!disableRequired">
+                    </mat-form-field>
+                    <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
+                        <span>SKU is required.</span>!</span>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc"
+                            [required]="!ean.valid">
+                    </mat-form-field>
+                    <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
+                        <span>UPC is required.</span>!</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean"
+                            [required]="!upc.valid">
+                    </mat-form-field>
+                    <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
+                        <span>EAN is required.</span>!</span>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width"
+                            placeholder="Width (Centimeters)" required>
+                    </mat-form-field>
+                    <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
+                        <span>Width is required.</span>!</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight"
+                            placeholder="Weight (kg)" required>
+                    </mat-form-field>
+                    <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
+                        <span>Weight is required.</span>!</span>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height"
+                            placeholder="Height (Centimeters)" required>
+                    </mat-form-field>
+                    <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
+                        <span>Height is required.</span>!</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100-p">
+                        <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth"
+                            placeholder="Depth (Centimeters)" required>
+                    </mat-form-field>
+                    <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
+                        <span>Depth is required.</span>!</span>
+                </div>
+                <div class="col-md-6">
+                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="margin-left: 312px"
+                        color="accent" (click)="addAnotherSupplier()">
+                        <span>Add Another Supplier</span>
+                    </button>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</form>
