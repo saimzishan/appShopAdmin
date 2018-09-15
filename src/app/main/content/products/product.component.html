@@ -34,10 +34,17 @@
             </div>
             <!-- / APP TITLE -->
 
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'"
+            <mat-form-field>
+                <mat-select placeholder="Action" class="mt-16 mt-sm-0">
+                    <mat-option (click)="productFormSubmition.click()" [value]="1">Save & Continue</mat-option>
+                    <mat-option [value]="2">Save & Exit</mat-option>
+                    <mat-option [value]="3">Save & Add More Supplier</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <!-- <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'"
                 (click)="productFormSubmition.click()">
                 <span>ADD</span>
-            </button>
+            </button> -->
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
                 (click)="deleteProduct()">
                 <span>DELETE</span>
@@ -106,8 +113,9 @@
 
                                     <div class="col-md-6">
                                         <ng-container *ngIf="tree">
-                                            <tree [tree]="tree" (nodeRemoved)="handleRemoved($event)" (nodeRenamed)="handleRenamed($event)"
-                                                (nodeSelected)="handleSelected($event)" (nodeMoved)="handleMoved($event)"></tree>
+                                            <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes"
+                                                (activate)="activeNodes(tree.treeModel)"></tree-root>
+
                                         </ng-container>
 
                                     </div>
@@ -126,8 +134,16 @@
 
 
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6" fusePerfectScrollbar>
+                                        <mat-form-field class="w-25-p">
+                                            <mat-label>Select Category Above</mat-label>
+                                            <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
 
-
+                                <input type="button" class="btn btn-primary" hidden #productFormSubmition (click)="addProduct(productForm)">
                             </div>
                         </form>
 
@@ -225,19 +241,19 @@
                                         <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
                                             <span>Depth is required.</span>!</span>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
                                             style="margin-left: 312px" color="accent" (click)="addAnotherSupplier()">
                                             <span>Add Another Supplier</span>
                                         </button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
 
                         </form>
 
                     </mat-tab>
-                    <mat-tab label="Options & SKUs">
+                    <mat-tab label="Options & SKUs" disabled>
                         <!-- <form name="optionSkuForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex> -->
                         <div class="tab-content p-24" fusePerfectScrollbar>
 
@@ -653,7 +669,7 @@
                         <!-- </form> -->
                     </mat-tab>
 
-                    <mat-tab label="Other Details">
+                    <mat-tab label="Other Details" disabled>
                         <div class="tab-content p-24" fusePerfectScrollbar fxLayout="column">
                             <div>
                                 <legend style="padding: 10px">
@@ -734,13 +750,13 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Images / Videos">
+                    <mat-tab label="Images / Videos" disabled>
                         <form name="imageVideoForm" #productForm="ngForm" class="product w-100-p" fxLayout="column"
                             fxFlex>
                         </form>
                     </mat-tab>
                 </mat-tab-group>
-                <input type="button" class="btn btn-primary" hidden #productFormSubmition (click)="addProduct(productForm)">
+
 
             </div>
             <!-- / CONTENT -->

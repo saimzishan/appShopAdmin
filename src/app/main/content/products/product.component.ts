@@ -1,3 +1,5 @@
+import { GLOBAL } from "./../../../shared/globel";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { NgForm } from "@angular/forms/src/forms";
 import { Contact } from "./../apps/contacts/contact.model";
 import {
@@ -43,6 +45,8 @@ import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
 import _ = require("lodash");
 import { Rules } from "../models/rule.model";
+import { CategoriesService } from "../categories/categories.service";
+import { ITreeOptions } from "angular-tree-component";
 
 const treeSettings: Ng2TreeSettings = {
   rootIsVisible: false
@@ -82,6 +86,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   selection_value = "1";
   enableMultipleSelection = false;
 
+  categoryOption: ITreeOptions = {
+    getChildren: this.getChildren.bind(this)
+  };
+  categoryNodes: any[] = [];
+
   onProductChanged: Subscription;
   category = new Category();
   onCategoryChanged: Subscription;
@@ -107,6 +116,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   option_value: OptionValue = new OptionValue();
   public tree: TreeModel;
   category_id: any;
+  categories: any;
+  parentCat: any;
+  parentCatId: any;
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -115,7 +127,9 @@ export class ProductComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    protected http: HttpClient,
+    private categoriesService: CategoriesService
   ) {}
 
   ngOnInit() {
@@ -124,6 +138,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     // this.getTaxes();
     this.getBrands();
     this.getOptionSets();
+    this.index();
 
     this.onProductChanged = this.productService.onProductChanged.subscribe(
       product => {
@@ -161,6 +176,71 @@ export class ProductComponent implements OnInit, OnDestroy {
     );
   }
 
+  createNode(obj) {
+    let tempNode = [];
+    obj.forEach(row => {
+      let tempObj = {};
+      if (row.children.length > 0) {
+        tempObj = {
+          name: row.name,
+          hasChildren: true,
+          my_id: row.id
+        };
+      } else {
+        tempObj = { name: row.name, my_id: row.id };
+      }
+
+      tempNode.push(tempObj);
+    });
+    return tempNode;
+  }
+
+  getChildren(node: any) {
+    return new Promise((resolve, reject) => {
+      this.spinnerService.requestInProcess(true);
+      const httpOptions = {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      };
+      this.http
+        .get(GLOBAL.USER_API + "categories/" + node.data.my_id, httpOptions)
+        .subscribe((response: any) => {
+          if (!response.error) {
+            resolve(this.createNode(response.data));
+          } else {
+            this.snotifyService.error(response.error);
+          }
+          this.spinnerService.requestInProcess(false);
+        }, reject);
+    });
+  }
+
+  index() {
+    this.spinnerService.requestInProcess(true);
+    this.categoriesService.index().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.categories = res.res.data;
+          this.categoryNodes = this.createNode(this.categories);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+
+  activeNodes(treeModel: any) {
+    this.parentCat = treeModel.activeNodes[0].data.name;
+    this.category_id = treeModel.activeNodes[0].data.my_id;
+  }
+
   // start
 
   addorEditSKU() {
@@ -177,9 +257,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   addAnotherSupplier() {
-    this.suppliers.push(this.supplier);
-    this.supplier = new Supplier();
-    this.supplierForm.reset();
+    // this.suppliers.push(this.supplier);
+    // this.supplier = new Supplier();
+    // this.supplierForm.reset();
   }
 
   addSKU(form: NgForm) {
@@ -196,7 +276,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   addRules(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning("Please Fill All  Required Fields");
       return;
     }
     this.rules.push(new Rules(this.rule));
@@ -274,10 +354,17 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
+  validateForm(form): boolean {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+    }
+    return form.invalid;
+  }
+
   addProduct(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
     this.product.suppliers.push(this.supplier);

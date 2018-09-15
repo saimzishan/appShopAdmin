@@ -7,14 +7,16 @@ import { ProductComponent } from "./product.component";
 import { ProductsService } from "./products.service";
 import { ProductService } from "./product.service";
 import { FileDropModule } from "ngx-file-drop";
-import { TreeModule } from "ng2-tree";
 import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import {FileDropModule} from 'ngx-file-drop';
 // import {TreeModule} from 'angular-tree-component';
 import { AuthGuard } from "../../../guard/auth.guard";
+import { TreeModule } from "angular-tree-component";
+
 // import { TreeviewModule } from "ngx-treeview";
 
 import * as $ from "jquery";
+import { CategoriesService } from "../categories/categories.service";
 
 const routes = [
   {
@@ -56,7 +58,7 @@ const routes = [
     ProductComponent,
     FuseOptionFormDialogComponent
   ],
-  providers: [ProductsService, ProductService],
+  providers: [ProductsService, ProductService, CategoriesService],
   entryComponents: [FuseOptionFormDialogComponent]
 })
 export class ProductsModule {}
