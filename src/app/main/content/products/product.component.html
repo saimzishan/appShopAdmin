@@ -72,16 +72,17 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
 
-                            <app-product-supplier-form style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
+                            <app-product-supplier-form (productSaved)="onProductSaved($event)" style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                         </mat-expansion-panel>
-                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel [disabled]="enabledChild" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Option & Skus
                                 </mat-panel-title>
 
                             </mat-expansion-panel-header>
-                            <p>I'm visible because I am open</p>
+                            <app-option-and-sku-form [supplier_id]="supplier_id" [product_id]="product_id">
+                            </app-option-and-sku-form>
                         </mat-expansion-panel>
                     </mat-accordion>
 

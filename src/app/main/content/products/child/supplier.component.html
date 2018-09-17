@@ -46,7 +46,7 @@
             <div class="row">
 
                 <div class="col-md-6">
-                    <ng-container *ngIf="tree">
+                    <ng-container>
                         <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes"
                             (activate)="activeNodes(tree.treeModel)"></tree-root>
 
@@ -57,8 +57,8 @@
                     <mat-form-field class="w-100-p">
                         <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id"
                             required>
-                            <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                                {{brand.name}}
+                            <mat-option *ngFor="let tax of taxes" [value]="tax.id">
+                                {{tax.title}} &nbsp; {{tax.value}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -78,8 +78,6 @@
             </div>
         </mat-card>
     </div>
-
-
 
     <div class="tab-content p-24" fusePerfectScrollbar>
         <mat-card>
@@ -171,10 +169,14 @@
                     <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
                         <span>Depth is required.</span>!</span>
                 </div>
-                <div class="col-md-6">
-                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="margin-left: 312px"
-                        color="accent" (click)="addAnotherSupplier()">
-                        <span>Add Another Supplier</span>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6" style="text-align: right;">
+                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
+                        (click)="addProduct(supplierForm)">
+                        <span>Save Product</span>
                     </button>
                 </div>
             </div>

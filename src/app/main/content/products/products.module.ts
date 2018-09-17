@@ -1,3 +1,4 @@
+import { OptionAndSkusComponent } from "./option-and-skus/option-and-sku.component";
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../../../core/modules/shared.module";
 import { RouterModule } from "@angular/router";
@@ -58,7 +59,8 @@ const routes = [
     ProductsComponent,
     ProductComponent,
     FuseOptionFormDialogComponent,
-    SupplierFormComponent
+    SupplierFormComponent,
+    OptionAndSkusComponent
   ],
   providers: [ProductsService, ProductService, CategoriesService],
   entryComponents: [FuseOptionFormDialogComponent]

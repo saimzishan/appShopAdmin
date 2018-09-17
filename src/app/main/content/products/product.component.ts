@@ -122,6 +122,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   categories: any;
   parentCat: any;
   parentCatId: any;
+  product_id: any;
+  supplier_id: any = false;
+  enabledChild: boolean = true;
+
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -139,11 +143,6 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Subscribe to update product on changes
-    this.getSupplier();
-    // this.getTaxes();
-    this.getBrands();
-    this.getOptionSets();
-    this.index();
 
     this.onProductChanged = this.productService.onProductChanged.subscribe(
       product => {
@@ -180,7 +179,12 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     );
   }
-
+  onProductSaved(evt) {
+    this.product_id = evt.id;
+    this.supplier_id = evt.supplier_id;
+    this.enabledChild = false;
+    console.log(evt);
+  }
   createNode(obj) {
     let tempNode = [];
     obj.forEach(row => {
@@ -335,23 +339,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  saveProduct() {
-    this.spinnerService.requestInProcess(true);
-
-    const data = this.productForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.productService.saveProduct(data).then(() => {
-      // Trigger the subscription with new data
-      this.productService.onProductChanged.next(data);
-
-      // Show the success message
-      this.snotifyService.success("Product added", "Success !");
-      // Change the location with new one
-      this.spinnerService.requestInProcess(false);
-
-      this.location.go("/products");
-    });
-  }
+  saveProduct() {}
 
   validateForm(form) {
     this.validateAllFormFields(form.control);
@@ -376,20 +364,15 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Select a category");
       return;
     }
-    this.product.suppliers.push(this.supplier);
     this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
 
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
-        // this.productForm.reset();
-        // this.supplierForm.reset();
-        // this.product = new Product();
-        // this.supplier = new Supplier();
-        this.router.navigate(["/products"]);
+        this.product_id = res.data.id;
+        // this.router.navigate(["/products"]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);

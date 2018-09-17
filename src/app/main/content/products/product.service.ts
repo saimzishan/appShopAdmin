@@ -104,28 +104,35 @@ export class ProductService extends ApiService implements Resolve<any> {
   }
 
   saveProduct(product) {
-    return new Promise((resolve, reject) => {
-      let access_token = AuthGuard.getToken();
-      if (access_token === undefined) {
-        let error = {
-          message: "Unauthorized"
-        };
-        return Observable.throw({ error: error });
-      }
-      const httpOptions = {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + access_token
-        })
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
       };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
 
-      this.http
-        .put(GLOBAL.USER_API + "products/" + product.id, product, httpOptions)
-        .subscribe((response: any) => {
-          resolve(response);
-          this.router.navigate(["/products"]);
-        }, reject);
-    });
+    //   this.http
+    //     .put(GLOBAL.USER_API + "products/" + product.id, product, httpOptions)
+    //     .subscribe((response: any) => {
+    //       resolve(response);
+    //       this.router.navigate(["/products"]);
+    //     }, reject);
+    // });
+
+    return this.http
+      .put(GLOBAL.USER_API + "products/" + product.id, product, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
   }
 
   addProduct(product) {
@@ -144,14 +151,6 @@ export class ProductService extends ApiService implements Resolve<any> {
       })
     };
 
-    //   this.http
-    //     .post(GLOBAL.USER_API + "products", product, httpOptions)
-    //     .subscribe((response: any) => {
-    //       console.log(response);
-    //       resolve(response);
-    //       this.router.navigate(["/products"]);
-    //     }, reject);
-    // });
     return this.http
       .post(GLOBAL.USER_API + "products", product, httpOptions)
       .map(this.extractData)

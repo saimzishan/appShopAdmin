@@ -3,8 +3,8 @@ import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { MatSnackBar } from "@angular/material";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
-import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, FormControl, NgForm } from "@angular/forms";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { Input, OnInit, ViewChildren, Directive } from "@angular/core";
 import { Supplier, Product } from "../../models/product.model";
 import { ProductService } from "../product.service";
@@ -25,9 +25,13 @@ export class SupplierFormComponent implements OnInit {
   suppliers: Supplier;
   categories: any;
   categoryNodes: any[] = [];
+  parentCat: any;
+  category_id: number;
   categoryOption: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
+  @Output()
+  productSaved = new EventEmitter();
 
   constructor(
     private productService: ProductService,
@@ -42,7 +46,12 @@ export class SupplierFormComponent implements OnInit {
     this.bluckPrices = new Array<BluckPrice>();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getSupplier();
+    this.getTaxes();
+    this.getBrands();
+    this.index();
+  }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -172,6 +181,44 @@ export class SupplierFormComponent implements OnInit {
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
         // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+  activeNodes(treeModel: any) {
+    this.parentCat = treeModel.activeNodes[0].data.name;
+    this.category_id = treeModel.activeNodes[0].data.my_id;
+  }
+  onProductSaved(obj) {
+    obj.supplier_id = this.product.supplier.id;
+    this.productSaved.emit(obj);
+  }
+
+  addProduct(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
+      return;
+    }
+
+    if (!this.category_id) {
+      this.snotifyService.warning("Please Select a category");
+      return;
+    }
+    this.product.supplier = this.supplier;
+    this.product.category_id = this.category_id;
+    this.spinnerService.requestInProcess(true);
+
+    this.productService.addProduct(this.product).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.onProductSaved(res.res.data);
+        // this.router.navigate(["/products"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
       }
     );
   }
