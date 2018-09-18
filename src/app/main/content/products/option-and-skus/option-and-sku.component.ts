@@ -67,7 +67,7 @@ export class OptionAndSkusComponent implements OnInit {
   saveOptionSetAndValue(option_st_id, option_id, operation, change_by, amount) {
     if (change_by === undefined || operation === undefined || amount === "") {
       this.snotifyService.warning(
-        "Please select Opration, Change by and and add amount",
+        "Please select Opration, Change by and add amount",
         "Warning !"
       );
       return;

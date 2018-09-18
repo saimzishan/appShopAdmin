@@ -19,6 +19,7 @@ import { TreeModule } from "angular-tree-component";
 import * as $ from "jquery";
 import { CategoriesService } from "../categories/categories.service";
 import { SupplierFormComponent } from "./child/supplier.component";
+import { VariantComponent } from "./variant/variant.component";
 
 const routes = [
   {
@@ -60,7 +61,8 @@ const routes = [
     ProductComponent,
     FuseOptionFormDialogComponent,
     SupplierFormComponent,
-    OptionAndSkusComponent
+    OptionAndSkusComponent,
+    VariantComponent
   ],
   providers: [ProductsService, ProductService, CategoriesService],
   entryComponents: [FuseOptionFormDialogComponent]

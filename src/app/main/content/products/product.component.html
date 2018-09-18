@@ -77,13 +77,25 @@
                         <mat-expansion-panel [disabled]="enabledChild" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
-                                    Option & Skus
+                                    Option
                                 </mat-panel-title>
 
                             </mat-expansion-panel-header>
                             <app-option-and-sku-form [supplier_id]="supplier_id" [product_id]="product_id">
                             </app-option-and-sku-form>
                         </mat-expansion-panel>
+
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Variants
+                                </mat-panel-title>
+
+                            </mat-expansion-panel-header>
+                            <app-variant-form [supplier_id]="supplier_id" [product_id]="product_id">
+                            </app-variant-form>
+                        </mat-expansion-panel>
+
                     </mat-accordion>
 
                 </div>
