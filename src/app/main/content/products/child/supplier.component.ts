@@ -12,6 +12,7 @@ import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
 import { GLOBAL } from "../../../../shared/globel";
 import { ITreeOptions } from "angular-tree-component";
+import { DetectChangesService } from "../../../../shared/detect-changes.services";
 @Component({
   selector: "app-product-supplier-form",
   templateUrl: "./supplier.component.html"
@@ -39,7 +40,8 @@ export class SupplierFormComponent implements OnInit {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     protected http: HttpClient,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private detectChanges: DetectChangesService
   ) {
     this.product = new Product();
     this.supplier = new Supplier();
@@ -212,6 +214,8 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(res.res.data);
+        localStorage.setItem('current_product' , JSON.stringify(this.product));
+        this.detectChanges.notifyOther({"product": this.product});
         // this.router.navigate(["/products"]);
       },
       errors => {

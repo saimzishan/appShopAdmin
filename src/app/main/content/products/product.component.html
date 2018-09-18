@@ -74,7 +74,8 @@
 
                             <app-product-supplier-form (productSaved)="onProductSaved($event)" style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                         </mat-expansion-panel>
-                        <mat-expansion-panel [disabled]="enabledChild" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <!-- [disabled]="enabledChild" -->
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Option

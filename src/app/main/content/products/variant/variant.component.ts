@@ -16,8 +16,8 @@ export class VariantComponent implements OnInit {
   product_id;
   @Input()
   supplier_id;
-  @Input()
-  option_with_value: [];
+  // @Input()
+  // option_with_value: [];
 
   constructor(
     private productService: ProductService,

@@ -12,6 +12,7 @@ export class OptionAndSkusComponent implements OnInit {
   option_set_id = [];
   optionSets: any;
   optionSetWithValue: {};
+  optionSetValues = [];
   @Input()
   product_id;
   @Input()
@@ -20,7 +21,7 @@ export class OptionAndSkusComponent implements OnInit {
     private productService: ProductService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getOptionSets();
@@ -62,27 +63,84 @@ export class OptionAndSkusComponent implements OnInit {
     this.option_set_id = _.without(this.option_set_id, id);
   }
 
-  handleSelection(event, value) {}
+  handleSelection(event, value) { }
 
-  saveOptionSetAndValue(option_st_id, option_id, operation, change_by, amount) {
-    if (change_by === undefined || operation === undefined || amount === "") {
-      this.snotifyService.warning(
-        "Please select Opration, Change by and add amount",
-        "Warning !"
-      );
-      return;
-    }
-    this.optionSetWithValue = {
-      id: this.product_id,
+  saveOptionSetAndValue(option_st_id, option, operation, change_by, amount) {
+    this.optionSetValues.push(this.optionSetWithValue = {
       supplier_id: this.supplier_id,
+      product_id: this.product_id,
       option_set_id: option_st_id,
-      option_id: option_id,
-      operation: operation,
-      changed_by: change_by,
-      amount: amount
-    };
-    this.saveProduct(this.optionSetWithValue);
+      name: this.getOptionSetName(option_st_id),
+      options: {
+        name: option.name,
+        option_id: option.id,
+        operation: operation,
+        change_by: change_by,
+        amount: amount
+      },
+    });
+    console.log(this.optionSetValues);
   }
+
+
+  // saveOptionSetAndValue(option_st_id, option, operation, change_by, amount) {
+  //     this.optionSetValues.push(this.optionSetWithValue = {
+  //     id: this.product_id,
+  //     supplier_id: this.supplier_id,
+  //     option_set_id: option_st_id,
+  //     name: this.getOptionSetName(option_st_id),
+  //     // options: {
+  //     //   option_id: option.id,
+  //     //   operation: operation,
+  //     //   changd
+  //     // }
+  //     // option_id: option,
+  //     // operation: operation,
+  //     // changed_by: change_by,
+  //     // amount: amount
+  //   });
+  //   console.log(this.getOptionSetName(option_st_id));
+  //   // console.log(option);
+  //   // return;
+  //   // if (change_by === undefined || operation === undefined || amount === "") {
+  //   //   this.snotifyService.warning(
+  //   //     "Please select Opration, Change by and add amount",
+  //   //     "Warning !"
+  //   //   );
+  //   //   return;
+  //   // }
+  //   // this.optionSetValues.push(this.optionSetWithValue = {
+  //   //   id: this.product_id,
+  //   //   supplier_id: this.supplier_id,
+  //   //   option_set_id: option_st_id,
+  //   //   option_id: option_id,
+  //   //   operation: operation,
+  //   //   changed_by: change_by,
+  //   //   amount: amount
+  //   // });
+  //   // this.optionSetValues.push(this.optionSetWithValue);
+
+  //   // this.optionSetValues.push({
+  //   //   id: 1,
+  //   //   supplier_id: 1,
+  //   //   option_set_id: option_st_id,
+  //   //   // name: "Size",
+  //   //   options: [
+  //   //     {
+  //   //       option_id: option_id,
+  //   //       // name: "small",
+  //   //       operation.id: 1,
+  //   //       changed_by: 1,
+  //   //       amount: 10
+  //   //     },
+  //   //   ]
+  //   // });
+  //   // console.log(this.optionSetValues);
+  //   this.optionSetWithValue = {};
+  //   return;
+  //   this.saveProduct(this.optionSetWithValue);
+  // }
+
   saveProduct(obj) {
     this.spinnerService.requestInProcess(true);
     this.spinnerService.requestInProcess(true);
