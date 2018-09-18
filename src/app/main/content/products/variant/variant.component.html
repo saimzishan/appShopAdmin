@@ -43,19 +43,53 @@
                         <mat-card-title>Create a SKU</mat-card-title>
                     </mat-card-header>
                     <mat-card-content>
+                        <!-- <table class="table">
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let optionSet of option_with_value">{{optionSet.name}}</th>
+                                    <th>SKU</th>
+                                    <th>UPC/EAN</th>
+                                    <th>Weight</th>
+                                    <th>Depth</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td *ngFor="let optionSet of option_with_value">
+                                        <mat-select placeholder="Select" name="option_set_id" required>
+                                            <mat-option *ngFor="let opt of getOption(optionSet.id)" [value]="optionSet.id">
+                                                {{opt.name}}</mat-option>
+                                        </mat-select>
+                                    </td>
+                                    <td> <input name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU" required></td>
+                                    <td><input matInput name="upc" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN"></td>
+                                    <td><input matInput name="weight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight (kg)"></td>
+                                    <td><input matInput name="depth" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth (mm)"></td>
+                                    <td><input matInput name="width" [(ngModel)]="product_variant.width" min="0" placeholder="Width (mm)"></td>
+                                    <td>
+                                        <mat-form-field class="w-70-p">
+                                            <input matInput name="height" [(ngModel)]="product_variant.height" min="0" placeholder="Height (mm)">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> -->
                         <div class="row">
-                            <div class="col-md-6">
-
-                            </div>
-                            <div class="col-md-6">
-
+                            <div class="col-md-2" *ngFor="let optionSet of option_with_value">
+                                <label>{{optionSet.name}}</label>
+                                <mat-select placeholder="Select {{optionSet.name}}" name="option_set_id"
+                                    required>
+                                    <mat-option *ngFor="let opt of getOption(optionSet.id)" [value]="optionSet.id">
+                                        {{opt.name}}</mat-option>
+                                </mat-select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-2">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU"
-                                        required>
+                                    <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -65,35 +99,30 @@
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="weight" [(ngModel)]="product_variant.weight" min="0"
-                                        placeholder="Weight (kg)">
+                                    <input matInput name="weight" [(ngModel)]="product_variant.weight" min="0" placeholder="Weight (kg)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="depth" [(ngModel)]="product_variant.depth" min="0"
-                                        placeholder="Depth (mm)">
+                                    <input matInput name="depth" [(ngModel)]="product_variant.depth" min="0" placeholder="Depth (mm)">
                                 </mat-form-field>
                             </div>
 
                             <div class="col-md-2">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="width" [(ngModel)]="product_variant.width" min="0"
-                                        placeholder="Width (mm)">
+                                    <input matInput name="width" [(ngModel)]="product_variant.width" min="0" placeholder="Width (mm)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="height" [(ngModel)]="product_variant.height" min="0"
-                                        placeholder="Height (mm)">
+                                    <input matInput name="height" [(ngModel)]="product_variant.height" min="0" placeholder="Height (mm)">
                                 </mat-form-field>
                             </div>
                         </div>
                     </mat-card-content>
                     <mat-card-actions style="text-align: right;">
                         <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                        <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save
-                            & Close</button>
+                        <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save & Close</button>
                     </mat-card-actions>
 
                 </mat-card>

@@ -77,12 +77,12 @@ export class ProductVariant {
 export class Options {
   option_id: number;
   option_set_id: number;
-  option_rule_id: number;
+  // option_rule_id: number;
   constructor(optionValue?) {
     optionValue = optionValue || {};
     this.option_set_id = optionValue.option_set_id || -1;
     this.option_id = optionValue.option_id || -1;
-    this.option_rule_id = optionValue.option_rule_id || -1;
+    // this.option_rule_id = optionValue.option_rule_id || -1;
   }
 }
 
