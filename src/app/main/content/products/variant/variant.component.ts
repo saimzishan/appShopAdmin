@@ -1,3 +1,4 @@
+import { DetectChangesService } from "./../../../../shared/detect-changes.services";
 import { Component, OnInit, Input } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
@@ -23,13 +24,20 @@ export class VariantComponent implements OnInit {
   product_variant: ProductVariant;
   isAddorEditSKU = false;
   productVariant: ProductVariant[] = new Array<ProductVariant>();
+  changesSubscription;
 
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
-    private snotifyService: SnotifyService
+    private snotifyService: SnotifyService,
+    private detectChangesService: DetectChangesService
   ) {
     this.product_variant = new ProductVariant();
+    this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
+      res => {
+        this.callRelatedFunctions(res);
+      }
+    );
   }
 
   ngOnInit() {
@@ -85,6 +93,18 @@ export class VariantComponent implements OnInit {
         amount: 10
       })
     );
+  }
+  callRelatedFunctions(res) {
+    if (res.hasOwnProperty("option")) {
+      // switch (res.option) {
+      //   case 'hideMe':
+      //     break;
+      //   case 'showMe':
+      //     break;
+      //     case 'updateAdminToken':
+      //     break;
+      // }
+    }
   }
   getOption(id) {
     const res = this.option_with_value.find(option => option.id === id);

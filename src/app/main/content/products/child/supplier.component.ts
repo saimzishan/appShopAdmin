@@ -214,8 +214,11 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(res.res.data);
-        localStorage.setItem('current_product' , JSON.stringify(this.product));
-        this.detectChanges.notifyOther({"product": this.product});
+        localStorage.setItem("current_product", JSON.stringify(this.product));
+        this.detectChanges.notifyOther({
+          option: "addproduct",
+          value: res.res.data
+        });
         // this.router.navigate(["/products"]);
       },
       errors => {

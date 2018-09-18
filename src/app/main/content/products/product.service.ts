@@ -119,16 +119,12 @@ export class ProductService extends ApiService implements Resolve<any> {
       })
     };
 
-    //   this.http
-    //     .put(GLOBAL.USER_API + "products/" + product.id, product, httpOptions)
-    //     .subscribe((response: any) => {
-    //       resolve(response);
-    //       this.router.navigate(["/products"]);
-    //     }, reject);
-    // });
-
     return this.http
-      .put(GLOBAL.USER_API + "products/" + product.id, product, httpOptions)
+      .put(
+        GLOBAL.USER_API + "products/" + product.id + "?ps_options",
+        product,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
