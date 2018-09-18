@@ -20,6 +20,7 @@ import * as $ from "jquery";
 import { CategoriesService } from "../categories/categories.service";
 import { SupplierFormComponent } from "./child/supplier.component";
 import { VariantComponent } from "./variant/variant.component";
+import { DetectChangesService } from "../../../shared/detect-changes.services";
 
 const routes = [
   {
@@ -64,7 +65,7 @@ const routes = [
     OptionAndSkusComponent,
     VariantComponent
   ],
-  providers: [ProductsService, ProductService, CategoriesService],
+  providers: [ProductsService, ProductService, CategoriesService , DetectChangesService],
   entryComponents: [FuseOptionFormDialogComponent]
 })
 export class ProductsModule {}

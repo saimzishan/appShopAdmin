@@ -1,14 +1,103 @@
 <div class="tab-content p-24" fusePerfectScrollbar style="background-color: rgb(243, 240, 240)">
-    <mat-card>
+    <mat-card style="background-color: #F4F4F7">
         <legend style="padding: 10px">
             <h2>Variants</h2>
-            <p>
-                Add variants if this product comes in multiple versions, like different sizes or colors.
-
-            </p>
         </legend>
-        <div class="row">
+        <p>
+            Add variants if this product comes in multiple versions, like different sizes or colors.
 
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Option name</th>
+                    <th>Option Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let optionSet of option_with_value">
+                    <tr>
+                        <td>{{optionSet.name}}</td>
+                        <td>
+                            <ng-container *ngFor="let opt of getOption(optionSet.id)">
+                                <button class="btn btn-xs btn-info">{{opt.name}}</button>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-container>
+
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Sku</button>
+                <button class="btn btn-info">Generate Sku</button>
+            </div>
+
+        </div>
+        <br>
+        <div class="row" *ngIf="isAddorEditSKU">
+            <form name="skuForm" #skuForm="ngForm" fxLayout="column" fxFlex>
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Create a SKU</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-md-6">
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU"
+                                        required>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="upc" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="weight" [(ngModel)]="product_variant.weight" min="0"
+                                        placeholder="Weight (kg)">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="depth" [(ngModel)]="product_variant.depth" min="0"
+                                        placeholder="Depth (mm)">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="width" [(ngModel)]="product_variant.width" min="0"
+                                        placeholder="Width (mm)">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput name="height" [(ngModel)]="product_variant.height" min="0"
+                                        placeholder="Height (mm)">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions style="text-align: right;">
+                        <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
+                        <button class="btn btn-info" mat-button (click)="addSKU(skuForm)">Save
+                            & Close</button>
+                    </mat-card-actions>
+
+                </mat-card>
+            </form>
         </div>
     </mat-card>
 </div>
