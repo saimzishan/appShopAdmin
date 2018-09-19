@@ -29,7 +29,7 @@ export class Supplier {
   width: number;
   height: number;
   depth: number;
-  image: string;
+  images: [];
   content_type: string;
 
   constructor(supplier?) {
@@ -43,7 +43,7 @@ export class Supplier {
     this.sku = supplier.sku || "";
     this.height = supplier.height || "";
     this.depth = supplier.depth || "";
-    this.image = supplier.image || "";
+    this.images = supplier.images || [];
     this.content_type = supplier.content_type || "";
   }
 }

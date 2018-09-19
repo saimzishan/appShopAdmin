@@ -33,11 +33,16 @@ export class OptionAndSkusComponent implements OnInit {
 
   ngOnInit() {
     this.getOptionSets();
+    let current_product: any = localStorage.getItem("current_product");
+    if (current_product) {
+      current_product = JSON.parse(current_product);
+      this.supplier_id = current_product.supplier.id;
+      this.product_id = current_product.id;
+    }
   }
 
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
-      console.log(res.value);
       switch (res.option) {
         case "addproduct":
           this.supplier_id = res.value.supplier_id;
@@ -80,6 +85,16 @@ export class OptionAndSkusComponent implements OnInit {
     }
   }
   removeOptionSet(id) {
+    let optionSet: any = localStorage.getItem("optionSet");
+    if (optionSet) {
+      optionSet = JSON.parse(optionSet);
+
+      const result = optionSet.find(option => option.option_set_id === id);
+      if (result) {
+        this.snotifyService.warning("Could not be removed...", "Warning !");
+        return;
+      }
+    }
     this.option_set_id = _.without(this.option_set_id, id);
   }
 
@@ -142,14 +157,16 @@ export class OptionAndSkusComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     this.spinnerService.requestInProcess(true);
 
-    this.productService.saveProduct(obj).subscribe(
+    this.productService.saveProduct(obj, "ps_options").subscribe(
       (res: any) => {
         this.optionSetWithValue = {};
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
+        localStorage.removeItem("optionSet");
+        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
         this.detectChangesService.notifyOther({
           value: this.optionSet,
-          option: "addproduct"
+          option: "optionsAdded"
         });
       },
       errors => {

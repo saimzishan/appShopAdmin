@@ -103,7 +103,7 @@ export class ProductService extends ApiService implements Resolve<any> {
     });
   }
 
-  saveProduct(product) {
+  saveProduct(product, option: string) {
     // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -121,7 +121,7 @@ export class ProductService extends ApiService implements Resolve<any> {
 
     return this.http
       .put(
-        GLOBAL.USER_API + "products/" + product.id + "?ps_options",
+        GLOBAL.USER_API + "products/" + product.id + "?" + option,
         product,
         httpOptions
       )

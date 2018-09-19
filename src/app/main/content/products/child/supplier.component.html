@@ -110,7 +110,7 @@
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
                         <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU"
-                            [required]="!disableRequired">
+                            required>
                     </mat-form-field>
                     <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
                         <span>SKU is required.</span>!</span>

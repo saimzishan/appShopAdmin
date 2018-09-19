@@ -1,3 +1,4 @@
+import { Option } from './../../models/product.model';
 import { DetectChangesService } from "./../../../../shared/detect-changes.services";
 import { Component, OnInit, Input } from "@angular/core";
 import { ProductService } from "../product.service";
@@ -21,12 +22,16 @@ export class VariantComponent implements OnInit {
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
   product_variant: ProductVariant;
+  // options: Options[] = new Array<Options>();
   isAddorEditSKU = false;
   productVariant: ProductVariant[] = new Array<ProductVariant>();
+  variants: ProductVariant[] = new Array<ProductVariant>();
   changesSubscription;
   option_skus;
   enableOptions = false;
-
+  obj = [];
+  supplierId = -1;
+  productId = -1;
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -42,73 +47,42 @@ export class VariantComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.option_with_value.length === 0) {
-      this.option_with_value.push(
-        new OptionSet({
-          id: 1,
-          supplier_id: 1,
-          option_set_id: 1,
-          name: "Size"
-        })
-      );
+    let optionSet: any = localStorage.getItem("optionSet");
+    if (optionSet) {
+      optionSet = JSON.parse(optionSet);
+      this.setOptions(optionSet);
     }
-    this.option_with_value.push(
-      new OptionSet({
-        id: 2,
-        supplier_id: 1,
-        option_set_id: 1,
-        name: "Color"
-      })
-    );
 
-    this.option_with_value[0].options.push(
-      new Options({
-        name: "larg",
-        operation: 1,
-        changed_by: 1,
-        amount: 12
-      })
-    );
-    this.option_with_value[0].options.push(
-      new Options({
-        name: "small",
-        operation: 1,
-        changed_by: 1,
-        amount: 10
-      })
-    );
+    let current_product: any = localStorage.getItem("current_product");
+    if (current_product) {
+      current_product = JSON.parse(current_product);
+      this.product_variant = current_product.supplier;
+      this.supplierId = current_product.supplier.id;
+      this.productId = current_product.id;
 
-    this.option_with_value[1].options.push(
-      new Options({
-        name: "Red",
-        operation: 1,
-        changed_by: 1,
-        amount: 12
-      })
-    );
-    this.option_with_value[1].options.push(
-      new Options({
-        name: "Green",
-        operation: 1,
-        changed_by: 1,
-        amount: 10
-      })
-    );
+    }
   }
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
-      // switch (res.option) {
-      //   case 'hideMe':
-      //     break;
-      //   case 'showMe':
-      //     break;
-      //     case 'updateAdminToken':
-      //     break;
-      // }
+      switch (res.option) {
+        case "optionsAdded":
+        let optionSet: any = localStorage.getItem("optionSet");
+        if (optionSet) {
+          optionSet = JSON.parse(optionSet);
+          this.setOptions(optionSet);
+        }
+          break;
+      }
     }
   }
+
+  setOptions(obj) {
+    this.option_with_value = obj;
+  }
   getOption(id) {
-    const res = this.option_with_value.find(option => option.id === id);
+    const res = this.option_with_value.find(
+      option => option.option_set_id === id
+    );
     if (res) {
       return res.options;
     }
@@ -136,16 +110,67 @@ export class VariantComponent implements OnInit {
     });
   }
 
-  addSKU(form: NgForm) {
+  addOptionSet(id, p_id ) {
+    let obj = {option_id: id, option_set_id: p_id};
+
+    const res = this.obj.find(
+      item => (item.option_set_id === p_id && item.option_id === id)
+    );
+     if (res) {
+      this.snotifyService.warning("Already taken, Could not select again", "Warning !");
+      return;
+     } 
+    this.obj.push(obj);
+  }
+  mangeOption(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Required Fields");
+    }
+    if (this.obj.length === 0 ) {
+      this.snotifyService.warning("Please select option", "Warning !");
       return;
     }
-    this.productVariant.push(new ProductVariant(this.product_variant));
-    this.isAddorEditSKU = !this.isAddorEditSKU;
-    form.resetForm();
+    this.variants.push(this.product_variant);
+    this.variants[this.variants.length - 1].options = this.obj;
+    this.product_variant.sku = '';
+    console.log(this.variants);
   }
+  saveProduct(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Required Fields");
+     }
+     if (! this.obj) {
+      this.snotifyService.warning("Please select option", "Warning !");
+      return;
+     }
+     let objct;      
+      // this.product_variant.options = this.obj;
+      this.productVariant.push(this.product_variant);
+      this.productVariant[0].options = this.obj;
+       objct = {
+        supplier_id: this.supplierId,
+        id: this.productId,
+        variants: this.productVariant
+       }
+    this.spinnerService.requestInProcess(true);
+    this.spinnerService.requestInProcess(true);
+
+    this.productService.saveProduct(objct, 'ps_variants').subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
+
+
 }
 export class Options {
   name: string;

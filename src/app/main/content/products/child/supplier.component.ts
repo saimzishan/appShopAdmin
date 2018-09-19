@@ -49,10 +49,17 @@ export class SupplierFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.index();
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
-    this.index();
+    let current_product: any = localStorage.getItem("current_product");
+    if (current_product) {
+      current_product = JSON.parse(current_product);
+      this.product = current_product;
+      this.supplier = current_product.supplier;
+      this.onProductSaved(current_product);
+    }
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -191,7 +198,6 @@ export class SupplierFormComponent implements OnInit {
     this.category_id = treeModel.activeNodes[0].data.my_id;
   }
   onProductSaved(obj) {
-    obj.supplier_id = this.product.supplier.id;
     this.productSaved.emit(obj);
   }
 
@@ -213,7 +219,8 @@ export class SupplierFormComponent implements OnInit {
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
-        this.onProductSaved(res.res.data);
+        this.onProductSaved(this.product);
+        this.product.id = res.res.data.id;
         localStorage.setItem("current_product", JSON.stringify(this.product));
         this.detectChanges.notifyOther({
           option: "addproduct",
