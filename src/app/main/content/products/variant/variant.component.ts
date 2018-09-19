@@ -25,6 +25,8 @@ export class VariantComponent implements OnInit {
   isAddorEditSKU = false;
   productVariant: ProductVariant[] = new Array<ProductVariant>();
   changesSubscription;
+  option_skus;
+  enableOptions = false;
 
   constructor(
     private productService: ProductService,
@@ -115,6 +117,12 @@ export class VariantComponent implements OnInit {
 
   addOrEditSku() {
     this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  seletOption(id) {
+    console.log(this.getOption(id));
+    this.option_skus = this.getOption(id);
+    this.enableOptions = true;
   }
 
   validateAllFormFields(formGroup: FormGroup) {
