@@ -3,7 +3,6 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import _ = require("lodash");
 import { ProductVariant } from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
 

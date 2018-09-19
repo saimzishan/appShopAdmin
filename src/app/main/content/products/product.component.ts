@@ -43,7 +43,7 @@ import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component"
 // import * as $ from 'jquery';
 import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
-import _ = require("lodash");
+import * as _ from "lodash";
 import { Rules } from "../models/rule.model";
 import { CategoriesService } from "../categories/categories.service";
 import { ITreeOptions } from "angular-tree-component";
@@ -183,7 +183,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.product_id = evt.id;
     this.supplier_id = evt.supplier_id;
     this.enabledChild = false;
-    console.log(evt);
   }
   createNode(obj) {
     let tempNode = [];

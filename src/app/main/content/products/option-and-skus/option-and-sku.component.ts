@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import _ = require("lodash");
+import * as _ from "lodash";
 
 @Component({
   selector: "app-option-and-sku-form",
