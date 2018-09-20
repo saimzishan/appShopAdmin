@@ -1,0 +1,98 @@
+<div class="tab-content p-24" fusePerfectScrollbar style="background-color: rgb(243, 240, 240)">
+    <mat-card>
+        <div class="row">
+            <div class="col-md-3">
+                <label>Attach Option Set
+                </label>
+                <mat-select multiple placeholder="Option Set" name="option_set_id" [(ngModel)]="option_set_id">
+                    <mat-option *ngFor="let optionSet of optionSets" [value]="optionSet.id">
+                        {{optionSet.name}}
+                    </mat-option>
+                </mat-select>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                <table class="table table-bordered" *ngIf='option_set_id.length > 0'>
+                    <thead>
+                        <tr>
+
+                            <th scope="col">
+                                Option set
+                            </th>
+                            <th scope="col">
+                                Type
+                            </th>
+                            <th scope="col">
+                                Option value
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let row of option_set_id; let j=index">
+                            <!-- <form name="optionForm{{j}}" #skuForm{{j}}="ngForm"> -->
+                            <td>
+                                <i (click)="removeOptionSet(row)" class="material-icons" style="color:#FF0000; cursor: pointer;">
+                                    delete
+                                </i>
+                                {{getOptionSetName(row)}}
+                            </td>
+                            <td>
+                                <mat-select placeholder="Single" #checkSelection>
+                                    <mat-option value=1 selected="true">Single</mat-option>
+                                    <mat-option value=2>Multiple</mat-option>
+                                </mat-select>
+                            </td>
+                            <td>
+
+                                <ng-container *ngFor="let opt of getOptionName(row)">
+                                    <!-- <form name="optionSetAndOptionFrom" #optionSetAndOptionFrom="ngForm" class="product w-100-p" -->
+                                    <!-- fxLayout="column" fxFlex> -->
+                                    <div class="row" style="margin-left: none !important">
+                                        <div class="col-md-3">
+                                            <mat-list-item role="listitem">
+                                                <mat-checkbox #option_set [value]="opt.id">{{opt.value}}</mat-checkbox>
+                                            </mat-list-item>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-select placeholder="Operation" #operation required>
+                                                <mat-option value=1>Add</mat-option>
+                                                <mat-option value=2>Subtract</mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-select placeholder="Change by" #change_by required>
+                                                <mat-option value=1>Absolute</mat-option>
+                                                <mat-option value=2>Percentage</mat-option>
+                                            </mat-select>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <input class="form-control" required placeholder="Amount" #amount name="amount">
+                                        </div>
+                                        <div class="col-md-1">
+
+                                        </div>
+                                        <div class="col-md-1" *ngIf="option_set.checked">
+                                            <button class="btn btn-info" (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)">Save</button>
+                                        </div>
+                                    </div>
+                                    <!-- </form> -->
+                                </ng-container>
+
+                            </td>
+                            <!-- </form> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </mat-card>
+</div>

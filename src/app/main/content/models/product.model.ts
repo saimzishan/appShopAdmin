@@ -1,4 +1,3 @@
-
 export class Option {
   id: string;
   option_name = "";
@@ -11,13 +10,13 @@ export class Product {
   category_id: number = 1;
   tax_id: number;
   brand_id: number;
-  suppliers: Array<Supplier>;
+  supplier: Supplier;
 
   constructor(product?) {
     product = product || {};
     this.id = product.id || -1;
-    this.name = product.name || '';
-    this.suppliers = new Array<Supplier>();
+    this.name = product.name || "";
+    this.supplier = new Supplier();
   }
 }
 export class Supplier {
@@ -30,9 +29,8 @@ export class Supplier {
   width: number;
   height: number;
   depth: number;
-  image: string;
+  images: [];
   content_type: string;
-  productVariants: Array<ProductVariant>;
 
   constructor(supplier?) {
     supplier = supplier || {};
@@ -42,12 +40,11 @@ export class Supplier {
     this.width = supplier.width;
     this.upc = supplier.upc;
     this.ean = supplier.ean;
-    this.sku = supplier.sku || '';
-    this.height = supplier.height || '';
-    this.depth = supplier.depth || '';
-    this.image = supplier.image || '';
-    this.content_type = supplier.content_type || '';
-    this.productVariants = new Array<ProductVariant>();
+    this.sku = supplier.sku || "";
+    this.height = supplier.height || "";
+    this.depth = supplier.depth || "";
+    this.images = supplier.images || [];
+    this.content_type = supplier.content_type || "";
   }
 }
 export class ProductVariant {
@@ -80,12 +77,12 @@ export class ProductVariant {
 export class Options {
   option_id: number;
   option_set_id: number;
-  option_rule_id: number;
+  // option_rule_id: number;
   constructor(optionValue?) {
     optionValue = optionValue || {};
     this.option_set_id = optionValue.option_set_id || -1;
     this.option_id = optionValue.option_id || -1;
-    this.option_rule_id = optionValue.option_rule_id || -1;
+    // this.option_rule_id = optionValue.option_rule_id || -1;
   }
 }
 

@@ -1,3 +1,5 @@
+import { GLOBAL } from "./../../../shared/globel";
+import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { NgForm } from "@angular/forms/src/forms";
 import { Contact } from "./../apps/contacts/contact.model";
 import {
@@ -41,8 +43,10 @@ import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component"
 // import * as $ from 'jquery';
 import { TreeModel, Ng2TreeSettings } from "ng2-tree";
 import { Router } from "@angular/router";
-import _ = require("lodash");
+import * as _ from "lodash";
 import { Rules } from "../models/rule.model";
+import { CategoriesService } from "../categories/categories.service";
+import { ITreeOptions } from "angular-tree-component";
 
 const treeSettings: Ng2TreeSettings = {
   rootIsVisible: false
@@ -79,8 +83,16 @@ export class ProductComponent implements OnInit, OnDestroy {
   supplierForm: FormGroup;
   skuForm: FormGroup;
   rulesForm: FormGroup;
+  bluckPriceForm: FormGroup;
   selection_value = "1";
   enableMultipleSelection = false;
+  selectedTabIndex = 0;
+  categoryOption: ITreeOptions = {
+    getChildren: this.getChildren.bind(this)
+  };
+  categoryNodes: any[] = [];
+  bluckPrice: BluckPrice = new BluckPrice();
+  bluckPrices: BluckPrice[];
 
   onProductChanged: Subscription;
   category = new Category();
@@ -107,6 +119,13 @@ export class ProductComponent implements OnInit, OnDestroy {
   option_value: OptionValue = new OptionValue();
   public tree: TreeModel;
   category_id: any;
+  categories: any;
+  parentCat: any;
+  parentCatId: any;
+  product_id: any;
+  supplier_id: any = false;
+  enabledChild: boolean = true;
+
   constructor(
     private productService: ProductService,
     private formBuilder: FormBuilder,
@@ -115,15 +134,15 @@ export class ProductComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
-    private router: Router
-  ) {}
+    private router: Router,
+    protected http: HttpClient,
+    private categoriesService: CategoriesService
+  ) {
+    this.bluckPrices = new Array<BluckPrice>();
+  }
 
   ngOnInit() {
     // Subscribe to update product on changes
-    this.getSupplier();
-    // this.getTaxes();
-    this.getBrands();
-    this.getOptionSets();
 
     this.onProductChanged = this.productService.onProductChanged.subscribe(
       product => {
@@ -160,6 +179,75 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     );
   }
+  onProductSaved(evt) {
+    this.product_id = evt.id;
+    this.supplier_id = evt.supplier_id;
+    this.enabledChild = false;
+  }
+  createNode(obj) {
+    let tempNode = [];
+    obj.forEach(row => {
+      let tempObj = {};
+      if (row.children.length > 0) {
+        tempObj = {
+          name: row.name,
+          hasChildren: true,
+          my_id: row.id
+        };
+      } else {
+        tempObj = { name: row.name, my_id: row.id };
+      }
+
+      tempNode.push(tempObj);
+    });
+    return tempNode;
+  }
+
+  getChildren(node: any) {
+    return new Promise((resolve, reject) => {
+      this.spinnerService.requestInProcess(true);
+      const httpOptions = {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json"
+        })
+      };
+      this.http
+        .get(GLOBAL.USER_API + "categories/" + node.data.my_id, httpOptions)
+        .subscribe((response: any) => {
+          if (!response.error) {
+            resolve(this.createNode(response.data));
+          } else {
+            this.snotifyService.error(response.error);
+          }
+          this.spinnerService.requestInProcess(false);
+        }, reject);
+    });
+  }
+
+  index() {
+    this.spinnerService.requestInProcess(true);
+    this.categoriesService.index().subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.categories = res.res.data;
+          this.categoryNodes = this.createNode(this.categories);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+
+  activeNodes(treeModel: any) {
+    this.parentCat = treeModel.activeNodes[0].data.name;
+    this.category_id = treeModel.activeNodes[0].data.my_id;
+  }
 
   // start
 
@@ -177,9 +265,9 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   addAnotherSupplier() {
-    this.suppliers.push(this.supplier);
-    this.supplier = new Supplier();
-    this.supplierForm.reset();
+    // this.suppliers.push(this.supplier);
+    // this.supplier = new Supplier();
+    // this.supplierForm.reset();
   }
 
   addSKU(form: NgForm) {
@@ -196,7 +284,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   addRules(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.snotifyService.warning("Please Fill All  Required Fields");
       return;
     }
     this.rules.push(new Rules(this.rule));
@@ -207,23 +295,22 @@ export class ProductComponent implements OnInit, OnDestroy {
   removeOptionSet(id) {
     this.option_set_id = _.without(this.option_set_id, id);
   }
-  handleSelection(event, value) {
-    // if (value === "1" || value === undefined) {
-    //   if (event.option.selected) {
-    //     event.source.deselectAll();
-    //     event.option._setSelected(true);
-    //   }
-    // }
-  }
-  saveOption(pId, type, options) {
-    if (type === undefined || options.length === 0) {
-      this.snotifyService.warning(
-        "Please Select option type and  option value"
-      );
+  handleSelection(event, value) {}
+
+  // end
+
+  addBluckPrice(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
       return;
     }
+    this.bluckPrices.push(new BluckPrice(this.bluckPrice));
+    this.bluckPrice = new BluckPrice();
+    form.form.reset();
   }
-  // end
+  removeBluckPrice(index) {
+    this.bluckPrices.splice(index, 1);
+  }
 
   enableChildren() {
     this.viewChildren = true;
@@ -251,47 +338,40 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
 
-  newOptionAdded() {
-    // $('#addOptionModal').modal('show');
-    this.newContact();
+  saveProduct() {}
+
+  validateForm(form) {
+    this.validateAllFormFields(form.control);
+    this.snotifyService.warning("Please Fill All Required Fields");
   }
 
-  saveProduct() {
-    this.spinnerService.requestInProcess(true);
-
-    const data = this.productForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.productService.saveProduct(data).then(() => {
-      // Trigger the subscription with new data
-      this.productService.onProductChanged.next(data);
-
-      // Show the success message
-      this.snotifyService.success("Product added", "Success !");
-      // Change the location with new one
-      this.spinnerService.requestInProcess(false);
-
-      this.location.go("/products");
-    });
-  }
-
-  addProduct(form) {
+  addProduct(form: FormGroup, form2: FormGroup) {
     if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
+      this.selectedTabIndex = 0;
+      this.validateForm(form);
       return;
     }
-    this.product.suppliers.push(this.supplier);
+
+    if (form2.invalid) {
+      this.selectedTabIndex = 1;
+      this.validateForm(form2);
+      return;
+    }
+
+    if (!this.category_id) {
+      this.selectedTabIndex = 0;
+      this.snotifyService.warning("Please Select a category");
+      return;
+    }
     this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
 
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
-        this.product = new Product();
-        this.supplier = new Supplier();
-        this.router.navigate(["/products"]);
+        this.product_id = res.data.id;
+        // this.router.navigate(["/products"]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -381,24 +461,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          // Here you can access the real file
-          /**
-           // You could upload it like this:
-           const formData = new FormData()
-           formData.append('logo', file, relativePath)
-
-           // Headers
-           const headers = new HttpHeaders({
-            'security-token': 'mytoken'
-          })
-
-           this.http.post('https://mybackend.com/api/upload/sanitize-and-save-logo', formData, { headers: headers, responseType: 'blob' })
-           .subscribe(data => {
-            // Sanitized logo returned from backend
-          })
-           **/
-        });
+        fileEntry.file((file: File) => {});
       } else {
         // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
@@ -409,34 +472,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   fileOver(event) {}
 
   fileLeave(event) {}
-  checkMyOptions(val) {
-    const result = this.optionSets.find(option => option.id === val);
-    if (result !== undefined) {
-      this.setDataSuorce(result.options);
-      this.option_set.id = result.id;
-      this.disableSkuAndRuleTab = true;
-      this.enableOptionTable = true;
-    } else {
-      this.dataSource = [];
-      this.disableSkuAndRuleTab = false;
-      this.enableOptionTable = false;
-    }
-  }
-
-  newContact() {
-    this.dialogRef = this.dialog.open(FuseOptionFormDialogComponent, {
-      panelClass: "contact-form-dialog",
-      data: {
-        action: "new"
-      }
-    });
-
-    this.dialogRef.afterClosed().subscribe((response: FormGroup) => {
-      if (!response) {
-        return;
-      }
-    });
-  }
 
   setDataSuorce(obj) {
     this.dataSource = obj;
@@ -470,19 +505,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     });
   }
-  selectCategory(event, cId) {
-    if (event.checked) {
-      this.product.category_id = cId;
-    }
-  }
 
   setSelection(val) {
     // this.option_id = val.selectedOptions.selected[0].value;
   }
-
-  // enableRequired() {
-  //   this.disableRequired = false;
-  // }
 
   getOptionSetName(id) {
     const result = this.optionSets.find(option => option.id === id);
@@ -497,14 +523,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       return res.options;
     }
   }
-
-  // deleteOption(index) {
-  //   this.product.option_values.splice(index, 1);
-  //   if (this.product.option_values.length === 0) {
-  //     this.disableSkuAndRuleTab = false;
-  //   }
-  //   console.log(this.product.option_values);
-  // }
 
   changeFieldName(categories: Category[]) {
     const res: TreeModel[] = [];
@@ -538,5 +556,21 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.onProductChanged.unsubscribe();
+  }
+}
+
+export class BluckPrice {
+  from: number;
+  to: number;
+  discount: number;
+  changeBy: number;
+  product_supplier_id: number;
+  constructor(bluckPrice?) {
+    bluckPrice = bluckPrice || {};
+    this.from = bluckPrice.from;
+    this.to = bluckPrice.to;
+    this.discount = bluckPrice.discount;
+    this.changeBy = bluckPrice.changeBy;
+    this.product_supplier_id = bluckPrice.product_supplier_id;
   }
 }

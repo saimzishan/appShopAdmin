@@ -41,8 +41,7 @@
         *ngIf="!checkPageType()" (click)="store()">
         <span>ADD</span>
       </button>
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
-        (click)="store()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()" (click)="store()">
         <span>Delete</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="categoryForm.invalid || categoryForm.pristine"
