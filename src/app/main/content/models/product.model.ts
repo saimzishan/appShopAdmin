@@ -56,7 +56,7 @@ export class ProductVariant {
   width: number;
   height: number;
   depth: number;
-  image: string;
+  images: Array<any>;
   content_type: string;
   options: Array<Options>;
 
@@ -71,6 +71,7 @@ export class ProductVariant {
     this.height = productVariant.height;
     this.depth = productVariant.depth;
     this.options = new Array<Options>();
+    this.images = [];
   }
 }
 

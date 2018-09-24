@@ -40,6 +40,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   bluckPrice: BluckPrice = new BluckPrice();
   bluckPrices: BluckPrice[];
 
+  ps_panelOpenState = true;
+  ps_sku_panelOpenState = false;
+  ps_v_panelOpenState = false;
+
   viewChildren = false;
   pageType: string;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
@@ -61,6 +65,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.product_id = evt.id;
     this.supplier_id = evt.supplier_id;
     this.enabledChild = false;
+    this.ps_sku_panelOpenState = true;
+    this.ps_panelOpenState = false;
   }
 
   enableChildren() {
