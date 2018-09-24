@@ -29,7 +29,7 @@ export class Supplier {
   width: number;
   height: number;
   depth: number;
-  images: [];
+  images;
   content_type: string;
 
   constructor(supplier?) {
