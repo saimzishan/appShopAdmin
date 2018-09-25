@@ -26,26 +26,17 @@ const routes = [
   {
     canActivate: [AuthGuard],
     path: "",
-    component: ProductsComponent,
-    resolve: {
-      academy: ProductsService
-    }
+    component: ProductsComponent
   },
   {
     canActivate: [AuthGuard],
     path: ":id",
-    component: ProductComponent,
-    resolve: {
-      academy: ProductService
-    }
+    component: ProductComponent
   },
   {
     canActivate: [AuthGuard],
     path: ":id/:handle",
-    component: ProductComponent,
-    resolve: {
-      academy: ProductService
-    }
+    component: ProductComponent
   }
 ];
 
@@ -65,7 +56,12 @@ const routes = [
     OptionAndSkusComponent,
     VariantComponent
   ],
-  providers: [ProductsService, ProductService, CategoriesService , DetectChangesService],
+  providers: [
+    ProductsService,
+    ProductService,
+    CategoriesService,
+    DetectChangesService
+  ],
   entryComponents: [FuseOptionFormDialogComponent]
 })
 export class ProductsModule {}

@@ -29,7 +29,7 @@ export class Supplier {
   width: number;
   height: number;
   depth: number;
-  images: [];
+  images: Image[];
   content_type: string;
 
   constructor(supplier?) {
@@ -43,8 +43,19 @@ export class Supplier {
     this.sku = supplier.sku || "";
     this.height = supplier.height || "";
     this.depth = supplier.depth || "";
-    this.images = supplier.images || [];
+    this.images = new Array<Image>();
     this.content_type = supplier.content_type || "";
+  }
+}
+export class Image {
+  content_type: string;
+  base64String: string;
+  type: string;
+  constructor(image?) {
+    image = image || {};
+    this.content_type = image.content_type || "";
+    this.base64String = image.base64String || "";
+    this.type = image.type || "";
   }
 }
 export class ProductVariant {
@@ -56,7 +67,7 @@ export class ProductVariant {
   width: number;
   height: number;
   depth: number;
-  image: string;
+  images: Array<any>;
   content_type: string;
   options: Array<Options>;
 
@@ -71,6 +82,7 @@ export class ProductVariant {
     this.height = productVariant.height;
     this.depth = productVariant.depth;
     this.options = new Array<Options>();
+    this.images = [];
   }
 }
 

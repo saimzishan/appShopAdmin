@@ -83,7 +83,7 @@ export class FuseLoginComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     this.userServices.getLogin(this.userModel).subscribe(
       (res: any) => {
-        if (res.status === 200) {
+        if (!res.error) {
           localStorage.setItem("currentUser", JSON.stringify(res.res));
           localStorage.setItem(
             "rememberMe",
