@@ -36,7 +36,7 @@ export class ProductService extends ApiService implements Resolve<any> {
     this.routeParams = route.params;
 
     return new Promise((resolve, reject) => {
-      Promise.all([this.getProduct(), this.getCategories()]).then(() => {
+      Promise.all([]).then(() => {
         resolve();
       }, reject);
     });

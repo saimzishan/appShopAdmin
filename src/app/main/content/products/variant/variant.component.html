@@ -28,29 +28,19 @@
 
             </tbody>
         </table>
-        <div class="row">
+        <div class="row" style="margin-bottom:10px">
             <div class="col-md-12">
                 <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Sku</button>
                 <button class="btn btn-info">Generate Sku</button>
             </div>
 
         </div>
-        <br>
-        <div class="row" *ngIf="isAddorEditSKU">
-            <form name="skuForm" #skuForm="ngForm" fxLayout="column" fxFlex>
-                <mat-card>
+        <div *ngIf="isAddorEditSKU">
+            <mat-card>
+                <form name="skuForm" #skuForm="ngForm">
+
                     <mat-card-content>
                         <br>
-                        <div class="row" *ngFor="let variant of variants">
-                            <div class="col-md-1">
-                                <label>{{variant.name}}</label>
-                                <!-- <mat-select placeholder="Select" 
-                                            required>
-                                            <mat-option *ngFor="let opt of getOption(optionSet.option_set_id)" [value]="opt.id">
-                                                {{opt.name}}</mat-option>
-                                        </mat-select> -->
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-1" *ngFor="let optionSet of option_with_value">
                                 <label>{{optionSet.name}}</label>
@@ -105,15 +95,39 @@
                             </div>
                         </div>
                     </mat-card-content>
-                    <mat-card-actions style="text-align: right;">
-                        <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                        <button class="btn btn-info" mat-button (click)="saveProduct(skuForm)">Save & Close</button>
-                    </mat-card-actions>
+                </form>
+                <!-- {{variants| json}} -->
+                <table class="table" *ngIf="variants.length > 0">
+                    <thead>
+                        <tr>
+                            <th>sku</th>
+                            <th>upc</th>
+                            <th>weight</th>
+                            <th>depth</th>
+                            <th>width</th>
+                            <th>height</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let variant of variants">
+                            <tr>
+                                <td>{{variant.sku}}</td>
+                                <td>{{variant.upc}}</td>
+                                <td>{{variant.weight}}</td>
+                                <td>{{variant.depth}}</td>
+                                <td>{{variant.width}}</td>
+                                <td>{{variant.height}}</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
 
-                </mat-card>
-            </form>
+                <mat-card-actions style="text-align: right;">
+                    <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
+                    <button class="btn btn-info" mat-button (click)="saveProduct()">Save & Close</button>
+                </mat-card-actions>
 
-
+            </mat-card>
         </div>
     </mat-card>
 </div>

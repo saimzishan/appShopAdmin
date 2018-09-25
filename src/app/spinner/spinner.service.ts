@@ -11,6 +11,6 @@ export class SpinnerService {
   requestInProcess(isRequesting: boolean) {
     setTimeout(() => {
       this.requestInProcessSource.next(isRequesting);
-    }, 1);
+    }, 0);
   }
 }
