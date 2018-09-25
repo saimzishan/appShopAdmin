@@ -32,6 +32,7 @@ export class VariantComponent implements OnInit {
   obj = [];
   supplierId = -1;
   productId = -1;
+
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
