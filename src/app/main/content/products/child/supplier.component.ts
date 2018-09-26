@@ -66,6 +66,10 @@ export class SupplierFormComponent implements OnInit {
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
+    this.init();
+  }
+
+  init() {
     let current_product: any = localStorage.getItem("current_product");
     if (current_product) {
       current_product = JSON.parse(current_product);
@@ -250,6 +254,7 @@ export class SupplierFormComponent implements OnInit {
           "current_product_sp_images",
           JSON.stringify(res.res.data.images)
         );
+        this.init();
         this.detectChanges.notifyOther({
           option: "addproduct",
           value: res.res.data

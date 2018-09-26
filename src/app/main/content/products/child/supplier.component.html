@@ -79,7 +79,47 @@
             </div>
         </mat-card>
     </div>
+    <div class="tab-content p-24" fusePerfectScrollbar>
+        <mat-card>
+            <legend style="padding: 10px">
+                <h2>Other Details</h2>
+            </legend>
+            <div class="row">
+                <div class="col-md-2">
+                    <!-- <mat-form-field class="w-100-p"> -->
+                    <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="supplier.track_stock">Track
+                        Stock</mat-checkbox>
+                    <!-- </mat-form-field> -->
+                </div>
 
+                <div class="col-md-2">
+                    <!-- <mat-form-field class="w-100-p"> -->
+                    <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="supplier.printing_option">Printing
+                        option</mat-checkbox>
+                    <!-- </mat-form-field> -->
+                </div>
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <mat-form-field class="w-70-p">
+                        <input matInput #stock="ngModel" name="stock" [(ngModel)]="supplier.stock" placeholder="Stock">
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <mat-form-field class="w-70-p">
+                        <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="supplier.low_level_stock"
+                            placeholder="Low level Stock">
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card>
+    </div>
     <div class="tab-content p-24" fusePerfectScrollbar>
         <mat-card>
             <legend style="padding: 10px">
@@ -98,13 +138,27 @@
                     <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
                         <span>Please Select a Supplier.</span>!</span>
                 </div>
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
+                <div class="col-md-2">
+                    <mat-form-field class="w-90-p">
                         <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price"
                             required>
                     </mat-form-field>
                     <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
                         <span>Price is required.</span>!</span>
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-90-p">
+                        <input matInput #buying_price="ngModel" name="buying_price" [(ngModel)]="supplier.buying_price"
+                            placeholder="Product buying price">
+                    </mat-form-field>
+
+                </div>
+                <div class="col-md-2">
+                    <mat-form-field class="w-90-p">
+                        <input matInput #market_price="ngModel" name="market_price" [(ngModel)]="supplier.market_price"
+                            placeholder="Product market price">
+                    </mat-form-field>
+
                 </div>
             </div>
             <div class="row">
@@ -232,14 +286,14 @@
                 </ng-container>
             </div>
             <div class="row" *ngIf="displayImage">
-                <div class="col-md-4">
+                <div class="col-md-4" style="text-align:center">
                     <img src="{{urltoMe + displayImage.small}}" width="100" height="100">
                 </div>
-                <div class="col-md-4">
-                    <img src="{{urltoMe + displayImage.medium}}" width="100" height="100">
+                <div class="col-md-4" style="text-align:center">
+                    <img src="{{urltoMe + displayImage.medium}}" width="150" height="100">
                 </div>
-                <div class="col-md-4">
-                    <img src="{{urltoMe + displayImage.large}}" width="100" height="100">
+                <div class="col-md-4" style="text-align:center">
+                    <img src="{{urltoMe + displayImage.large}}" width="200" height="100">
                 </div>
             </div>
             <br>
