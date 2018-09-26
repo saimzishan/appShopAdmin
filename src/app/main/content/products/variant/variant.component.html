@@ -87,6 +87,27 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
+                                <mat-select placeholder="Operation" name="operation" [(ngModel)]="product_variant.operation"
+                                    style="margin-top: 20px;">
+                                    <mat-option value=1>Add</mat-option>
+                                    <mat-option value=2>Subtract</mat-option>
+                                </mat-select>
+
+                            </div>
+                            <div class="col-md-1">
+
+                                <mat-select placeholder="Change by" name="changeBy" [(ngModel)]="product_variant.changeBy"
+                                    style="margin-top: 20px;">
+                                    <mat-option value=1>Absolute</mat-option>
+                                    <mat-option value=2>Percentage</mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-md-1">
+                                <input class="form-control" type="number" name="amount" [(ngModel)]="product_variant.amount"
+                                    style="margin-top: 20px;" min="0" placeholder="Amount">
+                            </div>
+
+                            <div class="col-md-1">
                                 <button (click)="mangeOption(skuForm)" class="btn btn-info btn-xs">
                                     <i class="material-icons">
                                         add
@@ -96,16 +117,77 @@
                         </div>
                     </mat-card-content>
                 </form>
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Small (180x135)</label>
+                        <div class="center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'small')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Medium (480x360)</label>
+
+                        <div class="center" style="text-align:center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'medium')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Large (960x720)</label>
+                        <div class="center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'large')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <ng-container *ngFor="let image of images">
+                        <div class="col-md-4">
+                            <ng-container *ngIf="image.type === 'small'">
+
+                                <p>
+                                    Small Image saved
+                                </p>
+                            </ng-container>
+
+                        </div>
+                        <div class="col-md-4" style="margin-top: -25px;">
+                            <ng-container *ngIf="image.type === 'medium'">
+                                <p>
+                                    Medium Image saved
+                                </p>
+                            </ng-container>
+
+                        </div>
+                        <div class="col-md-4" style="margin-top: -30px;">
+                            <ng-container *ngIf="image.type === 'large'">
+                                <p>
+                                    Large Image saved
+                                </p>
+
+                            </ng-container>
+
+                        </div>
+                    </ng-container>
+                </div>
+                <br>
                 <!-- {{variants| json}} -->
                 <table class="table" *ngIf="variants.length > 0">
                     <thead>
                         <tr>
-                            <th>sku</th>
-                            <th>upc</th>
-                            <th>weight</th>
-                            <th>depth</th>
-                            <th>width</th>
-                            <th>height</th>
+                            <th>Sku</th>
+                            <th>Upc</th>
+                            <th>Weight</th>
+                            <th>Depth</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Operation</th>
+                            <th>Change by</th>
+                            <th>Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,6 +199,12 @@
                                 <td>{{variant.depth}}</td>
                                 <td>{{variant.width}}</td>
                                 <td>{{variant.height}}</td>
+                                <td>{{(variant.operation) === '1'? 'Add' :(variant.operation) === '2'? 'Subtract' :
+                                    'Null'}}</td>
+                                <td>{{(variant.changeBy) === '1' ? 'Absolute' :(variant.changeBy) === '2'? 'Percentage'
+                                    :
+                                    'Null'}}</td>
+                                <td>{{variant.amount}}</td>
                             </tr>
                         </ng-container>
                     </tbody>

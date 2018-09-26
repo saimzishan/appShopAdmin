@@ -37,7 +37,7 @@
             <mat-form-field>
                 <mat-select placeholder="Action" class="mt-16 mt-sm-0">
                     <mat-option [value]="1">Save & Continue</mat-option>
-                    <mat-option [value]="2">Save & Exit</mat-option>
+                    <mat-option [value]="2" (click)="saveAndExit()">Save & Exit</mat-option>
                     <mat-option [value]="3">Save & Add More Supplier</mat-option>
                 </mat-select>
             </mat-form-field>

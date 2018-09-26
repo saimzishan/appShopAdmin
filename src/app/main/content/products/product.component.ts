@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 
 import {
@@ -16,12 +17,6 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/observable/fromEvent";
 import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
-import {
-  FileSystemDirectoryEntry,
-  FileSystemFileEntry,
-  UploadEvent,
-  UploadFile
-} from "ngx-file-drop";
 
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 
@@ -48,13 +43,16 @@ export class ProductComponent implements OnInit, OnDestroy {
   pageType: string;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   dialogRef: any;
-  files: UploadFile[] = [];
 
   product_id: any;
   supplier_id: any = false;
   enabledChild: boolean = true;
 
-  constructor(private dialog: MatDialog, protected http: HttpClient) {
+  constructor(
+    private dialog: MatDialog,
+    protected http: HttpClient,
+    private router: Router
+  ) {
     this.bluckPrices = new Array<BluckPrice>();
   }
 
@@ -87,20 +85,16 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.confirmDialogRef = null;
     });
   }
-
-  dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const droppedFile of event.files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {});
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-      }
-    }
+  saveAndExit() {
+    localStorage.removeItem("current_product");
+    localStorage.removeItem("current_product_sp_images");
+    localStorage.removeItem("optionSet");
+    this.router.navigate(["/products"]);
   }
+
+  // scrollToId() {
+  //   $("#middleOfPanel")[0].scrollIntoView();
+  // }
 
   ngOnDestroy() {}
 }

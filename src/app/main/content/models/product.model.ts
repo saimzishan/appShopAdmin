@@ -79,6 +79,10 @@ export class ProductVariant {
   depth: number;
   images: Array<any>;
   content_type: string;
+  operation: number;
+  changeBy: number;
+  amount: number;
+
   options: Array<Options>;
 
   constructor(productVariant?) {
@@ -91,6 +95,9 @@ export class ProductVariant {
     this.width = productVariant.width;
     this.height = productVariant.height;
     this.depth = productVariant.depth;
+    this.operation = productVariant.operation || null;
+    this.changeBy = productVariant.changeBy || null;
+    this.amount = productVariant.amount || null;
     this.options = new Array<Options>();
     this.images = [];
   }
