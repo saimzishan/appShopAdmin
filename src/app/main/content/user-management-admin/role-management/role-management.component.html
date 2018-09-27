@@ -1,128 +1,74 @@
-<div id="adminHome" class="page-layout carded fullwidth" fusePerfectScrollbar>
+<div id="role" class="page-layout carded fullwidth" fusePerfectScrollbar>
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg mat-accent-bg"></div>
     <!-- / TOP BACKGROUND -->
     <!-- CENTER -->
-    <div  class="center">
+    <div class="center">
 
-        <!-- HEADER -->
-        <!-- <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
-            <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">center_focus_strong</mat-icon>
-
-         
-        </div> -->
-        <div class="header white-fg"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-             <!-- APP TITLE -->
-            <div class="logo my-12 m-sm-0"
-                 fxLayout="row" fxLayoutAlign="start center">
-                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">center_focus_strong</mat-icon>
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/user-management/manage-role/roles'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">center_focus_strong</mat-icon>
                 <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"> Roles Management</span>
             </div>
             <!-- / APP TITLE -->
 
-             <!-- SEARCH -->
-            <div class="search-input-wrapper mx-12 m-md-0"
-                 fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                <label for="search" class="mr-8">
-                    <mat-icon class="secondary-text">search</mat-icon>
-                </label>
-                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-                    <input id="search" matInput #filter placeholder="Search">
-                </mat-form-field>
-            </div>
-            <!-- / SEARCH -->
+            <!-- CRUD CONTROL -->
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="roleFormSubmit.click()">
+                <span>ADD</span>
+            </button>
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteRole()">
+                <span>DELETE</span>
+            </button>
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editRoleFormSubmit.click()">
+                <span>SAVE</span>
+            </button>
+            <!-- / CRUD CONTROL -->
 
             <!-- [routerLink]="'/products/new'" -->
-            <button mat-raised-button
-                    (click)="toggleMe()"
-                    class="add-product-button mat-white-bg my-12 mt-sm-0">
+            <button mat-raised-button (click)="toggleMe()" class="add-product-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW ROLE</span>
             </button>
-          
+
         </div>
         <!-- CONTENT CARD -->
-        <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="!isAddingNewRole">
-            <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-            </mat-form-field>
-            <mat-table
-                       #table [dataSource]="dataSource"
-                       matSort
-                       [@animateStagger]="{value:'50'}"
-                       fusePerfectScrollbar>
-          
-            <!-- role Column -->
-            <ng-container cdkColumnDef="role">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Role</mat-header-cell>
-                <mat-cell *cdkCellDef="let user">
-                    <p class="text-truncate">{{user.id}}</p>
-                </mat-cell>
-            </ng-container>
-          
-            <!-- permissions Column -->
-            <ng-container cdkColumnDef="permissions">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Permissions</mat-header-cell>
-                <mat-cell *cdkCellDef="let user">
-                    <p class="text-truncate">{{user.name}}</p>
-                </mat-cell>
-            </ng-container>
 
-            <!-- operations Column -->
-            <ng-container cdkColumnDef="operations">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Operations</mat-header-cell>
-                <mat-cell *cdkCellDef="let user">
-                    <p class="text-truncate">{{user.name}}</p>
-                </mat-cell>
-            </ng-container>
-          
-              <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <div class="content-card mat-white-bg" style="padding: 20px;">
+            <div class="content">
+                <form name="roleForm" #roleForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+                        <mat-form-field class="w-100-p">
+                            <input matInput required #name="ngModel" name="name" [(ngModel)]="role.name" placeholder="Role">
+                        </mat-form-field>
+                        <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error red-fg">
+                            <span>Product name is required.</span>!</span>
 
-              <mat-row *cdkRowDef="let user; columns: displayedColumns;">
-              </mat-row>
-            </mat-table>
-          
-             <mat-paginator #paginator
-                           [pageIndex]="0"
-                           [pageSize]="10"
-                           [pageSizeOptions]="[5, 10, 25, 100]">
-            </mat-paginator>
-              
-              
+                        <mat-form-field class="w-100-p">
+                            <mat-select required #permissions="ngModel" name="permissions" placeholder="Permissions" [(ngModel)]="role.permissions" multiple>
+                                <mat-select-trigger>
+                                    {{role.permissions ? role.permissions[0] : ''}}
+                                    <span *ngIf="permissions.value?.length > 1" class="example-additional-selection">
+                                        (+{{role.permissions.length - 1}} {{role.permissions?.length === 2 ? 'other' : 'others'}})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option *ngFor="let permission of PermissionList" [value]="permission">{{permission}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <span *ngIf="permissions.touched && permissions.errors?.required;" class="inline-icon error red-fg">
+                            <span>Permissions are required.</span>!</span>
+
+                    </div>
+                    <input type="button" class="btn btn-primary" hidden #roleFormSubmit (click)="addRole(roleForm)">
+                    <input type="button" class="btn btn-primary" hidden #editRoleFormSubmit (click)="updateRole(roleForm)">
+                </form>
+            </div>
         </div>
-        <!-- Role Form -->
-        <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="isAddingNewRole">
-            <form name="roleForm"  #roleForm="ngForm" class="product">
-
-                <mat-form-field class="w-100-p">
-                    <input matInput required #name="ngModel" name="name" [(ngModel)]="role.name" placeholder="Role" >
-                </mat-form-field>
-                <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error red-fg">
-                    <span>Product name is required.</span>!</span>
-
-                <mat-form-field class="w-100-p">
-                    <mat-select required #permissions="ngModel" name="permissions" placeholder="Permissions" [(ngModel)]="role.permissions" multiple>
-                        <mat-select-trigger>
-                            {{role.permissions ? role.permissions[0] : ''}}
-                            <span *ngIf="permissions.value?.length > 1" class="example-additional-selection">
-                                (+{{role.permissions.length - 1}} {{role.permissions?.length === 2 ? 'other' : 'others'}})
-                            </span>
-                        </mat-select-trigger>
-                        <mat-option *ngFor="let permission of PermissionList" [value]="permission">{{permission}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <span *ngIf="permissions.touched && permissions.errors?.required;" class="inline-icon error red-fg">
-                    <span>Permissions are name is required.</span>!</span>
-                
-                <button mat-raised-button (click)="addRole(roleForm)" color="accent" class="submit-button float-right" aria-label="Add new role">
-                    Add Role
-                </button>
-
-            </form>
-        </div>
-        <!-- /Role Form -->
-          <!-- CONTENT CARD -->
+        <!-- CONTENT CARD -->
     </div>
-</div>            
+</div>

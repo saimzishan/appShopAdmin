@@ -4,7 +4,8 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../core/modules/shared.module';
 import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
 import { UserManagmentComponent } from './user-management/user-management.component';
-import { RoleManagmentComponent } from './role-management/role-management.component';
+import { RoleManagementComponent } from './role-management/role-management.component';
+import { RolesManagementComponent } from './role-management/roles-management.component';
 import { ProductManagmentComponent } from './product-management/product-management.component';
 import { PermissionManagementComponent } from './permission-management/permission-management.component';
 import { UserManagementService } from './users.service';
@@ -20,25 +21,26 @@ const routes = [
     canActivate: [AuthGuard],
     path: '',
     component: UserManagmentComponent,
-    // resolve: {
-    //   academy: UserManagementService
-    // }
   },
   {
     canActivate: [AuthGuard],
     path: 'manage-users',
     component: UserManagmentComponent,
-    // resolve  : {
-    //   academy: UserManagementService
-    // }
   },
   {
     canActivate: [AuthGuard],
-    path: 'manage-roles',
-    component: RoleManagmentComponent,
-    // resolve  : {
-    //   academy: UserManagementService
-    // }
+    path: 'manage-role/roles',
+    component: RolesManagementComponent,
+  },
+  {
+    canActivate: [AuthGuard],
+    path: 'manage-role/role/new',
+    component: RoleManagementComponent,
+  },
+  {
+    canActivate: [AuthGuard],
+    path: 'manage-role/role/:id',
+    component: RoleManagementComponent,
   },
   {
     canActivate: [AuthGuard],
@@ -69,7 +71,8 @@ const routes = [
   ],
   declarations: [
     UserManagmentComponent,
-    RoleManagmentComponent,
+    RoleManagementComponent,
+    RolesManagementComponent,
     ProductManagmentComponent,
     PermissionManagementComponent,
     AdminHomeComponent

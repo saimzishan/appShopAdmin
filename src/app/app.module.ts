@@ -102,11 +102,6 @@ const appRoutes: Routes = [
     path: 'pages',
     loadChildren: './main/content/pages/pages.module#FusePagesModule'
   },
-  {
-    path: 'usermanagment',
-    loadChildren:
-      './main/content/user-management-admin/user-management.module#UserManagementModule'
-  },
   
 
   /*,

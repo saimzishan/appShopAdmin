@@ -234,7 +234,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 ]
             },
             {
-                'id': 'brands',
+                'id': 'userManagement',
                 'title': 'User Management',
                 'translate': 'NAV.BRANDS',
                 'type': 'collapse',
@@ -255,12 +255,28 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'exactMatch': true
                     },
                     {
-                        'id': 'add',
+                        'id': 'manageRoles',
                         'title': 'Manage Roles',
-                        'type': 'item',
+                        'type': 'collapse',
                         'icon': 'center_focus_strong',
-                        'url': 'user-management/manage-roles',
-                        'exactMatch': true
+                        'children': [
+                            {
+                                'id': 'view',
+                                'title': 'View',
+                                'type': 'item',
+                                'icon': 'visibility',
+                                'url': '/user-management/manage-role/roles',
+                                'exactMatch': true
+                            },
+                            {
+                                'id': 'add',
+                                'title': 'Add',
+                                'type': 'item',
+                                'icon': 'add_circle',
+                                'url': '/user-management/manage-role/role/new',
+                                'exactMatch': true
+                            }
+                        ]
                     },
                     {
                         'id': 'productDetail',

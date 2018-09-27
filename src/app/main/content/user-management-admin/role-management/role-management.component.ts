@@ -19,7 +19,7 @@ import { Role } from '../../models/role.model';
     styleUrls  : ['./role-management.component.css'],
     animations : fuseAnimations
 })
-export class RoleManagmentComponent implements OnInit {
+export class RoleManagementComponent implements OnInit {
     
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('filter') filter: ElementRef;
@@ -32,12 +32,16 @@ export class RoleManagmentComponent implements OnInit {
     userForm: FormGroup;
     permissions = new FormControl();
     PermissionList: string[] = ['add-roles', 'view-roles', 'edit-roles', 'delete-roles', 'add-products', 'view-products', 'edit-products', 'delete-products'];
+    pageType: string;
+
     constructor(private userMService: UserManagementService, private spinnerService: SpinnerService,
         private snotifyService: SnotifyService) {
             this.role = new Role();
         }
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.pageType = 'new';
+    }
 
     ngAfterViewInit () {
         // console.log(AuthGuard.isTokenExpired());
