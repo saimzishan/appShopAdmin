@@ -18,6 +18,7 @@ export class OptionAndSkusComponent implements OnInit {
   product_id;
   supplier_id;
   changesSubscription;
+  alreadyTaken: any = false;
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -58,6 +59,13 @@ export class OptionAndSkusComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.optionSets = res.res.data;
+          this.alreadyTaken = localStorage.getItem("optionSet");
+          if (this.alreadyTaken) {
+            this.alreadyTaken = JSON.parse(this.alreadyTaken);
+            this.alreadyTaken.forEach(element => {
+              this.option_set_id.push(element.option_set_id);
+            });
+          }
         }
         this.spinnerService.requestInProcess(false);
       },

@@ -22,6 +22,8 @@ export class Product {
 export class Supplier {
   id: number;
   price: number;
+  buying_price: number;
+  market_price: number;
   ean: string;
   sku: string;
   upc: string;
@@ -30,12 +32,18 @@ export class Supplier {
   height: number;
   depth: number;
   images: Image[];
+  track_stock: boolean;
+  printing_option: boolean;
+  stock: number;
+  low_level_stock: number;
   content_type: string;
 
   constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id;
     this.price = supplier.price;
+    this.buying_price = supplier.buying_price;
+    this.market_price = supplier.market_price;
     this.weight = supplier.weight;
     this.width = supplier.width;
     this.upc = supplier.upc;
@@ -45,6 +53,8 @@ export class Supplier {
     this.depth = supplier.depth || "";
     this.images = new Array<Image>();
     this.content_type = supplier.content_type || "";
+    this.track_stock = supplier.ttrack_stock || false;
+    this.printing_option = supplier.printing_option || false;
   }
 }
 export class Image {
@@ -69,6 +79,10 @@ export class ProductVariant {
   depth: number;
   images: Array<any>;
   content_type: string;
+  operation: number;
+  changeBy: number;
+  amount: number;
+
   options: Array<Options>;
 
   constructor(productVariant?) {
@@ -81,6 +95,9 @@ export class ProductVariant {
     this.width = productVariant.width;
     this.height = productVariant.height;
     this.depth = productVariant.depth;
+    this.operation = productVariant.operation || null;
+    this.changeBy = productVariant.changeBy || null;
+    this.amount = productVariant.amount || null;
     this.options = new Array<Options>();
     this.images = [];
   }
