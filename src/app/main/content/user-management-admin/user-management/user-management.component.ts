@@ -42,24 +42,24 @@ export class UserManagmentComponent implements AfterViewInit {
    
     ngAfterViewInit () {
         // console.log(AuthGuard.isTokenExpired());
-        this.index();
+        // this.index();
      }
    
     
-    index() {
-        this.spinnerService.requestInProcess(true);
-        this.userMService.index()
-            .subscribe((res: any) => {      
-                    this.users = res.res.data;
-                    this.setDataSuorce(res.res.data);
-                this.spinnerService.requestInProcess(false);
-            }, errors => {
-                this.spinnerService.requestInProcess(false);
-                let e = errors.error.message;
-                this.snotifyService.error(e, 'Error !' );
-                // this.notificationServiceBus.launchNotification(true, e);
-            });
-    }
+    // index() {
+    //     this.spinnerService.requestInProcess(true);
+    //     this.userMService.index()
+    //         .subscribe((res: any) => {      
+    //                 this.users = res.res.data;
+    //                 this.setDataSuorce(res.res.data);
+    //             this.spinnerService.requestInProcess(false);
+    //         }, errors => {
+    //             this.spinnerService.requestInProcess(false);
+    //             let e = errors.error.message;
+    //             this.snotifyService.error(e, 'Error !' );
+    //             // this.notificationServiceBus.launchNotification(true, e);
+    //         });
+    // }
     setDataSuorce(obj) {
         this.dataSource = new MatTableDataSource<any>(obj);
         this.dataSource.paginator = this.paginator;

@@ -37,24 +37,23 @@ export class RolesManagementComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.index();
+        this.getRoleList();
     }
 
-    index() {
+    getRoleList() {
         this.spinnerService.requestInProcess(true);
-        this.userMService.index()
-            .subscribe((res: any) => {
-                this.users = res.res.data;
-                this.setDataSuorce(res.res.data);
-                this.spinnerService.requestInProcess(false);
-            }, errors => {
-                this.spinnerService.requestInProcess(false);
-                let e = errors.error.message;
-                this.snotifyService.error(e, 'Error !');
-            });
+        this.userMService.getRoles().subscribe((res: any) => {
+            let data = res.res.data;
+            this.setDataSource(data);
+            this.spinnerService.requestInProcess(false);
+        }, errors => {
+            this.spinnerService.requestInProcess(false);
+            let e = errors.error.message;
+            this.snotifyService.error(e, 'Error !');
+        });
     }
 
-    setDataSuorce(obj) {
+    setDataSource(obj) {
         this.dataSource = new MatTableDataSource<any>(obj);
         this.dataSource.paginator = this.paginator;
     }

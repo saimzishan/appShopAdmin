@@ -20,48 +20,6 @@ import { Permission } from '../models/permission.model';
 export class UserManagementService extends ApiService {
     // onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-    // /**
-    //  * Resolve
-    //  * @param {ActivatedRouteSnapshot} route
-    //  * @param {RouterStateSnapshot} state
-    //  * @returns {Observable<any> | Promise<any> | any}
-    //  */
-    // resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-
-    //     return new Promise((resolve, reject) => {
-
-    //         Promise.all([
-    //             this.index()
-    //         ]).then(
-    //             () => {
-    //                 resolve();
-    //             },
-    //             reject
-    //         );
-    //     });
-    // }
-
-    index() {
-        let access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-            let error = {
-                message: 'Unauthorized'
-            }
-            return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + access_token
-            })
-        };
-        return this.http.get(GLOBAL.USER_API + 'users', httpOptions)
-            .map(this.extractData)
-            .catch((err) => { return this.handleError(err); }
-            );
-
-    }
-
     //Role CRUD
 
     getRoles() {
@@ -78,8 +36,7 @@ export class UserManagementService extends ApiService {
         Authorization: 'Bearer ' + access_token
       })
     };
-    return this.http
-      .get(GLOBAL.USER_API + 'role', httpOptions)
+    return this.http.get(GLOBAL.USER_API + 'roles', httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
