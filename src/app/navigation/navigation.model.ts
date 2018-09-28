@@ -240,19 +240,29 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 'type': 'collapse',
                 'icon': 'supervised_user_circle',
                 'children': [
-                    /*{
-                      'id'   : 'dashboard',
-                      'title': 'Dashboard',
-                      'type' : 'item',
-                      'url'  : '/apps/e-commerce/dashboard'
-                    },*/
                     {
-                        'id': 'view',
+                        'id': 'manageUsers',
                         'title': 'Manage Users',
-                        'type': 'item',
+                        'type': 'collapse',
                         'icon': 'people',
-                        'url': '/user-management/manage-users',
-                        'exactMatch': true
+                        'children': [
+                            {
+                                'id': 'view',
+                                'title': 'View',
+                                'type': 'item',
+                                'icon': 'visibility',
+                                'url': '/user-management/manage-user/users',
+                                'exactMatch': true
+                            },
+                            {
+                                'id': 'add',
+                                'title': 'Add',
+                                'type': 'item',
+                                'icon': 'add_circle',
+                                'url': '/user-management/manage-user/user/new',
+                                'exactMatch': true
+                            }
+                        ]
                     },
                     {
                         'id': 'manageRoles',

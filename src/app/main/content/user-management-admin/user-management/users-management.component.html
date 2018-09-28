@@ -13,8 +13,8 @@
              <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0"
                  fxLayout="row" fxLayoutAlign="start center">
-                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">center_focus_strong</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"> Roles Management</span>
+                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"> User Management</span>
             </div>
             <!-- / APP TITLE -->
 
@@ -31,9 +31,9 @@
             <!-- / SEARCH -->
 
             <button mat-raised-button
-                    [routerLink]="['/user-management/manage-role/role/new']"
+                    [routerLink]="['/user-management/manage-user/user/new']"
                     class="add-product-button mat-white-bg my-12 mt-sm-0">
-                <span>ADD NEW ROLE</span>
+                <span>ADD NEW USER</span>
             </button>
           
         </div>
@@ -51,30 +51,46 @@
             <!-- id Column -->
             <ng-container cdkColumnDef="id">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                <mat-cell *cdkCellDef="let role">
-                    <p class="text-truncate">{{role.id}}</p>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.id}}</p>
                 </mat-cell>
             </ng-container>
 
-            <!-- role Column -->
-            <ng-container cdkColumnDef="role">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Role</mat-header-cell>
-                <mat-cell *cdkCellDef="let role">
-                    <p class="text-truncate">{{role.name}}</p>
+            <!-- name Column -->
+            <ng-container cdkColumnDef="name">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.name}}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- email Column -->
+            <ng-container cdkColumnDef="email">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.email}}</p>
+                </mat-cell>
+            </ng-container>
+
+            <!-- level Column -->
+            <ng-container cdkColumnDef="level">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Level</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate">{{user.level}}</p>
                 </mat-cell>
             </ng-container>
           
-            <!-- permissions Column -->
-            <ng-container cdkColumnDef="permissions">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Permissions</mat-header-cell>
-                <mat-cell *cdkCellDef="let role">
-                    <p class="text-truncate"><span *ngFor="let permession of role.permissions; let i = index">{{permession.name}}<span *ngIf="i !== role.permissions.length - 1">, </span></span></p>
+            <!-- roles Column -->
+            <ng-container cdkColumnDef="roles">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Roles</mat-header-cell>
+                <mat-cell *cdkCellDef="let user">
+                    <p class="text-truncate"><span *ngFor="let role of user.roles; let i = index">{{role.name}}<span *ngIf="i !== user.roles.length - 1">, </span></span></p>
                 </mat-cell>
             </ng-container>
           
               <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-              <mat-row *cdkRowDef="let role; columns: displayedColumns;" matRipple [routerLink]="['/user-management/manage-role/role/'+role.id]">
+              <mat-row *cdkRowDef="let user; columns: displayedColumns;" matRipple [routerLink]="['/user-management/manage-user/user/'+user.id]">
               </mat-row>
             </mat-table>
           

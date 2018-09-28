@@ -9,36 +9,36 @@ import 'rxjs/add/observable/fromEvent';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from '../../../../spinner/spinner.service';
 import { fuseAnimations } from '../../../../core/animations';
-import { Role } from '../../models/role.model';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { UserManagementService } from '../users.service';
+import { User } from '../../models/user.model';
 
 @Component({
-    selector: 'app-roles-management',
-    templateUrl: './roles-management.component.html',
-    styleUrls: ['./roles-management.component.css'],
+    selector: 'app-users-management',
+    templateUrl: './users-management.component.html',
+    styleUrls: ['./users-management.component.css'],
     animations: fuseAnimations
 })
-export class RolesManagementComponent implements OnInit {
+export class UsersManagementComponent implements OnInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild('filter') filter: ElementRef;
     @ViewChild(MatSort) sort: MatSort;
-    displayedColumns: string[] = ['id', 'role', 'permissions'];
-    role: Role;
+    displayedColumns: string[] = ['id', 'name', 'email', 'level', 'roles'];
+    user: User;
     dataSource;
-    permissions = new FormControl();
+    roles = new FormControl();
     constructor(private userMService: UserManagementService, private spinnerService: SpinnerService,
         private snotifyService: SnotifyService) {
-        this.role = new Role();
+        this.user = new User();
     }
 
     ngOnInit() {
-        this.getRoleList();
+        this.getUserList();
     }
 
-    getRoleList() {
+    getUserList() {
         this.spinnerService.requestInProcess(true);
-        this.userMService.getRoles().subscribe((res: any) => {
+        this.userMService.getUsers().subscribe((res: any) => {
             let data = res.res.data;
             this.setDataSource(data);
             this.spinnerService.requestInProcess(false);
@@ -49,8 +49,8 @@ export class RolesManagementComponent implements OnInit {
         });
     }
 
-    setDataSource(roles) {
-        this.dataSource = new MatTableDataSource<Role>(roles);
+    setDataSource(users) {
+        this.dataSource = new MatTableDataSource<User>(users);
         this.dataSource.paginator = this.paginator;
     }
 

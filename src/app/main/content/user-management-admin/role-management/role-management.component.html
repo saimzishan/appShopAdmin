@@ -22,7 +22,7 @@
                 <span>ADD</span>
             </button>
 
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteRole()">
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delRole()">
                 <span>DELETE</span>
             </button>
 
@@ -30,11 +30,6 @@
                 <span>SAVE</span>
             </button>
             <!-- / CRUD CONTROL -->
-
-            <!-- [routerLink]="'/products/new'" -->
-            <button mat-raised-button (click)="toggleMe()" class="add-product-button mat-white-bg my-12 mt-sm-0">
-                <span>ADD NEW ROLE</span>
-            </button>
 
         </div>
         <!-- CONTENT CARD -->
@@ -47,17 +42,17 @@
                             <input matInput required #name="ngModel" name="name" [(ngModel)]="role.name" placeholder="Role">
                         </mat-form-field>
                         <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error red-fg">
-                            <span>Product name is required.</span>!</span>
+                            <span>Role name is required.</span>!</span>
 
                         <mat-form-field class="w-100-p">
                             <mat-select required #permissions="ngModel" name="permissions" placeholder="Permissions" [(ngModel)]="role.permissions" multiple>
                                 <mat-select-trigger>
-                                    {{role.permissions ? role.permissions[0] : ''}}
+                                    {{role.permissions ? firstSelectedPerName : ''}}
                                     <span *ngIf="permissions.value?.length > 1" class="example-additional-selection">
                                         (+{{role.permissions.length - 1}} {{role.permissions?.length === 2 ? 'other' : 'others'}})
                                     </span>
                                 </mat-select-trigger>
-                                <mat-option *ngFor="let permission of PermissionList" [value]="permission">{{permission}}</mat-option>
+                                <mat-option (onSelectionChange)="onChange($event)" *ngFor="let permission of permissionList" [value]="permission.id">{{permission.name}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                         <span *ngIf="permissions.touched && permissions.errors?.required;" class="inline-icon error red-fg">
