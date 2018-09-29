@@ -1,6 +1,6 @@
 # App Shop
 
-Material Design Admin Panel using Angular 5+ and Angular Material 2
+Admin Panel designed using Angular 5+ and Angular Material 2 by XploreBytes Team
 
 ## Development server
 

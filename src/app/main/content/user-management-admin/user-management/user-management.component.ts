@@ -13,7 +13,6 @@ import { UserManagementService } from '../users.service';
 import { FormGroup, FormControl, NgForm } from '@angular/forms';
 import { SnotifyService } from 'ng-snotify';
 import { Role } from '../../models/role.model';
-import { Permission } from '../../models/permission.model';
 import { FuseConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
 import { User } from '../../models/user.model';
 

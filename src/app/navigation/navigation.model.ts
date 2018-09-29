@@ -203,13 +203,13 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'Add',
                         'type': 'item',
                         'icon': 'add_circle',
-                        'url': '/tax-management/taxes/new',
+                        'url': '/tax-management/tax/new',
                         'exactMatch': true
                     },
                 ]
             },
             {
-                'id': 'products',
+                'id': 'tags',
                 'title': 'Tags',
                 'translate': 'NAV.ECOMMERCE',
                 'type': 'collapse',
@@ -220,7 +220,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'View',
                         'type': 'item',
                         'icon': 'visibility',
-                        'url': '/tags',
+                        'url': '/tag-management/tags',
                         'exactMatch': true
                     },
                     {
@@ -228,7 +228,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'Add',
                         'type': 'item',
                         'icon': 'add_circle',
-                        'url': '/tags/new',
+                        'url': '/tag-management/tag/new',
                         'exactMatch': true
                     },
                 ]

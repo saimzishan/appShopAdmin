@@ -1,51 +1,17 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot
-} from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../../shared/globel';
 import { ApiService } from '../../../api/api.service';
 import { AuthGuard } from '../../../guard/auth.guard';
+import { Tag } from '../models/tag.model';
 
 @Injectable()
 export class TagsService extends ApiService {
-  tags: any[];
-  onTagsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  /**
-   * Resolve
-   * @param {ActivatedRouteSnapshot} route
-   * @param {RouterStateSnapshot} state
-   * @returns {Observable<any> | Promise<any> | any}
-   */
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<any> | Promise<any> | any {
-    return new Promise((resolve, reject) => {
-      Promise.all([this.getBrands()]).then(() => {
-        resolve();
-      }, reject);
-    });
-  }
+  //Tag CRUD
 
-  // getBrands(): Promise<any>
-  // {
-  //     return new Promise((resolve, reject) => {
-  //         this.http.get('api/e-commerce-brands')
-  //             .subscribe((response: any) => {
-  //                 this.brands = response;
-  //                 this.onBrandsChanged.next(this.brands);
-  //                 resolve(response);
-  //             }, reject);
-  //     });
-  // }
-
-  getBrands() {
+  getTags() {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
@@ -59,8 +25,91 @@ export class TagsService extends ApiService {
         Authorization: 'Bearer ' + access_token
       })
     };
-    return this.http
-      .get(GLOBAL.USER_API + 'tags', httpOptions)
+    return this.http.get(GLOBAL.USER_API + 'tags', httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getTagById(id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.get(GLOBAL.USER_API + 'tags/' + id, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  addTag(tag: Tag) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.post(GLOBAL.USER_API + 'tags', tag, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  updateTag(tag: Tag) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.put(GLOBAL.USER_API + 'tags/' + tag.id, tag, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  deleteTag(id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.delete(GLOBAL.USER_API + 'tags/' + id, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
