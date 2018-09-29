@@ -289,21 +289,37 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         ]
                     },
                     {
-                        'id': 'productDetail',
+                        'id': 'managePermission',
                         'title': 'Manage Permissions',
-                        'type': 'item',
+                        'type': 'collapse',
                         'icon': 'verified_user',
-                        'url': '/user-management/manage-permissions',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Manage Product',
-                        'type': 'item',
-                        'icon': 'add_shopping_cart',
-                        'url': '/user-management/manage-products',
-                        'exactMatch': true
-                    },
+                        'children': [
+                            {
+                                'id': 'view',
+                                'title': 'View',
+                                'type': 'item',
+                                'icon': 'visibility',
+                                'url': '/user-management/manage-permission/permissions',
+                                'exactMatch': true
+                            },
+                            {
+                                'id': 'add',
+                                'title': 'Add',
+                                'type': 'item',
+                                'icon': 'add_circle',
+                                'url': '/user-management/manage-permission/permission/new',
+                                'exactMatch': true
+                            }
+                        ]
+                    }
+                    // {
+                    //     'id': 'add',
+                    //     'title': 'Manage Product',
+                    //     'type': 'item',
+                    //     'icon': 'add_shopping_cart',
+                    //     'url': '/user-management/manage-products',
+                    //     'exactMatch': true
+                    // },
                 ]
             },
 

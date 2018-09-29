@@ -7,6 +7,7 @@ import { RoleManagementComponent } from './role-management/role-management.compo
 import { RolesManagementComponent } from './role-management/roles-management.component';
 import { ProductManagmentComponent } from './product-management/product-management.component';
 import { PermissionManagementComponent } from './permission-management/permission-management.component';
+import { PermissionsManagementComponent } from './permission-management/permissions-management.component';
 import { UserManagementService } from './users.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
@@ -54,20 +55,35 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
-    path: 'manage-products',
-    component: ProductManagmentComponent,
-    // resolve  : {
-    //   academy: UserManagementService
-    // }
+    path: 'manage-permission/permissions',
+    component: PermissionsManagementComponent,
   },
   {
     canActivate: [AuthGuard],
-    path: 'manage-permissions',
+    path: 'manage-permission/permission/new',
     component: PermissionManagementComponent,
-    // resolve  : {
-    //   academy: UserManagementService
-    // }
   },
+  {
+    canActivate: [AuthGuard],
+    path: 'manage-permission/permission/:id',
+    component: PermissionManagementComponent,
+  }
+  // {
+  //   canActivate: [AuthGuard],
+  //   path: 'manage-products',
+  //   component: ProductManagmentComponent,
+  //   // resolve  : {
+  //   //   academy: UserManagementService
+  //   // }
+  // }
+  // {
+  //   canActivate: [AuthGuard],
+  //   path: 'manage-permissions',
+  //   component: PermissionManagementComponent,
+  //   // resolve  : {
+  //   //   academy: UserManagementService
+  //   // }
+  // },
 ];
 
 @NgModule({
@@ -86,6 +102,7 @@ const routes = [
     RolesManagementComponent,
     ProductManagmentComponent,
     PermissionManagementComponent,
+    PermissionsManagementComponent,
     AdminHomeComponent
   ],
   providers: [UserManagementService, ProductsService]

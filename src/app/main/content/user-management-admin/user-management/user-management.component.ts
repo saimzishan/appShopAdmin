@@ -116,7 +116,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
     editUser() {
         this.spinnerService.requestInProcess(true);
-        this.sub = this.userMService.updateUser(this.user).subscribe((res: any) => {
+        this.sub = this.userMService.updateUserRoles(this.user).subscribe((res: any) => {
             let e = res.res.message;
             this.snotifyService.success(e, 'Success !');
             this.spinnerService.requestInProcess(false);

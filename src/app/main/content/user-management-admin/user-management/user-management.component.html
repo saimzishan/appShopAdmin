@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-md-6">
                                 <mat-form-field class="w-100-p">
-                                    <input matInput [type]="'email'" [disabled]="pageType === 'edit'" required #email="ngModel" name="email" [(ngModel)]="user.email" placeholder="Email">
+                                    <input matInput email [disabled]="pageType === 'edit'" required #email="ngModel" name="email" [(ngModel)]="user.email" placeholder="Email">
                                 </mat-form-field>
                                 <span *ngIf="email.touched && (email.errors?.required || email.errors?.email);" class="inline-icon error red-fg">
                                     <span>Email is required.</span>!</span>

@@ -152,13 +152,89 @@ export class UserManagementService extends ApiService {
             });
     }
 
-    getPermissionById(id: number) { }
+    getPermissionById(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'permissions/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
 
-    addPermission(permission: Permission) { }
+    addPermission(permission: Permission) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.post(GLOBAL.USER_API + 'permissions', permission, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
 
-    updatePermission(permission: Permission) { }
+    updatePermission(permission: Permission) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.put(GLOBAL.USER_API + 'permissions/' + permission.id, permission, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
 
-    deletePermission(id: number) { }
+    deletePermission(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.delete(GLOBAL.USER_API + 'permissions/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
 
     //User CRUD
 
@@ -225,7 +301,9 @@ export class UserManagementService extends ApiService {
             });
     }
 
-    updateUser(user: User) {
+    updateUser(user:User) { }
+
+    updateUserRoles(user: User) {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
             const error = {

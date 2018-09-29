@@ -1,6 +1,6 @@
-# Fuse2
+# App Shop
 
-Material Design Admin Template with Angular 5+ and Angular Material 2
+Material Design Admin Panel using Angular 5+ and Angular Material 2
 
 ## Development server
 
