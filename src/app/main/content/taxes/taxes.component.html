@@ -1,111 +1,81 @@
 <div id="taxes" class="page-layout carded fullwidth" fusePerfectScrollbar>
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
+  <!-- CENTER -->
+  <div class="center">
 
-    <!-- TOP BACKGROUND -->
-    <div class="top-bg mat-accent-bg"></div>
-    <!-- / TOP BACKGROUND -->
+    <!-- HEADER -->
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
 
-    <!-- CENTER -->
-    <div class="center">
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">monetization_on</mat-icon>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Taxes</span>
+      </div>
+      <!-- / APP TITLE -->
 
-        <!-- HEADER -->
-        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+      <!-- SEARCH -->
+      <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <label for="search" class="mr-8">
+          <mat-icon class="secondary-text">search</mat-icon>
+        </label>
+        <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+          <input id="search" matInput #filter placeholder="Search">
+        </mat-form-field>
+      </div>
+      <!-- / SEARCH -->
 
-            <!-- APP TITLE -->
-            <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
-                <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
-                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">monetization_on</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Taxes</span>
-            </div>
-            <!-- / APP TITLE -->
+      <button mat-raised-button [routerLink]="'/tax-management/tax/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
+        <span>ADD NEW TAX</span>
+      </button>
 
-            <!-- SEARCH -->
-            <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                <label for="search" class="mr-8">
-                    <mat-icon class="secondary-text">search</mat-icon>
-                </label>
-                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-                    <input id="search" matInput #filter placeholder="Search">
-                </mat-form-field>
-            </div>
-            <!-- / SEARCH -->
-
-            <button mat-raised-button [routerLink]="'/taxes/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
-                <span>ADD NEW TAX</span>
-            </button>
-
-        </div>
-        <!-- / HEADER -->
-
-        <!-- CONTENT CARD -->
-        <div class="content-card mat-white-bg">
-
-            <mat-table class="taxes-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
-
-
-
-                <!-- <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
-                    </td>
-                </ng-container> -->
-
-                <!-- ID Column -->
-                <ng-container cdkColumnDef="id">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *cdkCellDef="let tax">
-                        <p class="text-truncate">{{tax.id}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Image Column -->
-                <!-- <ng-container cdkColumnDef="image">
-                    <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-                    <mat-cell *cdkCellDef="let brand">
-                        <img class="brand-image"
-                             *ngIf="brand.images[0]" [alt]="brand.name"
-                             [src]="brand.images[0].url"/>
-                        <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
-                    </mat-cell>
-                </ng-container> -->
-
-                <!-- Name Column -->
-                <ng-container cdkColumnDef="title">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Tax Title</mat-header-cell>
-                    <mat-cell *cdkCellDef="let tax">
-                        <p class="text-truncate">{{tax.title}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Category Column -->
-                <ng-container cdkColumnDef="value">
-                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Notes</mat-header-cell>
-                    <mat-cell *cdkCellDef="let tax">
-                            <p class="text-truncate">{{tax.value}}</p>
-                        </mat-cell>
-                </ng-container>
-
-                <br>
-
-                <!-- Action Column -->
-
-
-                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-
-                <mat-row *cdkRowDef="let tax; columns: displayedColumns;" class="tax" matRipple [routerLink]="'/taxes/'+tax.id">
-                </mat-row>
-
-            </mat-table>
-
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
-            </mat-paginator>
-
-        </div>
-        <!-- / CONTENT CARD -->
     </div>
-    <!-- / CENTER -->
+    <!-- / HEADER -->
+
+    <!-- CONTENT CARD -->
+    <div class="content-card mat-white-bg">
+
+      <mat-table class="taxes-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
+
+        <!-- ID Column -->
+        <ng-container cdkColumnDef="id">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
+          <mat-cell *cdkCellDef="let tax">
+            <p class="text-truncate">{{tax.id}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Tax Title Column -->
+        <ng-container cdkColumnDef="title">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Tax Title</mat-header-cell>
+          <mat-cell *cdkCellDef="let tax">
+            <p class="text-truncate">{{tax.title}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Tax Value Column -->
+        <ng-container cdkColumnDef="value">
+          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Tax Value</mat-header-cell>
+          <mat-cell *cdkCellDef="let tax">
+            <p class="text-truncate">{{tax.value}}</p>
+          </mat-cell>
+        </ng-container>
+        <br>
+        <!-- Action Column -->
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+
+        <mat-row *cdkRowDef="let tax; columns: displayedColumns;" class="tax" matRipple [routerLink]="'/tax-management/tax/' + tax.id">
+        </mat-row>
+
+      </mat-table>
+
+      <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
 </div>

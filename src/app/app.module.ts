@@ -86,12 +86,12 @@ const appRoutes: Routes = [
   },
   {
     canActivate: [AuthGuard],
-    path: 'taxes',
+    path: 'tax-management',
     loadChildren: './main/content/taxes/taxes.module#TaxesModule'
   },
   {
     canActivate: [AuthGuard],
-    path: 'tags',
+    path: 'tag-management',
     loadChildren: './main/content/tags/tags.module#TagsModule'
   },
   {

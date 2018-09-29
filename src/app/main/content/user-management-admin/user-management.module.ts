@@ -11,7 +11,6 @@ import { PermissionsManagementComponent } from './permission-management/permissi
 import { UserManagementService } from './users.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
-import { ProductsService } from '../products/products.service';
 import { MatTableModule } from '@angular/material';
 import { AuthGuard } from '../../../guard/auth.guard';
 import { AdminHomeComponent } from './dashboard/home.component';
@@ -68,22 +67,6 @@ const routes = [
     path: 'manage-permission/permission/:id',
     component: PermissionManagementComponent,
   }
-  // {
-  //   canActivate: [AuthGuard],
-  //   path: 'manage-products',
-  //   component: ProductManagmentComponent,
-  //   // resolve  : {
-  //   //   academy: UserManagementService
-  //   // }
-  // }
-  // {
-  //   canActivate: [AuthGuard],
-  //   path: 'manage-permissions',
-  //   component: PermissionManagementComponent,
-  //   // resolve  : {
-  //   //   academy: UserManagementService
-  //   // }
-  // },
 ];
 
 @NgModule({
@@ -105,7 +88,7 @@ const routes = [
     PermissionsManagementComponent,
     AdminHomeComponent
   ],
-  providers: [UserManagementService, ProductsService]
+  providers: [UserManagementService]
 })
 export class UserManagementModule {
 }

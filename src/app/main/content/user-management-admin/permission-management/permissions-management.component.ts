@@ -9,7 +9,6 @@ import 'rxjs/add/observable/fromEvent';
 import { SnotifyService } from 'ng-snotify';
 import { SpinnerService } from '../../../../spinner/spinner.service';
 import { fuseAnimations } from '../../../../core/animations';
-import { FormGroup, FormControl } from '@angular/forms';
 import { UserManagementService } from '../users.service';
 import { Permission } from '../../models/permission.model';
 

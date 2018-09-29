@@ -184,7 +184,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 ]
             },
             {
-                'id': 'products',
+                'id': 'taxes',
                 'title': 'Taxes',
                 'translate': 'NAV.ECOMMERCE',
                 'type': 'collapse',
@@ -195,7 +195,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'View',
                         'type': 'item',
                         'icon': 'visibility',
-                        'url': '/taxes',
+                        'url': '/tax-management/taxes',
                         'exactMatch': true
                     },
                     {
@@ -203,7 +203,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'Add',
                         'type': 'item',
                         'icon': 'add_circle',
-                        'url': '/taxes/new',
+                        'url': '/tax-management/taxes/new',
                         'exactMatch': true
                     },
                 ]
