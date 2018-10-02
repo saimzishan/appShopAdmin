@@ -7,7 +7,12 @@ import { MatSnackBar } from "@angular/material";
 import { FormBuilder, FormGroup, FormControl, NgForm } from "@angular/forms";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { Input, OnInit, ViewChildren, Directive } from "@angular/core";
-import { Supplier, Product, Image } from "../../models/product.model";
+import {
+  Supplier,
+  Product,
+  Image,
+  BluckPrice
+} from "../../models/product.model";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
@@ -45,6 +50,7 @@ export class SupplierFormComponent implements OnInit {
   files: UploadFile[] = [];
   urltoMe = GLOBAL.USER_IMAGE_API;
   displayImage: any = false;
+  bluckPrice: BluckPrice;
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -59,6 +65,7 @@ export class SupplierFormComponent implements OnInit {
     this.bluckPrices = new Array<BluckPrice>();
     this.images = new Array<Image>();
     this.image = new Image();
+    this.bluckPrice = new BluckPrice();
   }
 
   ngOnInit() {
@@ -241,6 +248,7 @@ export class SupplierFormComponent implements OnInit {
     this.product.supplier = this.supplier;
     this.product.supplier.images = this.images;
     this.product.category_id = this.category_id;
+    this.product.supplier.bulk_prices = this.bluckPrices;
     this.spinnerService.requestInProcess(true);
 
     this.productService.addProduct(this.product).subscribe(
@@ -249,6 +257,7 @@ export class SupplierFormComponent implements OnInit {
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
         this.product.id = res.res.data.id;
+        delete this.product.supplier.images;
         localStorage.setItem("current_product", JSON.stringify(this.product));
         localStorage.setItem(
           "current_product_sp_images",
@@ -307,20 +316,17 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-}
 
-export class BluckPrice {
-  from: number;
-  to: number;
-  discount: number;
-  changeBy: number;
-  product_supplier_id: number;
-  constructor(bluckPrice?) {
-    bluckPrice = bluckPrice || {};
-    this.from = bluckPrice.from;
-    this.to = bluckPrice.to;
-    this.discount = bluckPrice.discount;
-    this.changeBy = bluckPrice.changeBy;
-    this.product_supplier_id = bluckPrice.product_supplier_id;
+  addBluckPrice(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
+      return;
+    }
+    this.bluckPrices.push(new BluckPrice(this.bluckPrice));
+    form.form.reset();
+    this.bluckPrice = new BluckPrice();
+  }
+  removeBluckPrice(index) {
+    this.bluckPrices.splice(index, 1);
   }
 }

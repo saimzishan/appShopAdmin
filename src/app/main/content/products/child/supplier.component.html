@@ -79,6 +79,8 @@
             </div>
         </mat-card>
     </div>
+
+
     <div class="tab-content p-24" fusePerfectScrollbar>
         <mat-card>
             <legend style="padding: 10px">
@@ -98,9 +100,22 @@
                         option</mat-checkbox>
                     <!-- </mat-form-field> -->
                 </div>
-
-
-
+                <div class="col-md-2">
+                    <!-- <mat-form-field class="w-100-p"> -->
+                    <mat-checkbox #active="ngModel" name="active" [(ngModel)]="supplier.active">Active </mat-checkbox>
+                    <!-- </mat-form-field> -->
+                </div>
+                <div class="col-md-6">
+                    <mat-radio-group name="class" [(ngModel)]="supplier.class">
+                        <mat-radio-button value="1">Slider</mat-radio-button>
+                        <mat-radio-button value="2">Featured</mat-radio-button>
+                        <mat-radio-button value="3">On-sale</mat-radio-button>
+                        <mat-radio-button value="4">new-arrival</mat-radio-button>
+                        <mat-radio-button value="5">Promoted</mat-radio-button>
+                        <!-- <mat-radio-button value="2">Add-on</mat-radio-button> -->
+                        <mat-radio-button value="6">none</mat-radio-button>
+                    </mat-radio-group>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-2">
@@ -120,6 +135,83 @@
             </div>
         </mat-card>
     </div>
+    <div class="tab-content p-24" fusePerfectScrollbar>
+        <mat-card>
+            <legend style="padding: 10px">
+                <h2>Bluck Price</h2>
+            </legend>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-inline" name="bluckPriceForm" #bluckPriceForm="ngForm">
+                        <div class="form-group">
+                            <label for="name">Purchases between &nbsp; </label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="Item" #form="ngModel" name="form"
+                                    [(ngModel)]="bluckPrice.from">
+                            </mat-form-field>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="email">&nbsp; and &nbsp;</label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="Item" #to="ngModel" name="to"
+                                    [(ngModel)]="bluckPrice.to">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd"> &nbsp; of this product will receive a &nbsp; </label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="%" #discount="ngModel" name="discount"
+                                    [(ngModel)]="bluckPrice.discount">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd"> &nbsp; discount off each individual item
+                                &nbsp;&nbsp;&nbsp;
+                            </label>
+                        </div>
+                        <button style="height: 31px;" type="submit" class="btn btn-info btn-xs" (click)="addBluckPrice(bluckPriceForm)">
+                            <i class="material-icons">
+                                add
+                            </i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <ng-container *ngFor="let row of bluckPrices; let i=index">
+                        <div class="row" style="text-align: left">
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Purchases between" value="{{row.from}}" style="margin-left: 91%;"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <input placeholder="and" matInput value="{{row.to}}" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <input placeholder="of this product will receive a % discount off each individual item"
+                                        matInput value="{{row.discount}}" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button style="height: 31px; margin-left: -20px;" type="submit" class="btn btn-danger btn-xs"
+                                    (click)="removeBluckPrice(i)">
+                                    <i class="material-icons">
+                                        remove
+                                    </i></button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
     <div class="tab-content p-24" fusePerfectScrollbar>
         <mat-card>
             <legend style="padding: 10px">
