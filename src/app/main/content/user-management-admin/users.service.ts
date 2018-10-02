@@ -13,50 +13,335 @@ import 'rxjs/add/observable/throw';
 import { HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../../shared/globel';
 import { AuthGuard } from '../../../guard/auth.guard';
+import { Role } from '../models/role.model';
+import { Permission } from '../models/permission.model';
+import { User } from '../models/user.model';
 
 @Injectable()
 export class UserManagementService extends ApiService {
     // onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-    // /**
-    //  * Resolve
-    //  * @param {ActivatedRouteSnapshot} route
-    //  * @param {RouterStateSnapshot} state
-    //  * @returns {Observable<any> | Promise<any> | any}
-    //  */
-    // resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
+    //Role CRUD
 
-    //     return new Promise((resolve, reject) => {
-
-    //         Promise.all([
-    //             this.index()
-    //         ]).then(
-    //             () => {
-    //                 resolve();
-    //             },
-    //             reject
-    //         );
-    //     });
-    // }
-
-    index() {
-        let access_token = AuthGuard.getToken();
+    getRoles() {
+        const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
-            let error = {
+            const error = {
                 message: 'Unauthorized'
-            }
+            };
             return Observable.throw({ error: error });
         }
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + access_token
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'roles', httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    getRoleById(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'roles/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    addRole(role: Role) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.post(GLOBAL.USER_API + 'roles', role, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    updateRole(role: Role) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.put(GLOBAL.USER_API + 'roles/' + role.id, role, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    deleteRole(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.delete(GLOBAL.USER_API + 'roles/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+
+    //Permission CRUD
+
+    getPermissions() {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'permissions', httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    getPermissionById(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'permissions/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    addPermission(permission: Permission) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.post(GLOBAL.USER_API + 'permissions', permission, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    updatePermission(permission: Permission) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.put(GLOBAL.USER_API + 'permissions/' + permission.id, permission, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    deletePermission(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.delete(GLOBAL.USER_API + 'permissions/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    //User CRUD
+
+    getUsers() {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
             })
         };
         return this.http.get(GLOBAL.USER_API + 'users', httpOptions)
             .map(this.extractData)
-            .catch((err) => { return this.handleError(err); }
-            );
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
 
+    getUserById(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.get(GLOBAL.USER_API + 'users/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    addUser(user: User) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.post(GLOBAL.USER_API + 'users', user, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    updateUser(user:User) { }
+
+    updateUserRoles(user: User) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.put(GLOBAL.USER_API + 'users/' + user.id + '?user_roles', user, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
+    deleteUser(id: number) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.delete(GLOBAL.USER_API + 'users/' + id, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
     }
 }

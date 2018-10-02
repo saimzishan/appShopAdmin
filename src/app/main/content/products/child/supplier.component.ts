@@ -1,3 +1,4 @@
+import { GLOBAL } from "./../../../../shared/globel";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
@@ -6,13 +7,24 @@ import { MatSnackBar } from "@angular/material";
 import { FormBuilder, FormGroup, FormControl, NgForm } from "@angular/forms";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { Input, OnInit, ViewChildren, Directive } from "@angular/core";
-import { Supplier, Product } from "../../models/product.model";
+import {
+  Supplier,
+  Product,
+  Image,
+  BluckPrice
+} from "../../models/product.model";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
-import { GLOBAL } from "../../../../shared/globel";
 import { ITreeOptions } from "angular-tree-component";
 import { DetectChangesService } from "../../../../shared/detect-changes.services";
+import {
+  FileSystemDirectoryEntry,
+  FileSystemFileEntry,
+  UploadEvent,
+  UploadFile
+} from "ngx-file-drop";
+
 @Component({
   selector: "app-product-supplier-form",
   templateUrl: "./supplier.component.html"
@@ -20,6 +32,8 @@ import { DetectChangesService } from "../../../../shared/detect-changes.services
 export class SupplierFormComponent implements OnInit {
   product: Product;
   supplier: Supplier;
+  images: Image[];
+  image: Image;
   bluckPrices: BluckPrice[];
   taxes: any;
   brands: any;
@@ -33,7 +47,10 @@ export class SupplierFormComponent implements OnInit {
   };
   @Output()
   productSaved = new EventEmitter();
-
+  files: UploadFile[] = [];
+  urltoMe = GLOBAL.USER_IMAGE_API;
+  displayImage: any = false;
+  bluckPrice: BluckPrice;
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -46,6 +63,9 @@ export class SupplierFormComponent implements OnInit {
     this.product = new Product();
     this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
+    this.images = new Array<Image>();
+    this.image = new Image();
+    this.bluckPrice = new BluckPrice();
   }
 
   ngOnInit() {
@@ -53,11 +73,18 @@ export class SupplierFormComponent implements OnInit {
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
+    this.init();
+  }
+
+  init() {
     let current_product: any = localStorage.getItem("current_product");
     if (current_product) {
       current_product = JSON.parse(current_product);
       this.product = current_product;
       this.supplier = current_product.supplier;
+      this.displayImage = localStorage.getItem("current_product_sp_images");
+      this.displayImage = JSON.parse(this.displayImage);
+      this.displayImage = this.displayImage[0];
       this.onProductSaved(current_product);
     }
   }
@@ -211,8 +238,17 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please Select a category");
       return;
     }
+    if (this.images.length < 2) {
+      this.snotifyService.warning(
+        "Please Upload three images (small, medium, large)",
+        "Warning"
+      );
+      return;
+    }
     this.product.supplier = this.supplier;
+    this.product.supplier.images = this.images;
     this.product.category_id = this.category_id;
+    this.product.supplier.bulk_prices = this.bluckPrices;
     this.spinnerService.requestInProcess(true);
 
     this.productService.addProduct(this.product).subscribe(
@@ -221,7 +257,13 @@ export class SupplierFormComponent implements OnInit {
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
         this.product.id = res.res.data.id;
+        delete this.product.supplier.images;
         localStorage.setItem("current_product", JSON.stringify(this.product));
+        localStorage.setItem(
+          "current_product_sp_images",
+          JSON.stringify(res.res.data.images)
+        );
+        this.init();
         this.detectChanges.notifyOther({
           option: "addproduct",
           value: res.res.data
@@ -236,20 +278,55 @@ export class SupplierFormComponent implements OnInit {
       }
     );
   }
-}
 
-export class BluckPrice {
-  from: number;
-  to: number;
-  discount: number;
-  changeBy: number;
-  product_supplier_id: number;
-  constructor(bluckPrice?) {
-    bluckPrice = bluckPrice || {};
-    this.from = bluckPrice.from;
-    this.to = bluckPrice.to;
-    this.discount = bluckPrice.discount;
-    this.changeBy = bluckPrice.changeBy;
-    this.product_supplier_id = bluckPrice.product_supplier_id;
+  dropped(event: UploadEvent, type: string) {
+    this.spinnerService.requestInProcess(true);
+    this.files = event.files;
+    for (const droppedFile of event.files) {
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          // Here you can access the real file
+          this.image.content_type = "." + file.type.split("/")[1];
+          this.image.type = type;
+          const reader = new FileReader();
+          reader.onload = this._handleReaderLoaded.bind(this);
+
+          reader.readAsBinaryString(file);
+        });
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+      }
+    }
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    const binaryString = readerEvt.target.result;
+    this.image.base64String = btoa(binaryString);
+    let index = this.images.findIndex(image => image.type === this.image.type);
+    if (index !== -1) {
+      this.images[index].base64String = this.image.base64String;
+      this.images[index].type = this.image.type;
+      this.images[index].content_type = this.image.content_type;
+    } else {
+      this.images.push(new Image(this.image));
+    }
+    this.image = new Image();
+    this.spinnerService.requestInProcess(false);
+  }
+
+  addBluckPrice(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
+      return;
+    }
+    this.bluckPrices.push(new BluckPrice(this.bluckPrice));
+    form.form.reset();
+    this.bluckPrice = new BluckPrice();
+  }
+  removeBluckPrice(index) {
+    this.bluckPrices.splice(index, 1);
   }
 }

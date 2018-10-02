@@ -22,6 +22,8 @@ export class Product {
 export class Supplier {
   id: number;
   price: number;
+  buying_price: number;
+  market_price: number;
   ean: string;
   sku: string;
   upc: string;
@@ -29,13 +31,21 @@ export class Supplier {
   width: number;
   height: number;
   depth: number;
-  images: [];
+  images: Image[];
+  bulk_prices: BluckPrice[];
+  track_stock: boolean;
+  printing_option: boolean;
+  stock: number;
+  low_level_stock: number;
   content_type: string;
-
+  active: boolean;
+  class: number;
   constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id;
     this.price = supplier.price;
+    this.buying_price = supplier.buying_price;
+    this.market_price = supplier.market_price;
     this.weight = supplier.weight;
     this.width = supplier.width;
     this.upc = supplier.upc;
@@ -43,8 +53,35 @@ export class Supplier {
     this.sku = supplier.sku || "";
     this.height = supplier.height || "";
     this.depth = supplier.depth || "";
-    this.images = supplier.images || [];
+    this.images = new Array<Image>();
+    this.bulk_prices = new Array<BluckPrice>();
     this.content_type = supplier.content_type || "";
+    this.track_stock = supplier.ttrack_stock || false;
+    this.printing_option = supplier.printing_option || false;
+    this.active = supplier.active || false;
+    this.class = supplier.class;
+  }
+}
+export class BluckPrice {
+  from: number;
+  to: number;
+  discount: number;
+  constructor(bluckPrice?) {
+    bluckPrice = bluckPrice || {};
+    this.from = bluckPrice.from;
+    this.to = bluckPrice.to;
+    this.discount = bluckPrice.discount;
+  }
+}
+export class Image {
+  content_type: string;
+  base64String: string;
+  type: string;
+  constructor(image?) {
+    image = image || {};
+    this.content_type = image.content_type || "";
+    this.base64String = image.base64String || "";
+    this.type = image.type || "";
   }
 }
 export class ProductVariant {
@@ -56,8 +93,12 @@ export class ProductVariant {
   width: number;
   height: number;
   depth: number;
-  image: string;
+  images: Array<any>;
   content_type: string;
+  operation: number;
+  changeBy: number;
+  amount: number;
+
   options: Array<Options>;
 
   constructor(productVariant?) {
@@ -70,7 +111,11 @@ export class ProductVariant {
     this.width = productVariant.width;
     this.height = productVariant.height;
     this.depth = productVariant.depth;
+    this.operation = productVariant.operation || null;
+    this.changeBy = productVariant.changeBy || null;
+    this.amount = productVariant.amount || null;
     this.options = new Array<Options>();
+    this.images = [];
   }
 }
 

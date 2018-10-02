@@ -1,6 +1,6 @@
-# Fuse2
+# App Shop
 
-Material Design Admin Template with Angular 5+ and Angular Material 2
+Admin Panel designed using Angular 5+ and Angular Material 2 by XploreBytes Team
 
 ## Development server
 

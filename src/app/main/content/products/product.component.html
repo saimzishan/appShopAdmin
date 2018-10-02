@@ -37,7 +37,7 @@
             <mat-form-field>
                 <mat-select placeholder="Action" class="mt-16 mt-sm-0">
                     <mat-option [value]="1">Save & Continue</mat-option>
-                    <mat-option [value]="2">Save & Exit</mat-option>
+                    <mat-option [value]="2" (click)="saveAndExit()">Save & Exit</mat-option>
                     <mat-option [value]="3">Save & Add More Supplier</mat-option>
                 </mat-select>
             </mat-form-field>
@@ -65,7 +65,7 @@
                 <div class="tab-content p-24" fusePerfectScrollbar>
 
                     <mat-accordion>
-                        <mat-expansion-panel>
+                        <mat-expansion-panel [expanded]="ps_panelOpenState">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Product Details & Supplier
@@ -75,7 +75,7 @@
                             <app-product-supplier-form (productSaved)="onProductSaved($event)" style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                         </mat-expansion-panel>
                         <!--  -->
-                        <mat-expansion-panel [disabled]="enabledChild">
+                        <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Option
@@ -86,7 +86,7 @@
                             </app-option-and-sku-form>
                         </mat-expansion-panel>
 
-                        <mat-expansion-panel [disabled]="enabledChild">
+                        <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Variants
@@ -111,303 +111,3 @@
     </div>
     <!-- / CENTER -->
 </div>
-
-
-
-
-<!-- 
-
-
-     <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-                    <mat-tab label="Details">
-                        <form name="productForm" #productForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput required #name="ngModel" name="name" [(ngModel)]="product.name"
-                                                placeholder="Product Name">
-                                        </mat-form-field>
-                                        <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
-                                            <span>Product name is required.</span>!</span>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id"
-                                                [(ngModel)]="product.brand_id">
-                                                <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                                                    {{brand.name}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
-                                            <span>Please Select a brand.</span>!</span>
-                                    </div>
-                                </div>
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <textarea matInput #long_description="ngModel" name="long_description" rows="3"
-                                                [(ngModel)]="product.long_description" placeholder="Product Long Description"></textarea>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <textarea required matInput #short_description="ngModel" name="short_description"
-                                                rows="3" [(ngModel)]="product.short_description" placeholder="Product Short Description"></textarea>
-                                        </mat-form-field>
-                                        <span *ngIf="short_description.touched && short_description.errors?.required;"
-                                            class="inline-icon error">
-                                            <span>Short description is required.</span>!</span>
-                                    </div>
-
-                                </div>
-                                <div class="row">
-
-                                    <div class="col-md-6">
-                                        <ng-container *ngIf="tree">
-                                            <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes"
-                                                (activate)="activeNodes(tree.treeModel)"></tree-root>
-
-                                        </ng-container>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id"
-                                                [(ngModel)]="product.tax_id" required>
-                                                <mat-option *ngFor="let brand of brands" [value]="brand.id">
-                                                    {{brand.name}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
-                                            <span>Please Select taxes.</span>!</span>
-                                    </div>
-
-
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6" fusePerfectScrollbar>
-                                        <mat-form-field class="w-25-p">
-                                            <mat-label>Select Category Above</mat-label>
-                                            <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                        </form>
-
-                    </mat-tab>
-
-                    <mat-tab label="Supplier">
-                        <form name="supplierForm" #supplierForm="ngForm" class="product w-100-p" fxLayout="column"
-                            fxFlex>
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
-                                                [(ngModel)]="supplier.id" required>
-                                                <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                                                    {{supplier.name}}</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
-                                            <span>Please Select a Supplier.</span>!</span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <mat-form-field class="w-100-p">
-                                            <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price"
-                                                placeholder="Product Price" required>
-                                        </mat-form-field>
-                                        <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
-                                            <span>Price is required.</span>!</span>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku"
-                                                    placeholder="Product Code/SKU" [required]="!disableRequired">
-                                            </mat-form-field>
-                                            <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
-                                                <span>SKU is required.</span>!</span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc"
-                                                    placeholder="Upc" [required]="!ean.valid">
-                                            </mat-form-field>
-                                            <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
-                                                <span>UPC is required.</span>!</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean"
-                                                    placeholder="Ean" [required]="!upc.valid">
-                                            </mat-form-field>
-                                            <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
-                                                <span>EAN is required.</span>!</span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input type="number" step="0.1" matInput #width="ngModel" name="width"
-                                                    [(ngModel)]="supplier.width" placeholder="Width (Centimeters)" required>
-                                            </mat-form-field>
-                                            <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
-                                                <span>Width is required.</span>!</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input type="number" step="0.1" matInput #weight="ngModel" name="weight"
-                                                    [(ngModel)]="supplier.weight" placeholder="Weight (kg)" required>
-                                            </mat-form-field>
-                                            <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
-                                                <span>Weight is required.</span>!</span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input type="number" step="0.1" matInput #height="ngModel" name="height"
-                                                    [(ngModel)]="supplier.height" placeholder="Height (Centimeters)"
-                                                    required>
-                                            </mat-form-field>
-                                            <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
-                                                <span>Height is required.</span>!</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <mat-form-field class="w-100-p">
-                                                <input type="number" step="0.1" matInput #depth="ngModel" name="depth"
-                                                    [(ngModel)]="supplier.depth" placeholder="Depth (Centimeters)" required>
-                                            </mat-form-field>
-                                            <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
-                                                <span>Depth is required.</span>!</span>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
-                                                style="margin-left: 312px" color="accent" (click)="addAnotherSupplier()">
-                                                <span>Add Another Supplier</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-    
-                            </form>
-    
-                        </mat-tab>
-                        <mat-tab label="Bluck Pricing">
-    
-                            <div class="tab-content p-24" fusePerfectScrollbar>
-                                <legend style="padding: 10px">
-                                    <h2>Bulk Pricing</h2>
-                                </legend>
-                                <mat-card>
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            Create bulk pricing rules to offer price discounts based on quantity
-                                            breaks. Please see this article for a complete tutorial on bulk pricing.
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content>
-                                        <form class="form-inline" name="bluckPriceForm" #bluckPriceForm="ngForm">
-                                            <div class="form-group">
-                                                <label for="name">Purchases between &nbsp; </label>
-                                                <mat-form-field>
-                                                    <input matInput id="name" required placeholder="Item" #form="ngModel"
-                                                        name="form" [(ngModel)]="bluckPrice.from">
-                                                </mat-form-field>
-    
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">&nbsp; and &nbsp;</label>
-                                                <mat-form-field>
-                                                    <input matInput id="name" required placeholder="Item" #to="ngModel"
-                                                        name="to" [(ngModel)]="bluckPrice.to">
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="pwd"> &nbsp; of this product will receive a &nbsp; </label>
-                                                <mat-form-field>
-                                                    <input matInput id="name" required placeholder="%" #discount="ngModel"
-                                                        name="discount" [(ngModel)]="bluckPrice.discount">
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="pwd"> &nbsp; discount off each individual item
-                                                    &nbsp;&nbsp;&nbsp;
-                                                </label>
-                                            </div>
-                                            <button style="height: 31px;" type="submit" class="btn btn-info btn-xs" (click)="addBluckPrice(bluckPriceForm)">
-                                                <i class="material-icons">
-                                                    add
-                                                </i></button>
-                                        </form>
-                                        <ng-container *ngFor="let row of bluckPrices; let i=index">
-                                            <div class="row" style="text-align: left">
-                                                <div class="col-md-3">
-                                                    <mat-form-field>
-                                                        <input matInput placeholder="Purchases between" value="{{row.from}}"
-                                                            style="margin-left: 91%;" readonly>
-                                                    </mat-form-field>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <mat-form-field>
-                                                        <input placeholder="and" matInput value="{{row.to}}" readonly>
-                                                    </mat-form-field>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <mat-form-field>
-                                                        <input placeholder="of this product will receive a % discount off each individual item"
-                                                            matInput value="{{row.discount}}" readonly>
-                                                    </mat-form-field>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <button style="height: 31px;" type="submit" class="btn btn-danger btn-xs"
-                                                        (click)="removeBluckPrice(i)">
-                                                        <i class="material-icons">
-                                                            remove
-                                                        </i></button>
-                                                </div>
-                                            </div>
-                                        </ng-container>
-    
-                                        <table class="table">
-                                            <tbody>
-                                                <tr *ngFor="let row of bluckPrices">
-                                                    <td>
-                                                        <mat-form-field>
-                                                            <input matInput value="{{row.from}}">
-                                                        </mat-form-field>
-                                                    </td>
-                                                    <td>
-                                                        <mat-form-field>
-                                                            <input matInput value="{{row.to}}">
-                                                        </mat-form-field>
-                                                    </td>
-                                                    <td>
-                                                        <mat-form-field>
-                                                            <input matInput value="{{row.discount}}">
-                                                        </mat-form-field>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </mat-card-content>
-                                </mat-card>
-                            </div>
-    
-                        </mat-tab>
-                        <input type="button" class="btn btn-primary" hidden #productFormSubmition (click)="addProduct(productForm, supplierForm)">
-                    </mat-tab-group>
-
- -->
