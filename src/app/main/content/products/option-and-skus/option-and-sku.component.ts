@@ -25,12 +25,6 @@ export class OptionAndSkusComponent implements OnInit {
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
   ) {
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.supplier_id = current_product.supplier.id;
-      this.product_id = current_product.id;
-    }
     this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
       res => {
         this.callRelatedFunctions(res);
@@ -40,14 +34,24 @@ export class OptionAndSkusComponent implements OnInit {
 
   ngOnInit() {
     this.getOptionSets();
+    let current_product: any = localStorage.getItem("current_product");
+    if (current_product) {
+      current_product = JSON.parse(current_product);
+      this.supplier_id = current_product.supplier.id;
+      this.product_id = current_product.id;
+    }
   }
 
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "addproduct":
-          this.supplier_id = res.value.supplier_id;
-          this.product_id = res.value.id;
+        let current_product: any = localStorage.getItem("current_product");
+        if (current_product) {
+          current_product = JSON.parse(current_product);
+          this.supplier_id = current_product.supplier.id;
+          this.product_id = current_product.id;
+        }
           break;
       }
     }

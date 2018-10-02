@@ -257,6 +257,7 @@ export class SupplierFormComponent implements OnInit {
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
         this.product.id = res.res.data.id;
+        delete this.product.supplier.images;
         localStorage.setItem("current_product", JSON.stringify(this.product));
         localStorage.setItem(
           "current_product_sp_images",
