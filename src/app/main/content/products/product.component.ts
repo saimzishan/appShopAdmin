@@ -48,7 +48,9 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   product_id: any;
   supplier_id: any = false;
-  enabledChild: boolean = true;
+  // enabledChild: boolean = true;
+  enableOptionChild = false;
+  enableVariantChild = false;
 
   constructor(private dialog: MatDialog, protected http: HttpClient) {
     this.bluckPrices = new Array<BluckPrice>();
@@ -60,7 +62,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   onProductSaved(evt) {
     this.product_id = evt.id;
     this.supplier_id = evt.supplier_id;
-    this.enabledChild = false;
+    this.enableOptionChild = false;
   }
 
   enableChildren() {

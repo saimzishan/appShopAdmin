@@ -86,29 +86,29 @@ export class FilesDataSource extends DataSource<any>
     }
 
     /** Connect function called by the table to retrieve one stream containing the data to render. */
-    connect(): Observable<any[]>
-    {
-        const displayDataChanges = [
-            this.productsService.onProductsChanged,
-            this._paginator.page,
-            this._filterChange,
-            this._sort.sortChange
-        ];
+    // connect(): Observable<any[]>
+    // {
+    //     const displayDataChanges = [
+    //         this.productsService.onProductsChanged,
+    //         this._paginator.page,
+    //         this._filterChange,
+    //         this._sort.sortChange
+    //     ];
 
-        return Observable.merge(...displayDataChanges).map(() => {
-            let data = this.productsService.products.slice();
+    //     return Observable.merge(...displayDataChanges).map(() => {
+    //         // let data = this.productsService.products.slice();
 
-            data = this.filterData(data);
+    //         data = this.filterData(data);
 
-            this.filteredData = [...data];
+    //         this.filteredData = [...data];
 
-            data = this.sortData(data);
+    //         data = this.sortData(data);
 
-            // Grab the page's slice of data.
-            const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-            return data.splice(startIndex, this._paginator.pageSize);
-        });
-    }
+    //         // Grab the page's slice of data.
+    //         const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+    //         return data.splice(startIndex, this._paginator.pageSize);
+    //     });
+    // }
 
     filterData(data)
     {
