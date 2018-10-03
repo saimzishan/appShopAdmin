@@ -4,4 +4,9 @@ export class GLOBAL {
   // public static USER_API = "http://53f6bb99.ngrok.io/api/auth/";
   public static USER_API =
     "http://124.109.39.22:18089/onlineappshopapi/public/api/auth/";
+  public static LEVELS = [
+      {id: 1, name: 'Silver'},
+      {id: 2, name: 'Gold'},
+      {id: 3, name: 'Platinum'}
+  ];
 }

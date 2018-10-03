@@ -5,8 +5,7 @@ export class User {
     name: string;
     email: string;
     password: string;
-    level: string;
-    provider: string;
+    level: string | number;
     roles: Role[] | any;
 
     constructor(user?) {
@@ -16,7 +15,6 @@ export class User {
         this.email = user.email || '';
         this.password = user.password || '';
         this.level = user.level || '';
-        this.provider = user.provider || '';
         this.roles = user.roles || new Array<User>();
     }
 }
