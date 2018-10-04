@@ -1,4 +1,4 @@
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 
 import {
@@ -21,6 +21,9 @@ import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 
 import * as _ from "lodash";
+import { SpinnerService } from "../../../spinner/spinner.service";
+import { ProductService } from "./product.service";
+import { SnotifyService } from "ng-snotify";
 
 declare var $: any;
 
@@ -44,6 +47,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   dialogRef: any;
 
+  checkParams = '';
+
   product_id: any;
   supplier_id: any = false;
   enabledChild: boolean = true;
@@ -51,14 +56,49 @@ export class ProductComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     protected http: HttpClient,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private spinnerService: SpinnerService,
+    private productService: ProductService,
+    private snotifyService: SnotifyService
   ) {
     this.bluckPrices = new Array<BluckPrice>();
   }
 
   ngOnInit() {
     // Subscribe to update product on changes
+    this.route.params.subscribe(params => {
+      const tempP: any = params;
+      if (tempP) {
+        if (tempP.id != 'new') {
+          this.edit(tempP.id);
+        } else {
+          alert('new');
+        }
+      }
+    }); 
   }
+
+  edit(id) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getProduct(id).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          console.log(res);
+          const product: any = res.res.data;
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+
   onProductSaved(evt) {
     this.product_id = evt.id;
     this.supplier_id = evt.supplier_id;
