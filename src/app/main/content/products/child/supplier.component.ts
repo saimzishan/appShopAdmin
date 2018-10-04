@@ -6,7 +6,13 @@ import { SnotifyService } from "ng-snotify";
 import { MatSnackBar } from "@angular/material";
 import { FormBuilder, FormGroup, FormControl, NgForm } from "@angular/forms";
 import { Component, EventEmitter, Output } from "@angular/core";
-import { Input, OnInit, ViewChildren, Directive } from "@angular/core";
+import {
+  Input,
+  OnInit,
+  ViewChildren,
+  Directive,
+  ViewChild
+} from "@angular/core";
 import {
   Supplier,
   Product,
@@ -18,12 +24,6 @@ import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
 import { ITreeOptions } from "angular-tree-component";
 import { DetectChangesService } from "../../../../shared/detect-changes.services";
-import {
-  FileSystemDirectoryEntry,
-  FileSystemFileEntry,
-  UploadEvent,
-  UploadFile
-} from "ngx-file-drop";
 
 @Component({
   selector: "app-product-supplier-form",
@@ -33,6 +33,7 @@ export class SupplierFormComponent implements OnInit {
   product: Product;
   supplier: Supplier;
   images: Image[];
+  lImages: any[] = [];
   image: Image;
   bluckPrices: BluckPrice[];
   taxes: any;
@@ -47,10 +48,10 @@ export class SupplierFormComponent implements OnInit {
   };
   @Output()
   productSaved = new EventEmitter();
-  files: UploadFile[] = [];
   urltoMe = GLOBAL.USER_IMAGE_API;
   displayImage: any = false;
   bluckPrice: BluckPrice;
+  url = "";
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -238,7 +239,7 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please Select a category");
       return;
     }
-    if (this.images.length < 2) {
+    if (this.lImages.length < 1) {
       this.snotifyService.warning(
         "Please Upload three images (small, medium, large)",
         "Warning"
@@ -246,11 +247,11 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
     this.product.supplier = this.supplier;
-    this.product.supplier.images = this.images;
+    this.product.supplier.images = this.lImages;
     this.product.category_id = this.category_id;
     this.product.supplier.bulk_prices = this.bluckPrices;
     this.spinnerService.requestInProcess(true);
-
+    this.product.supplier.ean = this.product.supplier.sku;
     this.productService.addProduct(this.product).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
@@ -258,7 +259,9 @@ export class SupplierFormComponent implements OnInit {
         this.onProductSaved(this.product);
         this.product.id = res.res.data.id;
         delete this.product.supplier.images;
-        localStorage.setItem("current_product", JSON.stringify(this.product));
+        let obj = res.res.data;
+        obj.supplier = this.product.supplier;
+        localStorage.setItem("current_product", JSON.stringify(obj));
         localStorage.setItem(
           "current_product_sp_images",
           JSON.stringify(res.res.data.images)
@@ -279,28 +282,34 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  dropped(event: UploadEvent, type: string) {
-    this.spinnerService.requestInProcess(true);
-    this.files = event.files;
-    for (const droppedFile of event.files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          // Here you can access the real file
-          this.image.content_type = "." + file.type.split("/")[1];
-          this.image.type = type;
-          const reader = new FileReader();
-          reader.onload = this._handleReaderLoaded.bind(this);
+  // dropped(event: UploadEvent, type: string) {
+  //   this.spinnerService.requestInProcess(true);
+  //   this.files = event.files;
+  //   for (const droppedFile of event.files) {
+  //     // Is it a file?
+  //     if (droppedFile.fileEntry.isFile) {
+  //       const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+  //       fileEntry.file((file: File) => {
+  //         // Here you can access the real file
+  //         this.image.content_type = "." + file.type.split("/")[1];
+  //         this.image.type = type;
+  //         const reader = new FileReader();
+  //         // reader.onload = this._handleReaderLoaded.bind(this);
+  //         // reader.readAsBinaryString(file);
 
-          reader.readAsBinaryString(file);
-        });
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-      }
-    }
-  }
+  //         reader.readAsDataURL(file); // read file as data url
+  //         reader.onload = event => {
+  //           // called once readAsDataURL is completed
+  //           // this.url = event.currentTarget.result;
+  //           this._handleReaderLoaded(event);
+  //         };
+  //       });
+  //     } else {
+  //       // It was a directory (empty directories are added, otherwise only files)
+  //       const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+  //     }
+  //   }
+  // }
 
   _handleReaderLoaded(readerEvt) {
     const binaryString = readerEvt.target.result;
@@ -315,6 +324,28 @@ export class SupplierFormComponent implements OnInit {
     }
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
+  }
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {
+    this.image.base64String = evt[0].dataURL.split(",")[1];
+    this.image.content_type = evt[0].type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
+    //
+    for (let index = 0; index < 3; index++) {
+      this.images.push(new Image(this.image));
+      if (index === 0) {
+        this.image.type = "medium";
+      }
+      if (index === 1) {
+        this.image.type = "large";
+      }
+    }
+    this.lImages.push(this.images);
+    this.images = new Array<Image>();
+  }
+  onCanceled(event) {
+    console.log(event);
   }
 
   addBluckPrice(form: NgForm) {

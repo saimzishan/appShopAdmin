@@ -108,7 +108,7 @@
                             </div>
 
                             <div class="col-md-1">
-                                <button (click)="mangeOption(skuForm)" class="btn btn-info btn-xs">
+                                <button (click)="mangeOption(skuForm);" class="btn btn-info btn-xs">
                                     <i class="material-icons">
                                         add
                                     </i>
@@ -116,65 +116,19 @@
                             </div>
                         </div>
                     </mat-card-content>
+                    <div class="row">
+                        <div class="col-md-12" style="text-align:center">
+                            <label>Image Max size 2 mb</label>
+                            <div class="center">
+                                <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                                    (success)="onUploadSuccess($event)"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </form>
-                <div class="row">
-                    <div class="col-md-4" style="text-align:center">
-                        <label>Small (180x135)</label>
-                        <div class="center">
-                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'small')" required>
-                                <span></span>
-                            </file-drop>
-                        </div>
-                    </div>
-                    <div class="col-md-4" style="text-align:center">
-                        <label>Medium (480x360)</label>
 
-                        <div class="center" style="text-align:center">
-                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'medium')" required>
-                                <span></span>
-                            </file-drop>
-                        </div>
-                    </div>
-                    <div class="col-md-4" style="text-align:center">
-                        <label>Large (960x720)</label>
-                        <div class="center">
-                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'large')" required>
-                                <span></span>
-                            </file-drop>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <ng-container *ngFor="let image of images">
-                        <div class="col-md-4">
-                            <ng-container *ngIf="image.type === 'small'">
-
-                                <p>
-                                    Small Image saved
-                                </p>
-                            </ng-container>
-
-                        </div>
-                        <div class="col-md-4" style="margin-top: -25px;">
-                            <ng-container *ngIf="image.type === 'medium'">
-                                <p>
-                                    Medium Image saved
-                                </p>
-                            </ng-container>
-
-                        </div>
-                        <div class="col-md-4" style="margin-top: -30px;">
-                            <ng-container *ngIf="image.type === 'large'">
-                                <p>
-                                    Large Image saved
-                                </p>
-
-                            </ng-container>
-
-                        </div>
-                    </ng-container>
-                </div>
-                <br>
                 <!-- {{variants| json}} -->
                 <table class="table" *ngIf="variants.length > 0">
                     <thead>

@@ -39,7 +39,7 @@ export class Supplier {
   low_level_stock: number;
   content_type: string;
   active: boolean;
-  class: number;
+  class: Array<any>;
   constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id;
@@ -49,7 +49,7 @@ export class Supplier {
     this.weight = supplier.weight;
     this.width = supplier.width;
     this.upc = supplier.upc;
-    this.ean = supplier.ean;
+    this.ean = supplier.upc;
     this.sku = supplier.sku || "";
     this.height = supplier.height || "";
     this.depth = supplier.depth || "";
