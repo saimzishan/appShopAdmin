@@ -42,38 +42,61 @@ export class ProductService extends ApiService implements Resolve<any> {
     });
   }
 
-  getProduct(): Promise<any> {
-    this.spinnerService.requestInProcess(true);
-    return new Promise((resolve, reject) => {
-      if (this.routeParams.id === "new") {
-        this.spinnerService.requestInProcess(false);
-        this.onProductChanged.next(false);
-        resolve(false);
-      } else {
-        let access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-          let error = {
-            message: "Unauthorized"
-          };
-          return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-          headers: new HttpHeaders({
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token
-          })
-        };
+  // getProduct(): Promise<any> {
+  //   this.spinnerService.requestInProcess(true);
+  //   return new Promise((resolve, reject) => {
+  //     if (this.routeParams.id === "new") {
+  //       this.spinnerService.requestInProcess(false);
+  //       this.onProductChanged.next(false);
+  //       resolve(false);
+  //     } else {
+  //       let access_token = AuthGuard.getToken();
+  //       if (access_token === undefined) {
+  //         let error = {
+  //           message: "Unauthorized"
+  //         };
+  //         return Observable.throw({ error: error });
+  //       }
+  //       const httpOptions = {
+  //         headers: new HttpHeaders({
+  //           "Content-Type": "application/json",
+  //           Authorization: "Bearer " + access_token
+  //         })
+  //       };
 
-        this.http
-          .get(GLOBAL.USER_API + "products/" + this.routeParams.id, httpOptions)
-          .subscribe((response: any) => {
-            this.product = response.data;
-            this.spinnerService.requestInProcess(false);
-            this.onProductChanged.next(this.product);
-            resolve(response);
-          }, reject);
-      }
-    });
+  //       this.http
+  //         .get(GLOBAL.USER_API + "products/" + this.routeParams.id, httpOptions)
+  //         .subscribe((response: any) => {
+  //           this.product = response.data;
+  //           this.spinnerService.requestInProcess(false);
+  //           this.onProductChanged.next(this.product);
+  //           resolve(response);
+  //         }, reject);
+  //     }
+  //   });
+  // }
+
+  getProduct(id) {
+    // return new Promise((resolve, reject) => {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "products/" + id, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
   }
 
   getCategories(): Promise<any> {
