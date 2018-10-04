@@ -1,39 +1,40 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { TagsService } from "./tags.service";
+import { OrdersService } from "./orders.service";
 import { SpinnerService } from "../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import { Tag } from "../models/tag.model";
+import { Order } from "../models/order.model";
+
 
 @Component({
-  selector: "app-tags",
-  templateUrl: "./tags.component.html",
-  styleUrls: ["./tags.component.scss"],
+  selector: "app-orders",
+  templateUrl: "./orders.component.html",
+  styleUrls: ["./orders.component.scss"],
   animations: fuseAnimations
 })
-export class TagsComponent implements OnInit {
+export class OrdersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild("filter") filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: any;
-  displayedColumns = ["id", "name", "notes"];
-  tag: Tag;
+  displayedColumns = ["toggle", "id", "date", "order_id", "customer", "status", "total", "actions"];
+  order: Order;
   constructor(
-    private tagsService: TagsService, private spinnerService: SpinnerService,
+    private ordersService: OrdersService, private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {
-    this.tag = new Tag();
+    this.order = new Order();
   }
 
   ngOnInit() {
-    this.getTagList();
+    this.getOrderList();
   }
 
-  getTagList() {
+  getOrderList() {
     this.spinnerService.requestInProcess(true);
-    this.tagsService.getTags().subscribe((res: any) => {
+    this.ordersService.getOrders().subscribe((res: any) => {
       let data = res.res.data;
       this.setDataSource(data);
       this.spinnerService.requestInProcess(false);
@@ -44,8 +45,8 @@ export class TagsComponent implements OnInit {
     });
   }
 
-  setDataSource(tags) {
-    this.dataSource = new MatTableDataSource<Tag>(tags);
+  setDataSource(orders) {
+    this.dataSource = new MatTableDataSource<Order>(orders);
     this.dataSource.paginator = this.paginator;
   }
 
