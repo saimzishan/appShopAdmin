@@ -5,32 +5,31 @@ import { FuseAngularMaterialModule } from '../components/angular-material/angula
 import { TaxesComponent } from './taxes.component';
 import { TaxComponent } from './tax.component';
 import { TaxesService } from './taxes.service';
-import { TaxService } from './tax.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path: '',
     component: TaxesComponent,
-    resolve: {
-      academy: TaxesService
-    }
   },
   {
-    path: ':id',
-    component: TaxComponent,
-    resolve: {
-      academy: TaxService
-    }
+    canActivate: [AuthGuard],
+    path: 'taxes',
+    component: TaxesComponent,
   },
   {
-    path: ':id/:handle',
+    canActivate: [AuthGuard],
+    path: 'tax/new',
     component: TaxComponent,
-    resolve: {
-      academy: TaxService
-    }
   },
+  {
+    canActivate: [AuthGuard],
+    path: 'tax/:id',
+    component: TaxComponent,
+  }
 ];
 
 @NgModule({
@@ -42,7 +41,7 @@ const routes = [
     TreeModule
   ],
   declarations: [TaxesComponent, TaxComponent],
-  providers: [TaxesService, TaxService]
+  providers: [TaxesService]
 })
 export class TaxesModule {
 }
