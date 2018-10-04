@@ -223,10 +223,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   store() {
     const data = this.categoryForm.getRawValue();
-    if (this.parentCatId === undefined) {
-      this.snotifyService.warning("Please select a parent category");
-      return;
-    }
+    // if (this.parentCatId === undefined) {
+    //   this.snotifyService.warning("Please select a parent category");
+    //   return;
+    // }
     data["parent_id"] = this.parentCatId;
     this.spinnerService.requestInProcess(true);
 

@@ -28,29 +28,19 @@
 
             </tbody>
         </table>
-        <div class="row">
+        <div class="row" style="margin-bottom:10px">
             <div class="col-md-12">
                 <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Sku</button>
                 <button class="btn btn-info">Generate Sku</button>
             </div>
 
         </div>
-        <br>
-        <div class="row" *ngIf="isAddorEditSKU">
-            <form name="skuForm" #skuForm="ngForm" fxLayout="column" fxFlex>
-                <mat-card>
+        <div *ngIf="isAddorEditSKU">
+            <mat-card>
+                <form name="skuForm" #skuForm="ngForm">
+
                     <mat-card-content>
                         <br>
-                        <div class="row" *ngFor="let variant of variants">
-                            <div class="col-md-1">
-                                <label>{{variant.name}}</label>
-                                <!-- <mat-select placeholder="Select" 
-                                            required>
-                                            <mat-option *ngFor="let opt of getOption(optionSet.option_set_id)" [value]="opt.id">
-                                                {{opt.name}}</mat-option>
-                                        </mat-select> -->
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-md-1" *ngFor="let optionSet of option_with_value">
                                 <label>{{optionSet.name}}</label>
@@ -97,6 +87,27 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
+                                <mat-select placeholder="Operation" name="operation" [(ngModel)]="product_variant.operation"
+                                    style="margin-top: 20px;">
+                                    <mat-option value=1>Add</mat-option>
+                                    <mat-option value=2>Subtract</mat-option>
+                                </mat-select>
+
+                            </div>
+                            <div class="col-md-1">
+
+                                <mat-select placeholder="Change by" name="changeBy" [(ngModel)]="product_variant.changeBy"
+                                    style="margin-top: 20px;">
+                                    <mat-option value=1>Absolute</mat-option>
+                                    <mat-option value=2>Percentage</mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-md-1">
+                                <input class="form-control" type="number" name="amount" [(ngModel)]="product_variant.amount"
+                                    style="margin-top: 20px;" min="0" placeholder="Amount">
+                            </div>
+
+                            <div class="col-md-1">
                                 <button (click)="mangeOption(skuForm)" class="btn btn-info btn-xs">
                                     <i class="material-icons">
                                         add
@@ -105,15 +116,106 @@
                             </div>
                         </div>
                     </mat-card-content>
-                    <mat-card-actions style="text-align: right;">
-                        <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                        <button class="btn btn-info" mat-button (click)="saveProduct(skuForm)">Save & Close</button>
-                    </mat-card-actions>
+                </form>
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Small (180x135)</label>
+                        <div class="center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'small')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Medium (480x360)</label>
 
-                </mat-card>
-            </form>
+                        <div class="center" style="text-align:center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'medium')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="text-align:center">
+                        <label>Large (960x720)</label>
+                        <div class="center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'large')" required>
+                                <span></span>
+                            </file-drop>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <ng-container *ngFor="let image of images">
+                        <div class="col-md-4">
+                            <ng-container *ngIf="image.type === 'small'">
 
+                                <p>
+                                    Small Image saved
+                                </p>
+                            </ng-container>
 
+                        </div>
+                        <div class="col-md-4" style="margin-top: -25px;">
+                            <ng-container *ngIf="image.type === 'medium'">
+                                <p>
+                                    Medium Image saved
+                                </p>
+                            </ng-container>
+
+                        </div>
+                        <div class="col-md-4" style="margin-top: -30px;">
+                            <ng-container *ngIf="image.type === 'large'">
+                                <p>
+                                    Large Image saved
+                                </p>
+
+                            </ng-container>
+
+                        </div>
+                    </ng-container>
+                </div>
+                <br>
+                <!-- {{variants| json}} -->
+                <table class="table" *ngIf="variants.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Sku</th>
+                            <th>Upc</th>
+                            <th>Weight</th>
+                            <th>Depth</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Operation</th>
+                            <th>Change by</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let variant of variants">
+                            <tr>
+                                <td>{{variant.sku}}</td>
+                                <td>{{variant.upc}}</td>
+                                <td>{{variant.weight}}</td>
+                                <td>{{variant.depth}}</td>
+                                <td>{{variant.width}}</td>
+                                <td>{{variant.height}}</td>
+                                <td>{{(variant.operation) === '1'? 'Add' :(variant.operation) === '2'? 'Subtract' :
+                                    'Null'}}</td>
+                                <td>{{(variant.changeBy) === '1' ? 'Absolute' :(variant.changeBy) === '2'? 'Percentage'
+                                    :
+                                    'Null'}}</td>
+                                <td>{{variant.amount}}</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+                <mat-card-actions style="text-align: right;">
+                    <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
+                    <button class="btn btn-info" mat-button (click)="saveProduct()">Save & Close</button>
+                </mat-card-actions>
+
+            </mat-card>
         </div>
     </mat-card>
 </div>
