@@ -121,7 +121,9 @@
                             <label>Image Max size 2 mb</label>
                             <div class="center">
                                 <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
-                                    (success)="onUploadSuccess($event)"></div>
+                                    (success)="onUploadSuccess($event)">
+
+                                </div>
                             </div>
                         </div>
 
@@ -142,6 +144,7 @@
                             <th>Operation</th>
                             <th>Change by</th>
                             <th>Amount</th>
+                            <th>No of Image(s)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -159,6 +162,7 @@
                                     :
                                     'Null'}}</td>
                                 <td>{{variant.amount}}</td>
+                                <td>{{variant.images.length}}</td>
                             </tr>
                         </ng-container>
                     </tbody>

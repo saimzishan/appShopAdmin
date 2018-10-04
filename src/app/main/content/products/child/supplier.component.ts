@@ -24,6 +24,7 @@ import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
 import { ITreeOptions } from "angular-tree-component";
 import { DetectChangesService } from "../../../../shared/detect-changes.services";
+import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
 
 @Component({
   selector: "app-product-supplier-form",
@@ -52,6 +53,9 @@ export class SupplierFormComponent implements OnInit {
   displayImage: any = false;
   bluckPrice: BluckPrice;
   url = "";
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
+
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -240,11 +244,14 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
     if (this.lImages.length < 1) {
-      this.snotifyService.warning(
-        "Please Upload three images (small, medium, large)",
-        "Warning"
-      );
-      return;
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
+      }
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
     }
     this.product.supplier = this.supplier;
     this.product.supplier.images = this.lImages;
@@ -327,8 +334,28 @@ export class SupplierFormComponent implements OnInit {
   }
   onUploadError(evt) {}
   onUploadSuccess(evt) {
-    this.image.base64String = evt[0].dataURL.split(",")[1];
-    this.image.content_type = evt[0].type.split("/")[1];
+    // this.image.base64String = evt[0].dataURL.split(",")[1];
+    // this.image.content_type = evt[0].type.split("/")[1];
+    // this.image.content_type = "." + this.image.content_type.split(";")[0];
+    // this.image.type = "small";
+    // //
+    // for (let index = 0; index < 3; index++) {
+    //   this.images.push(new Image(this.image));
+    //   if (index === 0) {
+    //     this.image.type = "medium";
+    //   }
+    //   if (index === 1) {
+    //     this.image.type = "large";
+    //   }
+    // }
+    // this.lImages.push(this.images);
+    // this.images = new Array<Image>();
+  }
+
+  addPicture(obj) {
+    this.image = new Image();
+    this.image.base64String = obj.dataURL.split(",")[1];
+    this.image.content_type = obj.type.split("/")[1];
     this.image.content_type = "." + this.image.content_type.split(";")[0];
     this.image.type = "small";
     //
@@ -344,6 +371,7 @@ export class SupplierFormComponent implements OnInit {
     this.lImages.push(this.images);
     this.images = new Array<Image>();
   }
+
   onCanceled(event) {
     console.log(event);
   }
