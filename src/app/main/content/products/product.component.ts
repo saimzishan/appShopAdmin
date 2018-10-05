@@ -47,7 +47,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   dialogRef: any;
 
-  checkParams = '';
+  checkParams = "";
 
   product_id: any;
   supplier_id: any = false;
@@ -70,13 +70,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       const tempP: any = params;
       if (tempP) {
-        if (tempP.id != 'new') {
+        if (tempP.id != "new") {
           this.edit(tempP.id);
-        } else {
-          alert('new');
+          console.log(tempP);
         }
       }
-    }); 
+    });
   }
 
   edit(id) {

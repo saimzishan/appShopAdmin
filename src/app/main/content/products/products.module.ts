@@ -47,6 +47,11 @@ const routes = [
   },
   {
     canActivate: [AuthGuard],
+    path: ":id/:supplier_id",
+    component: ProductComponent
+  },
+  {
+    canActivate: [AuthGuard],
     path: ":id/:handle",
     component: ProductComponent
   }

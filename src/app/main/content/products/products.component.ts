@@ -1,3 +1,5 @@
+import { filter } from "rxjs/operators";
+import { Router } from "@angular/router";
 import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ProductsService } from "./products.service";
@@ -30,6 +32,7 @@ export class ProductsComponent implements OnInit {
     "category",
     "price",
     "quantity",
+    "supplier",
     "active"
   ];
 
@@ -39,11 +42,13 @@ export class ProductsComponent implements OnInit {
   filter: ElementRef;
   @ViewChild(MatSort)
   sort: MatSort;
+  supplier_id: any;
 
   constructor(
     private productsService: ProductsService,
     private spinnerService: SpinnerService,
-    private snotifyService: SnotifyService
+    private snotifyService: SnotifyService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -68,9 +73,28 @@ export class ProductsComponent implements OnInit {
       }
     );
   }
+  getSupplier(id) {
+    var result = this.dataSource.data.filter(function(obj) {
+      if (obj.id === id) {
+        return obj;
+      }
+    })[0];
+    return result.suppliers;
+  }
+  onSupplierChange(value) {
+    this.supplier_id = value;
+  }
+  eidt(id, supplier_id) {
+    console.log(supplier_id);
+    this.router.navigate(["/products/" + id + "/" + supplier_id]);
+  }
+  rowClick(obj) {
+    console.log(obj);
+  }
 
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
     this.dataSource.paginator = this.paginator;
+    // console.log(this.dataSource);
   }
 }
