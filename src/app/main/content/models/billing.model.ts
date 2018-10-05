@@ -1,13 +1,18 @@
 import { Address } from "./address.model";
 
 export class Billing {
-    id;
-    billingaddress: Address;
-    delivryAddress: Address;
-    orderId;
-    paymentId;
-}
+    id: number;
+    billing_address: Address;
+    delivery_address: Address;
+    order_id: number;
+    payment_id: number;
 
-export class DeliveryAddress extends Address {
-
+    constructor(billing?) {
+        billing = billing || {};
+        this.id = billing.id || -1;
+        this.billing_address = billing.billing_address || new Address();
+        this.delivery_address = billing.delivery_address || new Address();
+        this.order_id = billing.order_id || -1;
+        this.payment_id = billing.payment_id || -1;
+    }
 }

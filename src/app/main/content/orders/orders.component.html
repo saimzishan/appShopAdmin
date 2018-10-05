@@ -27,7 +27,7 @@
             <!-- / SEARCH -->
       
             <button mat-raised-button [routerLink]="'/order-management/order/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
-              <span>ADD NEW O</span>
+              <span>ADD NEW ORDER</span>
             </button>
       
           </div>
@@ -37,14 +37,6 @@
           <div class="content-card mat-white-bg">
       
             <mat-table class="orders-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
-      
-              <!-- Toggle Column -->
-              <ng-container cdkColumnDef="toggle">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Toggle</mat-header-cell>
-                <mat-cell *cdkCellDef="let order">
-                  <mat-icon>add_circle</mat-icon>
-                </mat-cell>
-              </ng-container>
       
               <!-- ID Column -->
               <ng-container cdkColumnDef="id">
@@ -58,7 +50,7 @@
               <ng-container cdkColumnDef="date">
                 <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Date</mat-header-cell>
                 <mat-cell *cdkCellDef="let order">
-                  <p class="text-truncate">{{order.notes}}</p>
+                  <p class="text-truncate">{{order.created_at | date: 'dd-MMM-yyyy'}}</p>
                 </mat-cell>
               </ng-container>
 
@@ -66,7 +58,7 @@
               <ng-container cdkColumnDef="order_id">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header>Order ID</mat-header-cell>
                 <mat-cell *cdkCellDef="let order">
-                  <p class="text-truncate">{{order.orderId}}</p>
+                  <p>{{order.order_uuid}}</p>
                 </mat-cell>
               </ng-container>
       
@@ -74,7 +66,7 @@
               <ng-container cdkColumnDef="customer">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header>Customer</mat-header-cell>
                 <mat-cell *cdkCellDef="let order">
-                  <p class="text-truncate">{{order.customer}}</p>
+                  <p class="text-truncate">{{order.user.name}}</p>
                 </mat-cell>
               </ng-container>
       
@@ -94,21 +86,75 @@
                 </mat-cell>
               </ng-container>
       
-              <!-- Actions Column -->
-              <ng-container cdkColumnDef="actions">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Actions</mat-header-cell>
-                <mat-cell *cdkCellDef="let order">
-                  <button>Edit</button>
-                </mat-cell>
-              </ng-container>
               <br>
       
               <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
       
-              <mat-row *cdkRowDef="let order; columns: displayedColumns;" class="order" matRipple [routerLink]="'/order-management/order/' + order.id">
+              <mat-row *cdkRowDef="let order; columns: displayedColumns;" matRipple class="element-row" [cdkDetailRow]="order" [cdkDetailRowTpl]="tpl"
+                (toggleChange)="onToggleChange($event)">
               </mat-row>
       
             </mat-table>
+            <ng-template #tpl let-order>
+              <div class="" [@detailExpand] style="overflow: hidden">
+                <div class="row" style="border-top: 1px solid #e4e7ed;border-bottom: 1px solid #e4e7ed;">
+                  <div class="col-md-4 row">
+                    <div class="col-md-4">
+                      <h3 style="padding-top: 10%;padding-left: 50%;"><b>Billing</b></h3><br>
+                      <button mat-raised-button class="m-1" color="accent">Copy</button><br>
+                      <mat-icon class="s-20" style="float: right;padding-top: 40%;">email</mat-icon><br>
+                      <mat-icon class="s-20" style="float: right;padding-top: 55%;padding-left: 25%;">calendar_today</mat-icon>
+                    </div>
+                    <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
+                      <span class="text-truncate" style="padding: 10px 0px;">{{order.user.name}}<br>
+                        {{getAddress(order.billing.billing_address).no}}, 
+                        {{getAddress(order.billing.billing_address).street}}<br>
+                        {{getAddress(order.billing.billing_address).city}}, {{getAddress(order.billing.billing_address).postol_code}}<br>
+                        {{getAddress(order.billing.billing_address).country}}</span><br>
+                      <span style="padding: 10px 0px;">{{order.user.email}}</span><br>
+                      <span class="text-truncate" style="padding: 12px 0px;">{{order.created_at}}</span>
+                    </div>
+                  </div>
+                  <div class="col-md-4 row">
+                      <div class="col-md-4">
+                        <h3 style="padding-top: 10%;padding-left: 30%;"><b>Shipping</b></h3><br>
+                        <button mat-raised-button class="m-1" color="accent">Copy</button><br>
+                        <mat-icon class="s-20" style="float: right;padding-top: 40%;">email</mat-icon><br>
+                        <mat-icon class="s-20" style="float: right;padding-top: 55%;padding-left: 25%;">monetization_on</mat-icon>
+                      </div>
+                      <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
+                        <span class="text-truncate" style="padding: 10px 0px;">{{order.user.name}}<br>
+                          {{getAddress(order.billing.delivery_address).no}}, 
+                          {{getAddress(order.billing.delivery_address).street}}<br>
+                          {{getAddress(order.billing.delivery_address).city}}, {{getAddress(order.billing.delivery_address).postol_code}}<br>
+                          {{getAddress(order.billing.delivery_address).country}}</span><br>
+                        <span style="padding: 10px 0px;">{{order.user.email}}</span><br>
+                        <span class="text-truncate" style="padding: 12px 0px;">0.00</span>
+                      </div>
+                  </div>
+                  <div class="col-md-4 row">
+                      <div class="col-md-4">
+                        <h3 style="padding-top: 10%;padding-left: 55%;"><b>Order</b></h3><br>
+                        <p style="padding-left: 40%;"><b>{{getTotalItems(order)}} items</b></p>
+                      </div>
+                      <div class="col-md-8" style="border-left: 1px solid #e4e7ed!important;">
+                        <ng-container *ngFor="let item of order.line_items">
+                          <span style="padding: 10px 0px;" >{{item.quantity}} x {{item.title}}</span>
+                            <span style="float:right;padding-left: 40%">{{item.quantity * item.price_paid}} <b>Rs</b></span><br>
+                        </ng-container>
+                        <button mat-mini-fab>
+                            <mat-icon aria-label="Shipping Items">airport_shuttle</mat-icon>
+                        </button><br>
+                        <div style="padding-top: 25px;border-top: 1px solid #e4e7e0!important;">
+                          <span><h3>Subtotal<span style="float: right">{{getTotal(order)}}</span></h3></span><br>
+                          <span><h3>Shipping<span style="float: right">0.00</span></h3></span><br>
+                          <span><h2>GRAND TOTAL<span style="float: right">{{getTotal(order)}}</span></h2></span>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
       
             <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
             </mat-paginator>

@@ -1,10 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, Input } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { OrdersService } from "./orders.service";
 import { SpinnerService } from "../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
 import { Order } from "../models/order.model";
+import { CdkDetailRowDirective } from "./cdk-detail-row.directive";
+import { Address } from "../models/address.model";
 
 
 @Component({
@@ -19,7 +21,7 @@ export class OrdersComponent implements OnInit {
   @ViewChild("filter") filter: ElementRef;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: any;
-  displayedColumns = ["toggle", "id", "date", "order_id", "customer", "status", "total", "actions"];
+  displayedColumns = ["id", "date", "order_id", "customer", "status", "total"];
   order: Order;
   constructor(
     private ordersService: OrdersService, private spinnerService: SpinnerService,
@@ -30,6 +32,20 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.getOrderList();
+  }
+
+  @Input() singleChildRowDetail: boolean;
+
+  private openedRow: CdkDetailRowDirective
+  onToggleChange(cdkDetailRow: CdkDetailRowDirective) : void {
+    if (this.singleChildRowDetail && this.openedRow && this.openedRow.expended) {
+      this.openedRow.toggle();      
+    }
+    this.openedRow = cdkDetailRow.expended ? cdkDetailRow : undefined;
+  }
+
+  temp(cdkDetailRow: CdkDetailRowDirective) {
+    this.onToggleChange(cdkDetailRow);
   }
 
   getOrderList() {
@@ -52,5 +68,25 @@ export class OrdersComponent implements OnInit {
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getAddress(address: string) {
+    return new Address(JSON.parse(address));
+  }
+
+  getTotal(order: Order) {
+    let total = 0;
+    order.line_items.forEach(item => {
+      total += +item.quantity * +item.price_paid;
+    });
+    return Math.round(total);
+  }
+
+  getTotalItems(order: Order) {
+    let itemCount = 0;
+    order.line_items.forEach(item => {
+      itemCount += +item.quantity;
+    });
+    return Math.round(itemCount);
   }
 }
