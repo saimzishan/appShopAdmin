@@ -15,6 +15,7 @@ import { SnotifyService } from 'ng-snotify';
 import { Role } from '../../models/role.model';
 import { FuseConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
 import { User } from '../../models/user.model';
+import { GLOBAL } from '../../../../shared/globel';
 
 @Component({
     selector   : 'app-user-managment',
@@ -27,6 +28,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     user: User;
     roles = new FormControl();
     roleList: Role[];
+    levels: any[];
     confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
     pageType: string;
     firstSelectedRoleName: string;
@@ -41,6 +43,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         private dialog: MatDialog) {
             this.user = new User();
             this.roleList = new Array<Role>();
+            this.levels = GLOBAL.LEVELS;
             this.hide = true;
         }
 
@@ -71,6 +74,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
                 selectedRoles.forEach(item => {
                     this.user.roles.push(item.id);
                 });
+                this.user.level = GLOBAL.LEVELS
+                    .find(level => level.name.toLowerCase() === this.user.level).id;
                 this.onChange({isUserInput: true});
             }
             this.spinnerService.requestInProcess(false);

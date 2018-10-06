@@ -50,8 +50,8 @@ export class TaxesComponent implements OnInit {
     });
   }
 
-  setDataSource(permissions) {
-    this.dataSource = new MatTableDataSource<Tax>(permissions);
+  setDataSource(taxs) {
+    this.dataSource = new MatTableDataSource<Tax>(taxs);
     this.dataSource.paginator = this.paginator;
   }
 

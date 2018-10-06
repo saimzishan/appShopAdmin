@@ -44,8 +44,8 @@ export class TagsComponent implements OnInit {
     });
   }
 
-  setDataSource(permissions) {
-    this.dataSource = new MatTableDataSource<Tag>(permissions);
+  setDataSource(tags) {
+    this.dataSource = new MatTableDataSource<Tag>(tags);
     this.dataSource.paginator = this.paginator;
   }
 

@@ -43,6 +43,31 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                     },*/
                 ]
             },
+            {
+                'id': 'orders',
+                'title': 'Orders',
+                'translate': 'NAV.ECOMMERCE',
+                'type': 'collapse',
+                'icon': 'shopping_basket',
+                'children': [
+                    {
+                        'id': 'view',
+                        'title': 'View',
+                        'type': 'item',
+                        'icon': 'visibility',
+                        'url': '/order-management/orders',
+                        'exactMatch': true
+                    },
+                    {
+                        'id': 'add',
+                        'title': 'Add',
+                        'type': 'item',
+                        'icon': 'add_circle',
+                        'url': '/order-management/order/new',
+                        'exactMatch': true
+                    }
+                ]
+            },
 
             {
                 'id': 'suppliers',

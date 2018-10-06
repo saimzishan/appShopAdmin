@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <mat-form-field class="w-100-p">
                                     <mat-select required #roles="ngModel" name="roles" placeholder="Roles" [(ngModel)]="user.roles" multiple>
                                         <mat-select-trigger>
@@ -90,6 +90,17 @@
                                 </mat-form-field>
                                 <span *ngIf="roles.touched && roles.errors?.required;" class="inline-icon error red-fg">
                                     <span>Roles are required.</span>!</span>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <mat-select required #level="ngModel" name="level" placeholder="Select Level" [(ngModel)]="user.level">
+                                        <mat-option *ngFor="let level of levels" [value]="level.id">
+                                          {{level.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span *ngIf="level.touched && level.errors?.required;" class="inline-icon error red-fg">
+                                    <span>Level is required.</span>!</span>
                             </div>
                         </div>
                     </div>
