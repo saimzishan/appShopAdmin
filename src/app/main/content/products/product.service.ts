@@ -76,8 +76,7 @@ export class ProductService extends ApiService implements Resolve<any> {
   //   });
   // }
 
-  getProduct(id) {
-    // return new Promise((resolve, reject) => {
+  getProductWithSupplier(id, supplier_id) {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
@@ -92,7 +91,14 @@ export class ProductService extends ApiService implements Resolve<any> {
       })
     };
     return this.http
-      .get(GLOBAL.USER_API + "products/" + id, httpOptions)
+      .get(
+        GLOBAL.USER_API +
+          "products?product_id=" +
+          id +
+          "&supplier_id=" +
+          supplier_id,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

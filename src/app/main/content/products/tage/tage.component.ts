@@ -59,11 +59,24 @@ export class TageComponent implements OnInit {
       this.productId = current_product.product_id;
     }
   }
+  edit(obj) {
+    setTimeout(() => {
+      for (const iterator of obj) {
+        let id = this.tags.findIndex(i => i.id === iterator.id);
+        if (id !== -1) {
+          this.tags[id].selected = true;
+        }
+      }
+    }, 3);
+  }
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "addproduct":
           this.init();
+          break;
+        case "editProduct":
+          this.edit(res.value.tags);
           break;
       }
     }

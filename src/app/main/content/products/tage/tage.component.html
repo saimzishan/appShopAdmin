@@ -2,13 +2,14 @@
     <div class="tab-content p-24" fusePerfectScrollbar style="background-color: rgb(243, 240, 240)">
         <mat-card>
             <legend style="padding: 10px">
-                <h2>Tags</h2>
+                <h2>Tags {{tagId[0]}}</h2>
             </legend>
 
 
             <div class="row">
                 <mat-selection-list name="class" [(ngModel)]="tagId">
-                    <mat-list-option style="display: inline-block !important;" [value]="tag.id" *ngFor="let tag of tags">{{tag.name}}</mat-list-option>
+                    <mat-list-option style="display: inline-block !important;" *ngFor="let tag of tags" value="{{tag.id}}"
+                        [selected]='tag.selected'>{{tag.name}}</mat-list-option>
                 </mat-selection-list>
             </div>
             <br>

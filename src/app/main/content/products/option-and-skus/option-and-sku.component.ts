@@ -19,6 +19,7 @@ export class OptionAndSkusComponent implements OnInit {
   supplier_id;
   changesSubscription;
   alreadyTaken: any = false;
+  product_supplier_attributes: any;
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -46,17 +47,26 @@ export class OptionAndSkusComponent implements OnInit {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "addproduct":
-        let current_product: any = localStorage.getItem("current_product");
-        if (current_product) {
-          current_product = JSON.parse(current_product);
-          this.supplier_id = current_product.supplier.id;
-          this.product_id = current_product.id;
-        }
+          let current_product: any = localStorage.getItem("current_product");
+          if (current_product) {
+            current_product = JSON.parse(current_product);
+            this.supplier_id = current_product.supplier.id;
+            this.product_id = current_product.id;
+          }
+          break;
+        case "editProduct":
+          this.edit(res.value.product_supplier_attributes);
           break;
       }
     }
   }
-
+  edit(obj) {
+    const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
+    setTimeout(() => {
+      this.option_set_id = unique;
+    }, 3);
+    this.product_supplier_attributes = obj;
+  }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
     this.productService.getOptionSets().subscribe(

@@ -24,6 +24,7 @@ import * as _ from "lodash";
 import { SpinnerService } from "../../../spinner/spinner.service";
 import { ProductService } from "./product.service";
 import { SnotifyService } from "ng-snotify";
+import { DetectChangesService } from "../../../shared/detect-changes.services";
 
 declare var $: any;
 
@@ -52,7 +53,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   product_id: any;
   supplier_id: any = false;
   enabledChild: boolean = true;
-
+  tempP;
   constructor(
     private dialog: MatDialog,
     protected http: HttpClient,
@@ -60,7 +61,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private spinnerService: SpinnerService,
     private productService: ProductService,
-    private snotifyService: SnotifyService
+    private snotifyService: SnotifyService,
+    private detectChanges: DetectChangesService
   ) {
     this.bluckPrices = new Array<BluckPrice>();
   }
@@ -68,34 +70,40 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to update product on changes
     this.route.params.subscribe(params => {
-      const tempP: any = params;
-      if (tempP) {
-        if (tempP.id != "new") {
-          this.edit(tempP.id);
-          console.log(tempP);
+      this.tempP = params;
+      if (this.tempP) {
+        if (this.tempP.id != "new") {
+          this.edit(this.tempP);
+          this.enabledChild = false;
         }
       }
     });
   }
 
-  edit(id) {
+  edit(obj) {
     this.spinnerService.requestInProcess(true);
-    this.productService.getProduct(id).subscribe(
-      (res: any) => {
-        if (!res.status) {
-          console.log(res);
-          const product: any = res.res.data;
+    this.productService
+      .getProductWithSupplier(obj.id, obj.supplier_id)
+      .subscribe(
+        (res: any) => {
+          if (!res.status) {
+            const product: any = res.res.data;
+            product.supplier_id = +this.tempP.supplier_id;
+            this.detectChanges.notifyOther({
+              option: "editProduct",
+              value: product
+            });
+          }
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.error);
+          this.snotifyService.error(e, "Error !");
+          // this.notificationServiceBus.launchNotification(true, e);
         }
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
-      }
-    );
+      );
   }
 
   onProductSaved(evt) {

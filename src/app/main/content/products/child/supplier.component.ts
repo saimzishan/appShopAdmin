@@ -55,7 +55,8 @@ export class SupplierFormComponent implements OnInit {
   url = "";
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
-
+  changesSubscription;
+  pageType = "new";
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -71,6 +72,11 @@ export class SupplierFormComponent implements OnInit {
     this.images = new Array<Image>();
     this.image = new Image();
     this.bluckPrice = new BluckPrice();
+    this.changesSubscription = this.detectChanges.notifyObservable$.subscribe(
+      res => {
+        this.callRelatedFunctions(res);
+      }
+    );
   }
 
   ngOnInit() {
@@ -78,7 +84,56 @@ export class SupplierFormComponent implements OnInit {
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
-    this.init();
+    if (this.pageType === "new") {
+      this.init();
+    }
+  }
+  callRelatedFunctions(res) {
+    if (res.hasOwnProperty("option")) {
+      switch (res.option) {
+        case "editProduct":
+          this.pageType = "edit";
+          this.product = this.supplier = res.value;
+          this.product.brand_id = res.value.brand.id;
+          this.product.brand_id = res.value.brand.id;
+          this.supplier.buying_price = res.value.buyingPrice;
+          this.supplier.market_price = res.value.marketPrice;
+          this.supplier.id = res.value.supplier_id;
+          this.supplier.low_level_stock = res.value.lowLevelStock;
+          this.supplier.track_stock = res.value.trackStock;
+          this.product.tax_id = res.value.tax.id;
+          this.bluckPrices = res.value.bulk_prices;
+          this.supplier.class = [];
+          for (const iterator of res.value.product_classes) {
+            let id = "";
+            switch (iterator.class) {
+              case "slider":
+                id = "1";
+                break;
+              case "featured":
+                id = "2";
+                break;
+              case "on-sale":
+                id = "3";
+                break;
+              case "new-arrival":
+                id = "4";
+                break;
+              case "promoted":
+                id = "5";
+                break;
+              case "add-on":
+                id = "6";
+                break;
+
+              default:
+                break;
+            }
+            this.supplier.class.push(id);
+          }
+          break;
+      }
+    }
   }
 
   init() {

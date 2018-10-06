@@ -59,7 +59,7 @@ export class Supplier {
     this.track_stock = supplier.ttrack_stock || false;
     this.printing_option = supplier.printing_option || false;
     this.active = supplier.active || false;
-    this.class = supplier.class;
+    this.class = supplier.class || new Array();
   }
 }
 export class BluckPrice {

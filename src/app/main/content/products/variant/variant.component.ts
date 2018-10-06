@@ -86,8 +86,16 @@ export class VariantComponent implements OnInit {
         case "optionsAdded":
           this.init();
           break;
+        case "editProduct":
+          this.edit(res.value.product_variants);
+          break;
       }
     }
+  }
+
+  edit(obj) {
+    this.variants = obj;
+    this.isAddorEditSKU = true;
   }
 
   setOptions(obj) {
