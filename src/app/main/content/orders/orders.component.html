@@ -26,10 +26,6 @@
             </div>
             <!-- / SEARCH -->
       
-            <button mat-raised-button [routerLink]="'/order-management/order/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
-              <span>ADD NEW ORDER</span>
-            </button>
-      
           </div>
           <!-- / HEADER -->
       
@@ -74,7 +70,7 @@
               <ng-container cdkColumnDef="status">
                 <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Status</mat-header-cell>
                 <mat-cell *cdkCellDef="let order">
-                  <p class="text-truncate">{{order.status}}</p>
+                  <p class="text-truncate">{{order.status.replace(order.status[0], order.status[0].toUpperCase())}}</p>
                 </mat-cell>
               </ng-container>
 
@@ -82,7 +78,7 @@
               <ng-container cdkColumnDef="total">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header>Total</mat-header-cell>
                 <mat-cell *cdkCellDef="let order">
-                  <p class="text-truncate">{{order.total}}</p>
+                  <p class="text-truncate">{{getTotalAmount(order)}}</p>
                 </mat-cell>
               </ng-container>
       
@@ -91,22 +87,26 @@
               <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
       
               <mat-row *cdkRowDef="let order; columns: displayedColumns;" matRipple class="element-row" [cdkDetailRow]="order" [cdkDetailRowTpl]="tpl"
-                (toggleChange)="onToggleChange($event)">
+                (toggleChange)="onToggleChange($event, order)">
               </mat-row>
       
             </mat-table>
             <ng-template #tpl let-order>
-              <div class="" [@detailExpand] style="overflow: hidden">
+              <div class="" [@detailExpand] style="overflow: hidden;background: #f3efef;">
                 <div class="row" style="border-top: 1px solid #e4e7ed;border-bottom: 1px solid #e4e7ed;">
                   <div class="col-md-4 row">
                     <div class="col-md-4">
                       <h3 style="padding-top: 10%;padding-left: 50%;"><b>Billing</b></h3><br>
-                      <button style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" color="accent">Copy</button><br>
-                      <mat-icon class="s-20" style="float: right;padding-top: 40%;">email</mat-icon><br>
-                      <mat-icon class="s-20" style="float: right;padding-top: 55%;padding-left: 25%;">calendar_today</mat-icon>
+                      <button ngxClipboard [cbContent]="order.user.name + ' ' + getAddress(order.billing.billing_address).no + ' ' +
+                      getAddress(order.billing.billing_address).street + ' ' + getAddress(order.billing.billing_address).city + ', ' +
+                      getAddress(order.billing.billing_address).postol_code + ' ' + getAddress(order.billing.billing_address).country"
+                      style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1"
+                      (click)="copied()" color="accent">Copy</button><br>
+                      <mat-icon class="s-16" style="float: right;padding-top: 25%;">email</mat-icon><br>
+                      <mat-icon class="s-16" style="float: right;padding-top: 40%;">today</mat-icon>
                     </div>
                     <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
-                      <span class="text-truncate" style="padding: 10px 0px;">{{order.user.name}}<br>
+                      <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': clipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>
                         {{getAddress(order.billing.billing_address).no}}, 
                         {{getAddress(order.billing.billing_address).street}}<br>
                         {{getAddress(order.billing.billing_address).city}}, {{getAddress(order.billing.billing_address).postol_code}}<br>
@@ -118,37 +118,52 @@
                   <div class="col-md-4 row">
                       <div class="col-md-4">
                         <h3 style="padding-top: 10%;padding-left: 30%;"><b>Shipping</b></h3><br>
-                        <button style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" color="accent">Copy</button><br>
-                        <mat-icon class="s-20" style="float: right;padding-top: 40%;">email</mat-icon><br>
-                        <mat-icon class="s-20" style="float: right;padding-top: 55%;padding-left: 25%;">monetization_on</mat-icon>
+                        <button ngxClipboard [cbContent]="order.user.name + ' ' + getAddress(order.billing.delivery_address).no + ' ' +
+                        getAddress(order.billing.delivery_address).street + ' ' + getAddress(order.billing.delivery_address).city + ', ' +
+                        getAddress(order.billing.delivery_address).postol_code + ' ' + getAddress(order.billing.delivery_address).country" style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" 
+                        (click)="shipCopied()"color="accent">Copy</button><br>
+                        <mat-icon class="s-16" style="float: right;padding-top: 25%;">email</mat-icon><br>
+                        <mat-icon class="s-16" style="float: right;padding-top: 40%;">local_shipping</mat-icon><br>
+                        <mat-icon class="s-16" style="float: right;padding-top: 55%;padding-left: 20%">attach_money</mat-icon><br>
+                        <mat-icon class="s-16" style="float: right;padding-top: 70%;padding-left: 50%">credit_card</mat-icon>
                       </div>
                       <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
-                        <span class="text-truncate" style="padding: 10px 0px;">{{order.user.name}}<br>
+                        <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': shipClipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>
                           {{getAddress(order.billing.delivery_address).no}}, 
                           {{getAddress(order.billing.delivery_address).street}}<br>
                           {{getAddress(order.billing.delivery_address).city}}, {{getAddress(order.billing.delivery_address).postol_code}}<br>
                           {{getAddress(order.billing.delivery_address).country}}</span><br>
                         <span style="padding: 10px 0px;">{{order.user.email}}</span><br>
-                        <span class="text-truncate" style="padding: 12px 0px;">0.00</span>
+                        <span class="text-truncate" style="padding: 12px 0px;">No Shipping Method</span>
+                        <span class="text-truncate">0.00</span>
+                        <span class="text-truncate" style="padding: 12px 0px;">N/A</span>
                       </div>
                   </div>
                   <div class="col-md-4 row">
                       <div class="col-md-4">
-                        <h3 style="padding-top: 10%;padding-left: 55%;"><b>Order</b></h3><br>
-                        <p style="padding-left: 40%;"><b>{{getTotalItems(order)}} items</b></p>
+                        <h3 style="padding-top: 10%;padding-left: 55%;"><b>Order</b></h3>
+                        <p style="padding-left: 40%;">{{getTotalItems(order)}} items</p>
                       </div>
                       <div class="col-md-8" style="border-left: 1px solid #e4e7ed!important;">
+                        <mat-form-field class="w-180">
+                            <mat-select [(ngModel)]="orderStatus" (change)="onStatusChange(order)">
+                              <mat-option *ngFor="let status of statusList" [value]="status.id">
+                                {{status.name.replace(status.name[0], status.name[0].toUpperCase())}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br>
                         <ng-container *ngFor="let item of order.line_items">
                           <span style="padding: 10px 0px;" >{{item.quantity}} x {{item.title}}</span>
                             <span style="float:right;padding-left: 40%">{{item.quantity * item.price_paid}} <b>Rs</b></span><br>
                         </ng-container>
                         <button mat-mini-fab>
-                            <mat-icon style="color: #ffffff" aria-label="Shipping Items">airport_shuttle</mat-icon>
+                            <mat-icon style="color: #ffffff" aria-label="Shipping Items">local_shipping</mat-icon>
                         </button><br>
                         <div style="padding-top: 25px;margin-top: 5px;border-top: 1px solid #e4e7e0!important;">
-                          <h3>Subtotal<span style="float: right">{{getTotal(order)}}</span></h3><br>
-                          <h3>Shipping<span style="float: right">0.00</span></h3><br>
-                          <h2>GRAND TOTAL<span style="float: right">{{getTotal(order)}}</span></h2>
+                          <h4>Subtotal<span style="float: right">{{getTotalAmount(order)}}</span></h4><br>
+                          <h4>Shipping<span style="float: right">0.00</span></h4><br>
+                          <h3><b>GRAND TOTAL<span style="float: right">{{getTotalAmount(order)}}</span></b></h3>
                         </div>
                       </div>
                   </div>

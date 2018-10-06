@@ -9,4 +9,13 @@ export class GLOBAL {
       {id: 2, name: 'Gold'},
       {id: 3, name: 'Platinum'}
   ];
+
+  public static STATUS = [
+    {id: 1, name: 'created'},
+    {id: 2, name: 'accepted'},
+    {id: 3, name: 'in-progress'},
+    {id: 4, name: 'dispatched'},
+    {id: 5, name: 'delivered'},
+    {id: 6, name: 'closed'}
+];
 }

@@ -5,7 +5,7 @@ import { User } from "./user.model";
 export class Order {
     id: number;
     order_uuid: string
-    status: string;
+    status: string | number;
     billing: Billing;
     line_items: LineItem[];
     user: User;

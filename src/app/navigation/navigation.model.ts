@@ -57,14 +57,6 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'icon': 'visibility',
                         'url': '/order-management/orders',
                         'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/order-management/order/new',
-                        'exactMatch': true
                     }
                 ]
             },
