@@ -30,6 +30,7 @@
                     <div class="h2" *ngIf="pageType ==='new'">
                         New Option Set
                     </div>
+
                     <div class="subtitle secondary-text">
                         <span>Option Detail</span>
                     </div>
@@ -41,15 +42,14 @@
                 <span>ADD</span>
             </button>
 
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteBrand()">
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delOption()">
                 <span>DELETE</span>
             </button>
 
-
-            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editoptionFormSubmition.click()">
+            <!-- <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editoptionFormSubmition.click()">
 
                 <span>SAVE</span>
-            </button>
+            </button> -->
         </div>
         <!-- / HEADER -->
 
@@ -73,83 +73,31 @@
                             <span>Option Name required.</span>!
                         </span>
                         <br>
-                        <!-- <mat-card *ngIf="pageType ==='edit'">
-                            <ng-container>
-                                {{option.options.value}}
-                            </ng-container>
-                        </mat-card> -->
-                        <mat-form-field class="w-50-p">
-                            <input matInput name="option_values" [(ngModel)]="option_values.value" placeholder="Option">
-                        </mat-form-field>
-                        <!-- <label *ngIf="optionValues.length > 0">
-                            <p *ngFor="let ov of optionValues">
-                                {{ov}}
-                            </p>
-                        </label> -->
-                        <!-- <mat-card *ngIf="optionsCardEnable">
-                            {{option.options.value}}
-                        </mat-card> -->
-                        <button mat-raised-button style="margin-left: 20px" class="save-brand-button mat-white-bg mt-16 mt-sm-0" (click)="addOptionValue()">
-                            <mat-icon>add</mat-icon>
-                            <span>Add Option</span>
-                        </button>
-                        <table class="table table-bordered" *ngIf="optionsCardEnable">
-                            <thead>
-                                <tr>
-                                    <th scope="col">
-                                        Options
-                                    </th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let o of option.options ; let i = index">
-                                    <td>
-                                        {{o.value}}
-                                    </td>
-                                    <td>
-                                        <mat-icon style="color: rgb(255, 0, 0) ; cursor: pointer;" (click)="removeOptions(i)">delete</mat-icon>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-
-
-
-                        <!-- <mat-form-field class="w-100-p"> -->
-                        <!-- <fieldset class="w-100-p" *ngIf="pageType ==='new'">
-                            <div>
-                                <input type="file" name="fileUp" (change)="handleFileSelect($event)">
-                            </div>
-                        </fieldset> -->
+                        
+                        <mat-form-field class="option-chip-list">
+                            <mat-chip-list #chipList required>
+                              <mat-chip class="mat-accent-600-bg" *ngFor="let opItem of option.options" [selectable]="selectable"
+                                       [removable]="removable" (removed)="deleteOptionValue(opItem)">
+                                {{opItem.value}}
+                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                              </mat-chip>
+                              <input name="values" #values placeholder="Option Value"
+                                     [matChipInputFor]="chipList"
+                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                     [matChipInputAddOnBlur]="addOnBlur"
+                                     (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                          </mat-form-field>
+                          <span *ngIf="chipList.errorState" class="error">
+                            <span>Atleast 1 option value required.</span>!
+                        </span>
                         <br>
-                        <!-- <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
-                            <mat-card>
-                                <ng-container *ngIf="brand.image">
-                                    <img src="{{baseURL+brand.image.small}}" width="100" height="100">
-                                </ng-container>
-                                <ng-container *ngIf="!brand.image">
-                                    <p> No Image</p>
-                                </ng-container>
-                            </mat-card>
-                            <input type="file" name="fileUp" (change)="handleFileSelect($event)">
-                        </fieldset> -->
-                        <!-- </mat-form-field> -->
-                        <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
-                                </mat-form-field> -->
-
-                        <!-- <h3 class="mb-0">Categories</h3> -->
-
-                        <!-- <tree-root [nodes]="nodes" [options]="options"></tree-root> -->
                     </div>
                     <!-- </mat-tab> -->
 
-
                     <!-- </mat-tab-group> -->
                     <input type="button" class="btn btn-primary" hidden #optionFormSubmition (click)="addOption(optionForm)">
-                    <input type="button" class="btn btn-primary" hidden #editoptionFormSubmition (click)="saveOption(optionForm)">
+                    <!-- <input type="button" class="btn btn-primary" hidden #editOptionFormSubmition (click)="editOption(optionForm)"> -->
                 </form>
 
             </div>

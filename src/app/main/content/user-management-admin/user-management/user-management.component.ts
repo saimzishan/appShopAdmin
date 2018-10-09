@@ -177,8 +177,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     onChange(event) {
+        let foundRole;
         if(event.isUserInput) {
-            let foundRole = this.roleList.find(role => role.id === (this.pageType === 'edit'? this.user.roles[0] : event.source.value));
+            // let foundRole = this.roleList.find(role => role.id === ((this.pageType === 'edit')? this.user.roles[0] : event.source.value));
+            if (this.pageType === 'edit' && this.user.roles.length > 0) {
+                foundRole = this.roleList.find(role => role.id === this.user.roles[0]);
+            } else {
+                foundRole = this.roleList.find(role => role.id === event.source.value);
+            }
             if(foundRole) {
                 this.firstSelectedRoleName = foundRole.name;
             }

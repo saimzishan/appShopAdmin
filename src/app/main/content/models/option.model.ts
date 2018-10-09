@@ -1,25 +1,23 @@
 export class Option {
     id: number;
-    name = '';
+    name: string;
     options: Array<OptionValues>;
 
     constructor(option?) {
         option = option || {};
-        this.id = option.id;
+        this.id = option.id || -1;
         this.name = option.name || '';
-        this.options = new Array<OptionValues>();
+        this.options = this.options || new Array<OptionValues>();
     }
 }
 
 export class OptionValues {
     id: number;
-    value = '';
-    option_set_id: number;
+    value: string;
 
-    constructor(optionvalues?) {
-        optionvalues = optionvalues || {};
-        this.id = optionvalues.id;
-        this.value = optionvalues.value;
-        this.option_set_id = optionvalues.option_set_id;
+    constructor(optionValues?) {
+        optionValues = optionValues || {};
+        this.id = optionValues.id || -1;
+        this.value = optionValues.value || '';
     }
 }

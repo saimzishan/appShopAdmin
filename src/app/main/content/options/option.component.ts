@@ -1,46 +1,15 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-  Inject,
-  ViewChild,
-  TemplateRef
-} from '@angular/core';
-import { OptionService } from './option.service';
-// import { OptionsService } from './option.service';
+import { Component, OnInit, ViewEncapsulation, ViewChild, TemplateRef } from '@angular/core';
+import { OptionsService } from './options.service';
 import { Option, OptionValues } from '../models/option.model';
 import { fuseAnimations } from '../../../core/animations';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/observable/fromEvent';
 import { Subscription } from 'rxjs/Subscription';
-import { Brand } from '../models/brand.model';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { FuseUtils } from '../../../core/fuseUtils';
-import {
-  MatSnackBar,
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef
-} from '@angular/material';
-import { Location } from '@angular/common';
-import {
-  FileSystemDirectoryEntry,
-  FileSystemFileEntry,
-  UploadEvent,
-  UploadFile
-} from 'ngx-file-drop';
-import { GLOBAL } from '../../../shared/globel';
+import { FormGroup, FormControl, NgForm } from '@angular/forms';
+import { MatDialog, MatDialogRef, MatChipInputEvent } from '@angular/material';
 import { SnotifyService } from 'ng-snotify';
 import { FuseConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 import { SpinnerService } from '../../../spinner/spinner.service';
-import { Router } from '@angular/router';
-// import { $ } from 'protractor';
-declare var $: any;
+import { Router, ActivatedRoute } from '@angular/router';
+import { ENTER, COMMA } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-option',
@@ -52,160 +21,136 @@ declare var $: any;
 export class OptionComponent implements OnInit {
   @ViewChild('dialogContent')
   dialogContent: TemplateRef<any>;
+  @ViewChild('chipList') chipList;
 
-  option = new Option();
-  option_values = new OptionValues();
-  onOptionChanged: Subscription;
+  option: Option;
   pageType: string;
   optionForm: FormGroup;
-  files: UploadFile[] = [];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-  baseURL = GLOBAL.USER_IMAGE_API;
-  options = {};
-  base64textString: string;
-  newVal = '';
-  optionsCardEnable = false;
-  o;
+  sub: Subscription;
+  optionID: any;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
 
   constructor(
-    private optionService: OptionService,
-    private formBuilder: FormBuilder,
-    public snackBar: MatSnackBar,
-    private location: Location,
+    private optionService: OptionsService,
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private spinnerService: SpinnerService,
+    private route: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.option = new Option();
+  }
 
   ngOnInit() {
-    // Subscribe to update product on changes
-    // if (this.pageType === 'new') {
-      if (this.router.url.includes('/options/new')) {
-      this.option = new Option();
-      this.optionsCardEnable = false;
-
-    } else {
-      this.getOptions();
-    }
-    // this.onOptionChanged = this.optionService.onOptionChanged.subscribe(option => {
-    //   if (option) {
-    //     console.log(option);
-    //     this.option = new Option(option);
-    //     this.o = option.options;
-    //     this.pageType = 'edit';
-    //     this.optionsCardEnable = true;
-    //   } else {
-    //     this.pageType = 'new';
-    //     this.optionsCardEnable = false;
-    //     this.option = new Option();
-    //   }
-
-    // this.brandForm = this.createBrandForm();
-    // });
-  }
-
-  getOptions() {
-    this.spinnerService.requestInProcess(true);
-    this.optionService.getOptions().subscribe(
-      (res: any) => {
-        this.option = res.res.data;
-        console.log(this.option);
+    this.sub = this.route.params.subscribe(params => {
+      this.optionID = params['id'] || '';
+      if (Boolean(this.optionID) && parseInt(this.optionID, 10) > 0) {
+        this.getOptionById(this.optionID);
         this.pageType = 'edit';
-        this.optionsCardEnable = true;
-        // this.option_values = res.res.data;
-        // this.setDataSuorce(res.res.data);
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error.message;
-        this.snotifyService.error(e, 'Error !');
-        // this.notificationServiceBus.launchNotification(true, e);
-      }
-    );
-  }
-
-  addOptionValue() {
-    this.option.options.push(this.option_values);
-    console.log(this.option.options);
-    this.option_values = new OptionValues();
-    if (this.option.options.length > 0) {
-      this.optionsCardEnable = true;
-    } else if (this.option.options.length === 0) {
-      this.optionsCardEnable = false;
-    }
-  }
-
-  addOption(form) {
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill Required Field(s)');
-      return;
-    }
-    // this.option.suppliers.push(this.supplier);
-    // this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
-    this.spinnerService.requestInProcess(true);
-
-    this.optionService.addOption(this.option).subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, 'Success !');
-        this.spinnerService.requestInProcess(false);
+      } else {
+        this.pageType = 'new';
         this.option = new Option();
-        this.option_values = new OptionValues();
-        this.router.navigate(['/options']);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.error);
-        this.snotifyService.error(e, 'Error !');
       }
-    );
-  }
-
-
-  saveOption(form) {
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning('Please Fill All Required Fields');
-      return;
-    }
-    this.optionService.saveOption(this.option).then(() => {
-      // Trigger the subscription with new data
-      this.optionService.onOptionChanged.next(this.option);
-
-      // Show the success message
     });
   }
 
-  removeOptions(indexToRemove) {
-    this.option.options.splice(indexToRemove, 1);
-    console.log(this.option);
+  ngOnDestroy(): void {
+    return this.sub && this.sub.unsubscribe();
   }
 
-  deleteOption() {
-    // {
+  getOptionById(id: number) {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.optionService.getOptionById(id).subscribe((res: any) => {
+      this.option = new Option(res.res.data);
+      this.option.options = res.res.data.options;
+      this.spinnerService.requestInProcess(false);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  addOption(form: NgForm) {
+    if (form.invalid || this.option.options.length <= 0) {
+      this.validateForm(form);
+      return;
+    } else {
+      this.createOption();
+    }
+  }
+
+  createOption() {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.optionService.addOption(this.option).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/options']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  delOption() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
     });
-
     this.confirmDialogRef.componentInstance.confirmMessage =
-      'Are you sure you want to delete?';
-
+      "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const data = this.optionForm.getRawValue();
-        data.handle = FuseUtils.handleize(data.name);
-        this.optionService.deleteOptions(data).then(() => {
-          this.optionService.onOptionChanged.next(data);
-        });
+        this.deleteOption();
       }
       this.confirmDialogRef = null;
     });
   }
+
+  deleteOption() {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.optionService.deleteOption(this.option.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/options']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  deleteOptionValue(optionVal: OptionValues) {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.optionService.deleteOptionValue(optionVal.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.remove(optionVal);
+      // this.router.navigate(['/options']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  validateForm(form) {
+    this.validateAllFormFields(form.control);
+    this.snotifyService.error("Please Fill All Required Fields");
+  }
+
   validateAllFormFields(formGroup: FormGroup) {
+    if (this.option.options.length <= 0) {
+      this.chipList.errorState = true;
+    }
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
@@ -216,15 +161,40 @@ export class OptionComponent implements OnInit {
     });
   }
 
-  fileOver(event) {
-    console.log(event);
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    let tempOptionVal = new OptionValues();
+    tempOptionVal.value = event.value.trim();
+
+    // Add our option
+    if ((value || '').trim()) {
+      this.option.options.push(tempOptionVal);
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    if (this.option.options.length > 0) {
+      this.chipList.errorState = false;
+    }
   }
 
-  fileLeave(event) {
-    console.log(event);
-  }
+  remove(optValue: OptionValues): void {
+    const index = this.option.options.indexOf(optValue);
 
-  // ngOnDestroy() {
-  //   this.onOptionChanged.unsubscribe();
-  // }
+    if (index >= 0) {
+      this.option.options.splice(index, 1);
+    }
+
+    if (this.option.options.length > 0) {
+      this.chipList.errorState = false;
+    }
+
+    if (this.option.options.length <= 0) {
+      this.chipList.errorState = true;
+    }
+  }
 }
