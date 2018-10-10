@@ -87,8 +87,9 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: any) => {
           if (!res.status) {
-            const product: any = res.res.data;
+            let product: any = res.res.data;
             product.supplier_id = +this.tempP.supplier_id;
+            product.product_id = +this.tempP.id;
             this.detectChanges.notifyOther({
               option: "editProduct",
               value: product

@@ -3,11 +3,11 @@ export class Option {
   option_name = "";
 }
 export class Product {
-  id: string;
+  id: number;
   name: string;
   short_description: string;
   long_description: string;
-  category_id: number = 1;
+  category_id: number = -1;
   tax_id: number;
   brand_id: number;
   supplier: Supplier;

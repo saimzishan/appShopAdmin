@@ -46,6 +46,7 @@ export class SupplierFormComponent implements OnInit {
   categoryNodes: any[] = [];
   parentCat: any;
   category_id: number;
+  product_id: number;
   categoryOption: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
@@ -102,9 +103,10 @@ export class SupplierFormComponent implements OnInit {
             this.pageType = "edit";
           }, 1);
           this.product = this.supplier = res.value;
+          this.product_id = res.value.product_id;
           this.product.brand_id = res.value.brand.id;
-          this.product.brand_id = res.value.brand.id;
-          this.product.category_id = res.value.category[0].id;
+          this.category_id = this.product.category_id =
+            res.value.category[0].id;
           this.parentCat = res.value.category[0].name;
           this.supplier.buying_price = res.value.buyingPrice;
           this.supplier.market_price = res.value.marketPrice;
@@ -491,20 +493,62 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please Select a category");
       return;
     }
-    this.product.category_id = this.category_id;
+    if (!this.product.name || this.product.name === "") {
+      this.snotifyService.warning("Product name is required");
+      return;
+    }
+    if (!this.product.brand_id) {
+      this.snotifyService.warning("Please select brand id");
+      return;
+    }
 
-    let object: any = this.product;
-    delete object.brand;
-    delete object.bulk_prices;
-    delete object.category;
-    delete object.class;
-    delete object.images;
-    delete object.product_classes;
-    delete object.product_variants;
-    delete object.rating;
-    delete object.tags;
-    delete object.tax;
-    delete object.product_supplier_attributes;
-    console.log(object);
+    if (
+      !this.product.long_description ||
+      this.product.long_description === ""
+    ) {
+      this.snotifyService.warning("Long description name is required");
+      return;
+    }
+    if (
+      !this.product.short_description ||
+      this.product.short_description === ""
+    ) {
+      this.snotifyService.warning("Short description is required");
+      return;
+    }
+
+    if (!this.product.tax_id) {
+      this.snotifyService.warning("Please select Tax");
+      return;
+    }
+
+    let object = {
+      id: this.product_id,
+      category_id: this.category_id,
+      name: this.product.name,
+      brand_id: this.product.brand_id,
+      long_description: this.product.long_description,
+      short_description: this.product.short_description,
+      tax_id: this.product.tax_id
+    };
+
+    this.put(object);
+  }
+
+  put(obj) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.saveProduct(obj, "p_update").subscribe(
+      (res: any) => {
+        this.spinnerService.requestInProcess(false);
+        this.snotifyService.success(res.res.message + "Success !");
+      },
+      (errors: any) => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+        console.log(errors.error.message);
+      }
+    );
   }
 }

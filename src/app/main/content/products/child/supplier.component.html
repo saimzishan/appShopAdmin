@@ -30,8 +30,10 @@
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
                         <textarea matInput #long_description="ngModel" name="long_description" rows="3" [(ngModel)]="product.long_description"
-                            placeholder="Product Long Description"></textarea>
+                            placeholder="Product Long Description" required></textarea>
                     </mat-form-field>
+                    <span *ngIf="long_description.touched && long_description.errors?.required;" class="inline-icon error">
+                        <span>Long description is required.</span>!</span>
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
@@ -76,7 +78,7 @@
                             width="100" height="100" />
                     </mat-form-field>
                 </div>
-                <div class="col-md-6" style="text-align: right;">
+                <div class="col-md-6" style="text-align: right;" *ngIf="pageType !== 'new'">
                     <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
                         (click)="updateProduct()">
                         <span>Update Product</span>
