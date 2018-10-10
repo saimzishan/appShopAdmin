@@ -62,6 +62,7 @@ export class SupplierFormComponent implements OnInit {
   pageType = "new";
   baseURL = GLOBAL.USER_IMAGE_API;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+  ps_id: any;
 
   constructor(
     private productService: ProductService,
@@ -104,6 +105,7 @@ export class SupplierFormComponent implements OnInit {
           }, 1);
           this.product = this.supplier = res.value;
           this.product_id = res.value.product_id;
+          this.ps_id =  res.value.id;
           this.product.brand_id = res.value.brand.id;
           this.category_id = this.product.category_id =
             res.value.category[0].id;
@@ -356,34 +358,45 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  // dropped(event: UploadEvent, type: string) {
-  //   this.spinnerService.requestInProcess(true);
-  //   this.files = event.files;
-  //   for (const droppedFile of event.files) {
-  //     // Is it a file?
-  //     if (droppedFile.fileEntry.isFile) {
-  //       const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-  //       fileEntry.file((file: File) => {
-  //         // Here you can access the real file
-  //         this.image.content_type = "." + file.type.split("/")[1];
-  //         this.image.type = type;
-  //         const reader = new FileReader();
-  //         // reader.onload = this._handleReaderLoaded.bind(this);
-  //         // reader.readAsBinaryString(file);
+  editSupplier(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
+      return;
+    }
 
-  //         reader.readAsDataURL(file); // read file as data url
-  //         reader.onload = event => {
-  //           // called once readAsDataURL is completed
-  //           // this.url = event.currentTarget.result;
-  //           this._handleReaderLoaded(event);
-  //         };
-  //       });
-  //     } else {
-  //       // It was a directory (empty directories are added, otherwise only files)
-  //       const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-  //     }
-  //   }
-  // }
+    setTimeout(() => {
+      let a = this.directiveRef.dropzone();
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    }, 1000);
+    this.spinnerService.requestInProcess(true);
+    delete this.supplier.images;
+    let supplier = {
+      id: this.supplier.id,
+      ps_id: this.ps_id,
+      track_stock: this.supplier.track_stock,
+      printing_option: this.supplier.printing_option,
+      active: this.supplier.active,
+      class: this.supplier.class,
+      stock: this.supplier.stock,
+      low_level_stock: this.supplier.low_level_stock,
+      buying_price: this.supplier.buying_price,
+      market_price: this.supplier.market_price,
+      price: this.supplier.price,
+      sku: this.supplier.sku,
+      ean: this.supplier.sku,
+      upc: this.supplier.upc,
+      width: this.supplier.width,
+      weight: this.supplier.weight,
+      height: this.supplier.height,
+      depth: this.supplier.depth,
+      images: this.lImages
+    }
+    
+    this.putSupplier(supplier);
+    
+  }
 
   _handleReaderLoaded(readerEvt) {
     const binaryString = readerEvt.target.result;
@@ -538,6 +551,23 @@ export class SupplierFormComponent implements OnInit {
   put(obj) {
     this.spinnerService.requestInProcess(true);
     this.productService.saveProduct(obj, "p_update").subscribe(
+      (res: any) => {
+        this.spinnerService.requestInProcess(false);
+        this.snotifyService.success(res.res.message + "Success !");
+      },
+      (errors: any) => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+        console.log(errors.error.message);
+      }
+    );
+  }
+
+  putSupplier(obj) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.saveProduct(obj, "ps_update").subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         this.snotifyService.success(res.res.message + "Success !");

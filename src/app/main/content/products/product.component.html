@@ -22,7 +22,7 @@
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
                     <div class="h2" *ngIf="pageType ==='edit'">
-                        {{product.name}}
+                        {{productName}}
                     </div>
                     <div class="h2" *ngIf="pageType ==='new'">
                         New Product
@@ -33,6 +33,10 @@
                 </div>
             </div>
             <!-- / APP TITLE -->
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
+                (click)="deleteProduct()">
+                <span>DELETE</span>
+            </button>
 
             <mat-form-field>
                 <mat-select placeholder="Action" class="mt-16 mt-sm-0">
@@ -41,18 +45,6 @@
                     <mat-option [value]="3">Save & Add More Supplier</mat-option>
                 </mat-select>
             </mat-form-field>
-            <!-- <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'"
-                (click)="productFormSubmition.click()">
-                <span>ADD</span>
-            </button> -->
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
-                (click)="deleteProduct()">
-                <span>DELETE</span>
-            </button>
-            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="productForm.invalid || productForm.pristine"
-                *ngIf="pageType ==='edit'" (click)="saveProduct()">
-                <span>SAVE</span>
-            </button>
         </div>
         <!-- / HEADER -->
 

@@ -150,7 +150,7 @@ export class ProductService extends ApiService implements Resolve<any> {
 
     return this.http
       .put(
-        GLOBAL.USER_API + "products/" + product.id + "?" + option,
+        GLOBAL.USER_API + "products/" + (option === 'ps_update' ? product.ps_id : product.id) + "?" + option,
         product,
         httpOptions
       )
@@ -298,36 +298,25 @@ export class ProductService extends ApiService implements Resolve<any> {
       });
   }
 
-  deleteProduct(product) {
-    this.spinnerService.requestInProcess(true);
-    return new Promise((resolve, reject) => {
-      const access_token = AuthGuard.getToken();
-      if (access_token === undefined) {
-        const error = {
-          message: "Unauthorized"
-        };
-        return Observable.throw({ error: error });
-      }
-      const httpOptions = {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + access_token
-        })
+  deleteProduct(id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
       };
-
-      this.http
-        .delete(GLOBAL.USER_API + "products/" + product.id, httpOptions)
-        .subscribe((response: any) => {
-          this.spinnerService.requestInProcess(false);
-          if (!response.error) {
-            resolve(response);
-            this.snotifyService.success("Product Deleted Successfully");
-            this.router.navigate(["/suppliers"]);
-          } else {
-            this.snotifyService.error(response.error);
-          }
-        }, reject);
-    });
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.delete(GLOBAL.USER_API + 'products/' + id + '?p_delete', httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
   }
 
   deletePImage(id: number, image_id: number) {

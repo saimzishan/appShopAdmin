@@ -51,6 +51,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   checkParams = "";
 
   product_id: any;
+  productName = '';
   supplier_id: any = false;
   enabledChild: boolean = true;
   tempP;
@@ -74,6 +75,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       if (this.tempP) {
         if (this.tempP.id != "new") {
           this.edit(this.tempP);
+          this.pageType = 'edit';
           this.enabledChild = false;
         }
       }
@@ -88,6 +90,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         (res: any) => {
           if (!res.status) {
             let product: any = res.res.data;
+            this.productName = product.name;
             product.supplier_id = +this.tempP.supplier_id;
             product.product_id = +this.tempP.id;
             this.detectChanges.notifyOther({
@@ -129,8 +132,23 @@ export class ProductComponent implements OnInit, OnDestroy {
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeProduct();
       }
       this.confirmDialogRef = null;
+    });
+  }
+
+  removeProduct() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.deleteProduct(+this.tempP.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/products']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
     });
   }
   saveAndExit() {
