@@ -25,6 +25,8 @@ import { CategoriesService } from "../../categories/categories.service";
 import { ITreeOptions } from "angular-tree-component";
 import { DetectChangesService } from "../../../../shared/detect-changes.services";
 import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
+import { MatDialogRef } from "@angular/material";
 
 @Component({
   selector: "app-product-supplier-form",
@@ -57,6 +59,9 @@ export class SupplierFormComponent implements OnInit {
   directiveRef: DropzoneDirective;
   changesSubscription;
   pageType = "new";
+  baseURL = GLOBAL.USER_IMAGE_API;
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+
   constructor(
     private productService: ProductService,
     public snackBar: MatSnackBar,
@@ -64,7 +69,8 @@ export class SupplierFormComponent implements OnInit {
     private snotifyService: SnotifyService,
     protected http: HttpClient,
     private categoriesService: CategoriesService,
-    private detectChanges: DetectChangesService
+    private detectChanges: DetectChangesService,
+    private dialog: MatDialog
   ) {
     this.product = new Product();
     this.supplier = new Supplier();
@@ -92,10 +98,14 @@ export class SupplierFormComponent implements OnInit {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "editProduct":
-          this.pageType = "edit";
+          setTimeout(() => {
+            this.pageType = "edit";
+          }, 1);
           this.product = this.supplier = res.value;
           this.product.brand_id = res.value.brand.id;
           this.product.brand_id = res.value.brand.id;
+          this.product.category_id = res.value.category[0].id;
+          this.parentCat = res.value.category[0].name;
           this.supplier.buying_price = res.value.buyingPrice;
           this.supplier.market_price = res.value.marketPrice;
           this.supplier.id = res.value.supplier_id;
@@ -442,5 +452,59 @@ export class SupplierFormComponent implements OnInit {
   }
   removeBluckPrice(index) {
     this.bluckPrices.splice(index, 1);
+  }
+
+  removeImage(image_id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.productService.deletePImage(+this.product.id, image_id).subscribe(
+          res => {
+            this.spinnerService.requestInProcess(false);
+            if (!res.error) {
+              this.snotifyService.success("Deleted successfully !", "Success");
+              const result = this.supplier.images.findIndex(
+                image => image.id === image_id
+              );
+              if (result !== -1) {
+                this.supplier.images.splice(result, 1);
+              }
+            }
+          },
+          error => {
+            this.spinnerService.requestInProcess(false);
+            console.log(error);
+          }
+        );
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  updateProduct() {
+    if (!this.category_id) {
+      this.snotifyService.warning("Please Select a category");
+      return;
+    }
+    this.product.category_id = this.category_id;
+
+    let object: any = this.product;
+    delete object.brand;
+    delete object.bulk_prices;
+    delete object.category;
+    delete object.class;
+    delete object.images;
+    delete object.product_classes;
+    delete object.product_variants;
+    delete object.rating;
+    delete object.tags;
+    delete object.tax;
+    delete object.product_supplier_attributes;
+    console.log(object);
   }
 }

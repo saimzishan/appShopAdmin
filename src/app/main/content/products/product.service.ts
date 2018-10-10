@@ -329,4 +329,34 @@ export class ProductService extends ApiService implements Resolve<any> {
         }, reject);
     });
   }
+
+  deletePImage(id: number, image_id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .delete(
+        GLOBAL.USER_API +
+          "products/" +
+          id +
+          "?p_image_id=" +
+          image_id +
+          "&p_image_delete",
+        httpOptions
+      )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }

@@ -45,6 +45,7 @@ export class VariantComponent implements OnInit {
   lImages: any = [];
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
+  pageType: string;
 
   constructor(
     private productService: ProductService,
@@ -54,6 +55,7 @@ export class VariantComponent implements OnInit {
   ) {
     this.images = new Array<Image>();
     this.image = new Image();
+    this.pageType = "new";
     this.product_variant = new ProductVariant();
     this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
       res => {
@@ -94,10 +96,14 @@ export class VariantComponent implements OnInit {
   }
 
   edit(obj) {
+    this.pageType = "edit";
     this.variants = obj;
     this.isAddorEditSKU = true;
   }
-
+  editSku(variant) {
+    console.log(variant);
+    this.product_variant = variant;
+  }
   setOptions(obj) {
     this.option_with_value = obj;
   }

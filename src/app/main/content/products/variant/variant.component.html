@@ -89,8 +89,8 @@
                             <div class="col-md-1">
                                 <mat-select placeholder="Operation" name="operation" [(ngModel)]="product_variant.operation"
                                     style="margin-top: 20px;">
-                                    <mat-option value=1>Add</mat-option>
-                                    <mat-option value=2>Subtract</mat-option>
+                                    <mat-option value=2>Add</mat-option>
+                                    <mat-option value=3>Subtract</mat-option>
                                 </mat-select>
 
                             </div>
@@ -98,8 +98,8 @@
 
                                 <mat-select placeholder="Change by" name="changeBy" [(ngModel)]="product_variant.changeBy"
                                     style="margin-top: 20px;">
-                                    <mat-option value=1>Absolute</mat-option>
-                                    <mat-option value=2>Percentage</mat-option>
+                                    <mat-option value=2>Absolute</mat-option>
+                                    <mat-option value=3>Percentage</mat-option>
                                 </mat-select>
                             </div>
                             <div class="col-md-1">
@@ -148,16 +148,18 @@
                     </thead>
                     <tbody>
                         <ng-container *ngFor="let variant of variants">
-                            <tr>
+                            <tr style="cursor:pointer" (click)="editSku(variant)">
                                 <td>{{variant.sku}}</td>
                                 <td>{{variant.upc}}</td>
                                 <td>{{variant.weight}}</td>
                                 <td>{{variant.depth}}</td>
                                 <td>{{variant.width}}</td>
                                 <td>{{variant.height}}</td>
-                                <td>{{(variant.operation) === '1'? 'Add' :(variant.operation) === '2'? 'Subtract' :
+                                <td>{{(variant.operation) === 'add'? 'Add' :(variant.operation) === 'subtract'?
+                                    'Subtract' :
                                     'Null'}}</td>
-                                <td>{{(variant.changeBy) === '1' ? 'Absolute' :(variant.changeBy) === '2'? 'Percentage'
+                                <td>{{(variant.changeBy) === 'absolute' ? 'Absolute' :(variant.changeBy) ===
+                                    'percentage'? 'Percentage'
                                     :
                                     'Null'}}</td>
                                 <td>{{variant.amount}}</td>
