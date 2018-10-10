@@ -29,7 +29,7 @@
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button [routerLink]="'/options/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
+            <button mat-raised-button [routerLink]="'/options/option/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW OPTION</span>
             </button>
 
@@ -55,20 +55,14 @@
                 <ng-container cdkColumnDef="option_values">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Option Values</mat-header-cell>
                     <mat-cell *cdkCellDef="let option" fxHide fxShow.gt-md>
-                        <p class="category text-truncate" *ngFor="let optionValue of option.options; let i = index">
-                            <!-- <mat-chip class="mat-chip mat-primary mat-standard-chip ng-tns-c60-93 mat-chip-with-trailing-icon ng-star-inserted" role="option"
-                                tabindex="-1" aria-disabled="false" aria-selected="false"> {{optionValue.value}}
-                                </mat-chip> -->
-                                <!-- <button>{{optionValue.value}}</button> -->
-                                <!-- <button type="button" class="btn btn-primary"> -->
-                                    <span class="badge badge-secondary" style="margin-left: 3px">{{optionValue.value}}</span>
-                                <!-- </button> -->
-                        </p>
+                        <mat-chip-list>
+                            <mat-chip *ngFor="let optionValue of option.options; let i = index" class="mat-accent-500-bg">{{optionValue.value}}</mat-chip>
+                        </mat-chip-list>
                     </mat-cell>
                 </ng-container>
                 <br>
                 <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *cdkRowDef="let option; columns: displayedColumns;" class="brand" matRipple [routerLink]="'/options/'+option.id">
+                <mat-row *cdkRowDef="let option; columns: displayedColumns;" class="brand" matRipple [routerLink]="'/options/option/'+option.id">
                 </mat-row>
             </mat-table>
             <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">

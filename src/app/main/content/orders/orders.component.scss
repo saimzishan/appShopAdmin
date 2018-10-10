@@ -95,3 +95,15 @@
   .element-row.expanded {
     border-bottom-color: transparent;
   }
+
+  .qview-address {
+    border-radius: 4px;
+    margin: 5px 0 0 -10px;
+    padding: 0 10px !important;
+    min-height: 80px;
+    box-sizing: border-box;
+}
+
+.clipboard-string {
+    background-color: #cddbe0;
+}

@@ -95,6 +95,27 @@ export class OrdersService extends ApiService {
       });
   }
 
+  updateOrderStatus(orderId: number, previousStatus: number, status: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.put(GLOBAL.USER_API + 'orders/' + orderId, {previous_status: previousStatus, status: status}, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   deleteOrder(id: number) {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {

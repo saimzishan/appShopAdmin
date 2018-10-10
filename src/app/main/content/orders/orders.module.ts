@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
 import { OrdersService } from './orders.service';
 import { FileDropModule } from 'ngx-file-drop';
+import { ClipboardModule } from 'ngx-clipboard';
 import { TreeModule } from 'angular-tree-component';
 import { AuthGuard } from '../../../guard/auth.guard';
 import { OrdersComponent } from './orders.component';
@@ -20,17 +21,7 @@ const routes = [
     canActivate: [AuthGuard],
     path: 'orders',
     component: OrdersComponent,
-  },
-  {
-    canActivate: [AuthGuard],
-    path: 'order/new',
-    component: OrderComponent,
-  },
-  {
-    canActivate: [AuthGuard],
-    path: 'order/:id',
-    component: OrderComponent,
-  },
+  }
 ];
 
 @NgModule({
@@ -39,6 +30,7 @@ const routes = [
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
     FileDropModule,
+    ClipboardModule,
     TreeModule
   ],
   declarations: [OrdersComponent, OrderComponent, CdkDetailRowDirective],

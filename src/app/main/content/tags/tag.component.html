@@ -22,7 +22,7 @@
         <span>ADD</span>
       </button>
 
-      <button mat-raised-button [hidden]="true" class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delTag()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delTag()">
         <span>DELETE</span>
       </button>
 
@@ -46,11 +46,8 @@
               <span>Tag name is required.</span>!</span>
 
             <mat-form-field class="w-100-p">
-              <input matInput required  name="notes" #notes="ngModel" [(ngModel)]="tag.notes" placeholder="Notes">
+              <input matInput  name="notes" #notes="ngModel" [(ngModel)]="tag.notes" placeholder="Notes">
             </mat-form-field>
-            <span *ngIf="notes.touched && notes.errors?.required;" class="inline-icon error red-fg">
-              <span>Notes are required.</span>!</span>
-            <span class="error" id="length"></span>
 
           </div>
           <input type="button" class="btn btn-primary" hidden #tagFormSubmit (click)="addTag(tagForm)">

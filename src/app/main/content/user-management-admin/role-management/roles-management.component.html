@@ -68,7 +68,7 @@
             <ng-container cdkColumnDef="permissions">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header>Permissions</mat-header-cell>
                 <mat-cell *cdkCellDef="let role">
-                    <p class="text-truncate"><span *ngFor="let permession of role.permissions; let i = index">{{permession.name}}<span *ngIf="i !== role.permissions.length - 1">, </span></span></p>
+                    <p><span *ngFor="let permession of role.permissions; let i = index">{{permession.name}}<span *ngIf="i !== role.permissions.length - 1">, </span></span></p>
                 </mat-cell>
             </ng-container>
           

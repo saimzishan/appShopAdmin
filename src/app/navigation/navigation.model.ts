@@ -57,14 +57,6 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'icon': 'visibility',
                         'url': '/order-management/orders',
                         'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/order-management/order/new',
-                        'exactMatch': true
                     }
                 ]
             },
@@ -184,7 +176,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                 ]
             },
             {
-                'id': 'products',
+                'id': 'options',
                 'title': 'Options',
                 'translate': 'NAV.ECOMMERCE',
                 'type': 'collapse',
@@ -203,7 +195,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'Add',
                         'type': 'item',
                         'icon': 'add_circle',
-                        'url': '/options/new',
+                        'url': 'options/option/new',
                         'exactMatch': true
                     },
                 ]
