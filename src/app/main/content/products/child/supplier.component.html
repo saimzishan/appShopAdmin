@@ -72,7 +72,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6" fusePerfectScrollbar>
-                    <mat-form-field class="w-25-p">
+                    <mat-form-field class="w-50-p">
                         <mat-label>Select Category Above</mat-label>
                         <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}"
                             width="100" height="100" />
@@ -242,14 +242,14 @@
                     <div class="col-md-2">
                         <mat-form-field class="w-90-p">
                             <input matInput #buying_price="ngModel" name="buying_price" [(ngModel)]="supplier.buying_price"
-                                placeholder="Product buying price">
+                                placeholder="Buying price">
                         </mat-form-field>
 
                     </div>
                     <div class="col-md-2">
                         <mat-form-field class="w-90-p">
                             <input matInput #market_price="ngModel" name="market_price" [(ngModel)]="supplier.market_price"
-                                placeholder="Product market price">
+                                placeholder="Market price">
                         </mat-form-field>
 
                     </div>
