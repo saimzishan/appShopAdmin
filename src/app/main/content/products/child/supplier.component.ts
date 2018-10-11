@@ -47,6 +47,7 @@ export class SupplierFormComponent implements OnInit {
   parentCat: any;
   category_id: number;
   product_id: number;
+  deleteButton = false;
   categoryOption: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
@@ -103,6 +104,7 @@ export class SupplierFormComponent implements OnInit {
           setTimeout(() => {
             this.pageType = "edit";
           }, 1);
+          this.deleteButton = true;
           this.product = this.supplier = res.value;
           this.product_id = res.value.product_id;
           this.ps_id =  res.value.id;
@@ -489,6 +491,39 @@ export class SupplierFormComponent implements OnInit {
               if (result !== -1) {
                 this.supplier.images.splice(result, 1);
               }
+            }
+          },
+          error => {
+            this.spinnerService.requestInProcess(false);
+            console.log(error);
+          }
+        );
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  removeBulkPrice(bulk_id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.productService.deletePBulkPrice(+this.product.id, bulk_id).subscribe(
+          res => {
+            this.spinnerService.requestInProcess(false);
+            if (!res.error) {
+              const result = this.bluckPrices.findIndex(
+                bulk => bulk.id === bulk_id
+              );
+                this.bluckPrices.splice(result, 1);
+                this.snotifyService.success("Deleted successfully !", "Success");
+ 
+            } else {
+              this.snotifyService.error('Something went wrong!' , "Error");
             }
           },
           error => {
