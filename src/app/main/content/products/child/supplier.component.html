@@ -187,7 +187,8 @@
                     </div>
                     <div class="col-md-2">
                         <!-- <mat-form-field class="w-100-p"> -->
-                        <mat-checkbox #active="ngModel" name="active" [(ngModel)]="supplier.active">Active </mat-checkbox>
+                        <mat-checkbox #active="ngModel" name="active" [(ngModel)]="supplier.active">Active
+                        </mat-checkbox>
                         <!-- </mat-form-field> -->
                     </div>
                     <div class="col-md-6">
@@ -230,8 +231,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id"
-                                required>
+                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                                [(ngModel)]="supplier.id" required>
                                 <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
                                     {{supplier.name}}</mat-option>
                             </mat-select>
@@ -331,7 +332,7 @@
                                 </span>
                             </file-drop>
                         </div> -->
-                        <div class="dropzone" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
+                        <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
                             (success)="onUploadSuccess($event)"></div>
                     </div>
                     <!-- -->
@@ -359,12 +360,12 @@
                     <div class="col-md-6">
                     </div>
                     <div class="col-md-6" style="text-align: right;">
-                        <button *ngIf="pageType === 'new'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
-                            (click)="addProduct(supplierForm)">
+                        <button *ngIf="pageType === 'new'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
+                            style="background-color: #1E8ACA !important ; color: #ffffff !important" (click)="addProduct(supplierForm)">
                             <span>Save Product</span>
                         </button>
-                        <button *ngIf="pageType === 'edit'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
-                            (click)="editSupplier(otherSuppForm)">
+                        <button *ngIf="pageType === 'edit'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
+                            style="background-color: #1E8ACA !important ; color: #ffffff !important" (click)="editSupplier(otherSuppForm)">
                             <span>Edit Supplier</span>
                         </button>
                     </div>

@@ -20,6 +20,7 @@ export class OptionAndSkusComponent implements OnInit {
   changesSubscription;
   alreadyTaken: any = false;
   product_supplier_attributes: any;
+  pageType = "new";
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -61,6 +62,7 @@ export class OptionAndSkusComponent implements OnInit {
     }
   }
   edit(obj) {
+    this.pageType = "edit";
     const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
     setTimeout(() => {
       this.option_set_id = unique;
@@ -73,6 +75,9 @@ export class OptionAndSkusComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.optionSets = res.res.data;
+          // setTimeout(() => {
+
+          //  }, 1000 );
           this.alreadyTaken = localStorage.getItem("optionSet");
           if (this.alreadyTaken) {
             this.alreadyTaken = JSON.parse(this.alreadyTaken);
@@ -93,10 +98,15 @@ export class OptionAndSkusComponent implements OnInit {
   }
 
   getOptionName(id) {
-    const res = this.optionSets.find(option => option.id === id);
+    const res: any = this.optionSets.find(option => option.id === id);
     if (res) {
-      // console.log(res);
-      return res.options;
+      let obj = [];
+      if (this.pageType === "edit") {
+        obj = res.options;
+      } else {
+        obj = res.options;
+      }
+      return obj;
     }
   }
 

@@ -33,6 +33,7 @@ import { MatDialogRef } from "@angular/material";
   templateUrl: "./supplier.component.html"
 })
 export class SupplierFormComponent implements OnInit {
+  config;
   product: Product;
   supplier: Supplier;
   images: Image[];
@@ -105,7 +106,7 @@ export class SupplierFormComponent implements OnInit {
           }, 1);
           this.product = this.supplier = res.value;
           this.product_id = res.value.product_id;
-          this.ps_id =  res.value.id;
+          this.ps_id = res.value.id;
           this.product.brand_id = res.value.brand.id;
           this.category_id = this.product.category_id =
             res.value.category[0].id;
@@ -392,10 +393,9 @@ export class SupplierFormComponent implements OnInit {
       height: this.supplier.height,
       depth: this.supplier.depth,
       images: this.lImages
-    }
-    
+    };
+
     this.putSupplier(supplier);
-    
   }
 
   _handleReaderLoaded(readerEvt) {
