@@ -33,7 +33,7 @@ import { MatDialogRef } from "@angular/material";
   templateUrl: "./supplier.component.html"
 })
 export class SupplierFormComponent implements OnInit {
-  config;
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   product: Product;
   supplier: Supplier;
   images: Image[];
@@ -512,25 +512,29 @@ export class SupplierFormComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spinnerService.requestInProcess(true);
-        this.productService.deletePBulkPrice(+this.product.id, bulk_id).subscribe(
-          res => {
-            this.spinnerService.requestInProcess(false);
-            if (!res.error) {
-              const result = this.bluckPrices.findIndex(
-                bulk => bulk.id === bulk_id
-              );
+        this.productService
+          .deletePBulkPrice(+this.product.id, bulk_id)
+          .subscribe(
+            res => {
+              this.spinnerService.requestInProcess(false);
+              if (!res.error) {
+                const result = this.bluckPrices.findIndex(
+                  bulk => bulk.id === bulk_id
+                );
                 this.bluckPrices.splice(result, 1);
-                this.snotifyService.success("Deleted successfully !", "Success");
- 
-            } else {
-              this.snotifyService.error('Something went wrong!' , "Error");
+                this.snotifyService.success(
+                  "Deleted successfully !",
+                  "Success"
+                );
+              } else {
+                this.snotifyService.error("Something went wrong!", "Error");
+              }
+            },
+            error => {
+              this.spinnerService.requestInProcess(false);
+              console.log(error);
             }
-          },
-          error => {
-            this.spinnerService.requestInProcess(false);
-            console.log(error);
-          }
-        );
+          );
       }
       this.confirmDialogRef = null;
     });

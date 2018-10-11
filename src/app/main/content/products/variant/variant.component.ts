@@ -1,3 +1,4 @@
+import { GLOBAL } from "./../../../../shared/globel";
 import { Option } from "./../../models/product.model";
 import { DetectChangesService } from "./../../../../shared/detect-changes.services";
 import {
@@ -46,6 +47,7 @@ export class VariantComponent implements OnInit {
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
   pageType: string;
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
 
   constructor(
     private productService: ProductService,
