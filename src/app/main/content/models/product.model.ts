@@ -37,7 +37,6 @@ export class Supplier {
   printing_option: boolean;
   stock: number;
   low_level_stock: number;
-  content_type: string;
   active: boolean;
   class: Array<any>;
   constructor(supplier?) {
@@ -55,10 +54,11 @@ export class Supplier {
     this.depth = supplier.depth || "";
     this.images = new Array<Image>();
     this.bulk_prices = new Array<BluckPrice>();
-    this.content_type = supplier.content_type || "";
     this.track_stock = supplier.ttrack_stock || false;
     this.printing_option = supplier.printing_option || false;
     this.active = supplier.active || false;
+    this.low_level_stock = supplier.low_level_stock;
+    this.stock = supplier.stock;
     this.class = supplier.class || new Array();
   }
 }
@@ -100,6 +100,9 @@ export class ProductVariant {
   operation: number;
   changeBy: number;
   amount: number;
+  track_stock: boolean;
+  stock: number;
+  low_level_stock: number;
 
   options: Array<Options>;
 
@@ -116,6 +119,7 @@ export class ProductVariant {
     this.operation = productVariant.operation || null;
     this.changeBy = productVariant.changeBy || null;
     this.amount = productVariant.amount || null;
+    this.track_stock = productVariant.ttrack_stock || false;
     this.options = new Array<Options>();
     this.images = [];
   }
