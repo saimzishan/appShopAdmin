@@ -64,7 +64,7 @@ export class OptionAndSkusComponent implements OnInit {
     const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
     setTimeout(() => {
       this.option_set_id = unique;
-    }, 3);
+    }, 1000);
     this.product_supplier_attributes = obj;
   }
   getOptionSets() {

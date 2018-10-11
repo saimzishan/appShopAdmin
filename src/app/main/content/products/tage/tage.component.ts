@@ -67,7 +67,7 @@ export class TageComponent implements OnInit {
           this.tags[id].selected = true;
         }
       }
-    }, 3);
+    }, 1000);
   }
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
