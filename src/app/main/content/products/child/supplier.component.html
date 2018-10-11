@@ -240,15 +240,12 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <<<<<<< HEAD <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
                                 [(ngModel)]="supplier.id" required>
-                                =======
-                                <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
-                                    [(ngModel)]="supplier.id" required>
-                                    >>>>>>> 2acfc9208f7700ff787b38807bcd852429345931
-                                    <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                                        {{supplier.name}}</mat-option>
-                                </mat-select>
+
+                                <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                                    {{supplier.name}}</mat-option>
+                            </mat-select>
                         </mat-form-field>
                         <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
                             <span>Please Select a Supplier.</span>!</span>
