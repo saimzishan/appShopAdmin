@@ -348,4 +348,33 @@ export class ProductService extends ApiService implements Resolve<any> {
         return this.handleError(err);
       });
   }
+
+  deletePBulkPrice(id: number , bulk_id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .delete(
+        GLOBAL.USER_API +
+          "products/" +
+          id +
+          "?p_bulck_price" +
+          "&bulck_p_id=" + bulk_id,
+        httpOptions
+      )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }

@@ -119,11 +119,11 @@
                             </mat-form-field>
                         </div>
                         <div class="form-group">
-                            <label for="pwd"> &nbsp; discount off each individual item
-                                &nbsp;&nbsp;&nbsp;
+                            <label for="pwd"> &nbsp; discount off each individual item &nbsp;&nbsp;&nbsp;
                             </label>
                         </div>
-                        <button style="height: 31px;" type="submit" class="btn btn-info btn-xs" (click)="addBluckPrice(bluckPriceForm)">
+                        <button type="submit" class="btn btn-info btn-group-vertical" style="border-radius: 50%; padding: 0px !important;"
+                            (click)="addBluckPrice(bluckPriceForm)">
                             <i class="material-icons">
                                 add
                             </i></button>
@@ -151,10 +151,17 @@
                                         matInput value="{{row.discount}}" readonly>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-2">
-                                <button style="height: 31px; margin-left: -20px;" type="submit" class="btn btn-danger btn-xs"
-                                    (click)="removeBluckPrice(i)">
-                                    <i class="material-icons">
+                            <div class="col-md-2" *ngIf="deleteButton">
+                                <button class="btn btn-danger btn-group-vertical" style="border-radius: 50%; margin-left:-30px; padding: 0px !important"
+                                    type="submit" class="btn btn-danger btn-xs" (click)="removeBulkPrice(row.id)">
+                                    <i class="material-icons" style="margin-top: 2px ; font-size: 20px">
+                                        delete
+                                    </i></button>
+                            </div>
+                            <div class="col-md-2" *ngIf="!deleteButton">
+                                <button class="btn btn-danger btn-group-vertical" style="border-radius: 50%; margin-left:-30px; padding: 0px !important"
+                                    type="submit" class="btn btn-danger btn-xs" (click)="removeBluckPrice(i)">
+                                    <i class="material-icons" style="margin-top: 2px ; font-size: 20px">
                                         remove
                                     </i></button>
                             </div>
@@ -175,14 +182,16 @@
                     <div class="col-md-2">
                         <!-- <mat-form-field class="w-100-p"> -->
                         <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="supplier.track_stock">Track
-                            Stock</mat-checkbox>
+                            Stock
+                        </mat-checkbox>
                         <!-- </mat-form-field> -->
                     </div>
 
                     <div class="col-md-2">
                         <!-- <mat-form-field class="w-100-p"> -->
                         <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="supplier.printing_option">Printing
-                            option</mat-checkbox>
+                            option
+                        </mat-checkbox>
                         <!-- </mat-form-field> -->
                     </div>
                     <div class="col-md-2">
@@ -231,11 +240,15 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                            <<<<<<< HEAD <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
                                 [(ngModel)]="supplier.id" required>
-                                <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                                    {{supplier.name}}</mat-option>
-                            </mat-select>
+                                =======
+                                <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                                    [(ngModel)]="supplier.id" required>
+                                    >>>>>>> 2acfc9208f7700ff787b38807bcd852429345931
+                                    <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                                        {{supplier.name}}</mat-option>
+                                </mat-select>
                         </mat-form-field>
                         <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
                             <span>Please Select a Supplier.</span>!</span>
