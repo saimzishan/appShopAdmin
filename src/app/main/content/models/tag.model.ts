@@ -1,15 +1,14 @@
-import { FuseUtils } from '../../../core/fuseUtils';
-import { MatChipInputEvent } from '@angular/material';
-
 export class Tag {
-  id: string;
+  id: number;
   name: string;
   notes: string;
+  selected: boolean;
 
   constructor(tag?) {
     tag = tag || {};
-    this.id = tag.id || FuseUtils.generateGUID();
-    this.name = tag.name || '';
-    this.notes = tag.notes || '';
+    this.id = tag.id || -1;
+    this.name = tag.name || "";
+    this.notes = tag.notes ||'';
+    this.selected = tag.selected || false;
   }
 }

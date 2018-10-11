@@ -5,31 +5,30 @@ import { FuseAngularMaterialModule } from '../components/angular-material/angula
 import { TagsComponent } from './tags.component';
 import { TagComponent } from './tag.component';
 import { TagsService } from './tags.service';
-import { TagService } from './tag.service';
 import { FileDropModule } from 'ngx-file-drop';
 import { TreeModule } from 'angular-tree-component';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path: '',
     component: TagsComponent,
-    resolve: {
-      academy: TagsService
-    }
   },
   {
-    path: ':id',
-    component: TagComponent,
-    resolve: {
-      academy: TagService
-    }
+    canActivate: [AuthGuard],
+    path: 'tags',
+    component: TagsComponent,
   },
   {
-    path: ':id/:handle',
+    canActivate: [AuthGuard],
+    path: 'tag/new',
     component: TagComponent,
-    resolve: {
-      academy: TagService
-    }
+  },
+  {
+    canActivate: [AuthGuard],
+    path: 'tag/:id',
+    component: TagComponent,
   },
 ];
 
@@ -42,7 +41,7 @@ const routes = [
     TreeModule
   ],
   declarations: [TagsComponent, TagComponent],
-  providers: [TagsService, TagService]
+  providers: [TagsService]
 })
 export class TagsModule {
 }

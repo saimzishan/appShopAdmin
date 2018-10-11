@@ -30,8 +30,10 @@
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
                         <textarea matInput #long_description="ngModel" name="long_description" rows="3" [(ngModel)]="product.long_description"
-                            placeholder="Product Long Description"></textarea>
+                            placeholder="Product Long Description" required></textarea>
                     </mat-form-field>
+                    <span *ngIf="long_description.touched && long_description.errors?.required;" class="inline-icon error">
+                        <span>Long description is required.</span>!</span>
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
@@ -70,11 +72,17 @@
             </div>
             <div class="row">
                 <div class="col-md-6" fusePerfectScrollbar>
-                    <mat-form-field class="w-25-p">
+                    <mat-form-field class="w-50-p">
                         <mat-label>Select Category Above</mat-label>
                         <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}"
                             width="100" height="100" />
                     </mat-form-field>
+                </div>
+                <div class="col-md-6" style="text-align: right;" *ngIf="pageType !== 'new'">
+                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
+                        (click)="updateProduct()">
+                        <span>Update Product</span>
+                    </button>
                 </div>
             </div>
         </mat-card>
@@ -83,176 +91,285 @@
     <div class="tab-content p-24" fusePerfectScrollbar>
         <mat-card>
             <legend style="padding: 10px">
-                <h2>Supplier Details</h2>
+                <h2>Bluck Price</h2>
             </legend>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-inline" name="bluckPriceForm" #bluckPriceForm="ngForm">
+                        <div class="form-group">
+                            <label for="name">Purchases between &nbsp; </label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="Item" #form="ngModel" name="form"
+                                    [(ngModel)]="bluckPrice.from">
+                            </mat-form-field>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id"
-                            required>
-                            <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                                {{supplier.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
-                        <span>Please Select a Supplier.</span>!</span>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Product Price"
-                            required>
-                    </mat-form-field>
-                    <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
-                        <span>Price is required.</span>!</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU"
-                            required>
-                    </mat-form-field>
-                    <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
-                        <span>SKU is required.</span>!</span>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="Upc"
-                            [required]="!ean.valid">
-                    </mat-form-field>
-                    <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
-                        <span>UPC is required.</span>!</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">&nbsp; and &nbsp;</label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="Item" #to="ngModel" name="to"
+                                    [(ngModel)]="bluckPrice.to">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd"> &nbsp; of this product will receive a &nbsp; </label>
+                            <mat-form-field>
+                                <input matInput id="name" required placeholder="%" #discount="ngModel" name="discount"
+                                    [(ngModel)]="bluckPrice.discount">
+                            </mat-form-field>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd"> &nbsp; discount off each individual item
+                                &nbsp;&nbsp;&nbsp;
+                            </label>
+                        </div>
+                        <button style="height: 31px;" type="submit" class="btn btn-info btn-xs" (click)="addBluckPrice(bluckPriceForm)">
+                            <i class="material-icons">
+                                add
+                            </i></button>
+                    </form>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input matInput #ean="ngModel" name="ean" [(ngModel)]="supplier.ean" placeholder="Ean"
-                            [required]="!upc.valid">
-                    </mat-form-field>
-                    <span *ngIf="ean.touched && ean.errors?.required;" class="inline-icon error">
-                        <span>EAN is required.</span>!</span>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width"
-                            placeholder="Width (Centimeters)" required>
-                    </mat-form-field>
-                    <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
-                        <span>Width is required.</span>!</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight"
-                            placeholder="Weight (kg)" required>
-                    </mat-form-field>
-                    <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
-                        <span>Weight is required.</span>!</span>
-                </div>
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height"
-                            placeholder="Height (Centimeters)" required>
-                    </mat-form-field>
-                    <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
-                        <span>Height is required.</span>!</span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <mat-form-field class="w-100-p">
-                        <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth"
-                            placeholder="Depth (Centimeters)" required>
-                    </mat-form-field>
-                    <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
-                        <span>Depth is required.</span>!</span>
-                </div>
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-4" style="text-align:center">
-                    <label>Small (180x135)</label>
-                    <div class="center">
-                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'small')" required>
-                            <span></span>
-                        </file-drop>
-                    </div>
-                </div>
-                <div class="col-md-4" style="text-align:center">
-                    <label>Medium (480x360)</label>
-
-                    <div class="center" style="text-align:center">
-                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'medium')" required>
-                            <span></span>
-                        </file-drop>
-                    </div>
-                </div>
-                <div class="col-md-4" style="text-align:center">
-                    <label>Large (960x720)</label>
-                    <div class="center">
-                        <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'large')" required>
-                            <span></span>
-                        </file-drop>
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div class="row" *ngIf="!displayImage">
-                <ng-container *ngFor="let image of images">
-                    <div class="col-md-4">
-                        <ng-container *ngIf="image.type === 'small'">
-
-                            <p>
-                                Small Image saved
-                            </p>
-                        </ng-container>
-
-                    </div>
-                    <div class="col-md-4" style="margin-top: -20px;">
-                        <ng-container *ngIf="image.type === 'medium'">
-                            <p>
-                                Medium Image saved
-                            </p>
-                        </ng-container>
-
-                    </div>
-                    <div class="col-md-4" style="margin-top: -20px;">
-                        <ng-container *ngIf="image.type === 'large'">
-                            <p>
-                                Large Image saved
-                            </p>
-
-                        </ng-container>
-
-                    </div>
-                </ng-container>
-            </div>
-            <div class="row" *ngIf="displayImage">
-                <div class="col-md-4">
-                    <img src="{{urltoMe + displayImage.small}}" width="100" height="100">
-                </div>
-                <div class="col-md-4">
-                    <img src="{{urltoMe + displayImage.medium}}" width="100" height="100">
-                </div>
-                <div class="col-md-4">
-                    <img src="{{urltoMe + displayImage.large}}" width="100" height="100">
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-6">
-                </div>
-                <div class="col-md-6" style="text-align: right;">
-                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
-                        (click)="addProduct(supplierForm)">
-                        <span>Save Product</span>
-                    </button>
+                <div class="col-md-12">
+                    <ng-container *ngFor="let row of bluckPrices; let i=index">
+                        <div class="row" style="text-align: left">
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <input matInput placeholder="Purchases between" value="{{row.from}}" style="margin-left: 91%;"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-form-field>
+                                    <input placeholder="and" matInput value="{{row.to}}" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-form-field>
+                                    <input placeholder="of this product will receive a % discount off each individual item"
+                                        matInput value="{{row.discount}}" readonly>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button style="height: 31px; margin-left: -20px;" type="submit" class="btn btn-danger btn-xs"
+                                    (click)="removeBluckPrice(i)">
+                                    <i class="material-icons">
+                                        remove
+                                    </i></button>
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </mat-card>
     </div>
+
+    <form name="otherSuppForm" #otherSuppForm="ngForm">
+        <div class="tab-content p-24" fusePerfectScrollbar>
+            <mat-card>
+                <legend style="padding: 10px">
+                    <h2>Other Details</h2>
+                </legend>
+                <div class="row">
+                    <div class="col-md-2">
+                        <!-- <mat-form-field class="w-100-p"> -->
+                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="supplier.track_stock">Track
+                            Stock</mat-checkbox>
+                        <!-- </mat-form-field> -->
+                    </div>
+
+                    <div class="col-md-2">
+                        <!-- <mat-form-field class="w-100-p"> -->
+                        <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="supplier.printing_option">Printing
+                            option</mat-checkbox>
+                        <!-- </mat-form-field> -->
+                    </div>
+                    <div class="col-md-2">
+                        <!-- <mat-form-field class="w-100-p"> -->
+                        <mat-checkbox #active="ngModel" name="active" [(ngModel)]="supplier.active">Active </mat-checkbox>
+                        <!-- </mat-form-field> -->
+                    </div>
+                    <div class="col-md-6">
+                        <mat-selection-list name="class" [(ngModel)]="supplier.class">
+                            <mat-list-option value="1">Slider</mat-list-option>
+                            <mat-list-option value="2">Featured</mat-list-option>
+                            <mat-list-option value="3">On-sale</mat-list-option>
+                            <mat-list-option value="4">new-arrival</mat-list-option>
+                            <mat-list-option value="5">Promoted</mat-list-option>
+                            <mat-list-option value="6">Add-on</mat-list-option>
+                            <!-- <mat-list-option value="6">none</mat-list-option> -->
+                        </mat-selection-list>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <mat-form-field class="w-70-p">
+                            <input matInput #stock="ngModel" name="stock" [(ngModel)]="supplier.stock" placeholder="Stock">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <mat-form-field class="w-70-p">
+                            <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="supplier.low_level_stock"
+                                placeholder="Low level Stock">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div class="tab-content p-24" fusePerfectScrollbar>
+            <mat-card>
+                <legend style="padding: 10px">
+                    <h2>Supplier Details</h2>
+                </legend>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id" [(ngModel)]="supplier.id"
+                                required>
+                                <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+                                    {{supplier.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <span *ngIf="supplier_id.touched && supplier_id.errors?.required;" class="inline-icon error">
+                            <span>Please Select a Supplier.</span>!</span>
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field class="w-90-p">
+                            <input matInput #buying_price="ngModel" name="buying_price" [(ngModel)]="supplier.buying_price"
+                                placeholder="Buying price">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field class="w-90-p">
+                            <input matInput #market_price="ngModel" name="market_price" [(ngModel)]="supplier.market_price"
+                                placeholder="Market price">
+                        </mat-form-field>
+
+                    </div>
+                    <div class="col-md-2">
+                        <mat-form-field class="w-90-p">
+                            <input matInput #price="ngModel" name="price" [(ngModel)]="supplier.price" placeholder="Selling Price"
+                                required>
+                        </mat-form-field>
+                        <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
+                            <span>Price is required.</span>!</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input matInput #sku="ngModel" name="sku" [(ngModel)]="supplier.sku" placeholder="Product Code/SKU"
+                                required>
+                        </mat-form-field>
+                        <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
+                            <span>SKU is required.</span>!</span>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input matInput #upc="ngModel" name="upc" [(ngModel)]="supplier.upc" placeholder="UPC/EAN">
+                        </mat-form-field>
+                        <span *ngIf="upc.touched && upc.errors?.required;" class="inline-icon error">
+                            <span>UPC is required.</span>!</span>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="supplier.width"
+                                placeholder="Width (Centimeters)" required>
+                        </mat-form-field>
+                        <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
+                            <span>Width is required.</span>!</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="supplier.weight"
+                                placeholder="Weight (kg)" required>
+                        </mat-form-field>
+                        <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
+                            <span>Weight is required.</span>!</span>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="supplier.height"
+                                placeholder="Height (Centimeters)" required>
+                        </mat-form-field>
+                        <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
+                            <span>Height is required.</span>!</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <mat-form-field class="w-100-p">
+                            <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="supplier.depth"
+                                placeholder="Depth (Centimeters)" required>
+                        </mat-form-field>
+                        <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
+                            <span>Depth is required.</span>!</span>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" style="text-align:center">
+                        <label>Small (180x135)</label>
+
+                        <!-- <div class="center">
+                            <file-drop headertext="Drop files here" (onFileDrop)="dropped($event, 'small')" required>
+                                <span>
+                                    <img [src]="url" width="100" height="100">
+                                </span>
+                            </file-drop>
+                        </div> -->
+                        <div class="dropzone" (canceled)="onCanceled($event)" [dropzone]="config" (error)="onUploadError($event)"
+                            (success)="onUploadSuccess($event)"></div>
+                    </div>
+                    <!-- -->
+
+
+                </div>
+                <br>
+                <div class="row" *ngIf="pageType !== 'new'" style="text-align:center">
+
+                    <ng-container *ngFor="let image of supplier.images">
+                        <div class="col-md-2">
+                            <img src="{{baseURL}}{{image.medium}}" width="150" height="150">
+                            <br>
+                            <br>
+                            <button (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">
+                                <i class="material-icons">
+                                    delete
+                                </i></button>
+                        </div>
+                    </ng-container>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        <button *ngIf="pageType === 'new'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
+                            (click)="addProduct(supplierForm)">
+                            <span>Save Product</span>
+                        </button>
+                        <button *ngIf="pageType === 'edit'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
+                            (click)="editSupplier(otherSuppForm)">
+                            <span>Edit Supplier</span>
+                        </button>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </form>
 </form>

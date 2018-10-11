@@ -1,109 +1,114 @@
-<div id="adminHome" class="page-layout carded fullwidth" fusePerfectScrollbar>
+<div id="users" class="page-layout carded fullwidth" fusePerfectScrollbar>
 
     <!-- TOP BACKGROUND -->
     <div class="top-bg mat-accent-bg"></div>
     <!-- / TOP BACKGROUND -->
     <!-- CENTER -->
-    <div  class="center">
+    <div class="center">
 
-        <!-- HEADER -->
-        <div class="header white-fg"
-             fxLayout="column" fxLayoutAlign="center center"
-             fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-             <!-- APP TITLE -->
-            <div class="logo my-12 m-sm-0"
-                 fxLayout="row" fxLayoutAlign="start center">
-        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}"> Users Management</span>
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/user-management/manage-user/users'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update User': 'New User'}}</span>
             </div>
             <!-- / APP TITLE -->
 
-             <!-- SEARCH -->
-            <div class="search-input-wrapper mx-12 m-md-0"
-                 fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                <label for="search" class="mr-8">
-                    <mat-icon class="secondary-text">search</mat-icon>
-                </label>
-                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-                    <input id="search" matInput #filter placeholder="Search">
-                </mat-form-field>
-            </div>
-            <!-- / SEARCH -->
-
-            <!-- [routerLink]="'/products/new'" -->
-            <button mat-raised-button
-                    (click)="toggleMe()"
-                    class="add-product-button mat-white-bg my-12 mt-sm-0">
-                <span>ADD NEW USER</span>
+            <!-- CRUD CONTROL -->
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="userFormSubmit.click()">
+                <span>ADD</span>
             </button>
-          
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delUser()">
+                <span>DELETE</span>
+            </button>
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editUserFormSubmit.click()">
+                <span>SAVE</span>
+            </button>
+            <!-- / CRUD CONTROL -->
+
         </div>
+        <!-- CONTENT CARD -->
 
-          <!-- CONTENT CARD -->
-          <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="!isAddingNewUser">
-            <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-              </mat-form-field>
-            <mat-table
-                       #table [dataSource]="dataSource"
-                       matSort
-                       [@animateStagger]="{value:'50'}"
-                       fusePerfectScrollbar>
-          
-              <!-- id Column -->
-              <ng-container cdkColumnDef="id">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                <mat-cell *cdkCellDef="let user">
-                    <p class="text-truncate">{{user.id}}</p>
-                </mat-cell>
-            </ng-container>
-          
-              <!-- Name Column -->
-              <ng-container cdkColumnDef="name">
-                <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                <mat-cell *cdkCellDef="let user">
-                    <p class="text-truncate">{{user.name}}</p>
-                </mat-cell>
-            </ng-container>
-          
-              <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <div class="content-card mat-white-bg" style="padding: 20px;">
+            <div class="content">
+                <form name="userForm" #userForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <input [disabled]="pageType === 'edit'" matInput required #name="ngModel" name="name" [(ngModel)]="user.name" placeholder="Name">
+                                </mat-form-field>
+                                <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error red-fg">
+                                    <span>User name is required.</span>!</span>
 
-              <mat-row *cdkRowDef="let product; columns: displayedColumns;">
-              </mat-row>
-            </mat-table>
-          
-             <mat-paginator #paginator
-                           [pageIndex]="0"
-                           [pageSize]="10"
-                           [pageSizeOptions]="[5, 10, 25, 100]">
-            </mat-paginator>
-              
-              
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <input matInput email [disabled]="pageType === 'edit'" required #email="ngModel" name="email" [(ngModel)]="user.email" placeholder="Email">
+                                </mat-form-field>
+                                <span *ngIf="email.touched && (email.errors?.required || email.errors?.email);" class="inline-icon error red-fg">
+                                    <span>Email is required.</span>!</span>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="pageType !== 'edit'">
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <input matInput [type]="hide ? 'password' : 'text'" required #password="ngModel" name="password" [(ngModel)]="user.password" placeholder="Password">
+                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+                                </mat-form-field>
+                                <span *ngIf="password.touched && password.errors?.required;" class="inline-icon error red-fg">
+                                    <span>Password is required.</span>!</span>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <input matInput [type]="'password'" (keyup)="matchPassword()" required #confirm_password="ngModel" name="confirm_password" [(ngModel)]="confirmPassword"
+                                        placeholder="Confirm Password">
+                                </mat-form-field>
+                                <span *ngIf="confirm_password.touched && (confirm_password.errors?.required || isMatch);" class="inline-icon error red-fg">
+                                    <span>Password does't match.</span>!</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <mat-select required #roles="ngModel" name="roles" placeholder="Roles" [(ngModel)]="user.roles" multiple>
+                                        <mat-select-trigger>
+                                            {{user.roles ? firstSelectedRoleName : ''}}
+                                            <span *ngIf="roles.value?.length > 1" class="example-additional-selection">
+                                                (+{{user.roles.length - 1}} {{user.roles?.length === 2 ? 'other' : 'others'}})
+                                            </span>
+                                        </mat-select-trigger>
+                                        <mat-option (onSelectionChange)="onChange($event)" *ngFor="let role of roleList" [value]="role.id">{{role.name}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span *ngIf="roles.touched && roles.errors?.required;" class="inline-icon error red-fg">
+                                    <span>Roles are required.</span>!</span>
+                            </div>
+                            <div class="col-md-6">
+                                <mat-form-field class="w-100-p">
+                                    <mat-select required #level="ngModel" name="level" placeholder="Select Level" [(ngModel)]="user.level">
+                                        <mat-option *ngFor="let level of levels" [value]="level.id">
+                                          {{level.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <span *ngIf="level.touched && level.errors?.required;" class="inline-icon error red-fg">
+                                    <span>Level is required.</span>!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="button" class="btn btn-primary" hidden #userFormSubmit (click)="addUser(userForm)">
+                    <input type="button" class="btn btn-primary" hidden #editUserFormSubmit (click)="updateUser(userForm)">
+                </form>
+            </div>
         </div>
-
-        <div class="content-card mat-white-bg" style="padding: 20px;" *ngIf="isAddingNewUser">
-            <form name="loginForm" [formGroup]="userForm" novalidate>
-
-                <mat-form-field>
-                    <input matInput placeholder="User name" formControlName="email">
-                    <mat-error *ngIf="loginFormErrors.email.required">
-                        User Name is required
-                    </mat-error>
-                </mat-form-field>
-<!-- 
-                <mat-form-field>
-                    <input matInput type="password" placeholder="Password" formControlName="password" [(ngModel)]="userModel.password">
-                    <mat-error *ngIf="loginFormErrors.password.required">
-                        Password is required
-                    </mat-error>
-                </mat-form-field> -->
-
-                <button mat-raised-button color="accent" class="submit-button" aria-label="Add new user"
-                        [disabled]="userForm.invalid"  (click)="getLogin()">
-                    Add User
-                </button>
-
-            </form>
-        </div>    
-          <!-- CONTENT CARD -->
-</div>            
+        <!-- CONTENT CARD -->
+    </div>
+</div>

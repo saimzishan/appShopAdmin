@@ -18,18 +18,14 @@ export class OptionAndSkusComponent implements OnInit {
   product_id;
   supplier_id;
   changesSubscription;
+  alreadyTaken: any = false;
+  product_supplier_attributes: any;
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
   ) {
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.supplier_id = current_product.supplier.id;
-      this.product_id = current_product.id;
-    }
     this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
       res => {
         this.callRelatedFunctions(res);
@@ -39,25 +35,51 @@ export class OptionAndSkusComponent implements OnInit {
 
   ngOnInit() {
     this.getOptionSets();
+    let current_product: any = localStorage.getItem("current_product");
+    if (current_product) {
+      current_product = JSON.parse(current_product);
+      this.supplier_id = current_product.supplier.id;
+      this.product_id = current_product.id;
+    }
   }
 
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "addproduct":
-          this.supplier_id = res.value.supplier_id;
-          this.product_id = res.value.id;
+          let current_product: any = localStorage.getItem("current_product");
+          if (current_product) {
+            current_product = JSON.parse(current_product);
+            this.supplier_id = current_product.supplier.id;
+            this.product_id = current_product.id;
+          }
+          break;
+        case "editProduct":
+          this.edit(res.value.product_supplier_attributes);
           break;
       }
     }
   }
-
+  edit(obj) {
+    const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
+    setTimeout(() => {
+      this.option_set_id = unique;
+    }, 1000);
+    this.product_supplier_attributes = obj;
+  }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
     this.productService.getOptionSets().subscribe(
       (res: any) => {
         if (!res.status) {
           this.optionSets = res.res.data;
+          this.alreadyTaken = localStorage.getItem("optionSet");
+          if (this.alreadyTaken) {
+            this.alreadyTaken = JSON.parse(this.alreadyTaken);
+            this.alreadyTaken.forEach(element => {
+              this.option_set_id.push(element.option_set_id);
+            });
+          }
         }
         this.spinnerService.requestInProcess(false);
       },

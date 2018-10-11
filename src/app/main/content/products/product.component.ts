@@ -1,3 +1,4 @@
+import { Router, ActivatedRoute } from "@angular/router";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 
 import {
@@ -16,16 +17,14 @@ import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
 import "rxjs/add/observable/fromEvent";
 import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
-import {
-  FileSystemDirectoryEntry,
-  FileSystemFileEntry,
-  UploadEvent,
-  UploadFile
-} from "ngx-file-drop";
 
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 
 import * as _ from "lodash";
+import { SpinnerService } from "../../../spinner/spinner.service";
+import { ProductService } from "./product.service";
+import { SnotifyService } from "ng-snotify";
+import { DetectChangesService } from "../../../shared/detect-changes.services";
 
 declare var $: any;
 
@@ -48,19 +47,69 @@ export class ProductComponent implements OnInit, OnDestroy {
   pageType: string;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   dialogRef: any;
-  files: UploadFile[] = [];
+
+  checkParams = "";
 
   product_id: any;
+  productName = '';
   supplier_id: any = false;
   enabledChild: boolean = true;
-
-  constructor(private dialog: MatDialog, protected http: HttpClient) {
+  tempP;
+  constructor(
+    private dialog: MatDialog,
+    protected http: HttpClient,
+    private router: Router,
+    private route: ActivatedRoute,
+    private spinnerService: SpinnerService,
+    private productService: ProductService,
+    private snotifyService: SnotifyService,
+    private detectChanges: DetectChangesService
+  ) {
     this.bluckPrices = new Array<BluckPrice>();
   }
 
   ngOnInit() {
     // Subscribe to update product on changes
+    this.route.params.subscribe(params => {
+      this.tempP = params;
+      if (this.tempP) {
+        if (this.tempP.id != "new") {
+          this.edit(this.tempP);
+          this.pageType = 'edit';
+          this.enabledChild = false;
+        }
+      }
+    });
   }
+
+  edit(obj) {
+    this.spinnerService.requestInProcess(true);
+    this.productService
+      .getProductWithSupplier(obj.id, obj.supplier_id)
+      .subscribe(
+        (res: any) => {
+          if (!res.status) {
+            let product: any = res.res.data;
+            this.productName = product.name;
+            product.supplier_id = +this.tempP.supplier_id;
+            product.product_id = +this.tempP.id;
+            this.detectChanges.notifyOther({
+              option: "editProduct",
+              value: product
+            });
+          }
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.error);
+          this.snotifyService.error(e, "Error !");
+          // this.notificationServiceBus.launchNotification(true, e);
+        }
+      );
+  }
+
   onProductSaved(evt) {
     this.product_id = evt.id;
     this.supplier_id = evt.supplier_id;
@@ -83,24 +132,35 @@ export class ProductComponent implements OnInit, OnDestroy {
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.removeProduct();
       }
       this.confirmDialogRef = null;
     });
   }
 
-  dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const droppedFile of event.files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {});
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-      }
-    }
+  removeProduct() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.deleteProduct(+this.tempP.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/products']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
+    });
   }
+  saveAndExit() {
+    localStorage.removeItem("current_product");
+    localStorage.removeItem("current_product_sp_images");
+    localStorage.removeItem("optionSet");
+    this.router.navigate(["/products"]);
+  }
+
+  // scrollToId() {
+  //   $("#middleOfPanel")[0].scrollIntoView();
+  // }
 
   ngOnDestroy() {}
 }

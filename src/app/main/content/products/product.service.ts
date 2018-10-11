@@ -42,38 +42,67 @@ export class ProductService extends ApiService implements Resolve<any> {
     });
   }
 
-  getProduct(): Promise<any> {
-    this.spinnerService.requestInProcess(true);
-    return new Promise((resolve, reject) => {
-      if (this.routeParams.id === "new") {
-        this.spinnerService.requestInProcess(false);
-        this.onProductChanged.next(false);
-        resolve(false);
-      } else {
-        let access_token = AuthGuard.getToken();
-        if (access_token === undefined) {
-          let error = {
-            message: "Unauthorized"
-          };
-          return Observable.throw({ error: error });
-        }
-        const httpOptions = {
-          headers: new HttpHeaders({
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token
-          })
-        };
+  // getProduct(): Promise<any> {
+  //   this.spinnerService.requestInProcess(true);
+  //   return new Promise((resolve, reject) => {
+  //     if (this.routeParams.id === "new") {
+  //       this.spinnerService.requestInProcess(false);
+  //       this.onProductChanged.next(false);
+  //       resolve(false);
+  //     } else {
+  //       let access_token = AuthGuard.getToken();
+  //       if (access_token === undefined) {
+  //         let error = {
+  //           message: "Unauthorized"
+  //         };
+  //         return Observable.throw({ error: error });
+  //       }
+  //       const httpOptions = {
+  //         headers: new HttpHeaders({
+  //           "Content-Type": "application/json",
+  //           Authorization: "Bearer " + access_token
+  //         })
+  //       };
 
-        this.http
-          .get(GLOBAL.USER_API + "products/" + this.routeParams.id, httpOptions)
-          .subscribe((response: any) => {
-            this.product = response.data;
-            this.spinnerService.requestInProcess(false);
-            this.onProductChanged.next(this.product);
-            resolve(response);
-          }, reject);
-      }
-    });
+  //       this.http
+  //         .get(GLOBAL.USER_API + "products/" + this.routeParams.id, httpOptions)
+  //         .subscribe((response: any) => {
+  //           this.product = response.data;
+  //           this.spinnerService.requestInProcess(false);
+  //           this.onProductChanged.next(this.product);
+  //           resolve(response);
+  //         }, reject);
+  //     }
+  //   });
+  // }
+
+  getProductWithSupplier(id, supplier_id) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(
+        GLOBAL.USER_API +
+          "products?product_id=" +
+          id +
+          "&supplier_id=" +
+          supplier_id,
+        httpOptions
+      )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
   }
 
   getCategories(): Promise<any> {
@@ -121,7 +150,7 @@ export class ProductService extends ApiService implements Resolve<any> {
 
     return this.http
       .put(
-        GLOBAL.USER_API + "products/" + product.id + "?" + option,
+        GLOBAL.USER_API + "products/" + (option === 'ps_update' ? product.ps_id : product.id) + "?" + option,
         product,
         httpOptions
       )
@@ -200,6 +229,29 @@ export class ProductService extends ApiService implements Resolve<any> {
       });
   }
 
+  getTags() {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "tags", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   getBrands() {
     // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
@@ -246,35 +298,54 @@ export class ProductService extends ApiService implements Resolve<any> {
       });
   }
 
-  deleteProduct(product) {
-    this.spinnerService.requestInProcess(true);
-    return new Promise((resolve, reject) => {
-      const access_token = AuthGuard.getToken();
-      if (access_token === undefined) {
-        const error = {
-          message: "Unauthorized"
-        };
-        return Observable.throw({ error: error });
-      }
-      const httpOptions = {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + access_token
-        })
+  deleteProduct(id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: 'Unauthorized'
       };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + access_token
+      })
+    };
+    return this.http.delete(GLOBAL.USER_API + 'products/' + id + '?p_delete', httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 
-      this.http
-        .delete(GLOBAL.USER_API + "products/" + product.id, httpOptions)
-        .subscribe((response: any) => {
-          this.spinnerService.requestInProcess(false);
-          if (!response.error) {
-            resolve(response);
-            this.snotifyService.success("Product Deleted Successfully");
-            this.router.navigate(["/suppliers"]);
-          } else {
-            this.snotifyService.error(response.error);
-          }
-        }, reject);
-    });
+  deletePImage(id: number, image_id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .delete(
+        GLOBAL.USER_API +
+          "products/" +
+          id +
+          "?p_image_id=" +
+          image_id +
+          "&p_image_delete",
+        httpOptions
+      )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
   }
 }

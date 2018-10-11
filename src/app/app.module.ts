@@ -86,13 +86,17 @@ const appRoutes: Routes = [
   },
   {
     canActivate: [AuthGuard],
-    path: 'taxes',
+    path: 'tax-management',
     loadChildren: './main/content/taxes/taxes.module#TaxesModule'
   },
   {
     canActivate: [AuthGuard],
-    path: 'tags',
+    path: 'tag-management',
     loadChildren: './main/content/tags/tags.module#TagsModule'
+  },
+  {
+    path: 'order-management',
+    loadChildren: './main/content/orders/orders.module#OrdersModule'
   },
   {
     path: 'apps',
@@ -102,18 +106,7 @@ const appRoutes: Routes = [
     path: 'pages',
     loadChildren: './main/content/pages/pages.module#FusePagesModule'
   },
-  {
-    path: 'usermanagment',
-    loadChildren:
-      './main/content/user-management-admin/user-management.module#UserManagementModule'
-  },
-  
-
-  /*,
-  {
-    path: 'services',
-    loadChildren: './main/content/services/services.module#FuseServicesModule'
-  },
+  /*
   {
     path: 'components',
     loadChildren: './main/content/components/components.module#FuseComponentsModule'

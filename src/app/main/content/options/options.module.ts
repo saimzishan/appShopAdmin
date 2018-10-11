@@ -5,34 +5,26 @@ import { FuseAngularMaterialModule } from '../components/angular-material/angula
 import { OptionsComponent } from './options.component';
 import { OptionComponent } from './option.component';
 import { OptionsService } from './options.service';
-import { OptionService } from './option.service';
-import { FileDropModule } from 'ngx-file-drop';
-import { TreeModule } from 'angular-tree-component';
 import { MatChipsModule } from '@angular/material/chips';
+import { AuthGuard } from '../../../guard/auth.guard';
 
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path: '',
     component: OptionsComponent,
-    resolve: {
-      academy: OptionsService
-    }
   },
   {
-    path: ':id',
+    canActivate: [AuthGuard],
+    path: 'option/:id',
     component: OptionComponent,
-    resolve: {
-      academy: OptionService
-    }
   },
   {
-    path: ':id/:handle',
+    canActivate: [AuthGuard],
+    path: 'option/new',
     component: OptionComponent,
-    resolve: {
-      academy: OptionService
-    }
-  },
+  }
 ];
 
 @NgModule({
@@ -40,12 +32,10 @@ const routes = [
     SharedModule,
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
-    FileDropModule,
-    TreeModule,
     MatChipsModule
   ],
   declarations: [OptionsComponent, OptionComponent],
-  providers: [OptionsService, OptionService]
+  providers: [OptionsService]
 })
 export class OptionsModule {
 }

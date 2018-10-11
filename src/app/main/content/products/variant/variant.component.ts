@@ -1,12 +1,20 @@
 import { Option } from "./../../models/product.model";
 import { DetectChangesService } from "./../../../../shared/detect-changes.services";
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  ViewChild
+} from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import { ProductVariant } from "../../models/product.model";
+import { ProductVariant, Image } from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
 import * as _ from "lodash";
+declare var $: any;
+import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
 
 @Component({
   selector: "app-variant-form",
@@ -32,6 +40,12 @@ export class VariantComponent implements OnInit {
   obj = [];
   supplierId = -1;
   productId = -1;
+  images: Image[];
+  image: Image;
+  lImages: any = [];
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
+  pageType: string;
 
   constructor(
     private productService: ProductService,
@@ -39,6 +53,9 @@ export class VariantComponent implements OnInit {
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
   ) {
+    this.images = new Array<Image>();
+    this.image = new Image();
+    this.pageType = "new";
     this.product_variant = new ProductVariant();
     this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
       res => {
@@ -48,6 +65,9 @@ export class VariantComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.init();
+  }
+  init() {
     let optionSet: any = localStorage.getItem("optionSet");
     if (optionSet) {
       optionSet = JSON.parse(optionSet);
@@ -66,16 +86,24 @@ export class VariantComponent implements OnInit {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
         case "optionsAdded":
-          let optionSet: any = localStorage.getItem("optionSet");
-          if (optionSet) {
-            optionSet = JSON.parse(optionSet);
-            this.setOptions(optionSet);
-          }
+          this.init();
+          break;
+        case "editProduct":
+          this.edit(res.value.product_variants);
           break;
       }
     }
   }
 
+  edit(obj) {
+    this.pageType = "edit";
+    this.variants = obj;
+    this.isAddorEditSKU = true;
+  }
+  editSku(variant) {
+    console.log(variant);
+    this.product_variant = variant;
+  }
   setOptions(obj) {
     this.option_with_value = obj;
   }
@@ -135,17 +163,31 @@ export class VariantComponent implements OnInit {
       this.snotifyService.warning("Please select option", "Warning !");
       return;
     }
+    if (this.lImages.length < 1) {
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
+      }
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    }
 
     this.variants.push(new ProductVariant(this.product_variant));
     this.variants[this.variants.length - 1].options = this.obj;
+    this.variants[this.variants.length - 1].images = this.lImages;
+    this.lImages = new Array<Image>();
     this.product_variant.sku = "";
     this.obj = [];
+    this.resetDropzone();
   }
   saveProduct() {
     if (this.variants.length === 0) {
       this.snotifyService.warning("Please add option", "Warning !");
       return;
     }
+
     let objct;
     this.productVariant = this.variants;
     // this.productVariant[0].options = this.obj;
@@ -154,7 +196,6 @@ export class VariantComponent implements OnInit {
       id: this.productId,
       variants: this.productVariant
     };
-    this.spinnerService.requestInProcess(true);
     this.spinnerService.requestInProcess(true);
 
     this.productService.saveProduct(objct, "ps_variants").subscribe(
@@ -169,6 +210,49 @@ export class VariantComponent implements OnInit {
         this.snotifyService.error(e, "Error !");
       }
     );
+  }
+
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {
+    // this.image = new Image();
+    // this.image.base64String = evt[0].dataURL.split(",")[1];
+    // this.image.content_type = evt[0].type.split("/")[1];
+    // this.image.content_type = "." + this.image.content_type.split(";")[0];
+    // this.image.type = "small";
+    // //
+    // for (let index = 0; index < 3; index++) {
+    //   this.images.push(new Image(this.image));
+    //   if (index === 0) {
+    //     this.image.type = "medium";
+    //   }
+    //   if (index === 1) {
+    //     this.image.type = "large";
+    //   }
+    // }
+    // this.lImages.push(this.images);
+    // this.images = new Array<Image>();
+  }
+  addPicture(obj) {
+    this.image = new Image();
+    this.image.base64String = obj.dataURL.split(",")[1];
+    this.image.content_type = obj.type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
+    //
+    for (let index = 0; index < 3; index++) {
+      this.images.push(new Image(this.image));
+      if (index === 0) {
+        this.image.type = "medium";
+      }
+      if (index === 1) {
+        this.image.type = "large";
+      }
+    }
+    this.lImages.push(this.images);
+    this.images = new Array<Image>();
+  }
+  resetDropzone(): void {
+    this.directiveRef.reset();
   }
 }
 export class Options {

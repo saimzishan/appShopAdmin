@@ -15,12 +15,24 @@ import { AuthGuard } from "../../../guard/auth.guard";
 import { TreeModule } from "angular-tree-component";
 
 // import { TreeviewModule } from "ngx-treeview";
-
-import * as $ from "jquery";
 import { CategoriesService } from "../categories/categories.service";
 import { SupplierFormComponent } from "./child/supplier.component";
 import { VariantComponent } from "./variant/variant.component";
 import { DetectChangesService } from "../../../shared/detect-changes.services";
+import { DropzoneModule } from "ngx-dropzone-wrapper";
+import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
+import { DropzoneConfigInterface } from "ngx-dropzone-wrapper";
+import { TageComponent } from "./tage/tage.component";
+import { GLOBAL } from "../../../shared/globel";
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address:
+  url: GLOBAL.USER_API + "drop-image",
+  maxFilesize: 2, // size MB
+  acceptedFiles: "image/png, image/jpeg",
+  createImageThumbnails: true,
+  clickable: true,
+  addRemoveLinks: true
+};
 
 const routes = [
   {
@@ -31,6 +43,11 @@ const routes = [
   {
     canActivate: [AuthGuard],
     path: ":id",
+    component: ProductComponent
+  },
+  {
+    canActivate: [AuthGuard],
+    path: ":id/:supplier_id",
     component: ProductComponent
   },
   {
@@ -46,7 +63,8 @@ const routes = [
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
     FileDropModule,
-    TreeModule
+    TreeModule,
+    DropzoneModule
   ],
   declarations: [
     ProductsComponent,
@@ -54,13 +72,18 @@ const routes = [
     FuseOptionFormDialogComponent,
     SupplierFormComponent,
     OptionAndSkusComponent,
-    VariantComponent
+    VariantComponent,
+    TageComponent
   ],
   providers: [
     ProductsService,
     ProductService,
     CategoriesService,
-    DetectChangesService
+    DetectChangesService,
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG
+    }
   ],
   entryComponents: [FuseOptionFormDialogComponent]
 })
