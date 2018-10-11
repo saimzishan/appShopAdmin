@@ -21,18 +21,8 @@ import { VariantComponent } from "./variant/variant.component";
 import { DetectChangesService } from "../../../shared/detect-changes.services";
 import { DropzoneModule } from "ngx-dropzone-wrapper";
 import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
-import { DropzoneConfigInterface } from "ngx-dropzone-wrapper";
 import { TageComponent } from "./tage/tage.component";
 import { GLOBAL } from "../../../shared/globel";
-const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-  // Change this to your upload POST address:
-  url: GLOBAL.USER_API + "drop-image",
-  maxFilesize: 2, // size MB
-  acceptedFiles: "image/png, image/jpeg",
-  createImageThumbnails: true,
-  clickable: true,
-  addRemoveLinks: true
-};
 
 const routes = [
   {
@@ -82,7 +72,7 @@ const routes = [
     DetectChangesService,
     {
       provide: DROPZONE_CONFIG,
-      useValue: DEFAULT_DROPZONE_CONFIG
+      useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG
     }
   ],
   entryComponents: [FuseOptionFormDialogComponent]

@@ -1,3 +1,5 @@
+import { DropzoneConfigInterface } from "ngx-dropzone-wrapper";
+
 export class GLOBAL {
   // public static USER_API = "http://127.0.0.1:8080/api/auth/";
   public static USER_IMAGE_API = "http://124.109.39.22:18089/onlineappshopapi";
@@ -18,4 +20,14 @@ export class GLOBAL {
     { id: 5, name: "delivered" },
     { id: 6, name: "closed" }
   ];
+
+  public static DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+    // Change this to your upload POST address:
+    url: GLOBAL.USER_API + "drop-image",
+    maxFilesize: 2, // size MB
+    acceptedFiles: "image/png, image/jpeg",
+    createImageThumbnails: true,
+    clickable: true,
+    addRemoveLinks: true
+  };
 }

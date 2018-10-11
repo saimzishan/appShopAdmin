@@ -1,21 +1,12 @@
-import { Option } from "./../../models/product.model";
+import { GLOBAL } from "./../../../../shared/globel";
 import { DetectChangesService } from "./../../../../shared/detect-changes.services";
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  ViewChild
-} from "@angular/core";
+import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
 import { ProductVariant, Image } from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
-import * as _ from "lodash";
-declare var $: any;
-import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
-import { GLOBAL } from "../../../../shared/globel";
+import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
 import { MatDialogRef, MatDialog } from "@angular/material";
 import { Router } from "@angular/router";
@@ -53,6 +44,7 @@ export class VariantComponent implements OnInit {
   directiveRef: DropzoneDirective;
   pageType: string;
   productID: number;
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
 
   constructor(
     private productService: ProductService,

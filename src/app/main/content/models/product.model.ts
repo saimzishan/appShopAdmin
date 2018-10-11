@@ -63,6 +63,7 @@ export class Supplier {
   }
 }
 export class BluckPrice {
+  id: number;
   from: number;
   to: number;
   discount: number;
