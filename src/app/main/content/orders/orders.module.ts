@@ -8,7 +8,6 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { TreeModule } from 'angular-tree-component';
 import { AuthGuard } from '../../../guard/auth.guard';
 import { OrdersComponent } from './orders.component';
-import { OrderComponent } from './order.component';
 import { CdkDetailRowDirective } from './cdk-detail-row.directive';
 
 const routes = [
@@ -33,7 +32,7 @@ const routes = [
     ClipboardModule,
     TreeModule
   ],
-  declarations: [OrdersComponent, OrderComponent, CdkDetailRowDirective],
+  declarations: [OrdersComponent, CdkDetailRowDirective],
   providers: [OrdersService]
 })
 export class OrdersModule {
