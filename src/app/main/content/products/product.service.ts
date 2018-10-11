@@ -348,4 +348,72 @@ export class ProductService extends ApiService implements Resolve<any> {
         return this.handleError(err);
       });
   }
+
+  deleteProductVariantImage(variant_id: number, image_id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .delete(GLOBAL.USER_API + "productVariants/" + variant_id + "?pv_image_delete&pv_image_id=" + image_id, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  updateProductVariant(product_id: number, variant: any): any {
+      let access_token = AuthGuard.getToken();
+      if (access_token === undefined) {
+        let error = {
+          message: "Unauthorized"
+        };
+        return Observable.throw({ error: error });
+      }
+      const httpOptions = {
+        headers: new HttpHeaders({
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token
+        })
+      };
+  
+      return this.http
+        .put(GLOBAL.USER_API + "productVariants/" + product_id + '?ps_variant& psv_id=' + variant.id, variant, httpOptions)
+        .map(this.extractData)
+        .catch(err => {
+          return this.handleError(err);
+        });
+  }
+
+  deleteProductVariant(product_id:number, variant_id: number): any {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+
+    return this.http
+      .delete(GLOBAL.USER_API + "productVariants/" + product_id + '?pv_delete& pv_id=' + variant_id, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }

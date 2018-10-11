@@ -91,8 +91,8 @@
                                 <mat-form-field>
                                     <mat-select placeholder="Operation" name="operation" [(ngModel)]="product_variant.operation"
                                         style="margin-top: 5px;">
-                                        <mat-option value=2>Add</mat-option>
-                                        <mat-option value=3>Subtract</mat-option>
+                                        <mat-option [value]="2">Add</mat-option>
+                                        <mat-option [value]="3">Subtract</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
@@ -100,20 +100,21 @@
                                 <mat-form-field>
                                     <mat-select placeholder="Change by" name="changeBy" [(ngModel)]="product_variant.changeBy"
                                         style="margin-top: 5px;">
-                                        <mat-option value=2>Absolute</mat-option>
-                                        <mat-option value=3>Percentage</mat-option>
+                                        <mat-option [value]="1">Absolute</mat-option>
+                                        <mat-option [value]="2">Percentage</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
-                                <input class="form-control" type="number" name="amount" [(ngModel)]="product_variant.amount"
-                                    style="margin-top: 20px;" min="0" placeholder="Amount">
+                                <mat-form-field class="w-70-p">
+                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="product_variant.amount"
+                                         min="0" required>
+                                </mat-form-field>
                             </div>
-
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
                                     <input matInput #stock="ngModel" name="stock" [(ngModel)]="product_variant.stock"
-                                        placeholder="Stock">
+                                        placeholder="Stock" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
@@ -129,18 +130,19 @@
                                 <!-- </mat-form-field> -->
                             </div>
                             <div class="col-md-1" style="text-align: right;">
-                                <button (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical" style="border-radius: 50%;
+                                <button *ngIf="pageType === 'new'" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical" style="border-radius: 50%;
                                 margin-top: 20px; padding: 0px !important;">
                                     <i class="material-icons">
                                         add
                                     </i>
                                 </button>
+                                <button *ngIf="pageType === 'edit'" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">Save</button>
                             </div>
                         </div>
                     </mat-card-content>
                     <div class="row">
                         <div class="col-md-12" style="text-align:center">
-                            <label>Image Max size 2 mb</label>
+                            <label>Image Max size 2 MB</label>
                             <div class="center">
                                 <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
                                     (success)="onUploadSuccess($event)">
@@ -148,7 +150,23 @@
                                 </div>
                             </div>
                         </div>
-
+                    </div>
+                    <br>
+                    <div class="row" style="text-align:center">
+                    
+                        <ng-container *ngFor="let image of product_variant.images">
+                            <div class="col-md-2">
+                                <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
+                                <br>
+                                <br>
+                                <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                    <i class="material-icons">
+                                        delete
+                                    </i>
+                                </button>
+                                <br>
+                            </div>
+                        </ng-container>
                     </div>
 
                 </form>
@@ -167,6 +185,7 @@
                             <th>Stock</th>
                             <th>Low level stock</th>
                             <th>No of Image(s)</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -177,17 +196,19 @@
                                 <td>{{variant.depth}}</td>
                                 <td>{{variant.width}}</td>
                                 <td>{{variant.height}}</td>
-                                <td>{{(variant.operation) === 'add'? 'Add' :(variant.operation) === 'subtract'?
-                                    'Subtract' :
-                                    'Null'}}</td>
-                                <td>{{(variant.changeBy) === 'absolute' ? 'Absolute' :(variant.changeBy) ===
-                                    'percentage'? 'Percentage'
-                                    :
-                                    'Null'}}</td>
+                                <td>{{(variant.operation) === 2 ? 'Add' :(variant.operation) === 3?
+                                    'Subtract' : 'Null'}}</td>
+                                <td>{{(variant.changeBy) === 1 ? 'Absolute' :(variant.changeBy) === 2?
+                                    'Percentage' : 'Null'}}</td>
                                 <td>{{variant.amount}}</td>
                                 <td>{{variant.stock}}</td>
                                 <td>{{variant.low_level_stock}}</td>
                                 <td>{{variant.images.length}}</td>
+                                <td>
+                                    <button (click)="deleteVariant(variant.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </td>
                             </tr>
                         </ng-container>
                     </tbody>

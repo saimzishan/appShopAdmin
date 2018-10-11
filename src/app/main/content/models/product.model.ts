@@ -87,6 +87,7 @@ export class Image {
   }
 }
 export class ProductVariant {
+  id: number;
   price: number;
   ean: string;
   sku: string;
@@ -97,17 +98,18 @@ export class ProductVariant {
   depth: number;
   images: Array<any>;
   content_type: string;
-  operation: number;
-  changeBy: number;
+  operation: number | string;
+  changeBy: number | string;
   amount: number;
   track_stock: boolean;
   stock: number;
   low_level_stock: number;
-
+  product_variant_attributes: any[];
   options: Array<Options>;
 
   constructor(productVariant?) {
     productVariant = productVariant || {};
+    this.id = productVariant.id;
     this.price = productVariant.price;
     this.ean = productVariant.ean;
     this.sku = productVariant.sku;
@@ -120,6 +122,7 @@ export class ProductVariant {
     this.changeBy = productVariant.changeBy || null;
     this.amount = productVariant.amount || null;
     this.track_stock = productVariant.ttrack_stock || false;
+    this.product_variant_attributes = productVariant.product_variant_attributes || [];
     this.options = new Array<Options>();
     this.images = [];
   }
