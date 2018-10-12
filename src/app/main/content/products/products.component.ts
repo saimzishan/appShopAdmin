@@ -80,11 +80,13 @@ export class ProductsComponent implements OnInit {
     this.product_id = product_id;
   }
   editProduct(p_id) {
-    // if (p_id === this.product_id) {
-      this.router.navigate(["/products/" + p_id + "/" +  this.supplier_id ]);
-    // } else {
-    //   this.snotifyService.warning("Please select a Supplier", "Warning !");
-    // }
+    if (!this.supplier_id) {
+      let index = this.dataSource.data.findIndex(
+        product => product.id === p_id
+      );
+      this.supplier_id = this.dataSource.data[index].suppliers[0].id;
+    }
+    this.router.navigate(["/products/" + p_id + "/" + this.supplier_id]);
   }
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
