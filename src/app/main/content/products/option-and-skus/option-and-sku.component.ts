@@ -27,11 +27,7 @@ export class OptionAndSkusComponent implements OnInit {
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
   ) {
-    this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
-      res => {
-        this.callRelatedFunctions(res);
-      }
-    );
+   
   }
 
   ngOnInit() {
@@ -42,6 +38,13 @@ export class OptionAndSkusComponent implements OnInit {
       this.supplier_id = current_product.supplier.id;
       this.product_id = current_product.id;
     }
+
+    this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
+      res => {
+        this.callRelatedFunctions(res);
+      }
+    );
+
   }
 
   callRelatedFunctions(res) {
@@ -56,12 +59,15 @@ export class OptionAndSkusComponent implements OnInit {
           }
           break;
         case "editProduct":
+        this.product_id = res.value.ps_id;
+        this.supplier_id = res.value.supplier_id;
           this.edit(res.value.product_supplier_attributes);
           break;
       }
     }
   }
   edit(obj) {
+ 
     this.product_supplier_attributes = obj;
     this.pageType = "edit";
     const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
@@ -78,13 +84,13 @@ export class OptionAndSkusComponent implements OnInit {
         if (res) {
           element.isSelected = true;
           element.amount = res.amount;
-          element.changeBy = res.changeBy === "absolute" ? 1 : 2;
+          element.change_by = res.change_by === "absolute" ? 1 : 2;
           element.operation = res.operation === "add" ? 2 : 3;
           element.option_id = res.option.id;
         } else {
           element.isSelected = false;
           element.amount = null;
-          element.changeBy = null;
+          element.change_by = null;
           element.operation = null;
           element.option_id = null;
         }
@@ -209,8 +215,6 @@ export class OptionAndSkusComponent implements OnInit {
 
   saveProduct(obj) {
     this.spinnerService.requestInProcess(true);
-    this.spinnerService.requestInProcess(true);
-
     this.productService.saveProduct(obj, "ps_options").subscribe(
       (res: any) => {
         this.optionSetWithValue = {};
@@ -228,8 +232,33 @@ export class OptionAndSkusComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-      }
-    );
+      });
+  }
+
+  editOptionSetValue(option_id: number, operation: number, change_by: number, amount: number) {
+
+  }
+
+  deleteOptionSetValue(option_id: number) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.deleteOptionValue(this.product_id, option_id).subscribe(
+      (res: any) => {
+        this.optionSetWithValue = {};
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        localStorage.removeItem("optionSet");
+        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
+        this.detectChangesService.notifyOther({
+          value: this.optionSet,
+          option: "optionsAdded"
+        });
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      });
   }
 }
 

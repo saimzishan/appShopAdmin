@@ -108,10 +108,10 @@ export class VariantComponent implements OnInit {
       } else if (variant.operation === 'subtract') {
         variant.operation = 3;
       }
-      if (variant.changeBy === 'absolute') {
-        variant.changeBy = 1;
-      } else if (variant.changeBy === 'percentage') {
-        variant.changeBy = 2;
+      if (variant.change_by === 'absolute') {
+        variant.change_by = 1;
+      } else if (variant.change_by === 'percentage') {
+        variant.change_by = 2;
       }
     });
     this.isAddorEditSKU = true;

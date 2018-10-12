@@ -89,13 +89,14 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: any) => {
           if (!res.status) {
-            let product: any = res.res.data;
-            this.productName = product.name;
-            product.supplier_id = +this.tempP.supplier_id;
-            product.product_id = +this.tempP.id;
+            // let product: any = res.res.data;
+            this.productName = res.res.data.name;
+            res.res.data.supplier_id = +this.tempP.supplier_id;
+            res.res.data.ps_id = res.res.data.id;
+            res.res.data.product_id = +this.tempP.id;
             this.detectChanges.notifyOther({
               option: "editProduct",
-              value: product
+              value: res.res.data
             });
           }
           this.spinnerService.requestInProcess(false);
@@ -169,14 +170,14 @@ export class BluckPrice {
   from: number;
   to: number;
   discount: number;
-  changeBy: number;
+  change_by: number;
   product_supplier_id: number;
   constructor(bluckPrice?) {
     bluckPrice = bluckPrice || {};
     this.from = bluckPrice.from;
     this.to = bluckPrice.to;
     this.discount = bluckPrice.discount;
-    this.changeBy = bluckPrice.changeBy;
+    this.change_by = bluckPrice.change_by;
     this.product_supplier_id = bluckPrice.product_supplier_id;
   }
 }

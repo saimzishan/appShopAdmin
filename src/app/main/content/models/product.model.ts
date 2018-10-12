@@ -100,7 +100,7 @@ export class ProductVariant {
   images: Array<any>;
   content_type: string;
   operation: number | string;
-  changeBy: number | string;
+  change_by: number | string;
   amount: number;
   track_stock: boolean;
   stock: number;
@@ -122,7 +122,7 @@ export class ProductVariant {
     this.low_level_stock = productVariant.low_level_stock;
     this.stock = productVariant.stock;
     this.operation = productVariant.operation || null;
-    this.changeBy = productVariant.changeBy || null;
+    this.change_by = productVariant.change_by || null;
     this.amount = productVariant.amount || null;
     this.track_stock = productVariant.ttrack_stock || false;
     this.product_variant_attributes = productVariant.product_variant_attributes || [];

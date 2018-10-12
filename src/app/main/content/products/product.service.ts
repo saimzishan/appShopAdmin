@@ -160,6 +160,28 @@ export class ProductService extends ApiService implements Resolve<any> {
       });
   }
 
+  deleteOptionValue(ps_id: number, option_id: number) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+
+    return this.http.delete(GLOBAL.USER_API + "products/" + ps_id + "?ps_option=" + option_id, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   addProduct(product) {
     // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
