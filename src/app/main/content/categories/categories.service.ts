@@ -1,14 +1,11 @@
 import { GLOBAL } from "./../../../shared/globel";
 import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot
-} from "@angular/router";
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { ApiService } from "../../../api/api.service";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 @Injectable()
 export class CategoriesService extends ApiService implements Resolve<any> {
@@ -46,9 +43,17 @@ export class CategoriesService extends ApiService implements Resolve<any> {
   }
 
   index(): Observable<Object> {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
     return this.http
@@ -59,13 +64,21 @@ export class CategoriesService extends ApiService implements Resolve<any> {
       });
   }
   getData(id) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
     return new Promise((resolve, reject) => {
       this.spinnerService.requestInProcess(true);
-      const httpOptions = {
-        headers: new HttpHeaders({
-          "Content-Type": "application/json"
-        })
-      };
       this.http
         .get(GLOBAL.USER_API + "categories/" + id, httpOptions)
         .subscribe((response: any) => {
@@ -80,9 +93,17 @@ export class CategoriesService extends ApiService implements Resolve<any> {
   }
 
   show(id): Observable<Object> {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
     return this.http

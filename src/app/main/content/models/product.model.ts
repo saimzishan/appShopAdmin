@@ -119,6 +119,8 @@ export class ProductVariant {
     this.width = productVariant.width;
     this.height = productVariant.height;
     this.depth = productVariant.depth;
+    this.low_level_stock = productVariant.low_level_stock;
+    this.stock = productVariant.stock;
     this.operation = productVariant.operation || null;
     this.changeBy = productVariant.changeBy || null;
     this.amount = productVariant.amount || null;

@@ -20,6 +20,7 @@ export class ProductsComponent implements OnInit {
     "image",
     "name",
     "category",
+    "brand",
     "price",
     "quantity",
     "supplier",
@@ -34,6 +35,7 @@ export class ProductsComponent implements OnInit {
   sort: MatSort;
   supplier_id: any;
   product_id: any;
+  selectedSupplier: any;
 
   constructor(
     private productsService: ProductsService,
@@ -51,7 +53,7 @@ export class ProductsComponent implements OnInit {
     this.productsService.getProducts().subscribe(
       (res: any) => {
         if (!res.status) {
-          this.setDataSuorce(res.res.data);
+          this.setDataSuorce(res.res.data.data);
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -64,24 +66,25 @@ export class ProductsComponent implements OnInit {
       }
     );
   }
-  getSupplier(id) {
+  getSupplier(product_id) {
     var result = this.dataSource.data.filter(function(obj) {
-      if (obj.id === id) {
+      if (obj.id === product_id) {
         return obj;
       }
     })[0];
+    this.selectedSupplier = result.suppliers[0];
     return result.suppliers;
   }
   onSupplierChange(supplier_id, product_id) {
     this.supplier_id = supplier_id;
     this.product_id = product_id;
   }
-  eidt(id) {
-    if (id === this.product_id) {
-      this.router.navigate(["/products/" + id + "/" + this.supplier_id]);
-    } else {
-      this.snotifyService.warning("Please select a Supplier", "Warning !");
-    }
+  editProduct(p_id) {
+    // if (p_id === this.product_id) {
+      this.router.navigate(["/products/" + p_id + "/" +  this.supplier_id ]);
+    // } else {
+    //   this.snotifyService.warning("Please select a Supplier", "Warning !");
+    // }
   }
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
