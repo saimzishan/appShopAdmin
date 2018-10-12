@@ -51,7 +51,7 @@ export class ProductsComponent implements OnInit {
     this.productsService.getProducts().subscribe(
       (res: any) => {
         if (!res.status) {
-          this.setDataSuorce(res.res.data);
+          this.setDataSuorce(res.res.data.data);
         }
         this.spinnerService.requestInProcess(false);
       },

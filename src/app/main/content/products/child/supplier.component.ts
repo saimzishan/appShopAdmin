@@ -367,12 +367,11 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
 
-    setTimeout(() => {
-      let a = this.directiveRef.dropzone();
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
-    }, 1000);
+    let a = this.directiveRef.dropzone();
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
+    }
+
     this.spinnerService.requestInProcess(true);
     delete this.supplier.images;
     let supplier = {
@@ -396,8 +395,9 @@ export class SupplierFormComponent implements OnInit {
       depth: this.supplier.depth,
       images: this.lImages
     };
-
-    this.putSupplier(supplier);
+    setTimeout(() => {
+      this.putSupplier(supplier);
+    }, 1000);
   }
 
   _handleReaderLoaded(readerEvt) {

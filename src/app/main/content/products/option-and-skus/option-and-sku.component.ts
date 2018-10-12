@@ -62,12 +62,34 @@ export class OptionAndSkusComponent implements OnInit {
     }
   }
   edit(obj) {
+    this.product_supplier_attributes = obj;
     this.pageType = "edit";
     const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
     setTimeout(() => {
       this.option_set_id = unique;
     }, 1000);
-    this.product_supplier_attributes = obj;
+  }
+  setDefault() {
+    for (const iterator of this.optionSets) {
+      iterator.options.forEach(element => {
+        let res = this.product_supplier_attributes.find(
+          select => select.option.id === element.id
+        );
+        if (res) {
+          element.isSelected = true;
+          element.amount = res.amount;
+          element.changeBy = res.changeBy === "absolute" ? 1 : 2;
+          element.operation = res.operation === "add" ? 2 : 3;
+          element.option_id = res.option.id;
+        } else {
+          element.isSelected = false;
+          element.amount = null;
+          element.changeBy = null;
+          element.operation = null;
+          element.option_id = null;
+        }
+      });
+    }
   }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
@@ -75,9 +97,9 @@ export class OptionAndSkusComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.optionSets = res.res.data;
-          // setTimeout(() => {
-
-          //  }, 1000 );
+          if (this.pageType !== "new") {
+            this.setDefault();
+          }
           this.alreadyTaken = localStorage.getItem("optionSet");
           if (this.alreadyTaken) {
             this.alreadyTaken = JSON.parse(this.alreadyTaken);

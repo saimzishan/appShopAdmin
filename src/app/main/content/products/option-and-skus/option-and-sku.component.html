@@ -55,24 +55,27 @@
                                     <div class="row" style="margin-left: none !important">
                                         <div class="col-md-3">
                                             <mat-list-item role="listitem">
-                                                <mat-checkbox #option_set [value]="opt.id">{{opt.value}}</mat-checkbox>
+                                                <mat-checkbox #option_set [checked]="opt.isSelected" [value]="opt.id">{{opt.value}}</mat-checkbox>
                                             </mat-list-item>
                                         </div>
                                         <div class="col-md-2">
-                                            <mat-select placeholder="Operation" #operation required>
-                                                <mat-option value=2>Add</mat-option>
-                                                <mat-option value=3>Subtract</mat-option>
+                                            <mat-select placeholder="Operation" [(value)]="opt.operation" #operation
+                                                required>
+                                                <mat-option [value]=2>Add</mat-option>
+                                                <mat-option [value]=3>Subtract</mat-option>
                                             </mat-select>
                                         </div>
                                         <div class="col-md-2">
-                                            <mat-select placeholder="Change by" #change_by required>
-                                                <mat-option value=1>Absolute</mat-option>
-                                                <mat-option value=2>Percentage</mat-option>
+                                            <mat-select placeholder="Change by" [(value)]="opt.changeBy" #change_by
+                                                required>
+                                                <mat-option [value]=1>Absolute</mat-option>
+                                                <mat-option [value]=2>Percentage</mat-option>
                                             </mat-select>
                                         </div>
 
                                         <div class="col-md-2">
-                                            <input class="form-control" required placeholder="Amount" #amount name="amount">
+                                            <input class="form-control" required placeholder="Amount" [value]="opt.amount"
+                                                #amount name="amount">
                                         </div>
                                         <div class="col-md-1">
 
