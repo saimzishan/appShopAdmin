@@ -65,7 +65,6 @@ export class ProductsService extends ApiService implements Resolve<any> {
   // }
 
   getProducts() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {

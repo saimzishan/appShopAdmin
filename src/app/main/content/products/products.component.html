@@ -74,9 +74,15 @@
                 <ng-container cdkColumnDef="category">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <!-- <p class="category text-truncate">
-                            {{product.categories[0]}}
-                        </p> -->
+                        <p class="text-truncate">{{product.category.name}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Brand Column -->
+                <ng-container cdkColumnDef="brand">
+                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Brand</mat-header-cell>
+                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+                        <p class="text-truncate">{{product.brand.name}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -84,9 +90,7 @@
                 <ng-container cdkColumnDef="price">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <!-- <p class="price text-truncate">
-                            {{product.priceTaxIncl | currency:'USD':'symbol'}}
-                        </p> -->
+                        <p class="text-truncate">{{product.suppliers[0].pivot.price}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -94,14 +98,7 @@
                 <ng-container cdkColumnDef="quantity">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-sm>
-
-                        <!-- <span class="quantity-indicator text-truncate"
-                              [ngClass]="{'mat-red-500-bg':product.quantity <= 5, 'mat-amber-500-bg':product.quantity > 5 && product.quantity <= 25,'mat-green-600-bg':product.quantity > 25}">
-                        </span>
-                        <span>
-                            {{product.quantity}}
-                        </span> -->
-
+                        <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -110,7 +107,7 @@
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
                         <mat-form-field>
-                            <mat-select placeholder="Select supplier" (change)="onSupplierChange($event.value, product.id)">
+                            <mat-select placeholder="Select supplier" [(value)]="product.suppliers[0].id" (change)="onSupplierChange($event.value, product.id)">
                                 <mat-option *ngFor="let supplier of getSupplier(product.id)" [value]="supplier.id">
                                     {{supplier.name}}
                                 </mat-option>
@@ -123,7 +120,7 @@
                 <ng-container cdkColumnDef="active">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <mat-icon class="active-icon mat-green-600-bg s-26" (click)="eidt(product.id)" style="cursor:pointer">edit</mat-icon>
+                        <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="cursor:pointer">edit</mat-icon>
                         <!-- <mat-icon class="active-icon mat-red-500-bg s-16">close</mat-icon> -->
                     </mat-cell>
                 </ng-container>
