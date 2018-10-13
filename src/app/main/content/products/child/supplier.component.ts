@@ -83,26 +83,17 @@ export class SupplierFormComponent implements OnInit {
     this.images = new Array<Image>();
     this.image = new Image();
     this.bluckPrice = new BluckPrice();
-    // this.changesSubscription = this.detectChanges.notifyObservable$.subscribe(
-    //   res => {
-    //     this.callRelatedFunctions(res);
-    //   }
-    // );
-  }
-
-  ngOnInit() {
-    this.index();
+    this.getAllCategories();
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
   }
-  // callRelatedFunctions(res) {
-  //   if (res.hasOwnProperty("option")) {
-  //     switch (res.option) {
-  //         break;
-  //     }
-  //   }
-  // }
+
+  ngOnInit() {
+    if (this.pageType === "edit") {
+      this.bluckPrices = this.product.supplier.bulk_prices;
+    }
+  }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -216,9 +207,9 @@ export class SupplierFormComponent implements OnInit {
     return tempNode;
   }
 
-  index() {
+  getAllCategories() {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.index().subscribe(
+    this.categoriesService.getCategories().subscribe(
       (res: any) => {
         if (!res.status) {
           this.categories = res.res.data;
@@ -263,7 +254,6 @@ export class SupplierFormComponent implements OnInit {
         this.addPicture(iterator);
       }
     }
-    this.product.supplier = this.supplier;
     this.product.supplier.images = this.lImages;
     this.product.category_id = this.category_id;
     this.product.supplier.bulk_prices = this.bluckPrices;
@@ -274,10 +264,15 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
-        this.detectChanges.notifyOther({
-          option: "addproduct",
-          value: res.res.data
-        });
+        let temp = {
+          _p_id: res.res.data.id,
+          _s_id: this.product.supplier.id
+        };
+        localStorage.setItem("_saveP", JSON.stringify(temp));
+        // this.detectChanges.notifyOther({
+        //   option: "addproduct",
+        //   value: res.res.data
+        // });
         // this.router.navigate(["/products"]);
       },
       errors => {
