@@ -48,8 +48,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   productName = "";
   supplier_id: any = false;
   enabledChild: boolean = true;
-  tempP;
   product: Product;
+  params: any;
   constructor(
     private dialog: MatDialog,
     protected http: HttpClient,
@@ -57,8 +57,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private spinnerService: SpinnerService,
     private productService: ProductService,
-    private snotifyService: SnotifyService,
-    private detectChanges: DetectChangesService
+    private snotifyService: SnotifyService
   ) {
     this.bluckPrices = new Array<BluckPrice>();
   }
@@ -66,14 +65,15 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Subscribe to update product on changes
     this.route.params.subscribe(params => {
-      this.tempP = params;
-      if (this.tempP) {
-        if (this.tempP.id != "new") {
-          this.edit(this.tempP);
-          this.pageType = "edit";
-          this.enabledChild = false;
-        } else {
+      this.params = params;
+      if (this.params) {
+        if (this.params.id === 'new') {
+          this.pageType = 'new';
           this.product = new Product();
+        } else {
+          this.edit(this.params);
+          this.pageType = 'edit';
+          this.enabledChild = false;
         }
       }
     });

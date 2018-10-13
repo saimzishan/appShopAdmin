@@ -1,45 +1,62 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
 import { Tag } from "../../models/tag.model";
-import { DetectChangesService } from "./../../../../shared/detect-changes.services";
+import { TagsService } from "../../tags/tags.service";
 
 @Component({
   selector: "app-tage",
   templateUrl: "./tage.component.html"
 })
 export class TageComponent implements OnInit {
+  @Input() selectedTags: number[];
+  @Input() pageType: string;
   tags: Tag[];
-  tagId;
   supplierId: any;
   productId: any;
   changesSubscription: any;
+  sub: any;
+  productID: number;
+  supplierID: number;
   constructor(
     private productService: ProductService,
+    private tagService: TagsService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
-    private detectChangesService: DetectChangesService
+    private route: ActivatedRoute
   ) {
-    this.tags = new Array<Tag>();
-    this.tagId = [];
-    this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
-      res => {
-        this.callRelatedFunctions(res);
-      }
-    );
+    this.getAllTags();
   }
   ngOnInit() {
-    this.index();
-    this.init();
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === 'edit') {
+        product_id = params['id'] || '';
+        supplier_id = params['supplier_id'] || '';
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      } else if (this.pageType === 'new') {
+        let ps_ids: any = localStorage.getItem('_saveP');
+        ps_ids = JSON.parse(ps_ids);
+        product_id = ps_ids._p_id;
+        supplier_id = ps_ids._s_id;
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      }
+    });
   }
 
-  index() {
+  getAllTags() {
     this.spinnerService.requestInProcess(true);
-    this.productService.getTags().subscribe(
+    this.tagService.getTags().subscribe(
       (res: any) => {
-        if (!res.status) {
+        if (res) {
           this.tags = res.res.data;
+          if (this.pageType === 'edit')
+          this.bindSelectedTags();
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -48,52 +65,28 @@ export class TageComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-      }
-    );
-  }
-  init() {
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.supplierId = current_product.supplier.id;
-      this.productId = current_product.product_id;
-    }
-  }
-  edit(obj) {
-    setTimeout(() => {
-      for (const iterator of obj) {
-        let id = this.tags.findIndex(i => i.id === iterator.id);
-        if (id !== -1) {
-          this.tags[id].selected = true;
-        }
-      }
-    }, 1000);
-  }
-  callRelatedFunctions(res) {
-    if (res.hasOwnProperty("option")) {
-      switch (res.option) {
-        case "addproduct":
-          this.init();
-          break;
-        case "editProduct":
-          this.edit(res.value.tags);
-          break;
-      }
-    }
+      });
   }
 
-  put() {
-    if (this.tagId.length === 0) {
+  bindSelectedTags() {
+    this.selectedTags.forEach(item => {
+      let index = this.tags.findIndex(tag => tag.id === item);
+      if (index !== -1) {
+        this.tags[index].selected = true;
+      }
+    });
+  }
+
+  updateProductTags() {
+    if (this.selectedTags.length === 0) {
       this.snotifyService.warning("Please select atleast one tag", "Warning !");
       return;
     }
-    const obj = {
-      supplier_id: this.supplierId,
-      id: this.productId,
-      tags: this.tagId
-    };
     this.spinnerService.requestInProcess(true);
-    this.productService.saveProduct(obj, "p_tags").subscribe(
+    let updatedTags = {
+      tags: this.selectedTags
+    }
+    this.productService.updateProductTags(this.productID, updatedTags).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);

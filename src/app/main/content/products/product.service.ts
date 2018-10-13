@@ -151,6 +151,29 @@ export class ProductService extends ApiService {
       });
   }
 
+  updateProductTags(productId: number, tags: Object) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+
+    return this.http
+      .put(GLOBAL.USER_API + "products/" + productId + "?p_tags", tags, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   deleteOptionValue(ps_id: number, option_id: number) {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
