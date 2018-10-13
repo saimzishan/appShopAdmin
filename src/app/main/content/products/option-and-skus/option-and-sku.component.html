@@ -83,10 +83,10 @@
 
                                         </div> -->
                                         <div class="col-md-3" style="padding-left: 5%;">
-                                            <button *ngIf="!opt.isSelected" class="btn btn-success" (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)"><i
+                                            <button *ngIf="!opt.isSelected && option_set.checked" class="btn btn-success" (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)"><i
                                                     class="material-icons">add</i></button>
                                             <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-info"
-                                                (click)="editOptionSetValue(opt.ps_id , operation.value , change_by.value , amount.value)"><i
+                                                (click)="editOptionSetValue(opt.ps_id, row, opt.option_id, operation.value , change_by.value , amount.value)"><i
                                                     class="material-icons">create</i></button>
                                             <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-danger"
                                                 (click)="deleteOptionSetValue(opt.ps_id)"><i class="material-icons">delete</i></button>
