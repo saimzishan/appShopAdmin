@@ -63,17 +63,17 @@
                                         Product Details & Supplier
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <app-product-supplier-form [product]='product' [pageType]="pageType" (productSaved)="onProductSaved($event)"
+                                <app-product-supplier-form [product]="product" [pageType]="pageType" (productSaved)="onProductSaved($event)"
                                     style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                             </mat-expansion-panel>
-                            
+
                             <mat-expansion-panel [disabled]="enabledChild">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         Tags
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-                                <app-tage></app-tage>
+                                <app-tage [selectedTags]="product.tags" [pageType]="pageType"></app-tage>
                             </mat-expansion-panel>
                             <!--<mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
                                 <mat-expansion-panel-header>

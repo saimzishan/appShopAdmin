@@ -157,7 +157,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   index() {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.index().subscribe(
+    this.categoriesService.getCategories().subscribe(
       (res: any) => {
         if (!res.status) {
           this.categories = res.res.data;
