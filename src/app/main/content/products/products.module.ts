@@ -9,12 +9,9 @@ import { ProductsService } from "./products.service";
 import { ProductService } from "./product.service";
 import { FileDropModule } from "ngx-file-drop";
 import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
-// import {FileDropModule} from 'ngx-file-drop';
-// import {TreeModule} from 'angular-tree-component';
 import { AuthGuard } from "../../../guard/auth.guard";
 import { TreeModule } from "angular-tree-component";
 
-// import { TreeviewModule } from "ngx-treeview";
 import { CategoriesService } from "../categories/categories.service";
 import { SupplierFormComponent } from "./child/supplier.component";
 import { VariantComponent } from "./variant/variant.component";
@@ -77,4 +74,4 @@ const routes = [
   ],
   entryComponents: [FuseOptionFormDialogComponent]
 })
-export class ProductsModule {}
+export class ProductsModule { }

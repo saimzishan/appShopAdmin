@@ -23,13 +23,6 @@ const routes = [
       academy: SupplierService
     }
   },
-  /*{
-    path     : ':id/:handle',
-    component: SupplierComponent,
-    resolve  : {
-      academy: SupplierService
-    }
-  },*/
 ];
 
 @NgModule({

@@ -21,7 +21,6 @@ import { Router } from "@angular/router";
 import { GLOBAL } from "../../../shared/globel";
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: "app-supplier",
   templateUrl: "./supplier.component.html",
   styleUrls: ["./supplier.component.scss"],
@@ -48,7 +47,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private spinnerService: SpinnerService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.onSupplierChanged = this.supplierService.onSupplierChanged.subscribe(
@@ -61,7 +60,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
           this.pageType = "new";
           this.supplier = new Supplier();
         }
-        // this.supplierForm = this.createSupplierForm();
       }
     );
   }
@@ -70,7 +68,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getGermanyJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -82,7 +80,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getCanadaJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -98,28 +96,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
     }
   }
 
-  // createSupplierForm() {
-  //   return this.formBuilder.group({
-  //     id: [this.supplier.id],
-  //     name: [this.supplier.name],
-  //     type: [this.supplier.type],
-  //     email: [this.supplier.contact.email],
-  //     no: [this.supplier.contact.no],
-  //     street: [this.supplier.contact.street],
-  //     postal_code: [this.supplier.contact.postal_code],
-  //     city: [this.supplier.contact.city],
-  //     country: [this.supplier.contact.country],
-  //     po_box: [this.supplier.contact.po_box],
-  //     ph_landline1: [this.supplier.contact.ph_landline1],
-  //     ph_landline2: [this.supplier.contact.ph_landline2],
-  //     ph_landline3: [this.supplier.contact.ph_landline3],
-  //     ph_mobile1: [this.supplier.contact.ph_mobile1],
-  //     ph_mobile2: [this.supplier.contact.ph_mobile2],
-  //     ph_mobile3: [this.supplier.contact.ph_mobile3],
-  //     handle: [this.supplier.handle],
-  //   });
-  // }
-
   saveSupplier(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
@@ -134,7 +110,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
         this.supplier.image_name = preImageName[3];
       } else {
         let date = new Date(null);
-        date.setSeconds(45); // specify value for SECONDS here
+        date.setSeconds(45);
         let timeString = date.toISOString().substr(11, 8);
         this.supplier.image_name = timeString + this.supplier.content_type;
       }
@@ -146,8 +122,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
     const data = this.supplier;
     this.supplierService.saveSupplier(data).then(() => {
       this.router.navigate(["/suppliers"]);
-      // this.supplierService.onSupplierChanged.next(data);
-      // this.snotifyService.success("Supplier saved", "Success !");
     });
   }
 
@@ -163,15 +137,11 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addSupplier(form) {
-    // this.supplier.contact = this.supplier_contact;
-    // this.supplier.contact = this.supplier_contact;
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    // this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
     this.spinnerService.requestInProcess(true);
     if (this.base64textString) {
       this.supplier.image = this.base64textString;
@@ -208,7 +178,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
   _handleReaderLoaded(readerEvt) {
     const binaryString = readerEvt.target.result;
     this.base64textString = btoa(binaryString);
-    // this.supplier.image = this.base64textString;
   }
 
   deleteSupplier() {
@@ -220,8 +189,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         alert("a");
-        // const data = this.supplierForm.getRawValue();
-        // data.handle = FuseUtils.handleize(data.name);
         this.supplierService.deleteSuppler(this.supplier).then(() => {
           this.supplierService.onSupplierChanged.next(this.supplier);
         });

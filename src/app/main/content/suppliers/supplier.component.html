@@ -1,29 +1,14 @@
 <div id="supplier" class="page-layout carded fullwidth" fusePerfectScrollbar>
-
-  <!-- TOP BACKGROUND -->
   <div class="top-bg mat-accent-bg"></div>
-  <!-- / TOP BACKGROUND -->
-
-  <!-- CENTER -->
   <div class="center">
-
-    <!-- HEADER -->
     <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
-
-      <!-- APP TITLE -->
       <div fxLayout="row" fxLayoutAlign="start center" fxFlex="70">
-
         <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/suppliers'">
           <mat-icon>arrow_back</mat-icon>
         </button>
-
         <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-          <!-- <img *ngIf="supplier.contact.profile_image" [src]="supplier.contact.profile_image">
-          <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
-        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
-
+          <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
         </div>
-
         <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
           <div class="h2" *ngIf="pageType ==='edit'">
             {{supplier.name}}
@@ -36,33 +21,17 @@
           </div>
         </div>
       </div>
-      <!-- / APP TITLE -->
-
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="supplierFormSubmition.click()">
         <span>ADD</span>
       </button>
-      <!-- <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteSupplier()">
-        <span>Delete</span>
-      </button> -->
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editSupplierFormSubmition.click()">
         <span>SAVE</span>
       </button>
     </div>
-    <!-- / HEADER -->
-
-    <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-
-      <!-- CONTENT -->
       <div class="content">
-
         <form name="supplierForm" #supplierForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
-
-          <!--<mat-tab-group>
-
-            <mat-tab label="Basic Info">-->
           <div class="tab-content p-24" fusePerfectScrollbar>
-
             <mat-form-field class="w-100-p">
               <mat-label>Name</mat-label>
               <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name" required>
@@ -184,72 +153,11 @@
                 </mat-form-field>
               </mat-expansion-panel>
             </mat-accordion>
-
             <input type="button" class="btn btn-primary" hidden #supplierFormSubmition (click)="addSupplier(supplierForm)">
             <input type="button" class="btn btn-primary" hidden #editSupplierFormSubmition (click)="saveSupplier(supplierForm)">
-
-
-
-
-
-            <!--<mat-form-field class="w-100-p">
-                                    <textarea matInput
-                                              name="description"
-                                              formControlName="description"
-                                              placeholder="Product Description"
-                                              rows="5">
-                                    </textarea>
-                </mat-form-field>
-
-                <h3 class="mb-0">Categories</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #categoryList
-                                 name="categories"
-                                 formControlName="categories">
-
-                    <mat-chip *ngFor="let category of supplier.categories"
-                              removable="true" (removed)="supplier.removeCategory(category)">
-                      {{category}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addCategory($event)"
-                         placeholder="Add category..."
-                         [matChipInputFor]="categoryList"/>
-                </mat-form-field>
-
-                <h3 class="mb-0">Tags</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #tagList
-                                 name="tags"
-                                 formControlName="tags">
-
-                    <mat-chip *ngFor="let tag of supplier.tags"
-                              removable="true" (removed)="supplier.removeTag(tag)">
-                      {{tag}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addTag($event)"
-                         placeholder="Add tag..."
-                         [matChipInputFor]="tagList"/>
-                </mat-form-field>-->
           </div>
-          <!--</mat-tab>
-
-          </mat-tab-group>-->
         </form>
-
       </div>
-      <!-- / CONTENT -->
-
     </div>
-    <!-- / CONTENT CARD -->
-
   </div>
-  <!-- / CENTER -->
 </div>

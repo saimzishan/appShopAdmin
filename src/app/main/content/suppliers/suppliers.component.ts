@@ -49,21 +49,10 @@ export class SuppliersComponent implements OnInit {
     private suppliersService: SuppliersService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getSuppliers();
-    // this.dataSource = new FilesDataSource(this.suppliersService, this.paginator, this.sort);
-    // Observable.fromEvent(this.filter.nativeElement, 'keyup')
-    //   .debounceTime(150)
-    //   .distinctUntilChanged()
-    //   .subscribe(() => {
-    //     if ( !this.dataSource )
-    //     {
-    //       return;
-    //     }
-    //     this.dataSource.filter = this.filter.nativeElement.value;
-    //   });
   }
 
   getSuppliers() {
@@ -79,7 +68,6 @@ export class SuppliersComponent implements OnInit {
         this.spinnerService.requestInProcess(false);
         let e = errors.error.message;
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -119,7 +107,6 @@ export class FilesDataSource extends DataSource<any> {
     this.filteredData = this.suppliersService.suppliers;
   }
 
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<any[]> {
     const displayDataChanges = [
       this.suppliersService.onSuppliersChanged,
@@ -137,7 +124,6 @@ export class FilesDataSource extends DataSource<any> {
 
       data = this.sortData(data);
 
-      // Grab the page's slice of data.
       const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
       return data.splice(startIndex, this._paginator.pageSize);
     });
@@ -189,5 +175,5 @@ export class FilesDataSource extends DataSource<any> {
     });
   }
 
-  disconnect() {}
+  disconnect() { }
 }

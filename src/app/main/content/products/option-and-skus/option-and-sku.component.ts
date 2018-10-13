@@ -26,7 +26,7 @@ export class OptionAndSkusComponent implements OnInit {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getOptionSets();
@@ -95,7 +95,6 @@ export class OptionAndSkusComponent implements OnInit {
         }
       });
     }
-    console.log(this.optionSets);
   }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
@@ -158,7 +157,7 @@ export class OptionAndSkusComponent implements OnInit {
     this.option_set_id = _.without(this.option_set_id, id);
   }
 
-  handleSelection(event, value) {}
+  handleSelection(event, value) { }
 
   saveOptionSetAndValue(option_set_id, option, operation, change_by, amount) {
     if (change_by === undefined || operation === undefined || amount === "") {
@@ -172,11 +171,9 @@ export class OptionAndSkusComponent implements OnInit {
       this.snotifyService.warning("Maximum limit 3", "Warning !");
       return;
     }
-    // check if already added
     const result = this.optionSet.find(
       option => option.option_set_id === option_set_id
     );
-    // check if already added
     if (!result) {
       this.optionSet.push(
         new OptionSet({
@@ -188,7 +185,7 @@ export class OptionAndSkusComponent implements OnInit {
       );
     }
     let index: any = this.optionSet
-      .map(function(obj, index) {
+      .map(function (obj, index) {
         if (obj.option_set_id === option_set_id) {
           return index;
         }
@@ -241,7 +238,7 @@ export class OptionAndSkusComponent implements OnInit {
     operation: number,
     change_by: number,
     amount: number
-  ) {}
+  ) { }
 
   deleteOptionSetValue(ps_id: number) {
     this.spinnerService.requestInProcess(true);

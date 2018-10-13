@@ -19,9 +19,6 @@ import { User } from '../models/user.model';
 
 @Injectable()
 export class UserManagementService extends ApiService {
-    // onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
-
-    //Role CRUD
 
     getRoles() {
         const access_token = AuthGuard.getToken();
@@ -128,9 +125,6 @@ export class UserManagementService extends ApiService {
             });
     }
 
-
-    //Permission CRUD
-
     getPermissions() {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
@@ -236,8 +230,6 @@ export class UserManagementService extends ApiService {
             });
     }
 
-    //User CRUD
-
     getUsers() {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
@@ -301,7 +293,7 @@ export class UserManagementService extends ApiService {
             });
     }
 
-    updateUser(user:User) { }
+    updateUser(user: User) { }
 
     updateUserRoles(user: User) {
         const access_token = AuthGuard.getToken();

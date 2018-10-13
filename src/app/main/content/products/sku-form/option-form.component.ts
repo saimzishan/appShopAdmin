@@ -11,7 +11,6 @@ import { Option } from "../../models/product.model";
   encapsulation: ViewEncapsulation.None
 })
 export class FuseOptionFormDialogComponent implements OnInit {
-  // event: CalendarEvent;
   dialogTitle: string;
   optionForm: FormGroup;
   action: string;
@@ -27,7 +26,6 @@ export class FuseOptionFormDialogComponent implements OnInit {
 
     if (this.action === "edit") {
       this.dialogTitle = "Edit Contact";
-      // this.contact = data.contact;
     } else {
       this.dialogTitle = "New Option set";
       this.option = new Option();
@@ -40,7 +38,6 @@ export class FuseOptionFormDialogComponent implements OnInit {
 
   createContactForm() {
     return this.formBuilder.group({
-      // id      : [this.option.id],
       name: [this.option.option_name]
     });
   }

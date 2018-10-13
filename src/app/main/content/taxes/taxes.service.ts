@@ -8,9 +8,6 @@ import { Tax } from '../models/tax.model';
 
 @Injectable()
 export class TaxesService extends ApiService {
-
-  //Tax CRUD
-
   getTaxs() {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {

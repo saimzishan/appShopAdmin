@@ -29,40 +29,6 @@ export class ProductService extends ApiService {
    * @returns {Observable<any> | Promise<any> | any}
    */
 
-  // getProduct(): Promise<any> {
-  //   this.spinnerService.requestInProcess(true);
-  //   return new Promise((resolve, reject) => {
-  //     if (this.routeParams.id === "new") {
-  //       this.spinnerService.requestInProcess(false);
-  //       this.onProductChanged.next(false);
-  //       resolve(false);
-  //     } else {
-  //       let access_token = AuthGuard.getToken();
-  //       if (access_token === undefined) {
-  //         let error = {
-  //           message: "Unauthorized"
-  //         };
-  //         return Observable.throw({ error: error });
-  //       }
-  //       const httpOptions = {
-  //         headers: new HttpHeaders({
-  //           "Content-Type": "application/json",
-  //           Authorization: "Bearer " + access_token
-  //         })
-  //       };
-
-  //       this.http
-  //         .get(GLOBAL.USER_API + "products/" + this.routeParams.id, httpOptions)
-  //         .subscribe((response: any) => {
-  //           this.product = response.data;
-  //           this.spinnerService.requestInProcess(false);
-  //           this.onProductChanged.next(this.product);
-  //           resolve(response);
-  //         }, reject);
-  //     }
-  //   });
-  // }
-
   getProductWithSupplier(id, supplier_id) {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -80,10 +46,10 @@ export class ProductService extends ApiService {
     return this.http
       .get(
         GLOBAL.USER_API +
-          "products?product_id=" +
-          id +
-          "&supplier_id=" +
-          supplier_id,
+        "products?product_id=" +
+        id +
+        "&supplier_id=" +
+        supplier_id,
         httpOptions
       )
       .map(this.extractData)
@@ -114,13 +80,11 @@ export class ProductService extends ApiService {
           this.category = response.data;
           this.onCategoryChanged.next(this.category);
           resolve(response);
-          // console.log(this.category);
         }, reject);
     });
   }
 
   saveProduct(product, option: string) {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -138,10 +102,10 @@ export class ProductService extends ApiService {
     return this.http
       .put(
         GLOBAL.USER_API +
-          "products/" +
-          (option === "ps_update" ? product.ps_id : product.id) +
-          "?" +
-          option,
+        "products/" +
+        (option === "ps_update" ? product.ps_id : product.id) +
+        "?" +
+        option,
         product,
         httpOptions
       )
@@ -178,7 +142,6 @@ export class ProductService extends ApiService {
   }
 
   addProduct(product) {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -202,7 +165,6 @@ export class ProductService extends ApiService {
   }
 
   getSupplier() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -224,7 +186,6 @@ export class ProductService extends ApiService {
       });
   }
   getTaxes() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -247,7 +208,6 @@ export class ProductService extends ApiService {
   }
 
   getTags() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -270,7 +230,6 @@ export class ProductService extends ApiService {
   }
 
   getBrands() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -293,7 +252,6 @@ export class ProductService extends ApiService {
   }
 
   getOptionSets() {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -354,11 +312,11 @@ export class ProductService extends ApiService {
     return this.http
       .delete(
         GLOBAL.USER_API +
-          "products/" +
-          id +
-          "?p_image_id=" +
-          image_id +
-          "&p_image_delete",
+        "products/" +
+        id +
+        "?p_image_id=" +
+        image_id +
+        "&p_image_delete",
         httpOptions
       )
       .map(this.extractData)
@@ -385,10 +343,10 @@ export class ProductService extends ApiService {
     return this.http
       .delete(
         GLOBAL.USER_API +
-          "productVariants/" +
-          variant_id +
-          "?pv_image_delete&pv_image_id=" +
-          image_id,
+        "productVariants/" +
+        variant_id +
+        "?pv_image_delete&pv_image_id=" +
+        image_id,
         httpOptions
       )
       .map(this.extractData)
@@ -415,10 +373,10 @@ export class ProductService extends ApiService {
     return this.http
       .put(
         GLOBAL.USER_API +
-          "productVariants/" +
-          product_id +
-          "?ps_variant& psv_id=" +
-          variant.id,
+        "productVariants/" +
+        product_id +
+        "?ps_variant& psv_id=" +
+        variant.id,
         variant,
         httpOptions
       )
@@ -445,10 +403,10 @@ export class ProductService extends ApiService {
     return this.http
       .delete(
         GLOBAL.USER_API +
-          "productVariants/" +
-          product_id +
-          "?pv_delete& pv_id=" +
-          variant_id,
+        "productVariants/" +
+        product_id +
+        "?pv_delete& pv_id=" +
+        variant_id,
         httpOptions
       )
       .map(this.extractData)
@@ -474,11 +432,11 @@ export class ProductService extends ApiService {
     return this.http
       .delete(
         GLOBAL.USER_API +
-          "products/" +
-          id +
-          "?p_bulck_price" +
-          "&bulck_p_id=" +
-          bulk_id,
+        "products/" +
+        id +
+        "?p_bulck_price" +
+        "&bulck_p_id=" +
+        bulk_id,
         httpOptions
       )
       .map(this.extractData)

@@ -16,43 +16,12 @@ export class ProductsService extends ApiService {
   products: any[];
   onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  // constructor(
-  //     private http: HttpClient
-  // )
-  // {
-  // }
-
   /**
    * Resolve
    * @param {ActivatedRouteSnapshot} route
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-
-  // getProducts(): Promise<any> {
-  //     return new Promise((resolve, reject) => {
-  //         let access_token = AuthGuard.getToken();
-  //         if (access_token === undefined) {
-  //             let error = {
-  //                 message: 'Unauthorized'
-  //             }
-  //             return Observable.throw({ error: error });
-  //         }
-  //         const httpOptions = {
-  //             headers: new HttpHeaders({
-  //                 'Content-Type': 'application/json',
-  //                 'Authorization': 'Bearer ' + access_token
-  //             })
-  //         };
-
-  //         this.http.get(GLOBAL.USER_API + 'products', httpOptions)
-  //             .subscribe((response: any) => {
-  //                 this.products = response.data;
-  //                 this.onProductsChanged.next(this.products);
-  //                 resolve(response);
-  //             }, reject);
-  //     });
-  // }
 
   getProducts() {
     let access_token = AuthGuard.getToken();

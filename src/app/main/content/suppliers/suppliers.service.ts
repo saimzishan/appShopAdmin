@@ -15,13 +15,6 @@ import { AuthGuard } from "../../../guard/auth.guard";
 export class SuppliersService extends ApiService {
   suppliers: any[];
   onSuppliersChanged: BehaviorSubject<any> = new BehaviorSubject({});
-  // http: any;
-
-  // constructor(
-  //   private http: HttpClient
-  // )
-  // {
-  // }
 
   /**
    * Resolve
@@ -39,18 +32,6 @@ export class SuppliersService extends ApiService {
       }, reject);
     });
   }
-
-  // getSuppliers(): Promise<any>
-  // {
-  //   return new Promise((resolve, reject) => {
-  //     this.http.get('api/suppliers')
-  //       .subscribe((response: any) => {
-  //         this.suppliers = response;
-  //         this.onProductsChanged.next(this.suppliers);
-  //         resolve(response);
-  //       }, reject);
-  //   });
-  // }
 
   getSuppliers() {
     const access_token = AuthGuard.getToken();

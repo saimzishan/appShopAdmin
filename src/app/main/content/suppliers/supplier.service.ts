@@ -20,15 +20,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
   supplier: any;
   onSupplierChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  //   constructor(
-  //     private http: HttpClient,
-  //     private spinnerService: SpinnerService,
-  //     private snotifyService: SnotifyService,
-  //     private router: Router
-  //   )
-  //   {
-  //   }
-
   /**
    * Resolve
    * @param {ActivatedRouteSnapshot} route
@@ -55,7 +46,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
         resolve(false);
       } else {
         this.spinnerService.requestInProcess(true);
-
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
           const error = {
@@ -84,20 +74,7 @@ export class SupplierService extends ApiService implements Resolve<any> {
     });
   }
 
-  // saveSupplier(supplier)
-  // {
-
-  //   return new Promise((resolve, reject) => {
-  //     this.http.post('api/suppliers/' + supplier.id, supplier)
-  //       .subscribe((response: any) => {
-  //         console.log(response);
-  //         resolve(response);
-  //       }, reject);
-  //   });
-  // }
-
   addSupplier(supplier) {
-    // return new Promise((resolve, reject) => {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
@@ -111,15 +88,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
         Authorization: "Bearer " + access_token
       })
     };
-
-    //   this.http
-    //     .post(GLOBAL.USER_API + "products", product, httpOptions)
-    //     .subscribe((response: any) => {
-    //       console.log(response);
-    //       resolve(response);
-    //       this.router.navigate(["/products"]);
-    //     }, reject);
-    // });
     return this.http
       .post(GLOBAL.USER_API + "suppliers", supplier, httpOptions)
       .map(this.extractData)
@@ -127,38 +95,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
         return this.handleError(err);
       });
   }
-
-  //   addSupplier(supplier) {
-  //     this.spinnerService.requestInProcess(true);
-  //     return new Promise((resolve, reject) => {
-  //         const access_token = AuthGuard.getToken();
-  //         if (access_token === undefined) {
-  //             const error = {
-  //                 message: 'Unauthorized'
-  //             }
-  //             return Observable.throw({ error: error });
-  //         }
-  //         const httpOptions = {
-  //             headers: new HttpHeaders({
-  //                 'Content-Type': 'application/json',
-  //                 'Authorization': 'Bearer ' + access_token
-  //             })
-  //         };
-
-  //         this.http.post(GLOBAL.USER_API + 'suppliers', supplier , httpOptions)
-  //             .subscribe((response: any) => {
-  //                 this.spinnerService.requestInProcess(false);
-  //                 if (!response.error) {
-  //                     resolve(response);
-  //                     this.snotifyService.success('Supplier Added');
-  //                     this.router.navigate(['/suppliers']);
-  //                 }
-  //                 else {
-  //                     this.snotifyService.error(response.error);
-  //                 }
-  //             }, reject);
-  //     });
-  // }
 
   deleteSuppler(supplier) {
     this.spinnerService.requestInProcess(true);
@@ -233,7 +169,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
         return response;
       })
       .catch(error => {
-        console.log(error);
         throw error.message || error;
       });
   }
@@ -245,7 +180,6 @@ export class SupplierService extends ApiService implements Resolve<any> {
         return response;
       })
       .catch(error => {
-        console.log(error);
         throw error.message || error;
       });
   }

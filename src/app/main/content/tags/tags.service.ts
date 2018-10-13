@@ -8,9 +8,6 @@ import { Tag } from '../models/tag.model';
 
 @Injectable()
 export class TagsService extends ApiService {
-
-  //Tag CRUD
-
   getTags() {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {

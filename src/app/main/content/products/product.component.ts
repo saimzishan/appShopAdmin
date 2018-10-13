@@ -64,7 +64,6 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Subscribe to update product on changes
     this.route.params.subscribe(params => {
       this.tempP = params;
       if (this.tempP) {
@@ -87,18 +86,8 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: any) => {
           if (!res.status) {
-            // let product: any = res.res.data;
-            //   this.productName = res.res.data.name;
-            //   res.res.data.supplier_id = +this.tempP.supplier_id;
-            //   res.res.data.ps_id = res.res.data.id;
-            //   res.res.data.product_id = +this.tempP.id;
-            //   this.detectChanges.notifyOther({
-            //     option: "editProduct",
-            //     value: res.res.data
-            //   });
             this.product = new Product(res.res.data);
-            console.log(res.res.data);
-            this.onProductSaved(obj); // for edit or after add product
+            this.onProductSaved(obj);
           }
           this.spinnerService.requestInProcess(false);
         },
@@ -161,10 +150,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     localStorage.removeItem("optionSet");
     this.router.navigate(["/products"]);
   }
-
-  // scrollToId() {
-  //   $("#middleOfPanel")[0].scrollIntoView();
-  // }
 
   ngOnDestroy() {}
 }

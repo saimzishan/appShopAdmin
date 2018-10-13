@@ -142,7 +142,6 @@ export class VariantComponent implements OnInit {
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
-      // this.supplier.upc.
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
@@ -154,7 +153,7 @@ export class VariantComponent implements OnInit {
 
   addOptionSet(id, p_id) {
     let index: any = this.obj
-      .map(function(obj, index) {
+      .map(function (obj, index) {
         if (obj.option_set_id === p_id) {
           return index;
         }
@@ -215,7 +214,7 @@ export class VariantComponent implements OnInit {
     }
     setTimeout(() => {
       this.updateVariant();
-    
+
     }, 1000);
     this.resetDropzone();
   }
@@ -230,7 +229,7 @@ export class VariantComponent implements OnInit {
     this.productService.updateProductVariant(this.productID, this.product_variant).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
-        if (this.product_variant.images.length > 0){
+        if (this.product_variant.images.length > 0) {
           this.router.navigate(['/products']);
         }
         this.product_variant.images = tmpImages;
@@ -252,7 +251,6 @@ export class VariantComponent implements OnInit {
 
     let objct;
     this.productVariant = this.variants;
-    // this.productVariant[0].options = this.obj;
     objct = {
       supplier_id: this.supplierId,
       id: this.productId,
@@ -305,25 +303,8 @@ export class VariantComponent implements OnInit {
       });
   }
 
-  onUploadError(evt) {}
+  onUploadError(evt) { }
   onUploadSuccess(evt) {
-    // this.image = new Image();
-    // this.image.base64String = evt[0].dataURL.split(",")[1];
-    // this.image.content_type = evt[0].type.split("/")[1];
-    // this.image.content_type = "." + this.image.content_type.split(";")[0];
-    // this.image.type = "small";
-    // //
-    // for (let index = 0; index < 3; index++) {
-    //   this.images.push(new Image(this.image));
-    //   if (index === 0) {
-    //     this.image.type = "medium";
-    //   }
-    //   if (index === 1) {
-    //     this.image.type = "large";
-    //   }
-    // }
-    // this.lImages.push(this.images);
-    // this.images = new Array<Image>();
   }
   addPicture(obj) {
     this.image = new Image();
@@ -331,7 +312,6 @@ export class VariantComponent implements OnInit {
     this.image.content_type = obj.type.split("/")[1];
     this.image.content_type = "." + this.image.content_type.split(";")[0];
     this.image.type = "small";
-    //
     for (let index = 0; index < 3; index++) {
       this.images.push(new Image(this.image));
       if (index === 0) {
@@ -369,7 +349,6 @@ export class VariantComponent implements OnInit {
           },
           error => {
             this.spinnerService.requestInProcess(false);
-            console.log(error);
           }
         );
       }

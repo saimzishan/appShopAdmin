@@ -1,39 +1,25 @@
 <div id="role" class="page-layout carded fullwidth" fusePerfectScrollbar>
-
-    <!-- TOP BACKGROUND -->
     <div class="top-bg mat-accent-bg"></div>
-    <!-- / TOP BACKGROUND -->
-    <!-- CENTER -->
     <div class="center">
-
         <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-            <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
                 <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/user-management/manage-role/roles'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">center_focus_strong</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Role': 'New Role'}}</span>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType
+                    === 'edit' ? 'Update Role': 'New Role'}}</span>
             </div>
-            <!-- / APP TITLE -->
-
-            <!-- CRUD CONTROL -->
             <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="roleFormSubmit.click()">
                 <span>ADD</span>
             </button>
-
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delRole()">
                 <span>DELETE</span>
             </button>
-
             <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editRoleFormSubmit.click()">
                 <span>SAVE</span>
             </button>
-            <!-- / CRUD CONTROL -->
-
         </div>
-        <!-- CONTENT CARD -->
-
         <div class="content-card mat-white-bg" style="padding: 20px;">
             <div class="content">
                 <form name="roleForm" #roleForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
@@ -57,13 +43,11 @@
                         </mat-form-field>
                         <span *ngIf="permissions.touched && permissions.errors?.required;" class="inline-icon error red-fg">
                             <span>Permissions are required.</span>!</span>
-
                     </div>
                     <input type="button" class="btn btn-primary" hidden #roleFormSubmit (click)="addRole(roleForm)">
                     <input type="button" class="btn btn-primary" hidden #editRoleFormSubmit (click)="updateRole(roleForm)">
                 </form>
             </div>
         </div>
-        <!-- CONTENT CARD -->
     </div>
 </div>

@@ -1,64 +1,47 @@
 <div id="tax" class="page-layout carded fullwidth" fusePerfectScrollbar>
-
-  <!-- TOP BACKGROUND -->
   <div class="top-bg mat-accent-bg"></div>
-  <!-- / TOP BACKGROUND -->
-  <!-- CENTER -->
   <div class="center">
-
     <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-      <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
         <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/tax-management/taxes'">
           <mat-icon>arrow_back</mat-icon>
         </button>
         <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">monetization_on</mat-icon>
-        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Tax': 'New Tax'}}</span>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType ===
+          'edit' ? 'Update Tax': 'New Tax'}}</span>
       </div>
-      <!-- / APP TITLE -->
-
-      <!-- CRUD CONTROL -->
       <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="taxFormSubmit.click()">
         <span>ADD</span>
       </button>
-
-      <button mat-raised-button [hidden]="true" class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="delTax()">
+      <button mat-raised-button [hidden]="true" class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
+        (click)="delTax()">
         <span>DELETE</span>
       </button>
-
       <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editTaxFormSubmit.click()">
         <span>SAVE</span>
       </button>
-      <!-- / CRUD CONTROL -->
-
     </div>
-    <!-- CONTENT CARD -->
-
     <div class="content-card mat-white-bg" style="padding: 20px;">
       <div class="content">
         <form name="taxForm" #taxForm="ngForm" class="product w-100-p" fxLayout="column" fxFlex>
           <div class="tab-content p-24" fusePerfectScrollbar>
-
             <mat-form-field class="w-100-p">
               <input matInput name="title" #title="ngModel" [(ngModel)]="tax.title" placeholder="Tax Title" required>
             </mat-form-field>
             <span *ngIf="title.touched && title.errors?.required;" class="inline-icon error red-fg">
-                <span>Tax title is required.</span>!</span>
-
+              <span>Tax title is required.</span>!</span>
             <mat-form-field class="w-100-p">
-              <input matInput (keyup)="checkLength()" required type="number" min="0.1" max="99.9" step="0.1" name="value" #value="ngModel" [(ngModel)]="tax.value"
-                placeholder="Tax Value">
+              <input matInput (keyup)="checkLength()" required type="number" min="0.1" max="99.9" step="0.1" name="value" #value="ngModel"
+                [(ngModel)]="tax.value" placeholder="Tax Value">
             </mat-form-field>
             <span *ngIf="value.touched && value.errors?.required;" class="inline-icon error red-fg">
-                <span>Tax value is required.</span>!</span>
+              <span>Tax value is required.</span>!</span>
             <span class="error" id="length"></span>
-
           </div>
           <input type="button" class="btn btn-primary" hidden #taxFormSubmit (click)="addTax(taxForm)">
           <input type="button" class="btn btn-primary" hidden #editTaxFormSubmit (click)="updateTax(taxForm)">
         </form>
       </div>
     </div>
-    <!-- CONTENT CARD -->
   </div>
 </div>

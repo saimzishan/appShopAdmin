@@ -42,7 +42,7 @@ export class ProductsComponent implements OnInit {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.index();
@@ -62,12 +62,11 @@ export class ProductsComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
   getSupplier(product_id) {
-    var result = this.dataSource.data.filter(function(obj) {
+    var result = this.dataSource.data.filter(function (obj) {
       if (obj.id === product_id) {
         return obj;
       }

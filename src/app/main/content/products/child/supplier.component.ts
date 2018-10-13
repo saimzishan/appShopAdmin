@@ -83,11 +83,6 @@ export class SupplierFormComponent implements OnInit {
     this.images = new Array<Image>();
     this.image = new Image();
     this.bluckPrice = new BluckPrice();
-    // this.changesSubscription = this.detectChanges.notifyObservable$.subscribe(
-    //   res => {
-    //     this.callRelatedFunctions(res);
-    //   }
-    // );
   }
 
   ngOnInit() {
@@ -96,17 +91,9 @@ export class SupplierFormComponent implements OnInit {
     this.getTaxes();
     this.getBrands();
   }
-  // callRelatedFunctions(res) {
-  //   if (res.hasOwnProperty("option")) {
-  //     switch (res.option) {
-  //         break;
-  //     }
-  //   }
-  // }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
-      // this.supplier.upc.
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
@@ -155,7 +142,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -174,7 +160,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -192,7 +177,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -231,7 +215,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -278,7 +261,6 @@ export class SupplierFormComponent implements OnInit {
           option: "addproduct",
           value: res.res.data
         });
-        // this.router.navigate(["/products"]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -342,24 +324,8 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-  onUploadError(evt) {}
+  onUploadError(evt) { }
   onUploadSuccess(evt) {
-    // this.image.base64String = evt[0].dataURL.split(",")[1];
-    // this.image.content_type = evt[0].type.split("/")[1];
-    // this.image.content_type = "." + this.image.content_type.split(";")[0];
-    // this.image.type = "small";
-    // //
-    // for (let index = 0; index < 3; index++) {
-    //   this.images.push(new Image(this.image));
-    //   if (index === 0) {
-    //     this.image.type = "medium";
-    //   }
-    //   if (index === 1) {
-    //     this.image.type = "large";
-    //   }
-    // }
-    // this.lImages.push(this.images);
-    // this.images = new Array<Image>();
   }
 
   addPicture(obj) {
@@ -383,7 +349,6 @@ export class SupplierFormComponent implements OnInit {
   }
 
   onCanceled(event) {
-    console.log(event);
   }
 
   addBluckPrice(form: NgForm) {
@@ -423,7 +388,6 @@ export class SupplierFormComponent implements OnInit {
           },
           error => {
             this.spinnerService.requestInProcess(false);
-            console.log(error);
           }
         );
       }
@@ -460,7 +424,6 @@ export class SupplierFormComponent implements OnInit {
             },
             error => {
               this.spinnerService.requestInProcess(false);
-              console.log(error);
             }
           );
       }
@@ -527,7 +490,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-        console.log(errors.error.message);
       }
     );
   }
@@ -544,7 +506,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-        console.log(errors.error.message);
       }
     );
   }
