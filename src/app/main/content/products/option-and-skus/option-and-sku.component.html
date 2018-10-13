@@ -36,7 +36,8 @@
                         <tr *ngFor="let row of option_set_id; let j=index">
                             <!-- <form name="optionForm{{j}}" #skuForm{{j}}="ngForm"> -->
                             <td>
-                                <i *ngIf="pageType === 'new'" (click)="removeOptionSet(row)" class="material-icons" style="color:#FF0000; cursor: pointer;">
+                                <i *ngIf="pageType === 'new'" (click)="removeOptionSet(row)" class="material-icons"
+                                    style="color:#FF0000; cursor: pointer;">
                                     delete
                                 </i>
                                 {{getOptionSetName(row)}}
@@ -55,7 +56,8 @@
                                     <div class="row" style="margin-left: none !important; padding-bottom: 2%">
                                         <div class="col-md-3">
                                             <mat-list-item role="listitem">
-                                                <mat-checkbox #option_set [disabled]="pageType === 'edit'&& opt.isSelected" [checked]="opt.isSelected" [value]="opt.id">{{opt.value}}</mat-checkbox>
+                                                <mat-checkbox #option_set [disabled]="pageType === 'edit'&& opt.isSelected"
+                                                    [checked]="opt.isSelected" [value]="opt.id">{{opt.value}}</mat-checkbox>
                                             </mat-list-item>
                                         </div>
                                         <div class="col-md-2">
@@ -81,9 +83,13 @@
 
                                         </div> -->
                                         <div class="col-md-3" style="padding-left: 5%;">
-                                            <button *ngIf="!opt.isSelected" class="btn btn-success" (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)"><i class="material-icons">add</i></button>
-                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-info" (click)="editOptionSetValue(opt.id , operation.value , change_by.value , amount.value)"><i class="material-icons">create</i></button>
-                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-danger" (click)="deleteOptionSetValue(opt.option_id)"><i class="material-icons">delete</i></button>
+                                            <button *ngIf="!opt.isSelected" class="btn btn-success" (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)"><i
+                                                    class="material-icons">add</i></button>
+                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-info"
+                                                (click)="editOptionSetValue(opt.ps_id , operation.value , change_by.value , amount.value)"><i
+                                                    class="material-icons">create</i></button>
+                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-danger"
+                                                (click)="deleteOptionSetValue(opt.ps_id)"><i class="material-icons">delete</i></button>
                                         </div>
                                     </div>
                                     <!-- </form> -->

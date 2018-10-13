@@ -19,16 +19,14 @@ export class OptionAndSkusComponent implements OnInit {
   supplier_id;
   changesSubscription;
   alreadyTaken: any = false;
-  product_supplier_attributes: any;
+  product_supplier_attributes: any = [];
   pageType = "new";
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private detectChangesService: DetectChangesService
-  ) {
-   
-  }
+  ) {}
 
   ngOnInit() {
     this.getOptionSets();
@@ -44,7 +42,6 @@ export class OptionAndSkusComponent implements OnInit {
         this.callRelatedFunctions(res);
       }
     );
-
   }
 
   callRelatedFunctions(res) {
@@ -59,21 +56,22 @@ export class OptionAndSkusComponent implements OnInit {
           }
           break;
         case "editProduct":
-        this.product_id = res.value.ps_id;
-        this.supplier_id = res.value.supplier_id;
+          this.pageType = "edit";
+          this.product_id = res.value.ps_id;
+          this.supplier_id = res.value.supplier_id;
           this.edit(res.value.product_supplier_attributes);
           break;
       }
     }
   }
   edit(obj) {
- 
     this.product_supplier_attributes = obj;
-    this.pageType = "edit";
+    this.spinnerService.requestInProcess(true);
     const unique = Array.from(new Set(obj.map(item => item.option_set_id)));
     setTimeout(() => {
       this.option_set_id = unique;
-    }, 1000);
+      this.spinnerService.requestInProcess(false);
+    }, 5000);
   }
   setDefault() {
     for (const iterator of this.optionSets) {
@@ -82,6 +80,7 @@ export class OptionAndSkusComponent implements OnInit {
           select => select.option.id === element.id
         );
         if (res) {
+          element.ps_id = res.id;
           element.isSelected = true;
           element.amount = res.amount;
           element.change_by = res.change_by === "absolute" ? 1 : 2;
@@ -96,6 +95,7 @@ export class OptionAndSkusComponent implements OnInit {
         }
       });
     }
+    console.log(this.optionSets);
   }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
@@ -232,16 +232,20 @@ export class OptionAndSkusComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 
-  editOptionSetValue(option_id: number, operation: number, change_by: number, amount: number) {
+  editOptionSetValue(
+    option_id: number,
+    operation: number,
+    change_by: number,
+    amount: number
+  ) {}
 
-  }
-
-  deleteOptionSetValue(option_id: number) {
+  deleteOptionSetValue(ps_id: number) {
     this.spinnerService.requestInProcess(true);
-    this.productService.deleteOptionValue(this.product_id, option_id).subscribe(
+    this.productService.deleteOptionValue(this.product_id, ps_id).subscribe(
       (res: any) => {
         this.optionSetWithValue = {};
         this.snotifyService.success(res.res.message, "Success !");
@@ -258,7 +262,8 @@ export class OptionAndSkusComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 }
 
