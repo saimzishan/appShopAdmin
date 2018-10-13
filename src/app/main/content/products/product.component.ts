@@ -78,6 +78,15 @@ export class ProductComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    let isAlreadySaved: any = localStorage.getItem("_saveP");
+    if (isAlreadySaved) {
+      isAlreadySaved = JSON.parse(isAlreadySaved);
+      localStorage.removeItem("_saveP");
+      this.router.navigate([
+        "/products/" + isAlreadySaved._p_id + "/" + isAlreadySaved._s_id
+      ]);
+    }
   }
 
   edit(obj) {
