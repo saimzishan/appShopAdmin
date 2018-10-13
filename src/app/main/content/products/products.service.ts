@@ -12,7 +12,7 @@ import { AuthGuard } from "../../../guard/auth.guard";
 import { ApiService } from "../../../api/api.service";
 
 @Injectable()
-export class ProductsService extends ApiService implements Resolve<any> {
+export class ProductsService extends ApiService {
   products: any[];
   onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
@@ -28,16 +28,6 @@ export class ProductsService extends ApiService implements Resolve<any> {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<any> | Promise<any> | any {
-    return new Promise((resolve, reject) => {
-      Promise.all([this.getProducts()]).then(() => {
-        resolve();
-      }, reject);
-    });
-  }
 
   // getProducts(): Promise<any> {
   //     return new Promise((resolve, reject) => {

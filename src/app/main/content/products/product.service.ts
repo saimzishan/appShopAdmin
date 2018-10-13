@@ -16,9 +16,8 @@ import { SnotifyService } from "ng-snotify";
 import { Product } from "../models/product.model";
 
 @Injectable()
-export class ProductService extends ApiService implements Resolve<any> {
+export class ProductService extends ApiService {
   routeParams: any;
-  product: Product = new Product();
   category: any;
   onProductChanged: BehaviorSubject<any> = new BehaviorSubject({});
   onCategoryChanged: BehaviorSubject<any> = new BehaviorSubject({});
@@ -29,18 +28,6 @@ export class ProductService extends ApiService implements Resolve<any> {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<any> | Promise<any> | any {
-    this.routeParams = route.params;
-
-    return new Promise((resolve, reject) => {
-      Promise.all([]).then(() => {
-        resolve();
-      }, reject);
-    });
-  }
 
   // getProduct(): Promise<any> {
   //   this.spinnerService.requestInProcess(true);
@@ -93,10 +80,10 @@ export class ProductService extends ApiService implements Resolve<any> {
     return this.http
       .get(
         GLOBAL.USER_API +
-        "products?product_id=" +
-        id +
-        "&supplier_id=" +
-        supplier_id,
+          "products?product_id=" +
+          id +
+          "&supplier_id=" +
+          supplier_id,
         httpOptions
       )
       .map(this.extractData)
@@ -150,7 +137,11 @@ export class ProductService extends ApiService implements Resolve<any> {
 
     return this.http
       .put(
-        GLOBAL.USER_API + "products/" + (option === 'ps_update' ? product.ps_id : product.id) + "?" + option,
+        GLOBAL.USER_API +
+          "products/" +
+          (option === "ps_update" ? product.ps_id : product.id) +
+          "?" +
+          option,
         product,
         httpOptions
       )
@@ -175,7 +166,11 @@ export class ProductService extends ApiService implements Resolve<any> {
       })
     };
 
-    return this.http.delete(GLOBAL.USER_API + "products/" + ps_id + "?ps_option=" + option_id, httpOptions)
+    return this.http
+      .delete(
+        GLOBAL.USER_API + "products/" + ps_id + "?ps_option=" + option_id,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -346,17 +341,18 @@ export class ProductService extends ApiService implements Resolve<any> {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.delete(GLOBAL.USER_API + 'products/' + id + '?p_delete', httpOptions)
+    return this.http
+      .delete(GLOBAL.USER_API + "products/" + id + "?p_delete", httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -380,11 +376,11 @@ export class ProductService extends ApiService implements Resolve<any> {
     return this.http
       .delete(
         GLOBAL.USER_API +
-        "products/" +
-        id +
-        "?p_image_id=" +
-        image_id +
-        "&p_image_delete",
+          "products/" +
+          id +
+          "?p_image_id=" +
+          image_id +
+          "&p_image_delete",
         httpOptions
       )
       .map(this.extractData)
@@ -409,7 +405,14 @@ export class ProductService extends ApiService implements Resolve<any> {
     };
 
     return this.http
-      .delete(GLOBAL.USER_API + "productVariants/" + variant_id + "?pv_image_delete&pv_image_id=" + image_id, httpOptions)
+      .delete(
+        GLOBAL.USER_API +
+          "productVariants/" +
+          variant_id +
+          "?pv_image_delete&pv_image_id=" +
+          image_id,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -432,7 +435,15 @@ export class ProductService extends ApiService implements Resolve<any> {
     };
 
     return this.http
-      .put(GLOBAL.USER_API + "productVariants/" + product_id + '?ps_variant& psv_id=' + variant.id, variant, httpOptions)
+      .put(
+        GLOBAL.USER_API +
+          "productVariants/" +
+          product_id +
+          "?ps_variant& psv_id=" +
+          variant.id,
+        variant,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -454,7 +465,14 @@ export class ProductService extends ApiService implements Resolve<any> {
       })
     };
     return this.http
-      .delete(GLOBAL.USER_API + "productVariants/" + product_id + '?pv_delete& pv_id=' + variant_id, httpOptions)
+      .delete(
+        GLOBAL.USER_API +
+          "productVariants/" +
+          product_id +
+          "?pv_delete& pv_id=" +
+          variant_id,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -478,10 +496,11 @@ export class ProductService extends ApiService implements Resolve<any> {
     return this.http
       .delete(
         GLOBAL.USER_API +
-        "products/" +
-        id +
-        "?p_bulck_price" +
-        "&bulck_p_id=" + bulk_id,
+          "products/" +
+          id +
+          "?p_bulck_price" +
+          "&bulck_p_id=" +
+          bulk_id,
         httpOptions
       )
       .map(this.extractData)

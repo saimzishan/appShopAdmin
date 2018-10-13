@@ -64,10 +64,11 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
 
-                            <app-product-supplier-form (productSaved)="onProductSaved($event)" style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
+                            <app-product-supplier-form [product]='product' (productSaved)="onProductSaved($event)"
+                                style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                         </mat-expansion-panel>
                         <!--  -->
-                        <mat-expansion-panel [disabled]="enabledChild">
+                        <!-- <mat-expansion-panel [disabled]="enabledChild">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Tags
@@ -95,7 +96,7 @@
                             </mat-expansion-panel-header>
                             <app-variant-form [option_with_value]="[]" [supplier_id]="supplier_id" [product_id]="product_id">
                             </app-variant-form>
-                        </mat-expansion-panel>
+                        </mat-expansion-panel> -->
 
                     </mat-accordion>
 
