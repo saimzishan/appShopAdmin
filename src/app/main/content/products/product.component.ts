@@ -1,13 +1,7 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 
-import {
-  Supplier,
-  OptionSet,
-  OptionValue,
-  ProductVariant,
-  Options
-} from "./../models/product.model";
+import { Supplier, ProductVariant, Product } from "./../models/product.model";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
@@ -51,10 +45,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   checkParams = "";
 
   product_id: any;
-  productName = '';
+  productName = "";
   supplier_id: any = false;
   enabledChild: boolean = true;
   tempP;
+  product: Product;
   constructor(
     private dialog: MatDialog,
     protected http: HttpClient,
@@ -75,8 +70,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       if (this.tempP) {
         if (this.tempP.id != "new") {
           this.edit(this.tempP);
-          this.pageType = 'edit';
+          this.pageType = "edit";
           this.enabledChild = false;
+        } else {
+          this.product = new Product();
         }
       }
     });
@@ -90,14 +87,15 @@ export class ProductComponent implements OnInit, OnDestroy {
         (res: any) => {
           if (!res.status) {
             // let product: any = res.res.data;
-            this.productName = res.res.data.name;
-            res.res.data.supplier_id = +this.tempP.supplier_id;
-            res.res.data.ps_id = res.res.data.id;
-            res.res.data.product_id = +this.tempP.id;
-            this.detectChanges.notifyOther({
-              option: "editProduct",
-              value: res.res.data
-            });
+            //   this.productName = res.res.data.name;
+            //   res.res.data.supplier_id = +this.tempP.supplier_id;
+            //   res.res.data.ps_id = res.res.data.id;
+            //   res.res.data.product_id = +this.tempP.id;
+            //   this.detectChanges.notifyOther({
+            //     option: "editProduct",
+            //     value: res.res.data
+            //   });
+            this.product = new Product(res.res.data);
           }
           this.spinnerService.requestInProcess(false);
         },
@@ -141,16 +139,19 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   removeProduct() {
     this.spinnerService.requestInProcess(true);
-    this.productService.deleteProduct(+this.tempP.id).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/products']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.productService.deleteProduct(+this.tempP.id).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/products"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
   saveAndExit() {
     localStorage.removeItem("current_product");

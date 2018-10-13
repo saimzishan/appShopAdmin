@@ -1,7 +1,3 @@
-export class Option {
-  id: string;
-  option_name = "";
-}
 export class Product {
   id: number;
   name: string;
@@ -11,12 +7,13 @@ export class Product {
   tax_id: number;
   brand_id: number;
   supplier: Supplier;
-
+  tags: number[];
   constructor(product?) {
     product = product || {};
     this.id = product.id || -1;
     this.name = product.name || "";
-    this.supplier = new Supplier();
+    this.supplier = product.supplier || new Supplier();
+    this.tags = product.tags || [];
   }
 }
 export class Supplier {
@@ -39,6 +36,9 @@ export class Supplier {
   low_level_stock: number;
   active: boolean;
   class: Array<any>;
+  product_supplier_attributes: ProductSupplierAttribute[];
+  product_variants: ProductVariant[];
+
   constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id;
@@ -60,6 +60,8 @@ export class Supplier {
     this.low_level_stock = supplier.low_level_stock;
     this.stock = supplier.stock;
     this.class = supplier.class || new Array();
+    this.product_supplier_attributes = new Array<ProductSupplierAttribute>();
+    this.product_variants = new Array<ProductVariant>();
   }
 }
 export class BluckPrice {
@@ -87,7 +89,8 @@ export class Image {
     this.id = image.id || -1;
   }
 }
-export class ProductVariant {
+
+export class Variant {
   id: number;
   price: number;
   ean: string;
@@ -97,7 +100,7 @@ export class ProductVariant {
   width: number;
   height: number;
   depth: number;
-  images: Array<any>;
+  images: Array<Image>;
   content_type: string;
   operation: number | string;
   change_by: number | string;
@@ -105,109 +108,59 @@ export class ProductVariant {
   track_stock: boolean;
   stock: number;
   low_level_stock: number;
-  product_variant_attributes: any[];
-  options: Array<Options>;
-
-  constructor(productVariant?) {
-    productVariant = productVariant || {};
-    this.id = productVariant.id;
-    this.price = productVariant.price;
-    this.ean = productVariant.ean;
-    this.sku = productVariant.sku;
-    this.upc = productVariant.upc;
-    this.weight = productVariant.weight;
-    this.width = productVariant.width;
-    this.height = productVariant.height;
-    this.depth = productVariant.depth;
-    this.low_level_stock = productVariant.low_level_stock;
-    this.stock = productVariant.stock;
-    this.operation = productVariant.operation || null;
-    this.change_by = productVariant.change_by || null;
-    this.amount = productVariant.amount || null;
-    this.track_stock = productVariant.ttrack_stock || false;
-    this.product_variant_attributes = productVariant.product_variant_attributes || [];
-    this.options = new Array<Options>();
-    this.images = [];
+  product_variant_attributes: Array<ProductVariantAttributes>;
+  constructor(variant?) {
+    variant = variant || {};
+    this.id = variant.id;
+    this.price = variant.price;
+    this.ean = variant.ean;
+    this.sku = variant.sku;
+    this.upc = variant.upc;
+    this.weight = variant.weight;
+    this.width = variant.width;
+    this.height = variant.height;
+    this.depth = variant.depth;
+    this.low_level_stock = variant.low_level_stock;
+    this.stock = variant.stock;
+    this.operation = variant.operation || null;
+    this.change_by = variant.change_by || null;
+    this.amount = variant.amount || null;
+    this.track_stock = variant.ttrack_stock || false;
+    this.product_variant_attributes = variant.product_variant_attributes || [];
+    this.product_variant_attributes = new Array<ProductVariantAttributes>();
+    this.images = variant.images || new Array<Image>();
   }
 }
-
-export class Options {
+export class ProductVariant {
+  supplier_id: number;
+  variants: Variant[];
+  constructor(productVariant?) {
+    this.supplier_id = productVariant.supplier_id || -1;
+    this.variants = new Array<Variant>();
+  }
+}
+export class ProductVariantAttributes {
   option_id: number;
   option_set_id: number;
-  // option_rule_id: number;
   constructor(optionValue?) {
     optionValue = optionValue || {};
     this.option_set_id = optionValue.option_set_id || -1;
     this.option_id = optionValue.option_id || -1;
-    // this.option_rule_id = optionValue.option_rule_id || -1;
   }
 }
-
-export class OptionSet {
+export class ProductSupplierAttribute {
   id: number;
-  optionValue: OptionValue;
-  constructor(optionSet?) {
-    optionSet = optionSet || {};
-    this.id = optionSet.id;
-    this.optionValue = new OptionValue(optionSet.optionValue);
-  }
-}
-export class OptionValue {
-  id: number;
+  amount: number;
+  operation: number;
+  changed_by: number;
+  option_id: number;
   option_set_id: number;
-  constructor(optionValue?) {
-    optionValue = optionValue || {};
-    this.option_set_id = optionValue.option_set_id || -1;
-    this.id = optionValue.id || -1;
+  constructor(productSupplierAttribute?) {
+    this.id = productSupplierAttribute.id || -1;
+    this.amount = productSupplierAttribute.amount || 0;
+    this.operation = productSupplierAttribute.operation || 1;
+    this.changed_by = productSupplierAttribute.changed_by || 1;
+    this.option_id = productSupplierAttribute.option_id || -1;
+    this.option_set_id = productSupplierAttribute.option_set_id || -1;
   }
 }
-
-/*
-
-declare module namespace {
-
-    export interface Option {
-        option_set_id: number;
-        option_id: number;
-        option_rule_id: number;
-    }
-
-    export interface ProductVariant {
-        ean: number;
-        sku: number;
-        upc: number;
-        weight: number;
-        width: number;
-        height: number;
-        depth: number;
-        image: string;
-        content_type: string;
-        options: Option[];
-    }
-
-    export interface Supplier {
-        id: string;
-        price: number;
-        ean: number;
-        sku: number;
-        upc: number;
-        weight: number;
-        width: number;
-        height: number;
-        depth: number;
-        image: string;
-        content_type: string;
-        productVariants: ProductVariant[];
-    }
-
-    export interface RootObject {
-        name: string;
-        short_description: string;
-        long_description: string;
-        brand_id: number;
-        category_id: string;
-        tax_id: string;
-        suppliers: Supplier[];
-    }
-
-} */

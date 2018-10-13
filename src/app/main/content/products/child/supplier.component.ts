@@ -34,6 +34,7 @@ import { MatDialogRef } from "@angular/material";
 })
 export class SupplierFormComponent implements OnInit {
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
+  @Input()
   product: Product;
   supplier: Supplier;
   images: Image[];
@@ -76,7 +77,7 @@ export class SupplierFormComponent implements OnInit {
     private detectChanges: DetectChangesService,
     private dialog: MatDialog
   ) {
-    this.product = new Product();
+    // this.product = new Product();
     this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
     this.images = new Array<Image>();
