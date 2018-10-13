@@ -163,7 +163,7 @@ export class OptionAndSkusComponent implements OnInit {
   saveOptionSetAndValue(option_set_id, option, operation, change_by, amount) {
     if (change_by === undefined || operation === undefined || amount === "") {
       this.snotifyService.warning(
-        "Please select Opration, Change by and and add amount",
+        "Please Select Option, Opration, Change by and add amount",
         "Warning !"
       );
       return;
@@ -236,12 +236,35 @@ export class OptionAndSkusComponent implements OnInit {
     );
   }
 
-  editOptionSetValue(
-    option_id: number,
-    operation: number,
-    change_by: number,
-    amount: number
-  ) {}
+  editOptionSetValue(ps_id: number, optionSet_id: any, option_id:number, operation: number, change_by: number, amount: number) {
+    this.spinnerService.requestInProcess(true);
+    let optionValue = {
+      supplier_id: this.supplier_id,
+      option_set_id: optionSet_id,
+      option_id: option_id,
+      operation: operation,
+      changed_by: change_by,
+      amount: amount
+    }
+    this.productService.updateOptionValue(this.product_id, ps_id, optionValue).subscribe(
+      (res: any) => {
+        this.optionSetWithValue = {};
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        localStorage.removeItem("optionSet");
+        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
+        this.detectChangesService.notifyOther({
+          value: this.optionSet,
+          option: "optionsAdded"
+        });
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      });
+  }
 
   deleteOptionSetValue(ps_id: number) {
     this.spinnerService.requestInProcess(true);
