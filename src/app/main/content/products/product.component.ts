@@ -96,6 +96,8 @@ export class ProductComponent implements OnInit, OnDestroy {
             //     value: res.res.data
             //   });
             this.product = new Product(res.res.data);
+            console.log(res.res.data);
+            this.onProductSaved(obj); // for edit or after add product
           }
           this.spinnerService.requestInProcess(false);
         },
@@ -104,7 +106,6 @@ export class ProductComponent implements OnInit, OnDestroy {
           let e = errors.error;
           e = JSON.stringify(e.error);
           this.snotifyService.error(e, "Error !");
-          // this.notificationServiceBus.launchNotification(true, e);
         }
       );
   }

@@ -3,7 +3,7 @@ export class Product {
   name: string;
   short_description: string;
   long_description: string;
-  category_id: number = -1;
+  category_id: number;
   tax_id: number;
   brand_id: number;
   supplier: Supplier;
@@ -12,6 +12,11 @@ export class Product {
     product = product || {};
     this.id = product.id || -1;
     this.name = product.name || "";
+    this.short_description = product.short_description || "";
+    this.long_description = product.long_description || "";
+    this.category_id = product.category_id || -1;
+    this.tax_id = product.tax_id || -1;
+    this.brand_id = product.brand_id || -1;
     this.supplier = product.supplier || new Supplier();
     this.tags = product.tags || [];
   }

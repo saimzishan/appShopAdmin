@@ -36,6 +36,8 @@ export class SupplierFormComponent implements OnInit {
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   @Input()
   product: Product;
+  @Input()
+  pageType: string;
   supplier: Supplier;
   images: Image[];
   lImages: any[] = [];
@@ -62,7 +64,6 @@ export class SupplierFormComponent implements OnInit {
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
   changesSubscription;
-  pageType = "new";
   baseURL = GLOBAL.USER_IMAGE_API;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   ps_id: any;
@@ -77,93 +78,20 @@ export class SupplierFormComponent implements OnInit {
     private detectChanges: DetectChangesService,
     private dialog: MatDialog
   ) {
-    // this.product = new Product();
     this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
     this.images = new Array<Image>();
     this.image = new Image();
     this.bluckPrice = new BluckPrice();
-    this.changesSubscription = this.detectChanges.notifyObservable$.subscribe(
-      res => {
-        this.callRelatedFunctions(res);
-      }
-    );
-  }
-
-  ngOnInit() {
-    this.index();
+    this.getAllCategories();
     this.getSupplier();
     this.getTaxes();
     this.getBrands();
-    if (this.pageType === "new") {
-      this.init();
-    }
-  }
-  callRelatedFunctions(res) {
-    if (res.hasOwnProperty("option")) {
-      switch (res.option) {
-        case "editProduct":
-          setTimeout(() => {
-            this.pageType = "edit";
-          }, 1);
-          this.deleteButton = true;
-          this.product = this.supplier = res.value;
-          this.product_id = res.value.product_id;
-          this.ps_id = res.value.id;
-          this.product.brand_id = res.value.brand.id;
-          this.category_id = this.product.category_id =
-            res.value.category[0].id;
-          this.parentCat = res.value.category[0].name;
-          this.supplier.buying_price = res.value.buyingPrice;
-          this.supplier.market_price = res.value.marketPrice;
-          this.supplier.id = res.value.supplier_id;
-          this.supplier.low_level_stock = res.value.lowLevelStock;
-          this.supplier.track_stock = res.value.trackStock;
-          this.product.tax_id = res.value.tax.id;
-          this.bluckPrices = res.value.bulk_prices;
-          this.supplier.class = [];
-          for (const iterator of res.value.product_classes) {
-            let id = "";
-            switch (iterator.class) {
-              case "slider":
-                id = "1";
-                break;
-              case "featured":
-                id = "2";
-                break;
-              case "on-sale":
-                id = "3";
-                break;
-              case "new-arrival":
-                id = "4";
-                break;
-              case "promoted":
-                id = "5";
-                break;
-              case "add-on":
-                id = "6";
-                break;
-
-              default:
-                break;
-            }
-            this.supplier.class.push(id);
-          }
-          break;
-      }
-    }
   }
 
-  init() {
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.product = current_product;
-      this.supplier = current_product.supplier;
-      this.displayImage = localStorage.getItem("current_product_sp_images");
-      this.displayImage = JSON.parse(this.displayImage);
-      this.displayImage = this.displayImage[0];
-      this.onProductSaved(current_product);
+  ngOnInit() {
+    if (this.pageType === "edit") {
+      this.bluckPrices = this.product.supplier.bulk_prices;
     }
   }
 
@@ -279,9 +207,9 @@ export class SupplierFormComponent implements OnInit {
     return tempNode;
   }
 
-  index() {
+  getAllCategories() {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.index().subscribe(
+    this.categoriesService.getCategories().subscribe(
       (res: any) => {
         if (!res.status) {
           this.categories = res.res.data;
@@ -326,7 +254,6 @@ export class SupplierFormComponent implements OnInit {
         this.addPicture(iterator);
       }
     }
-    this.product.supplier = this.supplier;
     this.product.supplier.images = this.lImages;
     this.product.category_id = this.category_id;
     this.product.supplier.bulk_prices = this.bluckPrices;
@@ -337,20 +264,15 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
-        this.product.id = res.res.data.id;
-        delete this.product.supplier.images;
-        let obj = res.res.data;
-        obj.supplier = this.product.supplier;
-        localStorage.setItem("current_product", JSON.stringify(obj));
-        localStorage.setItem(
-          "current_product_sp_images",
-          JSON.stringify(res.res.data.images)
-        );
-        this.init();
-        this.detectChanges.notifyOther({
-          option: "addproduct",
-          value: res.res.data
-        });
+        let temp = {
+          _p_id: res.res.data.id,
+          _s_id: this.product.supplier.id
+        };
+        localStorage.setItem("_saveP", JSON.stringify(temp));
+        // this.detectChanges.notifyOther({
+        //   option: "addproduct",
+        //   value: res.res.data
+        // });
         // this.router.navigate(["/products"]);
       },
       errors => {

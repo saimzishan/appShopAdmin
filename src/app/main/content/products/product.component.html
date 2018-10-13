@@ -55,39 +55,38 @@
             <div class="content">
 
                 <div class="tab-content p-24" fusePerfectScrollbar>
+                    <ng-container *ngIf="product">
+                        <mat-accordion>
+                            <mat-expansion-panel [expanded]="ps_panelOpenState">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Product Details & Supplier
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-product-supplier-form [product]='product' [pageType]="pageType" (productSaved)="onProductSaved($event)"
+                                    style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
+                            </mat-expansion-panel>
+                            
+                            <mat-expansion-panel [disabled]="enabledChild">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Tags
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <app-tage></app-tage>
+                            </mat-expansion-panel>
+                            <!--<mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Option
+                                    </mat-panel-title>
 
-                    <mat-accordion>
-                        <mat-expansion-panel [expanded]="ps_panelOpenState">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Product Details & Supplier
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
+                                </mat-expansion-panel-header>
+                                <app-option-and-sku-form>
+                                </app-option-and-sku-form>
+                            </mat-expansion-panel>
 
-                            <app-product-supplier-form [product]='product' (productSaved)="onProductSaved($event)"
-                                style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
-                        </mat-expansion-panel>
-                        <!--  -->
-                        <mat-expansion-panel [disabled]="enabledChild">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Tags
-                                </mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <app-tage [selectedTags]="product.tags" [pageType]="pageType"></app-tage>
-                        </mat-expansion-panel>
-                        <!-- <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title>
-                                    Option
-                                </mat-panel-title>
-
-                            </mat-expansion-panel-header>
-                            <app-option-and-sku-form>
-                            </app-option-and-sku-form>
-                        </mat-expansion-panel>
-
-                        <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
+                            <!-- <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Variants
@@ -97,9 +96,8 @@
                             <app-variant-form [option_with_value]="[]" [supplier_id]="supplier_id" [product_id]="product_id">
                             </app-variant-form>
                         </mat-expansion-panel> -->
-
-                    </mat-accordion>
-
+                        </mat-accordion>
+                    </ng-container>
                 </div>
 
 

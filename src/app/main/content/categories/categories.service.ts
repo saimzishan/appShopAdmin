@@ -1,6 +1,10 @@
 import { GLOBAL } from "./../../../shared/globel";
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  Resolve,
+  RouterStateSnapshot
+} from "@angular/router";
 import { Observable } from "rxjs/Observable";
 import { HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
@@ -42,7 +46,7 @@ export class CategoriesService extends ApiService implements Resolve<any> {
     });
   }
 
-  index(): Observable<Object> {
+  getCategories(): Observable<Object> {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
