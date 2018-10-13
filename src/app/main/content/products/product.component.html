@@ -55,9 +55,7 @@
             <div class="content">
 
                 <div class="tab-content p-24" fusePerfectScrollbar>
-
                     <ng-container *ngIf="product">
-
                         <mat-accordion>
                             <mat-expansion-panel [expanded]="ps_panelOpenState">
                                 <mat-expansion-panel-header>
@@ -65,11 +63,10 @@
                                         Product Details & Supplier
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
-
                                 <app-product-supplier-form [product]='product' [pageType]="pageType" (productSaved)="onProductSaved($event)"
                                     style="background-color: rgb(243, 240, 240)"></app-product-supplier-form>
                             </mat-expansion-panel>
-                            <!--  -->
+                            
                             <mat-expansion-panel [disabled]="enabledChild">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
@@ -78,7 +75,7 @@
                                 </mat-expansion-panel-header>
                                 <app-tage></app-tage>
                             </mat-expansion-panel>
-                            <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
+                            <!--<mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         Option
@@ -99,10 +96,8 @@
                             <app-variant-form [option_with_value]="[]" [supplier_id]="supplier_id" [product_id]="product_id">
                             </app-variant-form>
                         </mat-expansion-panel> -->
-
                         </mat-accordion>
                     </ng-container>
-
                 </div>
 
 

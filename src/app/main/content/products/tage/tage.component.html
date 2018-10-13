@@ -7,15 +7,15 @@
 
 
             <div class="row">
-                <mat-selection-list name="class" [(ngModel)]="tagId">
-                    <mat-list-option style="display: inline-block !important;" *ngFor="let tag of tags" value="{{tag.id}}"
+                <mat-selection-list name="class" [(ngModel)]="selectedTags">
+                    <mat-list-option style="display: inline-block !important;" *ngFor="let tag of tags" [value]="tag.id"
                         [selected]='tag.selected'>{{tag.name}}</mat-list-option>
                 </mat-selection-list>
             </div>
             <br>
             <div class="row">
                 <div class="col-md-12" style="text-align: right;">
-                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" (click)="put()"
+                    <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" (click)="updateProductTags()"
                         style="background-color: #1E8ACA !important ; color: #ffffff !important">
                         <span>Add Tags</span>
                     </button>

@@ -23,6 +23,7 @@ import { DropzoneModule } from "ngx-dropzone-wrapper";
 import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
 import { TageComponent } from "./tage/tage.component";
 import { GLOBAL } from "../../../shared/globel";
+import { TagsService } from "../tags/tags.service";
 
 const routes = [
   {
@@ -38,11 +39,6 @@ const routes = [
   {
     canActivate: [AuthGuard],
     path: ":id/:supplier_id",
-    component: ProductComponent
-  },
-  {
-    canActivate: [AuthGuard],
-    path: ":id/:handle",
     component: ProductComponent
   }
 ];
@@ -70,6 +66,7 @@ const routes = [
     ProductService,
     CategoriesService,
     DetectChangesService,
+    TagsService,
     {
       provide: DROPZONE_CONFIG,
       useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG
