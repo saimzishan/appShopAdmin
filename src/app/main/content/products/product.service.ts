@@ -462,7 +462,7 @@ export class ProductService extends ApiService {
         GLOBAL.USER_API +
           "productVariants/" +
           product_id +
-          "?ps_variant& psv_id=" +
+          "?ps_variant&psv_id=" +
           variant.id,
         variant,
         httpOptions
