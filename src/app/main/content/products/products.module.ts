@@ -8,7 +8,6 @@ import { ProductComponent } from "./product.component";
 import { ProductsService } from "./products.service";
 import { ProductService } from "./product.service";
 import { FileDropModule } from "ngx-file-drop";
-import { FuseOptionFormDialogComponent } from "./sku-form/option-form.component";
 // import {FileDropModule} from 'ngx-file-drop';
 // import {TreeModule} from 'angular-tree-component';
 import { AuthGuard } from "../../../guard/auth.guard";
@@ -55,7 +54,6 @@ const routes = [
   declarations: [
     ProductsComponent,
     ProductComponent,
-    FuseOptionFormDialogComponent,
     SupplierFormComponent,
     OptionAndSkusComponent,
     VariantComponent,
@@ -72,6 +70,6 @@ const routes = [
       useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG
     }
   ],
-  entryComponents: [FuseOptionFormDialogComponent]
+  entryComponents: []
 })
 export class ProductsModule {}
