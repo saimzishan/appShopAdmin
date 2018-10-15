@@ -4,18 +4,22 @@ import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import { ProductVariant, Image } from "../../models/product.model";
+import { ProductVariant, Image, Variant } from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
 import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
 import { MatDialogRef, MatDialog } from "@angular/material";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-variant-form",
   templateUrl: "./variant.component.html"
 })
 export class VariantComponent implements OnInit {
+  @Input() productVariants: ProductVariant;
+  @Input() pageType: string;
+  variant: Variant;
+
   option_set_id = [];
   optionSets: any;
   optionSetWithValue: {};
@@ -42,9 +46,10 @@ export class VariantComponent implements OnInit {
   lImages: any = [];
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
-  pageType: string;
   productID: number;
+  supplierID: number;
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
+  sub: any;
 
   constructor(
     private productService: ProductService,
@@ -52,21 +57,33 @@ export class VariantComponent implements OnInit {
     private snotifyService: SnotifyService,
     private dialog: MatDialog,
     private router: Router,
-    private detectChangesService: DetectChangesService
+    private route: ActivatedRoute
   ) {
     this.images = new Array<Image>();
     this.image = new Image();
-    this.pageType = "new";
-    this.product_variant = new ProductVariant();
-    this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
-      res => {
-        this.callRelatedFunctions(res);
-      }
-    );
+    this.variant = new Variant();
   }
 
   ngOnInit() {
-    this.init();
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === 'edit') {
+        product_id = params['id'] || '';
+        supplier_id = params['supplier_id'] || '';
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      } else if (this.pageType === 'new') {
+        let ps_ids: any = localStorage.getItem('_saveP');
+        ps_ids = JSON.parse(ps_ids);
+        product_id = ps_ids._p_id;
+        supplier_id = ps_ids._s_id;
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      }
+    });
+    this.converter(this.productVariants.variants);
+    // this.init();
   }
   init() {
     let optionSet: any = localStorage.getItem("optionSet");
@@ -91,16 +108,14 @@ export class VariantComponent implements OnInit {
           break;
         case "editProduct":
           this.productID = res.value.product_id;
-          this.edit(res.value.product_variants);
+          // this.edit(res.value.product_variants);
           break;
       }
     }
   }
 
-  edit(variantsObj) {
-    this.pageType = "edit";
-    this.variants = variantsObj;
-    this.variants.forEach(variant => {
+  converter(variants: Variant[]) {
+    variants.forEach(variant => {
       if (variant.operation === 'none') {
         variant.operation = 1;
       } else if (variant.operation === 'add') {
@@ -116,9 +131,11 @@ export class VariantComponent implements OnInit {
     });
     this.isAddorEditSKU = true;
   }
-  editSku(variant) {
-    this.product_variant = variant;
+
+  selectVariant(selectedVariant: Variant) {
+    this.variant = selectedVariant;
   }
+
   setOptions(obj) {
     this.option_with_value = obj;
   }
@@ -167,6 +184,7 @@ export class VariantComponent implements OnInit {
     let obj = { option_id: id, option_set_id: p_id };
     this.obj.push(obj);
   }
+  
   mangeOption(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
@@ -189,11 +207,11 @@ export class VariantComponent implements OnInit {
       }
     }
 
-    this.variants.push(new ProductVariant(this.product_variant));
-    this.variants[this.variants.length - 1].options = this.obj;
-    this.variants[this.variants.length - 1].images = this.lImages;
+    this.productVariants.variants.push(new Variant(this.variant));
+    this.productVariants.variants[this.productVariants.variants.length - 1].product_variant_attributes = this.obj;
+    this.productVariants.variants[this.productVariants.variants.length - 1].images = this.lImages;
     this.lImages = new Array<Image>();
-    this.product_variant.sku = "";
+    // this.product_variant.sku = "";
     this.obj = [];
     this.resetDropzone();
   }
@@ -204,7 +222,7 @@ export class VariantComponent implements OnInit {
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-    if (!this.product_variant.amount) {
+    if (!this.variant.amount) {
       this.snotifyService.warning("Please Enter Amount");
       return;
     }
@@ -221,19 +239,19 @@ export class VariantComponent implements OnInit {
   }
 
   updateVariant() {
-    delete this.product_variant.product_variant_attributes;
+    delete this.variant.product_variant_attributes;
     let tmpImages = [];
     if (this.lImages.length === 0) {
-      tmpImages = this.product_variant.images;
+      tmpImages = this.variant.images;
     }
-    this.product_variant.images = this.lImages;
-    this.productService.updateProductVariant(this.productID, this.product_variant).subscribe(
+    this.variant.images = this.lImages;
+    this.productService.updateProductVariant(this.productID, this.variant).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
-        if (this.product_variant.images.length > 0){
+        if (this.variant.images.length > 0){
           this.router.navigate(['/products']);
         }
-        this.product_variant.images = tmpImages;
+        this.variant.images = tmpImages;
         this.spinnerService.requestInProcess(false);
       },
       errors => {
@@ -292,9 +310,9 @@ export class VariantComponent implements OnInit {
     this.productService.deleteProductVariant(this.productID, variant_id).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
-        let index = this.variants.findIndex(variant => variant.id === variant_id);
-        this.variants.splice(index, 1);
-        this.product_variant = new ProductVariant();
+        let index = this.productVariants.variants.findIndex(variant => variant.id === variant_id);
+        this.productVariants.variants.splice(index, 1);
+        this.variant = new Variant();
         this.spinnerService.requestInProcess(false);
       },
       errors => {
@@ -352,27 +370,27 @@ export class VariantComponent implements OnInit {
     this.confirmDialogRef.componentInstance.confirmMessage =
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.spinnerService.requestInProcess(true);
-        this.productService.deleteProductVariantImage(+this.product_variant.id, image_id).subscribe(
-          res => {
-            this.spinnerService.requestInProcess(false);
-            if (!res.error) {
-              this.snotifyService.success("Deleted successfully !", "Success");
-              const result = this.product_variant.images.findIndex(
-                image => image.id === image_id
-              );
-              if (result !== -1) {
-                this.product_variant.images.splice(result, 1);
-              }
-            }
-          },
-          error => {
-            this.spinnerService.requestInProcess(false);
-            console.log(error);
-          }
-        );
-      }
+      // if (result) {
+      //   this.spinnerService.requestInProcess(true);
+      //   this.productService.deleteProductVariantImage(+this.product_variant.id, image_id).subscribe(
+      //     res => {
+      //       this.spinnerService.requestInProcess(false);
+      //       if (!res.error) {
+      //         this.snotifyService.success("Deleted successfully !", "Success");
+      //         const result = this.product_variant.images.findIndex(
+      //           image => image.id === image_id
+      //         );
+      //         if (result !== -1) {
+      //           this.product_variant.images.splice(result, 1);
+      //         }
+      //       }
+      //     },
+      //     error => {
+      //       this.spinnerService.requestInProcess(false);
+      //       console.log(error);
+      //     }
+      //   );
+      // }
       this.confirmDialogRef = null;
     });
   }

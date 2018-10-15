@@ -131,8 +131,8 @@ export class Variant {
     this.change_by = variant.change_by || null;
     this.amount = variant.amount || null;
     this.track_stock = variant.ttrack_stock || false;
-    this.product_variant_attributes = variant.product_variant_attributes || [];
-    this.product_variant_attributes = new Array<ProductVariantAttributes>();
+    this.product_variant_attributes = variant.product_variant_attributes ||
+      new Array<ProductVariantAttributes>();
     this.images = variant.images || new Array<Image>();
   }
 }

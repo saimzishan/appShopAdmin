@@ -149,7 +149,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   removeProduct() {
     this.spinnerService.requestInProcess(true);
-    this.productService.deleteProduct(+this.tempP.id).subscribe(
+    this.productService.deleteProduct(+this.params.id).subscribe(
       (res: any) => {
         let e = res.res.message;
         this.snotifyService.success(e, "Success !");

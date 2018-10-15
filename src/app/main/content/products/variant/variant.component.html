@@ -25,12 +25,11 @@
                         </td>
                     </tr>
                 </ng-container>
-
             </tbody>
         </table>
         <div class="row" style="margin-bottom:10px">
             <div class="col-md-12">
-                <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Sku</button>
+                <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Variant</button>
                 <button class="btn btn-info">Generate Sku</button>
             </div>
 
@@ -53,7 +52,7 @@
 
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="sku" [(ngModel)]="product_variant.sku" placeholder="SKU"
+                                    <input matInput name="sku" [(ngModel)]="variant.sku" placeholder="SKU"
                                         required>
                                 </mat-form-field>
                             </div>
@@ -64,32 +63,32 @@
                             </div> -->
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="weight" [(ngModel)]="product_variant.weight" min="0"
+                                    <input matInput name="weight" [(ngModel)]="variant.weight" min="0"
                                         placeholder="Weight (kg)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="depth" [(ngModel)]="product_variant.depth" min="0"
+                                    <input matInput name="depth" [(ngModel)]="variant.depth" min="0"
                                         placeholder="Depth (mm)">
                                 </mat-form-field>
                             </div>
 
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="width" [(ngModel)]="product_variant.width" min="0"
+                                    <input matInput name="width" [(ngModel)]="variant.width" min="0"
                                         placeholder="Width (mm)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="height" [(ngModel)]="product_variant.height" min="0"
+                                    <input matInput name="height" [(ngModel)]="variant.height" min="0"
                                         placeholder="Height (mm)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field>
-                                    <mat-select placeholder="Operation" name="operation" [(ngModel)]="product_variant.operation"
+                                    <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation"
                                         style="margin-top: 5px;">
                                         <mat-option [value]="2">Add</mat-option>
                                         <mat-option [value]="3">Subtract</mat-option>
@@ -98,7 +97,7 @@
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field>
-                                    <mat-select placeholder="Change by" name="change_by" [(ngModel)]="product_variant.change_by"
+                                    <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.change_by"
                                         style="margin-top: 5px;">
                                         <mat-option [value]="1">Absolute</mat-option>
                                         <mat-option [value]="2">Percentage</mat-option>
@@ -107,25 +106,25 @@
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="product_variant.amount"
+                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="variant.amount"
                                          min="0" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput #stock="ngModel" name="stock" [(ngModel)]="product_variant.stock"
+                                    <input matInput #stock="ngModel" name="stock" [(ngModel)]="variant.stock"
                                         placeholder="Stock" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="product_variant.low_level_stock"
+                                    <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="variant.low_level_stock"
                                         placeholder="Low level Stock">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1" style="margin-top: 20px;">
                                 <!-- <mat-form-field class="w-100-p"> -->
-                                <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product_variant.track_stock">Track
+                                <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="variant.track_stock">Track
                                     Stock</mat-checkbox>
                                 <!-- </mat-form-field> -->
                             </div>
@@ -136,7 +135,9 @@
                                         add
                                     </i>
                                 </button>
-                                <button *ngIf="pageType === 'edit'" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">Save</button>
+                                <button *ngIf="pageType === 'edit'" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">
+                                    Save
+                                </button>
                             </div>
                         </div>
                     </mat-card-content>
@@ -154,7 +155,7 @@
                     <br>
                     <div class="row" style="text-align:center">
                     
-                        <ng-container *ngFor="let image of product_variant.images">
+                        <ng-container *ngFor="let image of variant.images">
                             <div class="col-md-2">
                                 <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
                                 <br>
@@ -171,7 +172,7 @@
 
                 </form>
 
-                <table class="table" *ngIf="variants.length > 0">
+                <table class="table" *ngIf="productVariants.variants.length > 0">
                     <thead>
                         <tr>
                             <th>Sku</th>
@@ -189,17 +190,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <ng-container *ngFor="let variant of variants">
-                            <tr style="cursor:pointer" (click)="editSku(variant)">
+                        <ng-container *ngFor="let variant of productVariants.variants">
+                            <tr style="cursor:pointer" (click)="selectVariant(variant)">
                                 <td>{{variant.sku}}</td>
                                 <td>{{variant.weight}}</td>
                                 <td>{{variant.depth}}</td>
                                 <td>{{variant.width}}</td>
                                 <td>{{variant.height}}</td>
-                                <td>{{(variant.operation) === 2 ? 'Add' :(variant.operation) === 3?
-                                    'Subtract' : 'Null'}}</td>
-                                <td>{{(variant.change_by) === 1 ? 'Absolute' :(variant.change_by) === 2?
-                                    'Percentage' : 'Null'}}</td>
+                                <td>{{variant.operation === 2 ? 'Add' :variant.operation === 3?
+                                    'Subtract' : 'None'}}</td>
+                                <td>{{variant.change_by === 1 ? 'Absolute' :variant.change_by === 2?
+                                    'Percentage' : 'None'}}</td>
                                 <td>{{variant.amount}}</td>
                                 <td>{{variant.stock}}</td>
                                 <td>{{variant.low_level_stock}}</td>
