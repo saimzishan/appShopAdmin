@@ -1,5 +1,4 @@
 import { GLOBAL } from "./../../../../shared/globel";
-import { DetectChangesService } from "./../../../../shared/detect-changes.services";
 import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
@@ -10,35 +9,35 @@ import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
 import { MatDialogRef, MatDialog } from "@angular/material";
 import { Router, ActivatedRoute } from "@angular/router";
+import { Option } from "../../models/option.model";
 
 @Component({
   selector: "app-variant-form",
-  templateUrl: "./variant.component.html"
+  templateUrl: "./variant.component.html",
+  styleUrls: ["./variant.component.scss"]
 })
 export class VariantComponent implements OnInit {
   @Input() productVariants: ProductVariant;
   @Input() pageType: string;
+  @Input() ps_id: number;
   variant: Variant;
+  productID: number;
+  supplierID: number;
+  baseURL = GLOBAL.USER_IMAGE_API;
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
+  sub: any;
+  productOptionSetAndValue: Option[];
 
   option_set_id = [];
   optionSets: any;
   optionSetWithValue: {};
   @Input()
-  product_id;
-  @Input()
-  supplier_id;
-  @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
-  product_variant: ProductVariant;
-  baseURL = GLOBAL.USER_IMAGE_API;
   isAddorEditSKU = false;
-  productVariant: ProductVariant[] = new Array<ProductVariant>();
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-  variants: ProductVariant[] = new Array<ProductVariant>();
-  changesSubscription;
   option_skus;
   enableOptions = false;
-  obj = [];
+  product_variant_attributes = [];
   supplierId = -1;
   productId = -1;
   images: Image[];
@@ -46,11 +45,7 @@ export class VariantComponent implements OnInit {
   lImages: any = [];
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
-  productID: number;
-  supplierID: number;
-  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
-  sub: any;
-
+  
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -62,27 +57,11 @@ export class VariantComponent implements OnInit {
     this.images = new Array<Image>();
     this.image = new Image();
     this.variant = new Variant();
+    this.productOptionSetAndValue = new Array<Option>();
   }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      let product_id;
-      let supplier_id;
-      if (this.pageType === 'edit') {
-        product_id = params['id'] || '';
-        supplier_id = params['supplier_id'] || '';
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
-      } else if (this.pageType === 'new') {
-        let ps_ids: any = localStorage.getItem('_saveP');
-        ps_ids = JSON.parse(ps_ids);
-        product_id = ps_ids._p_id;
-        supplier_id = ps_ids._s_id;
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
-      }
-    });
-    this.converter(this.productVariants.variants);
+    this.setProductSupplierIds();
     // this.init();
   }
   init() {
@@ -92,14 +71,30 @@ export class VariantComponent implements OnInit {
       this.setOptions(optionSet);
     }
 
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.product_variant = current_product.supplier;
-      this.supplierId = current_product.supplier.id;
-      this.productId = current_product.id;
-    }
+    // let current_product: any = localStorage.getItem("current_product");
+    // if (current_product) {
+    //   current_product = JSON.parse(current_product);
+    //   this.product_variant = current_product.supplier;
+    //   this.supplierId = current_product.supplier.id;
+    //   this.productId = current_product.id;
+    // }
   }
+
+  getProductOptionSetWithValue() {
+    this.spinnerService.requestInProcess(true);
+    this.productService.getProductOptionSetWithValue(this.productID, this.supplierID).subscribe(
+      (res: any) => {
+        this.productOptionSetAndValue = res.res.data;
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      });
+  }
+
   callRelatedFunctions(res) {
     if (res.hasOwnProperty("option")) {
       switch (res.option) {
@@ -115,20 +110,22 @@ export class VariantComponent implements OnInit {
   }
 
   converter(variants: Variant[]) {
-    variants.forEach(variant => {
-      if (variant.operation === 'none') {
-        variant.operation = 1;
-      } else if (variant.operation === 'add') {
-        variant.operation = 2;
-      } else if (variant.operation === 'subtract') {
-        variant.operation = 3;
-      }
-      if (variant.change_by === 'absolute') {
-        variant.change_by = 1;
-      } else if (variant.change_by === 'percentage') {
-        variant.change_by = 2;
-      }
-    });
+    if (variants.length > 0) {
+      variants.forEach(variant => {
+        if (variant.operation === 'none') {
+          variant.operation = 1;
+        } else if (variant.operation === 'add') {
+          variant.operation = 2;
+        } else if (variant.operation === 'subtract') {
+          variant.operation = 3;
+        }
+        if (variant.change_by === 'absolute') {
+          variant.change_by = 1;
+        } else if (variant.change_by === 'percentage') {
+          variant.change_by = 2;
+        }
+      });
+    }
     this.isAddorEditSKU = true;
   }
 
@@ -139,9 +136,10 @@ export class VariantComponent implements OnInit {
   setOptions(obj) {
     this.option_with_value = obj;
   }
-  getOption(id) {
-    const res = this.option_with_value.find(
-      option => option.option_set_id === id
+
+  getOptions(id: number) {
+    const res = this.productOptionSetAndValue.find(
+      optionSet => optionSet.id === id
     );
     if (res) {
       return res.options;
@@ -153,13 +151,12 @@ export class VariantComponent implements OnInit {
   }
 
   seletOption(id) {
-    this.option_skus = this.getOption(id);
+    this.option_skus = this.getOptions(id);
     this.enableOptions = true;
   }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
-      // this.supplier.upc.
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
@@ -169,22 +166,23 @@ export class VariantComponent implements OnInit {
     });
   }
 
-  addOptionSet(id, p_id) {
-    let index: any = this.obj
+  addOptionSet(option_id, option_set_id) {
+
+    let index: any = this.product_variant_attributes
       .map(function(obj, index) {
-        if (obj.option_set_id === p_id) {
+        if (obj.option_set_id === option_set_id) {
           return index;
         }
       })
       .filter(isFinite);
 
     if (index.length > 0) {
-      this.obj.splice(index[0], 1);
+      this.product_variant_attributes.splice(index[0], 1);
     }
-    let obj = { option_id: id, option_set_id: p_id };
-    this.obj.push(obj);
+    let pv_attribute = { option_id: option_id, option_set_id: option_set_id };
+    this.product_variant_attributes.push(pv_attribute);
   }
-  
+
   mangeOption(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
@@ -192,7 +190,7 @@ export class VariantComponent implements OnInit {
       return;
     }
 
-    if (this.obj.length === 0) {
+    if (this.product_variant_attributes.length === 0) {
       this.snotifyService.warning("Please select option", "Warning !");
       return;
     }
@@ -208,11 +206,11 @@ export class VariantComponent implements OnInit {
     }
 
     this.productVariants.variants.push(new Variant(this.variant));
-    this.productVariants.variants[this.productVariants.variants.length - 1].product_variant_attributes = this.obj;
+    this.productVariants.variants[this.productVariants.variants.length - 1].product_variant_attributes = this.product_variant_attributes;
     this.productVariants.variants[this.productVariants.variants.length - 1].images = this.lImages;
     this.lImages = new Array<Image>();
     // this.product_variant.sku = "";
-    this.obj = [];
+    this.product_variant_attributes = [];
     this.resetDropzone();
   }
 
@@ -263,22 +261,19 @@ export class VariantComponent implements OnInit {
   }
 
   saveProduct() {
-    if (this.variants.length === 0) {
+    if (this.productVariants.variants.length === 0) {
       this.snotifyService.warning("Please add option", "Warning !");
       return;
     }
 
-    let objct;
-    this.productVariant = this.variants;
-    // this.productVariant[0].options = this.obj;
-    objct = {
-      supplier_id: this.supplierId,
-      id: this.productId,
-      variants: this.productVariant
-    };
+    // objct = {
+    //   supplier_id: this.supplierId,
+    //   id: this.productId,
+    //   variants: this.productVariant
+    // };
     this.spinnerService.requestInProcess(true);
 
-    this.productService.saveProduct(objct, "ps_variants").subscribe(
+    this.productService.saveProductVariants(this.productVariants, this.ps_id, "ps_variants").subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
@@ -397,6 +392,30 @@ export class VariantComponent implements OnInit {
 
   resetDropzone(): void {
     this.directiveRef.reset();
+  }
+
+  setProductSupplierIds() {
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === 'edit') {
+        product_id = params['id'] || '';
+        supplier_id = params['supplier_id'] || '';
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+        this.converter(this.productVariants.variants);
+      } else if (this.pageType === 'new') {
+        let ps_ids: any = localStorage.getItem('_saveP');
+        if (ps_ids) {
+          ps_ids = JSON.parse(ps_ids);
+          product_id = ps_ids._p_id;
+          supplier_id = ps_ids._s_id;
+          this.productID = parseInt(product_id, 10);
+          this.supplierID = parseInt(supplier_id, 10);
+        }
+      }
+      this.getProductOptionSetWithValue();
+    });
   }
 }
 

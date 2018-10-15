@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 
 import { Supplier, ProductVariant, Product } from "./../models/product.model";
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
 import "rxjs/add/observable/merge";
@@ -18,7 +18,8 @@ import * as _ from "lodash";
 import { SpinnerService } from "../../../spinner/spinner.service";
 import { ProductService } from "./product.service";
 import { SnotifyService } from "ng-snotify";
-import { DetectChangesService } from "../../../shared/detect-changes.services";
+import { VariantComponent } from "./variant/variant.component";
+
 
 declare var $: any;
 
@@ -32,6 +33,7 @@ declare var $: any;
 export class ProductComponent implements OnInit, OnDestroy {
   bluckPrice: BluckPrice = new BluckPrice();
   bluckPrices: BluckPrice[];
+  @ViewChild(VariantComponent) variantInstance: VariantComponent ; 
 
   ps_panelOpenState = true;
   ps_sku_panelOpenState = false;
@@ -41,6 +43,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   pageType: string;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   dialogRef: any;
+  isOpen: boolean = false;
 
   checkParams = "";
 
@@ -175,6 +178,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   // }
 
   ngOnDestroy() {}
+
+  getOptionSet() {
+    this.variantInstance.setProductSupplierIds();
+    // this.variantInstance.getProductOptionSetWithValue();
+  }
 }
 
 export class BluckPrice {

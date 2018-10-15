@@ -10,17 +10,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Option name</th>
+                    <th>Option Name</th>
                     <th>Option Value</th>
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let optionSet of option_with_value">
+                <ng-container *ngFor="let optionSet of productOptionSetAndValue">
                     <tr>
                         <td>{{optionSet.name}}</td>
                         <td>
-                            <ng-container *ngFor="let opt of getOption(optionSet.option_set_id)">
-                                <button class="btn btn-xs btn-info">{{opt.name}}</button>
+                            <ng-container *ngFor="let opt of getOptions(optionSet.id)">
+                                <span class="badge badge-pill badge-primary">{{opt.value}}</span>
                             </ng-container>
                         </td>
                     </tr>
@@ -41,14 +41,15 @@
                     <mat-card-content>
                         <br>
                         <div class="row">
-                            <div class="col-md-1" *ngFor="let optionSet of option_with_value">
-                                <label>{{optionSet.name}}</label>
-                                <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.option_set_id)"
-                                    required>
-                                    <mat-option *ngFor="let opt of getOption(optionSet.option_set_id)" [value]="opt.id">
-                                        {{opt.name}}</mat-option>
-                                </mat-select>
-                            </div>
+                            <ng-container *ngIf="pageType === 'new'">
+                                <div class="col-md-1" *ngFor="let optionSet of productOptionSetAndValue">
+                                    <label>{{optionSet.name}}</label>
+                                    <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
+                                        <mat-option *ngFor="let opt of getOptions(optionSet.id)" [value]="opt.id">
+                                            {{opt.value}}</mat-option>
+                                    </mat-select>
+                                </div>
+                            </ng-container>
 
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
@@ -172,7 +173,7 @@
 
                 </form>
 
-                <table class="table" *ngIf="productVariants.variants.length > 0">
+                <table class="table" *ngIf="productVariants.variants">
                     <thead>
                         <tr>
                             <th>Sku</th>

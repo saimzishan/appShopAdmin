@@ -30,23 +30,7 @@ export class TageComponent implements OnInit {
     this.getAllTags();
   }
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      let product_id;
-      let supplier_id;
-      if (this.pageType === 'edit') {
-        product_id = params['id'] || '';
-        supplier_id = params['supplier_id'] || '';
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
-      } else if (this.pageType === 'new') {
-        let ps_ids: any = localStorage.getItem('_saveP');
-        ps_ids = JSON.parse(ps_ids);
-        product_id = ps_ids._p_id;
-        supplier_id = ps_ids._s_id;
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
-      }
-    });
+    this.setProductSupplierIds();
   }
 
   getAllTags() {
@@ -78,6 +62,7 @@ export class TageComponent implements OnInit {
   }
 
   updateProductTags() {
+    this.setProductSupplierIds();
     if (this.selectedTags.length === 0) {
       this.snotifyService.warning("Please select atleast one tag", "Warning !");
       return;
@@ -98,5 +83,25 @@ export class TageComponent implements OnInit {
         this.snotifyService.error(e, "Error !");
       }
     );
+  }
+
+  setProductSupplierIds() {
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === 'edit') {
+        product_id = params['id'] || '';
+        supplier_id = params['supplier_id'] || '';
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      } else if (this.pageType === 'new') {
+        let ps_ids: any = localStorage.getItem('_saveP');
+        ps_ids = JSON.parse(ps_ids);
+        product_id = ps_ids._p_id;
+        supplier_id = ps_ids._s_id;
+        this.productID = parseInt(product_id, 10);
+        this.supplierID = parseInt(supplier_id, 10);
+      }
+    });
   }
 }

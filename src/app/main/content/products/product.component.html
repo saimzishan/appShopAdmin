@@ -86,14 +86,14 @@
                                 </app-option-and-sku-form>
                             </mat-expansion-panel> -->
 
-                            <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
+                            <mat-expansion-panel (opened)="getOptionSet()" [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
                             <mat-expansion-panel-header>
                                 <mat-panel-title>
                                     Variants
                                 </mat-panel-title>
 
                             </mat-expansion-panel-header>
-                            <app-variant-form [productVariants]="product.supplier.product_variants" [pageType]="pageType">
+                            <app-variant-form [productVariants]="product.supplier.product_variants" [ps_id]="product.id" [pageType]="pageType">
                             </app-variant-form>
                             </mat-expansion-panel>
                         </mat-accordion>

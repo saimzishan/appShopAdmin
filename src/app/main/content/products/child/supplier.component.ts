@@ -78,7 +78,7 @@ export class SupplierFormComponent implements OnInit {
     private detectChanges: DetectChangesService,
     private dialog: MatDialog
   ) {
-    this.supplier = new Supplier();
+    // this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
     this.images = new Array<Image>();
     this.image = new Image();

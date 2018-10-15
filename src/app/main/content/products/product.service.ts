@@ -151,6 +151,38 @@ export class ProductService extends ApiService {
       });
   }
 
+  saveProductVariants(product ,ps_id, option: string) {
+    // return new Promise((resolve, reject) => {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+
+    return this.http
+      .put(
+        GLOBAL.USER_API +
+          "products/" +
+          ps_id +
+          "?" +
+          option,
+        product,
+        httpOptions
+      )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
   updateProductTags(productId: number, tags: Object) {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -526,6 +558,29 @@ export class ProductService extends ApiService {
           bulk_id,
         httpOptions
       )
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  getProductOptionSetWithValue(product_id: number, supplier_id: number) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(
+        GLOBAL.USER_API + "products?attributes&product_id=" +product_id + "&supplier_id=" + supplier_id, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

@@ -42,7 +42,7 @@ export class Supplier {
   active: boolean;
   class: Array<any>;
   product_supplier_attributes: ProductSupplierAttribute[];
-  product_variants: ProductVariant[];
+  product_variants: ProductVariant;
 
   constructor(supplier?) {
     supplier = supplier || {};
@@ -66,7 +66,7 @@ export class Supplier {
     this.stock = supplier.stock;
     this.class = supplier.class || new Array();
     this.product_supplier_attributes = new Array<ProductSupplierAttribute>();
-    this.product_variants = new Array<ProductVariant>();
+    this.product_variants =supplier.product_variants || new ProductVariant();
   }
 }
 export class BluckPrice {
@@ -141,7 +141,7 @@ export class ProductVariant {
   variants: Variant[];
   constructor(productVariant?) {
     this.supplier_id = productVariant.supplier_id || -1;
-    this.variants = new Array<Variant>();
+    this.variants =productVariant.variants || new Array<Variant>();
   }
 }
 export class ProductVariantAttributes {
