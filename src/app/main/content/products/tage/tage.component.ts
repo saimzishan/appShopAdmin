@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
@@ -11,8 +11,10 @@ import { TagsService } from "../../tags/tags.service";
   templateUrl: "./tage.component.html"
 })
 export class TageComponent implements OnInit {
-  @Input() selectedTags: number[];
-  @Input() pageType: string;
+  @Input()
+  selectedTags: number[];
+  @Input()
+  pageType: string;
   tags: Tag[];
   supplierId: any;
   productId: any;
@@ -39,8 +41,7 @@ export class TageComponent implements OnInit {
       (res: any) => {
         if (res) {
           this.tags = res.res.data;
-          if (this.pageType === 'edit')
-          this.bindSelectedTags();
+          if (this.pageType === "edit") this.bindSelectedTags();
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -49,7 +50,8 @@ export class TageComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 
   bindSelectedTags() {
@@ -70,19 +72,21 @@ export class TageComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     let updatedTags = {
       tags: this.selectedTags
-    }
-    this.productService.updateProductTags(this.productID, updatedTags).subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
-      }
-    );
+    };
+    this.productService
+      .updateProductTags(this.productID, updatedTags)
+      .subscribe(
+        (res: any) => {
+          this.snotifyService.success(res.res.message, "Success !");
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.message);
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 
   setProductSupplierIds() {

@@ -1,25 +1,14 @@
 import { Router, ActivatedRoute } from "@angular/router";
-import { HttpHeaders, HttpClient } from "@angular/common/http";
-
-import { Supplier, ProductVariant, Product } from "./../models/product.model";
+import { HttpClient } from "@angular/common/http";
+import { Product } from "./../models/product.model";
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
-import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
-
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
-
-import * as _ from "lodash";
 import { SpinnerService } from "../../../spinner/spinner.service";
 import { ProductService } from "./product.service";
 import { SnotifyService } from "ng-snotify";
 import { VariantComponent } from "./variant/variant.component";
-
 
 declare var $: any;
 
@@ -70,12 +59,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.params = params;
       if (this.params) {
-        if (this.params.id === 'new') {
-          this.pageType = 'new';
+        if (this.params.id === "new") {
+          this.pageType = "new";
           this.product = new Product();
         } else {
           this.edit(this.params);
-          this.pageType = 'edit';
+          this.pageType = "edit";
           this.enabledChild = false;
         }
       }
@@ -108,7 +97,6 @@ export class ProductComponent implements OnInit, OnDestroy {
             //     value: res.res.data
             //   });
             this.product = new Product(res.res.data);
-            console.log(res.res.data);
             this.onProductSaved(obj); // for edit or after add product
           }
           this.spinnerService.requestInProcess(false);

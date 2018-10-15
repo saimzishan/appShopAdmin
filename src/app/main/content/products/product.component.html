@@ -75,16 +75,17 @@
                                 </mat-expansion-panel-header>
                                 <app-tage [selectedTags]="product.tags" [pageType]="pageType"></app-tage>
                             </mat-expansion-panel>
-                            <!--<mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
+                            <mat-expansion-panel [disabled]="enabledChild" [expanded]="ps_sku_panelOpenState">
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         Option
                                     </mat-panel-title>
 
                                 </mat-expansion-panel-header>
-                                <app-option-and-sku-form>
+                                <app-option-and-sku-form [ps_attributes]="product.supplier.product_supplier_attributes"
+                                    [pageType]="pageType" [ps_id]="product.id">
                                 </app-option-and-sku-form>
-                            </mat-expansion-panel> -->
+                            </mat-expansion-panel>
 
                             <mat-expansion-panel (opened)="getOptionSet()" [disabled]="enabledChild" [expanded]="ps_v_panelOpenState">
                             <mat-expansion-panel-header>
