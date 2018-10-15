@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from "@angular/router";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
@@ -11,8 +11,10 @@ import { TagsService } from "../../tags/tags.service";
   templateUrl: "./tage.component.html"
 })
 export class TageComponent implements OnInit {
-  @Input() selectedTags: number[];
-  @Input() pageType: string;
+  @Input()
+  selectedTags: number[];
+  @Input()
+  pageType: string;
   tags: Tag[];
   supplierId: any;
   productId: any;
@@ -33,18 +35,20 @@ export class TageComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       let product_id;
       let supplier_id;
-      if (this.pageType === 'edit') {
-        product_id = params['id'] || '';
-        supplier_id = params['supplier_id'] || '';
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
-      } else if (this.pageType === 'new') {
-        let ps_ids: any = localStorage.getItem('_saveP');
-        ps_ids = JSON.parse(ps_ids);
-        product_id = ps_ids._p_id;
-        supplier_id = ps_ids._s_id;
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
+      if (this.pageType === "edit") {
+        product_id = params["id"] || "";
+        supplier_id = params["supplier_id"] || "";
+        this.productID = +product_id;
+        this.supplierID = +supplier_id;
+      } else if (this.pageType === "new") {
+        let ps_ids: any = localStorage.getItem("_saveP");
+        if (ps_ids) {
+          ps_ids = JSON.parse(ps_ids);
+          product_id = ps_ids._p_id;
+          supplier_id = ps_ids._s_id;
+          this.productID = +product_id;
+          this.supplierID = +supplier_id;
+        }
       }
     });
   }
@@ -55,8 +59,7 @@ export class TageComponent implements OnInit {
       (res: any) => {
         if (res) {
           this.tags = res.res.data;
-          if (this.pageType === 'edit')
-          this.bindSelectedTags();
+          if (this.pageType === "edit") this.bindSelectedTags();
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -65,7 +68,8 @@ export class TageComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 
   bindSelectedTags() {
@@ -85,18 +89,20 @@ export class TageComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     let updatedTags = {
       tags: this.selectedTags
-    }
-    this.productService.updateProductTags(this.productID, updatedTags).subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
-      }
-    );
+    };
+    this.productService
+      .updateProductTags(this.productID, updatedTags)
+      .subscribe(
+        (res: any) => {
+          this.snotifyService.success(res.res.message, "Success !");
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.message);
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 }

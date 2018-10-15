@@ -1,9 +1,14 @@
+import { ActivatedRoute } from "@angular/router";
+import { ProductSupplierAttribute } from "./../../models/product.model";
 import { DetectChangesService } from "./../../../../shared/detect-changes.services";
 import { Component, OnInit, Input } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
 import * as _ from "lodash";
+import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
+import { MatDialogRef } from "@angular/material";
+import { MatDialog } from "@angular/material";
 
 @Component({
   selector: "app-option-and-sku-form",
@@ -18,24 +23,49 @@ export class OptionAndSkusComponent implements OnInit {
   product_id;
   supplier_id;
   changesSubscription;
-  alreadyTaken: any = false;
   product_supplier_attributes: any = [];
-  pageType = "new";
+  @Input()
+  ps_attributes: ProductSupplierAttribute[];
+  @Input()
+  pageType: string;
+  @Input()
+  ps_id: number;
+  sub: any;
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
-    private detectChangesService: DetectChangesService
+    private detectChangesService: DetectChangesService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.getOptionSets();
-    let current_product: any = localStorage.getItem("current_product");
-    if (current_product) {
-      current_product = JSON.parse(current_product);
-      this.supplier_id = current_product.supplier.id;
-      this.product_id = current_product.id;
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === "edit") {
+        product_id = params["id"] || "";
+        supplier_id = params["supplier_id"] || "";
+        this.product_id = +product_id;
+        this.supplier_id = +supplier_id;
+      } else if (this.pageType === "new") {
+        let ps_ids: any = localStorage.getItem("_saveP");
+        if (ps_ids) {
+          ps_ids = JSON.parse(ps_ids);
+          product_id = ps_ids._p_id;
+          supplier_id = ps_ids._s_id;
+          this.product_id = +product_id;
+          this.supplier_id = +supplier_id;
+        }
+      }
+    });
+    if (this.pageType === "edit") {
+      this.edit(this.ps_attributes);
     }
+    this.getOptionSets();
 
     this.changesSubscription = this.detectChangesService.notifyObservable$.subscribe(
       res => {
@@ -55,12 +85,6 @@ export class OptionAndSkusComponent implements OnInit {
             this.product_id = current_product.id;
           }
           break;
-        case "editProduct":
-          this.pageType = "edit";
-          this.product_id = res.value.ps_id;
-          this.supplier_id = res.value.supplier_id;
-          this.edit(res.value.product_supplier_attributes);
-          break;
       }
     }
   }
@@ -77,7 +101,7 @@ export class OptionAndSkusComponent implements OnInit {
     for (const iterator of this.optionSets) {
       iterator.options.forEach(element => {
         let res = this.product_supplier_attributes.find(
-          select => select.option.id === element.id
+          select => select.option_id === element.id
         );
         if (res) {
           element.ps_id = res.id;
@@ -85,7 +109,7 @@ export class OptionAndSkusComponent implements OnInit {
           element.amount = res.amount;
           element.change_by = res.change_by === "absolute" ? 1 : 2;
           element.operation = res.operation === "add" ? 2 : 3;
-          element.option_id = res.option.id;
+          element.option_id = res.option_id;
         } else {
           element.isSelected = false;
           element.amount = null;
@@ -95,7 +119,6 @@ export class OptionAndSkusComponent implements OnInit {
         }
       });
     }
-    console.log(this.optionSets);
   }
   getOptionSets() {
     this.spinnerService.requestInProcess(true);
@@ -105,13 +128,6 @@ export class OptionAndSkusComponent implements OnInit {
           this.optionSets = res.res.data;
           if (this.pageType !== "new") {
             this.setDefault();
-          }
-          this.alreadyTaken = localStorage.getItem("optionSet");
-          if (this.alreadyTaken) {
-            this.alreadyTaken = JSON.parse(this.alreadyTaken);
-            this.alreadyTaken.forEach(element => {
-              this.option_set_id.push(element.option_set_id);
-            });
           }
         }
         this.spinnerService.requestInProcess(false);
@@ -202,7 +218,7 @@ export class OptionAndSkusComponent implements OnInit {
       name: option.value
     });
     this.optionSetWithValue = {
-      id: this.product_id,
+      id: this.ps_id,
       supplier_id: this.supplier_id,
       option_set_id: option_set_id,
       option_id: option.id,
@@ -220,12 +236,22 @@ export class OptionAndSkusComponent implements OnInit {
         this.optionSetWithValue = {};
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
-        localStorage.removeItem("optionSet");
-        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
-        this.detectChangesService.notifyOther({
-          value: this.optionSet,
-          option: "optionsAdded"
-        });
+        let index = this.optionSets.findIndex(
+          op_set => op_set.id === obj.option_set_id
+        );
+        let opt_index = this.optionSets[index].options.findIndex(
+          opt => opt.id === obj.option_id
+        );
+        this.optionSets[index].options[opt_index].isSelected = true;
+        this.optionSets[index].options[opt_index].ps_id = res.res.data.id;
+        this.optionSets[index].options[opt_index].amount = res.res.data.amount;
+        this.optionSets[index].options[opt_index].change_by =
+          res.res.data.change_by === "absolute" ? 1 : 2;
+        this.optionSets[index].options[opt_index].operation =
+          res.res.data.operation === "add" ? 2 : 3;
+        this.optionSets[index].options[opt_index].option_id =
+          res.res.data.option_id;
+        // Updation after add new value
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -236,7 +262,14 @@ export class OptionAndSkusComponent implements OnInit {
     );
   }
 
-  editOptionSetValue(ps_id: number, optionSet_id: any, option_id:number, operation: number, change_by: number, amount: number) {
+  editOptionSetValue(
+    ps_id: number,
+    optionSet_id: any,
+    option_id: number,
+    operation: number,
+    change_by: number,
+    amount: number
+  ) {
     this.spinnerService.requestInProcess(true);
     let optionValue = {
       supplier_id: this.supplier_id,
@@ -245,48 +278,60 @@ export class OptionAndSkusComponent implements OnInit {
       operation: operation,
       changed_by: change_by,
       amount: amount
-    }
-    this.productService.updateOptionValue(this.product_id, ps_id, optionValue).subscribe(
-      (res: any) => {
-        this.optionSetWithValue = {};
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-        localStorage.removeItem("optionSet");
-        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
-        this.detectChangesService.notifyOther({
-          value: this.optionSet,
-          option: "optionsAdded"
-        });
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
-      });
+    };
+    this.productService
+      .updateOptionValue(this.product_id, ps_id, optionValue)
+      .subscribe(
+        (res: any) => {
+          this.optionSetWithValue = {};
+          this.snotifyService.success(res.res.message, "Success !");
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.message);
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 
-  deleteOptionSetValue(ps_id: number) {
-    this.spinnerService.requestInProcess(true);
-    this.productService.deleteOptionValue(this.product_id, ps_id).subscribe(
-      (res: any) => {
-        this.optionSetWithValue = {};
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-        localStorage.removeItem("optionSet");
-        localStorage.setItem("optionSet", JSON.stringify(this.optionSet));
-        this.detectChangesService.notifyOther({
-          value: this.optionSet,
-          option: "optionsAdded"
-        });
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
+  deleteOptionSetValue(p_id, ps_id: number) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.productService.deleteOptionValue(this.product_id, ps_id).subscribe(
+          (res: any) => {
+            this.optionSetWithValue = {};
+            this.snotifyService.success(res.res.message, "Success !");
+            this.spinnerService.requestInProcess(false);
+            let index = this.optionSets.findIndex(op_set => op_set.id === p_id);
+            let opt_index = this.optionSets[index].options.findIndex(
+              opt => opt.ps_id === ps_id
+            );
+
+            this.optionSets[index].options[opt_index].isSelected = false;
+            this.optionSets[index].options[opt_index].amount = null;
+            this.optionSets[index].options[opt_index].change_by = null;
+            this.optionSets[index].options[opt_index].operation = null;
+            this.optionSets[index].options[opt_index].option_id = null;
+            // Updation after deletion
+          },
+          errors => {
+            this.spinnerService.requestInProcess(false);
+            let e = errors.error;
+            e = JSON.stringify(e.message);
+            this.snotifyService.error(e, "Error !");
+          }
+        );
       }
-    );
+      this.confirmDialogRef = null;
+    });
   }
 }
 

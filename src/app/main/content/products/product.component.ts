@@ -67,12 +67,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.params = params;
       if (this.params) {
-        if (this.params.id === 'new') {
-          this.pageType = 'new';
+        if (this.params.id === "new") {
+          this.pageType = "new";
           this.product = new Product();
         } else {
           this.edit(this.params);
-          this.pageType = 'edit';
+          this.pageType = "edit";
           this.enabledChild = false;
         }
       }
@@ -105,7 +105,6 @@ export class ProductComponent implements OnInit, OnDestroy {
             //     value: res.res.data
             //   });
             this.product = new Product(res.res.data);
-            console.log(res.res.data);
             this.onProductSaved(obj); // for edit or after add product
           }
           this.spinnerService.requestInProcess(false);
