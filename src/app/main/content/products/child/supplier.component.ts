@@ -1,6 +1,6 @@
 import { GLOBAL } from "./../../../../shared/globel";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { MatSnackBar } from "@angular/material";
@@ -67,6 +67,7 @@ export class SupplierFormComponent implements OnInit {
   baseURL = GLOBAL.USER_IMAGE_API;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   ps_id: any;
+  params: any;
 
   constructor(
     private productService: ProductService,
@@ -76,7 +77,8 @@ export class SupplierFormComponent implements OnInit {
     protected http: HttpClient,
     private categoriesService: CategoriesService,
     private detectChanges: DetectChangesService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
     // this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
@@ -93,6 +95,14 @@ export class SupplierFormComponent implements OnInit {
     if (this.pageType === "edit") {
       this.bluckPrices = this.product.supplier.bulk_prices;
     }
+    this.route.params.subscribe(params => {
+      this.params = params;
+      if (this.params) {
+        if (this.params.id !== "new") {
+          this.product_id = params["id"] || "";
+        }
+      }
+    });
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -265,8 +275,9 @@ export class SupplierFormComponent implements OnInit {
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
         let temp = {
-          _p_id: res.res.data.id,
-          _s_id: this.product.supplier.id
+          _p_id: res.res.data.p_id,
+          _s_id: this.product.supplier.id,
+          _ps_id: res.res.data.id
         };
         localStorage.setItem("_saveP", JSON.stringify(temp));
         // this.detectChanges.notifyOther({
@@ -296,30 +307,15 @@ export class SupplierFormComponent implements OnInit {
     }
 
     this.spinnerService.requestInProcess(true);
-    delete this.supplier.images;
-    let supplier = {
-      id: this.supplier.id,
-      ps_id: this.ps_id,
-      track_stock: this.supplier.track_stock,
-      printing_option: this.supplier.printing_option,
-      active: this.supplier.active,
-      class: this.supplier.class,
-      stock: this.supplier.stock,
-      low_level_stock: this.supplier.low_level_stock,
-      buying_price: this.supplier.buying_price,
-      market_price: this.supplier.market_price,
-      price: this.supplier.price,
-      sku: this.supplier.sku,
-      ean: this.supplier.sku,
-      upc: this.supplier.upc,
-      width: this.supplier.width,
-      weight: this.supplier.weight,
-      height: this.supplier.height,
-      depth: this.supplier.depth,
-      images: this.lImages
-    };
+
+    // let supplier = {
+    //   ps_id: this.ps_id,
+
+    //   images: this.lImages
+    // };
     setTimeout(() => {
-      this.putSupplier(supplier);
+      this.product.supplier.images = this.lImages;
+      this.putSupplier(this.product.supplier);
     }, 1000);
   }
 
@@ -529,6 +525,7 @@ export class SupplierFormComponent implements OnInit {
 
   putSupplier(obj) {
     this.spinnerService.requestInProcess(true);
+    obj.id = this.product.id;
     this.productService.saveProduct(obj, "ps_update").subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);

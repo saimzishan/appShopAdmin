@@ -137,11 +137,7 @@ export class ProductService extends ApiService {
 
     return this.http
       .put(
-        GLOBAL.USER_API +
-          "products/" +
-          (option === "ps_update" ? product.ps_id : product.id) +
-          "?" +
-          option,
+        GLOBAL.USER_API + "products/" + product.id + "?" + option,
         product,
         httpOptions
       )
@@ -151,7 +147,7 @@ export class ProductService extends ApiService {
       });
   }
 
-  saveProductVariants(product ,ps_id, option: string) {
+  saveProductVariants(product, ps_id, option: string) {
     // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -169,11 +165,7 @@ export class ProductService extends ApiService {
 
     return this.http
       .put(
-        GLOBAL.USER_API +
-          "products/" +
-          ps_id +
-          "?" +
-          option,
+        GLOBAL.USER_API + "products/" + ps_id + "?" + option,
         product,
         httpOptions
       )
@@ -199,7 +191,11 @@ export class ProductService extends ApiService {
     };
 
     return this.http
-      .put(GLOBAL.USER_API + "products/" + productId + "?p_tags", tags, httpOptions)
+      .put(
+        GLOBAL.USER_API + "products/" + productId + "?p_tags",
+        tags,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -247,7 +243,12 @@ export class ProductService extends ApiService {
       })
     };
 
-    return this.http.put(GLOBAL.USER_API + "products/" + ps_id + "?ps_option=" + option_id, optValue, httpOptions)
+    return this.http
+      .put(
+        GLOBAL.USER_API + "products/" + ps_id + "?ps_option=" + option_id,
+        optValue,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -580,7 +581,13 @@ export class ProductService extends ApiService {
     };
     return this.http
       .get(
-        GLOBAL.USER_API + "products?attributes&product_id=" +product_id + "&supplier_id=" + supplier_id, httpOptions)
+        GLOBAL.USER_API +
+          "products?attributes&product_id=" +
+          product_id +
+          "&supplier_id=" +
+          supplier_id,
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

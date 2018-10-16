@@ -93,18 +93,20 @@ export class TageComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       let product_id;
       let supplier_id;
-      if (this.pageType === 'edit') {
-        product_id = params['id'] || '';
-        supplier_id = params['supplier_id'] || '';
+      if (this.pageType === "edit") {
+        product_id = params["id"] || "";
+        supplier_id = params["supplier_id"] || "";
         this.productID = parseInt(product_id, 10);
         this.supplierID = parseInt(supplier_id, 10);
-      } else if (this.pageType === 'new') {
-        let ps_ids: any = localStorage.getItem('_saveP');
-        ps_ids = JSON.parse(ps_ids);
-        product_id = ps_ids._p_id;
-        supplier_id = ps_ids._s_id;
-        this.productID = parseInt(product_id, 10);
-        this.supplierID = parseInt(supplier_id, 10);
+      } else if (this.pageType === "new") {
+        let ps_ids: any = localStorage.getItem("_saveP");
+        if (ps_ids) {
+          ps_ids = JSON.parse(ps_ids);
+          product_id = ps_ids._p_id;
+          supplier_id = ps_ids._s_id;
+          this.productID = parseInt(product_id, 10);
+          this.supplierID = parseInt(supplier_id, 10);
+        }
       }
     });
   }
