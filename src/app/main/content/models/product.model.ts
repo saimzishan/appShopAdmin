@@ -8,6 +8,7 @@ export class Product {
   brand_id: number;
   supplier: Supplier;
   tags: number[];
+  category: Category;
   constructor(product?) {
     product = product || {};
     this.id = product.id || -1;
@@ -19,6 +20,16 @@ export class Product {
     this.brand_id = product.brand_id || -1;
     this.supplier = product.supplier || new Supplier();
     this.tags = product.tags || [];
+    this.category = product.category || new Category();
+  }
+}
+export class Category {
+  id: number;
+  name: string;
+  constructor(cateegory?) {
+    cateegory = cateegory || {};
+    this.id = cateegory.id || -1;
+    this.name = cateegory.name || "";
   }
 }
 export class Supplier {

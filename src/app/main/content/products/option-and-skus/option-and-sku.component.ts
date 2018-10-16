@@ -332,8 +332,10 @@ export class OptionAndSkusComponent implements OnInit {
           ps_ids = JSON.parse(ps_ids);
           product_id = ps_ids._p_id;
           supplier_id = ps_ids._s_id;
+          let ps_id = ps_ids._ps_id;
           this.product_id = +product_id;
           this.supplier_id = +supplier_id;
+          this.ps_id = ps_id;
         }
       }
     });
