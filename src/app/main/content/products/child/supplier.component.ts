@@ -52,6 +52,7 @@ export class SupplierFormComponent implements OnInit {
   category_id: number;
   product_id: number;
   deleteButton = false;
+  product_supplier_id: number;
   categoryOption: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
@@ -92,14 +93,13 @@ export class SupplierFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.pageType === "edit") {
-      this.bluckPrices = this.product.supplier.bulk_prices;
-    }
     this.route.params.subscribe(params => {
       this.params = params;
       if (this.params) {
         if (this.params.id !== "new") {
           this.product_id = params["id"] || "";
+          this.product_supplier_id = this.product.id;
+          console.log(this.product_supplier_id);
         }
       }
     });
@@ -333,7 +333,7 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-  onUploadError(evt) {}
+  onUploadError(evt) { }
   onUploadSuccess(evt) {
     // this.image.base64String = evt[0].dataURL.split(",")[1];
     // this.image.content_type = evt[0].type.split("/")[1];
@@ -382,12 +382,12 @@ export class SupplierFormComponent implements OnInit {
       this.validateForm(form);
       return;
     }
-    this.bluckPrices.push(new BluckPrice(this.bluckPrice));
+    this.product.supplier.bulk_prices.push(new BluckPrice(this.bluckPrice));
     form.form.reset();
     this.bluckPrice = new BluckPrice();
   }
   removeBluckPrice(index) {
-    this.bluckPrices.splice(index, 1);
+    this.product.supplier.bulk_prices.splice(index, 1);
   }
 
   removeImage(image_id) {
@@ -539,5 +539,30 @@ export class SupplierFormComponent implements OnInit {
         console.log(errors.error.message);
       }
     );
+  }
+
+  editBulkPrice(id, from, to, discount) {
+    const obj = {
+      bulck_p_id: id,
+      from: from,
+      to: to,
+      discount: discount
+    };
+    this.spinnerService.requestInProcess(true);
+    this.productService.saveProduct(obj, "p_bulck_price").subscribe(
+      (res: any) => {
+        this.spinnerService.requestInProcess(false);
+        this.snotifyService.success(res.res.message + "Success !");
+      },
+      (errors: any) => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
+
+  addBulkPricetoServer() {
   }
 }

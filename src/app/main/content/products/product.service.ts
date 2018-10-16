@@ -120,7 +120,6 @@ export class ProductService extends ApiService {
   }
 
   saveProduct(product, option: string) {
-    // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
