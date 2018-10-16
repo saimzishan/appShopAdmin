@@ -66,7 +66,7 @@ export class Supplier {
     this.stock = supplier.stock;
     this.class = supplier.class || new Array();
     this.product_supplier_attributes = new Array<ProductSupplierAttribute>();
-    this.product_variants =supplier.product_variants || new ProductVariant();
+    this.product_variants = supplier.product_variants || new ProductVariant();
   }
 }
 export class BluckPrice {
@@ -131,7 +131,8 @@ export class Variant {
     this.change_by = variant.change_by || null;
     this.amount = variant.amount || null;
     this.track_stock = variant.ttrack_stock || false;
-    this.product_variant_attributes = variant.product_variant_attributes ||
+    this.product_variant_attributes =
+      variant.product_variant_attributes ||
       new Array<ProductVariantAttributes>();
     this.images = variant.images || new Array<Image>();
   }
@@ -140,8 +141,9 @@ export class ProductVariant {
   supplier_id: number;
   variants: Variant[];
   constructor(productVariant?) {
+    productVariant = productVariant || {};
     this.supplier_id = productVariant.supplier_id || -1;
-    this.variants =productVariant.variants || new Array<Variant>();
+    this.variants = productVariant.variants || new Array<Variant>();
   }
 }
 export class ProductVariantAttributes {
@@ -161,6 +163,7 @@ export class ProductSupplierAttribute {
   option_id: number;
   option_set_id: number;
   constructor(productSupplierAttribute?) {
+    productSupplierAttribute = productSupplierAttribute || {};
     this.id = productSupplierAttribute.id || -1;
     this.amount = productSupplierAttribute.amount || 0;
     this.operation = productSupplierAttribute.operation || 1;

@@ -43,25 +43,7 @@ export class OptionAndSkusComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      let product_id;
-      let supplier_id;
-      if (this.pageType === "edit") {
-        product_id = params["id"] || "";
-        supplier_id = params["supplier_id"] || "";
-        this.product_id = +product_id;
-        this.supplier_id = +supplier_id;
-      } else if (this.pageType === "new") {
-        let ps_ids: any = localStorage.getItem("_saveP");
-        if (ps_ids) {
-          ps_ids = JSON.parse(ps_ids);
-          product_id = ps_ids._p_id;
-          supplier_id = ps_ids._s_id;
-          this.product_id = +product_id;
-          this.supplier_id = +supplier_id;
-        }
-      }
-    });
+    this.setPSIds();
     if (this.pageType === "edit") {
       this.edit(this.ps_attributes);
     }
@@ -177,6 +159,8 @@ export class OptionAndSkusComponent implements OnInit {
   handleSelection(event, value) {}
 
   saveOptionSetAndValue(option_set_id, option, operation, change_by, amount) {
+    this.setPSIds();
+
     if (change_by === undefined || operation === undefined || amount === "") {
       this.snotifyService.warning(
         "Please Select Option, Opration, Change by and add amount",
@@ -331,6 +315,27 @@ export class OptionAndSkusComponent implements OnInit {
         );
       }
       this.confirmDialogRef = null;
+    });
+  }
+  setPSIds() {
+    this.sub = this.route.params.subscribe(params => {
+      let product_id;
+      let supplier_id;
+      if (this.pageType === "edit") {
+        product_id = params["id"] || "";
+        supplier_id = params["supplier_id"] || "";
+        this.product_id = +product_id;
+        this.supplier_id = +supplier_id;
+      } else if (this.pageType === "new") {
+        let ps_ids: any = localStorage.getItem("_saveP");
+        if (ps_ids) {
+          ps_ids = JSON.parse(ps_ids);
+          product_id = ps_ids._p_id;
+          supplier_id = ps_ids._s_id;
+          this.product_id = +product_id;
+          this.supplier_id = +supplier_id;
+        }
+      }
     });
   }
 }
