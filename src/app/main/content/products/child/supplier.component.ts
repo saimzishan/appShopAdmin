@@ -52,7 +52,6 @@ export class SupplierFormComponent implements OnInit {
   category_id: number;
   product_id: number;
   deleteButton = false;
-  product_supplier_id: number;
   categoryOption: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
@@ -98,8 +97,6 @@ export class SupplierFormComponent implements OnInit {
       if (this.params) {
         if (this.params.id !== "new") {
           this.product_id = params["id"] || "";
-          this.product_supplier_id = this.product.id;
-          console.log(this.product_supplier_id);
         }
       }
     });
@@ -270,7 +267,6 @@ export class SupplierFormComponent implements OnInit {
     }
     this.product.supplier.images = this.lImages;
     this.product.category_id = this.category_id;
-    this.product.supplier.bulk_prices = this.bluckPrices;
     this.spinnerService.requestInProcess(true);
     this.product.supplier.ean = this.product.supplier.sku;
     this.productService.addProduct(this.product).subscribe(
@@ -337,7 +333,7 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-  onUploadError(evt) { }
+  onUploadError(evt) {}
   onUploadSuccess(evt) {
     // this.image.base64String = evt[0].dataURL.split(",")[1];
     // this.image.content_type = evt[0].type.split("/")[1];
@@ -386,12 +382,36 @@ export class SupplierFormComponent implements OnInit {
       this.validateForm(form);
       return;
     }
+    if (this.pageType === "edit") {
+      let obj: any = this.bluckPrice;
+      obj.ps_id = this.product.id;
+      obj.id = this.product.id;
+      return this.addnewBulkPeice(obj);
+    }
     this.product.supplier.bulk_prices.push(new BluckPrice(this.bluckPrice));
     form.form.reset();
     this.bluckPrice = new BluckPrice();
   }
   removeBluckPrice(index) {
     this.product.supplier.bulk_prices.splice(index, 1);
+  }
+
+  addnewBulkPeice(obj) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.addBulkPrice(obj).subscribe(
+      (res: any) => {
+        this.product.supplier.bulk_prices = res.res.data;
+        this.bluckPrice = new BluckPrice();
+        this.spinnerService.requestInProcess(false);
+        this.snotifyService.success(res.res.message + "Success !");
+      },
+      (errors: any) => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   removeImage(image_id) {
@@ -441,10 +461,10 @@ export class SupplierFormComponent implements OnInit {
             res => {
               this.spinnerService.requestInProcess(false);
               if (!res.error) {
-                const result = this.bluckPrices.findIndex(
+                const result = this.product.supplier.bulk_prices.findIndex(
                   bulk => bulk.id === bulk_id
                 );
-                this.bluckPrices.splice(result, 1);
+                this.product.supplier.bulk_prices.splice(result, 1);
                 this.snotifyService.success(
                   "Deleted successfully !",
                   "Success"
@@ -567,6 +587,5 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  addBulkPricetoServer() {
-  }
+  addBulkPricetoServer() {}
 }
