@@ -230,9 +230,9 @@ export class OptionAndSkusComponent implements OnInit {
         this.optionSets[index].options[opt_index].ps_id = res.res.data.id;
         this.optionSets[index].options[opt_index].amount = res.res.data.amount;
         this.optionSets[index].options[opt_index].changed_by =
-          res.res.data.changed_by === "absolute" ? 1 : 2;
+          res.res.data.changed_by;
         this.optionSets[index].options[opt_index].operation =
-          res.res.data.operation === "add" ? 2 : 3;
+          res.res.data.operation;
         this.optionSets[index].options[opt_index].option_id =
           res.res.data.option_id;
         // Updation after add new value

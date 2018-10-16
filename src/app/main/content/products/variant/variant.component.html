@@ -45,7 +45,8 @@
                             <ng-container *ngIf="pageType === 'new' || isNew">
                                 <div class="col-md-1" *ngFor="let optionSet of productOptionSetAndValue">
                                     <label>{{optionSet.name}}</label>
-                                    <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
+                                    <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)"
+                                        required>
                                         <mat-option *ngFor="let opt of getOptions(optionSet.id)" [value]="opt.id">
                                             {{opt.value}}</mat-option>
                                     </mat-select>
@@ -54,8 +55,7 @@
 
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="sku" [(ngModel)]="variant.sku" placeholder="SKU"
-                                        required>
+                                    <input matInput name="sku" [(ngModel)]="variant.sku" placeholder="SKU" required>
                                 </mat-form-field>
                             </div>
                             <!-- <div class="col-md-1">
@@ -65,27 +65,23 @@
                             </div> -->
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="weight" [(ngModel)]="variant.weight" min="0"
-                                        placeholder="Weight (kg)">
+                                    <input matInput name="weight" [(ngModel)]="variant.weight" min="0" placeholder="Weight (kg)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="depth" [(ngModel)]="variant.depth" min="0"
-                                        placeholder="Depth (mm)">
+                                    <input matInput name="depth" [(ngModel)]="variant.depth" min="0" placeholder="Depth (mm)">
                                 </mat-form-field>
                             </div>
 
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="width" [(ngModel)]="variant.width" min="0"
-                                        placeholder="Width (mm)">
+                                    <input matInput name="width" [(ngModel)]="variant.width" min="0" placeholder="Width (mm)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput name="height" [(ngModel)]="variant.height" min="0"
-                                        placeholder="Height (mm)">
+                                    <input matInput name="height" [(ngModel)]="variant.height" min="0" placeholder="Height (mm)">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
@@ -108,8 +104,8 @@
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field class="w-70-p">
-                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="variant.amount"
-                                         min="0" required>
+                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number"
+                                        [(ngModel)]="variant.amount" min="0" required>
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
@@ -131,13 +127,15 @@
                                 <!-- </mat-form-field> -->
                             </div>
                             <div class="col-md-1" style="text-align: right;">
-                                <button *ngIf="pageType === 'new' || isNew" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical" style="border-radius: 50%;
+                                <button *ngIf="pageType === 'new' || isNew" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical"
+                                    style="border-radius: 50%;
                                 margin-top: 20px; padding: 0px !important;">
                                     <i class="material-icons">
                                         add
                                     </i>
                                 </button>
-                                <button *ngIf="pageType === 'edit' && !isNew" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">
+                                <button *ngIf="pageType === 'edit' && !isNew" (click)="editVariant(skuForm);" class="btn btn-info"
+                                    style="margin-top: 20px;">
                                     Save
                                 </button>
                             </div>
@@ -156,7 +154,7 @@
                     </div>
                     <br>
                     <div class="row" style="text-align:center">
-                    
+
                         <ng-container *ngFor="let image of variant.images">
                             <div class="col-md-2">
                                 <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
@@ -208,7 +206,8 @@
                                 <td>{{variant.low_level_stock}}</td>
                                 <td>{{variant.images.length}}</td>
                                 <td>
-                                    <button (click)="deleteVariant(variant.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                    <button (click)="deleteVariant(variant.id)" type="btn" style="margin-bottom: 15px;"
+                                        class="btn btn-danger btn-xs">
                                         <i class="material-icons">delete</i>
                                     </button>
                                 </td>
@@ -219,7 +218,8 @@
 
                 <mat-card-actions style="text-align: right;">
                     <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                    <button class="btn btn-info" mat-button (click)="saveProductVariants()">Save & Close</button>
+                    <button class="btn btn-info" [disabled]="pageType === 'edit'" mat-button (click)="saveProductVariants()">Save
+                        & Close</button>
                 </mat-card-actions>
 
             </mat-card>

@@ -38,7 +38,7 @@ export class SupplierFormComponent implements OnInit {
   product: Product;
   @Input()
   pageType: string;
-  supplier: Supplier;
+  // supplier: Supplier;
   images: Image[];
   lImages: any[] = [];
   image: Image;
@@ -100,6 +100,7 @@ export class SupplierFormComponent implements OnInit {
         }
       }
     });
+    this.converter();
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -428,11 +429,11 @@ export class SupplierFormComponent implements OnInit {
             this.spinnerService.requestInProcess(false);
             if (!res.error) {
               this.snotifyService.success("Deleted successfully !", "Success");
-              const result = this.supplier.images.findIndex(
+              const result = this.product.supplier.images.findIndex(
                 image => image.id === image_id
               );
               if (result !== -1) {
-                this.supplier.images.splice(result, 1);
+                this.product.supplier.images.splice(result, 1);
               }
             }
           },
@@ -552,6 +553,8 @@ export class SupplierFormComponent implements OnInit {
     obj.id = this.product.id;
     this.productService.saveProduct(obj, "ps_update").subscribe(
       (res: any) => {
+        this.product.supplier.images = res.res.data;
+        this.directiveRef.reset();
         this.spinnerService.requestInProcess(false);
         this.snotifyService.success(res.res.message + "Success !");
       },
@@ -588,4 +591,27 @@ export class SupplierFormComponent implements OnInit {
   }
 
   addBulkPricetoServer() {}
+
+  converter() {
+    let temp = [];
+    this.product.supplier.class.forEach(c => {
+      if (c === "slider") {
+        c = 1;
+      } else if (c === "featured") {
+        c = 2;
+      } else if (c === "on-sale") {
+        c = 3;
+      } else if (c === "new-arrival") {
+        c = 4;
+      } else if (c === "promoted") {
+        c = 5;
+      } else if (c === "add-on") {
+        c = 6;
+      } else if (c === "none") {
+        c = 7;
+      }
+      temp.push(c);
+    });
+    this.product.supplier.class = temp;
+  }
 }

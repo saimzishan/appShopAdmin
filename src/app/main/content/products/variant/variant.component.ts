@@ -46,7 +46,7 @@ export class VariantComponent implements OnInit {
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
   isNew = false;
-  
+
   constructor(
     private productService: ProductService,
     private spinnerService: SpinnerService,
@@ -106,41 +106,50 @@ export class VariantComponent implements OnInit {
 
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
-    if (this.pageType === 'edit') {
+    if (this.pageType === "edit") {
       let pVariants = new ProductVariant();
       pVariants.supplier_id = this.supplierID;
       pVariants.variants.push(this.variant);
+      this.lImages = new Array<Image>();
+      this.resetDropzone();
       return this.saveProductVariants(pVariants);
-
-    } else if(this.pageType === 'new') {
+    } else if (this.pageType === "new") {
       this.productVariants.variants.push(this.variant);
+      this.lImages = new Array<Image>();
+      this.resetDropzone();
     }
-    
   }
 
   saveProductVariants(productVariants?: ProductVariant) {
-    if (this.productVariants.variants.length === 0 || (productVariants && productVariants.variants.length === 0)) {
+    if (this.productVariants.variants.length === 0 && this.pageType === "new") {
       this.snotifyService.warning("Please add option", "Warning !");
       return;
     }
+
     this.spinnerService.requestInProcess(true);
     this.productVariants.supplier_id = this.supplierID;
-    this.productService.saveProductVariants(this.pageType === 'edit' ? productVariants : this.productVariants, this.ps_id, "ps_variants").subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
-        this.productVariants.variants = res.res.data;
-        this.lImages = new Array<Image>();
-      this.product_variant_attributes = [];
-      this.resetDropzone();
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
-      }
-    );
+    this.productService
+      .saveProductVariants(
+        this.pageType === "edit" ? productVariants : this.productVariants,
+        this.ps_id,
+        "ps_variants"
+      )
+      .subscribe(
+        (res: any) => {
+          this.snotifyService.success(res.res.message, "Success !");
+          this.variant = new Variant();
+          this.productVariants.variants = res.res.data;
+          this.product_variant_attributes = [];
+
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.message);
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 
   editVariant(form: NgForm) {
@@ -166,20 +175,21 @@ export class VariantComponent implements OnInit {
 
   updateVariant() {
     delete this.variant.product_variant_attributes;
-    let tmpImages = [];
-    if (this.lImages.length === 0) {
-      tmpImages = this.variant.images;
-    }
+
     this.variant.images = this.lImages;
     this.productService
       .updateProductVariant(this.productID, this.variant)
       .subscribe(
         (res: any) => {
           this.snotifyService.success(res.res.message, "Success !");
-          if (this.variant.images.length > 0) {
-            this.router.navigate(["/products"]);
-          }
-          this.variant.images = tmpImages;
+          let updatedVariant = new Variant(res.res.data);
+
+          let index = this.productVariants.variants.findIndex(
+            v => v.id === updatedVariant.id
+          );
+          this.productVariants.variants.splice(index, 1);
+          this.productVariants.variants.push(updatedVariant);
+          this.variant = updatedVariant;
           this.spinnerService.requestInProcess(false);
         },
         errors => {
@@ -236,22 +246,30 @@ export class VariantComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spinnerService.requestInProcess(true);
-        this.productService.deleteProductVariantImage(+this.variant.id, image_id).subscribe(
-          res => {
-            this.spinnerService.requestInProcess(false);
-            if (!res.error) {
-              this.snotifyService.success("Deleted successfully !", "Success");
-              const result = this.variant.images.findIndex(image => image.id === image_id);
-              if (result !== -1) {
-                this.variant.images.splice(result, 1);
+        this.productService
+          .deleteProductVariantImage(+this.variant.id, image_id)
+          .subscribe(
+            res => {
+              this.spinnerService.requestInProcess(false);
+              if (!res.error) {
+                this.snotifyService.success(
+                  "Deleted successfully !",
+                  "Success"
+                );
+                const result = this.variant.images.findIndex(
+                  image => image.id === image_id
+                );
+                if (result !== -1) {
+                  this.variant.images.splice(result, 1);
+                }
               }
+            },
+            error => {
+              this.spinnerService.requestInProcess(false);
+              let e = JSON.stringify(error);
+              this.snotifyService.error(e, "Fail");
             }
-          },
-          error => {
-            this.spinnerService.requestInProcess(false);
-            let e = JSON.stringify(error);
-            this.snotifyService.error(e, "Fail");
-          });
+          );
       }
       this.confirmDialogRef = null;
     });
@@ -271,16 +289,16 @@ export class VariantComponent implements OnInit {
   converter(variants: Variant[]) {
     if (variants.length > 0) {
       variants.forEach(variant => {
-        if (variant.operation === 'none') {
+        if (variant.operation === "none") {
           variant.operation = 1;
-        } else if (variant.operation === 'add') {
+        } else if (variant.operation === "add") {
           variant.operation = 2;
-        } else if (variant.operation === 'subtract') {
+        } else if (variant.operation === "subtract") {
           variant.operation = 3;
         }
-        if (variant.changed_by === 'absolute') {
+        if (variant.changed_by === "absolute") {
           variant.changed_by = 1;
-        } else if (variant.changed_by === 'percentage') {
+        } else if (variant.changed_by === "percentage") {
           variant.changed_by = 2;
         }
       });
@@ -312,7 +330,8 @@ export class VariantComponent implements OnInit {
         if (obj.option_set_id === option_set_id) {
           return index;
         }
-      }).filter(isFinite);
+      })
+      .filter(isFinite);
 
     if (index.length > 0) {
       this.product_variant_attributes.splice(index[0], 1);
@@ -375,8 +394,8 @@ export class VariantComponent implements OnInit {
     this.variant = new Variant();
   }
 
-  onUploadError(event: any) { }
-  onUploadSuccess(event: any) { }
+  onUploadError(event: any) {}
+  onUploadSuccess(event: any) {}
 }
 
 export class Options {
