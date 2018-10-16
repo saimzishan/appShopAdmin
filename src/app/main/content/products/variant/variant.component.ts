@@ -45,6 +45,7 @@ export class VariantComponent implements OnInit {
   lImages: any = [];
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
+  isNew = false;
   
   constructor(
     private productService: ProductService,
@@ -130,6 +131,7 @@ export class VariantComponent implements OnInit {
   }
 
   selectVariant(selectedVariant: Variant) {
+    this.isNew = false;
     this.variant = selectedVariant;
   }
 
@@ -416,6 +418,11 @@ export class VariantComponent implements OnInit {
       }
       this.getProductOptionSetWithValue();
     });
+  }
+
+  newVariant() {
+    this.isNew = true;
+    this.variant = new Variant();
   }
 }
 

@@ -36,12 +36,13 @@
         </div>
         <div *ngIf="isAddorEditSKU">
             <mat-card>
+                <button (click)="newVariant()" class="btn btn-info float-right">Add New Variant</button>
                 <form name="skuForm" #skuForm="ngForm">
 
                     <mat-card-content>
                         <br>
                         <div class="row">
-                            <ng-container *ngIf="pageType === 'new'">
+                            <ng-container *ngIf="pageType === 'new' || isNew">
                                 <div class="col-md-1" *ngFor="let optionSet of productOptionSetAndValue">
                                     <label>{{optionSet.name}}</label>
                                     <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
@@ -130,13 +131,13 @@
                                 <!-- </mat-form-field> -->
                             </div>
                             <div class="col-md-1" style="text-align: right;">
-                                <button *ngIf="pageType === 'new'" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical" style="border-radius: 50%;
+                                <button *ngIf="pageType === 'new' || isNew" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical" style="border-radius: 50%;
                                 margin-top: 20px; padding: 0px !important;">
                                     <i class="material-icons">
                                         add
                                     </i>
                                 </button>
-                                <button *ngIf="pageType === 'edit'" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">
+                                <button *ngIf="pageType === 'edit' && !isNew" (click)="editVariant(skuForm);" class="btn btn-info" style="margin-top: 20px;">
                                     Save
                                 </button>
                             </div>
