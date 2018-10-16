@@ -224,6 +224,10 @@ export class SupplierFormComponent implements OnInit {
         if (!res.status) {
           this.categories = res.res.data;
           this.categoryNodes = this.createNode(this.categories);
+          if (this.pageType === "edit") {
+            this.category_id = this.product.category.id;
+            this.parentCat = this.product.category.name;
+          }
         }
         this.spinnerService.requestInProcess(false);
       },
