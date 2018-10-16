@@ -36,7 +36,7 @@
         </div>
         <div *ngIf="isAddorEditSKU">
             <mat-card>
-                <button (click)="newVariant()" class="btn btn-info float-right">Add New Variant</button>
+                <button (click)="isNewVariant()" class="btn btn-info float-right">Add New Variant</button>
                 <form name="skuForm" #skuForm="ngForm">
 
                     <mat-card-content>
@@ -219,7 +219,7 @@
 
                 <mat-card-actions style="text-align: right;">
                     <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                    <button class="btn btn-info" mat-button (click)="saveProduct()">Save & Close</button>
+                    <button class="btn btn-info" mat-button (click)="saveProductVariants()">Save & Close</button>
                 </mat-card-actions>
 
             </mat-card>

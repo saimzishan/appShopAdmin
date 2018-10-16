@@ -169,7 +169,7 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   getOptionSet() {
     this.variantInstance.setProductSupplierIds();
-    // this.variantInstance.getProductOptionSetWithValue();
+    this.variantInstance.getProductOptionSetWithValue();
   }
 }
 

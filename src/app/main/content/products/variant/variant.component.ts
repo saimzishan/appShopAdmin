@@ -28,9 +28,6 @@ export class VariantComponent implements OnInit {
   sub: any;
   productOptionSetAndValue: Option[];
 
-  option_set_id = [];
-  optionSets: any;
-  optionSetWithValue: {};
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
   isAddorEditSKU = false;
@@ -63,22 +60,6 @@ export class VariantComponent implements OnInit {
 
   ngOnInit() {
     this.setProductSupplierIds();
-    // this.init();
-  }
-  init() {
-    let optionSet: any = localStorage.getItem("optionSet");
-    if (optionSet) {
-      optionSet = JSON.parse(optionSet);
-      this.setOptions(optionSet);
-    }
-
-    // let current_product: any = localStorage.getItem("current_product");
-    // if (current_product) {
-    //   current_product = JSON.parse(current_product);
-    //   this.product_variant = current_product.supplier;
-    //   this.supplierId = current_product.supplier.id;
-    //   this.productId = current_product.id;
-    // }
   }
 
   getProductOptionSetWithValue() {
@@ -96,102 +77,12 @@ export class VariantComponent implements OnInit {
       });
   }
 
-  callRelatedFunctions(res) {
-    if (res.hasOwnProperty("option")) {
-      switch (res.option) {
-        case "optionsAdded":
-          this.init();
-          break;
-        case "editProduct":
-          this.productID = res.value.product_id;
-          // this.edit(res.value.product_variants);
-          break;
-      }
-    }
-  }
-
-  converter(variants: Variant[]) {
-    if (variants.length > 0) {
-      variants.forEach(variant => {
-        if (variant.operation === 'none') {
-          variant.operation = 1;
-        } else if (variant.operation === 'add') {
-          variant.operation = 2;
-        } else if (variant.operation === 'subtract') {
-          variant.operation = 3;
-        }
-        if (variant.change_by === 'absolute') {
-          variant.change_by = 1;
-        } else if (variant.change_by === 'percentage') {
-          variant.change_by = 2;
-        }
-      });
-    }
-    this.isAddorEditSKU = true;
-  }
-
-  selectVariant(selectedVariant: Variant) {
-    this.isNew = false;
-    this.variant = selectedVariant;
-  }
-
-  setOptions(obj) {
-    this.option_with_value = obj;
-  }
-
-  getOptions(id: number) {
-    const res = this.productOptionSetAndValue.find(
-      optionSet => optionSet.id === id
-    );
-    if (res) {
-      return res.options;
-    }
-  }
-
-  addOrEditSku() {
-    this.isAddorEditSKU = !this.isAddorEditSKU;
-  }
-
-  seletOption(id) {
-    this.option_skus = this.getOptions(id);
-    this.enableOptions = true;
-  }
-
-  validateAllFormFields(formGroup: FormGroup) {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  addOptionSet(option_id, option_set_id) {
-
-    let index: any = this.product_variant_attributes
-      .map(function(obj, index) {
-        if (obj.option_set_id === option_set_id) {
-          return index;
-        }
-      })
-      .filter(isFinite);
-
-    if (index.length > 0) {
-      this.product_variant_attributes.splice(index[0], 1);
-    }
-    let pv_attribute = { option_id: option_id, option_set_id: option_set_id };
-    this.product_variant_attributes.push(pv_attribute);
-  }
-
   mangeOption(form: NgForm) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-
     if (this.product_variant_attributes.length === 0) {
       this.snotifyService.warning("Please select option", "Warning !");
       return;
@@ -211,9 +102,29 @@ export class VariantComponent implements OnInit {
     this.productVariants.variants[this.productVariants.variants.length - 1].product_variant_attributes = this.product_variant_attributes;
     this.productVariants.variants[this.productVariants.variants.length - 1].images = this.lImages;
     this.lImages = new Array<Image>();
-    // this.product_variant.sku = "";
     this.product_variant_attributes = [];
     this.resetDropzone();
+  }
+
+  saveProductVariants() {
+    if (this.productVariants.variants.length === 0) {
+      this.snotifyService.warning("Please add option", "Warning !");
+      return;
+    }
+    this.spinnerService.requestInProcess(true);
+
+    this.productService.saveProductVariants(this.productVariants, this.ps_id, "ps_variants").subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   editVariant(form: NgForm) {
@@ -262,33 +173,6 @@ export class VariantComponent implements OnInit {
       });
   }
 
-  saveProduct() {
-    if (this.productVariants.variants.length === 0) {
-      this.snotifyService.warning("Please add option", "Warning !");
-      return;
-    }
-
-    // objct = {
-    //   supplier_id: this.supplierId,
-    //   id: this.productId,
-    //   variants: this.productVariant
-    // };
-    this.spinnerService.requestInProcess(true);
-
-    this.productService.saveProductVariants(this.productVariants, this.ps_id, "ps_variants").subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.message);
-        this.snotifyService.error(e, "Error !");
-      }
-    );
-  }
-
   deleteVariant(variantId: number) {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
@@ -320,33 +204,107 @@ export class VariantComponent implements OnInit {
       });
   }
 
-  onUploadError(evt) {}
-  onUploadSuccess(evt) {
-    // this.image = new Image();
-    // this.image.base64String = evt[0].dataURL.split(",")[1];
-    // this.image.content_type = evt[0].type.split("/")[1];
-    // this.image.content_type = "." + this.image.content_type.split(";")[0];
-    // this.image.type = "small";
-    // //
-    // for (let index = 0; index < 3; index++) {
-    //   this.images.push(new Image(this.image));
-    //   if (index === 0) {
-    //     this.image.type = "medium";
-    //   }
-    //   if (index === 1) {
-    //     this.image.type = "large";
-    //   }
-    // }
-    // this.lImages.push(this.images);
-    // this.images = new Array<Image>();
+  removeImage(image_id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.productService.deleteProductVariantImage(+this.variant.id, image_id).subscribe(
+          res => {
+            this.spinnerService.requestInProcess(false);
+            if (!res.error) {
+              this.snotifyService.success("Deleted successfully !", "Success");
+              const result = this.variant.images.findIndex(image => image.id === image_id);
+              if (result !== -1) {
+                this.variant.images.splice(result, 1);
+              }
+            }
+          },
+          error => {
+            this.spinnerService.requestInProcess(false);
+            let e = JSON.stringify(error);
+            this.snotifyService.error(e, "Fail");
+          });
+      }
+      this.confirmDialogRef = null;
+    });
   }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  converter(variants: Variant[]) {
+    if (variants.length > 0) {
+      variants.forEach(variant => {
+        if (variant.operation === 'none') {
+          variant.operation = 1;
+        } else if (variant.operation === 'add') {
+          variant.operation = 2;
+        } else if (variant.operation === 'subtract') {
+          variant.operation = 3;
+        }
+        if (variant.change_by === 'absolute') {
+          variant.change_by = 1;
+        } else if (variant.change_by === 'percentage') {
+          variant.change_by = 2;
+        }
+      });
+    }
+    this.isAddorEditSKU = true;
+  }
+
+  selectVariant(selectedVariant: Variant) {
+    this.isNew = false;
+    this.variant = selectedVariant;
+  }
+
+  getOptions(id: number) {
+    const res = this.productOptionSetAndValue.find(
+      optionSet => optionSet.id === id
+    );
+    if (res) {
+      return res.options;
+    }
+  }
+
+  addOrEditSku() {
+    this.isAddorEditSKU = !this.isAddorEditSKU;
+  }
+
+  addOptionSet(option_id, option_set_id) {
+    let index: any = this.product_variant_attributes
+      .map(function(obj, index) {
+        if (obj.option_set_id === option_set_id) {
+          return index;
+        }
+      }).filter(isFinite);
+
+    if (index.length > 0) {
+      this.product_variant_attributes.splice(index[0], 1);
+    }
+    let pv_attribute = { option_id: option_id, option_set_id: option_set_id };
+    this.product_variant_attributes.push(pv_attribute);
+  }
+
   addPicture(obj) {
     this.image = new Image();
     this.image.base64String = obj.dataURL.split(",")[1];
     this.image.content_type = obj.type.split("/")[1];
     this.image.content_type = "." + this.image.content_type.split(";")[0];
     this.image.type = "small";
-    //
+
     for (let index = 0; index < 3; index++) {
       this.images.push(new Image(this.image));
       if (index === 0) {
@@ -358,38 +316,6 @@ export class VariantComponent implements OnInit {
     }
     this.lImages.push(this.images);
     this.images = new Array<Image>();
-  }
-
-  removeImage(image_id) {
-    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
-      disableClose: false
-    });
-    this.confirmDialogRef.componentInstance.confirmMessage =
-      "Are you sure you want to delete?";
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      // if (result) {
-      //   this.spinnerService.requestInProcess(true);
-      //   this.productService.deleteProductVariantImage(+this.product_variant.id, image_id).subscribe(
-      //     res => {
-      //       this.spinnerService.requestInProcess(false);
-      //       if (!res.error) {
-      //         this.snotifyService.success("Deleted successfully !", "Success");
-      //         const result = this.product_variant.images.findIndex(
-      //           image => image.id === image_id
-      //         );
-      //         if (result !== -1) {
-      //           this.product_variant.images.splice(result, 1);
-      //         }
-      //       }
-      //     },
-      //     error => {
-      //       this.spinnerService.requestInProcess(false);
-      //       console.log(error);
-      //     }
-      //   );
-      // }
-      this.confirmDialogRef = null;
-    });
   }
 
   resetDropzone(): void {
@@ -416,11 +342,10 @@ export class VariantComponent implements OnInit {
           this.supplierID = parseInt(supplier_id, 10);
         }
       }
-      this.getProductOptionSetWithValue();
     });
   }
 
-  newVariant() {
+  isNewVariant() {
     this.isNew = true;
     this.variant = new Variant();
   }
