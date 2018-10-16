@@ -68,7 +68,7 @@
                                             </mat-select>
                                         </div>
                                         <div class="col-md-2">
-                                            <mat-select placeholder="Change By" [(value)]="opt.change_by" #change_by
+                                            <mat-select placeholder="Change By" [(value)]="opt.changed_by" #change_by
                                                 required>
                                                 <mat-option [value]=1>Absolute</mat-option>
                                                 <mat-option [value]=2>Percentage</mat-option>
@@ -86,10 +86,10 @@
                                             <button *ngIf="!opt.isSelected && option_set.checked" class="btn btn-success"
                                                 (click)="saveOptionSetAndValue(row , opt , operation.value , change_by.value , amount.value)"><i
                                                     class="material-icons">add</i></button>
-                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-info"
+                                            <button *ngIf="opt.ps_id && opt.isSelected" class="btn btn-info"
                                                 (click)="editOptionSetValue(opt.ps_id, row, opt.option_id, operation.value , change_by.value , amount.value)"><i
                                                     class="material-icons">create</i></button>
-                                            <button *ngIf="pageType === 'edit' && opt.isSelected" class="btn btn-danger"
+                                            <button *ngIf="opt.ps_id && opt.isSelected" class="btn btn-danger"
                                                 (click)="deleteOptionSetValue(row, opt.ps_id)"><i class="material-icons">delete</i></button>
                                         </div>
                                     </div>
