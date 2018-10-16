@@ -177,14 +177,14 @@ export class BluckPrice {
   from: number;
   to: number;
   discount: number;
-  change_by: number;
+  changed_by: number;
   product_supplier_id: number;
   constructor(bluckPrice?) {
     bluckPrice = bluckPrice || {};
     this.from = bluckPrice.from;
     this.to = bluckPrice.to;
     this.discount = bluckPrice.discount;
-    this.change_by = bluckPrice.change_by;
+    this.changed_by = bluckPrice.changed_by;
     this.product_supplier_id = bluckPrice.product_supplier_id;
   }
 }

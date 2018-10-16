@@ -104,28 +104,34 @@ export class VariantComponent implements OnInit {
       }
     }
 
-    this.productVariants.variants.push(new Variant(this.variant));
-    this.productVariants.variants[
-      this.productVariants.variants.length - 1
-    ].product_variant_attributes = this.product_variant_attributes;
-    this.productVariants.variants[
-      this.productVariants.variants.length - 1
-    ].images = this.lImages;
-    this.lImages = new Array<Image>();
-    this.product_variant_attributes = [];
-    this.resetDropzone();
+    this.variant.product_variant_attributes = this.product_variant_attributes;
+    this.variant.images = this.lImages;
+    if (this.pageType === 'edit') {
+      let pVariants = new ProductVariant();
+      pVariants.supplier_id = this.supplierID;
+      pVariants.variants.push(this.variant);
+      return this.saveProductVariants(pVariants);
+
+    } else if(this.pageType === 'new') {
+      this.productVariants.variants.push(this.variant);
+    }
+    
   }
 
-  saveProductVariants() {
-    if (this.productVariants.variants.length === 0) {
+  saveProductVariants(productVariants?: ProductVariant) {
+    if (this.productVariants.variants.length === 0 || (productVariants && productVariants.variants.length === 0)) {
       this.snotifyService.warning("Please add option", "Warning !");
       return;
     }
     this.spinnerService.requestInProcess(true);
-
-    this.productService.saveProductVariants(this.productVariants, this.ps_id, "ps_variants").subscribe(
+    this.productVariants.supplier_id = this.supplierID;
+    this.productService.saveProductVariants(this.pageType === 'edit' ? productVariants : this.productVariants, this.ps_id, "ps_variants").subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
+        this.productVariants.variants = res.res.data;
+        this.lImages = new Array<Image>();
+      this.product_variant_attributes = [];
+      this.resetDropzone();
         this.spinnerService.requestInProcess(false);
       },
       errors => {
@@ -272,10 +278,10 @@ export class VariantComponent implements OnInit {
         } else if (variant.operation === 'subtract') {
           variant.operation = 3;
         }
-        if (variant.change_by === 'absolute') {
-          variant.change_by = 1;
-        } else if (variant.change_by === 'percentage') {
-          variant.change_by = 2;
+        if (variant.changed_by === 'absolute') {
+          variant.changed_by = 1;
+        } else if (variant.changed_by === 'percentage') {
+          variant.changed_by = 2;
         }
       });
     }
@@ -355,8 +361,10 @@ export class VariantComponent implements OnInit {
           ps_ids = JSON.parse(ps_ids);
           product_id = ps_ids._p_id;
           supplier_id = ps_ids._s_id;
+          let ps_id = ps_ids._ps_id;
           this.productID = parseInt(product_id, 10);
           this.supplierID = parseInt(supplier_id, 10);
+          this.ps_id = +ps_id;
         }
       }
     });
@@ -366,6 +374,9 @@ export class VariantComponent implements OnInit {
     this.isNew = true;
     this.variant = new Variant();
   }
+
+  onUploadError(event: any) { }
+  onUploadSuccess(event: any) { }
 }
 
 export class Options {

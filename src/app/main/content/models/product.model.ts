@@ -119,7 +119,7 @@ export class Variant {
   images: Array<Image>;
   content_type: string;
   operation: number | string;
-  change_by: number | string;
+  changed_by: number | string;
   amount: number;
   track_stock: boolean;
   stock: number;
@@ -139,7 +139,7 @@ export class Variant {
     this.low_level_stock = variant.low_level_stock;
     this.stock = variant.stock;
     this.operation = variant.operation || null;
-    this.change_by = variant.change_by || null;
+    this.changed_by = variant.changed_by || null;
     this.amount = variant.amount || null;
     this.track_stock = variant.ttrack_stock || false;
     this.product_variant_attributes =

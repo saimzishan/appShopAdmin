@@ -89,13 +89,13 @@ export class OptionAndSkusComponent implements OnInit {
           element.ps_id = res.id;
           element.isSelected = true;
           element.amount = res.amount;
-          element.change_by = res.change_by === "absolute" ? 1 : 2;
+          element.changed_by = res.changed_by === "absolute" ? 1 : 2;
           element.operation = res.operation === "add" ? 2 : 3;
           element.option_id = res.option_id;
         } else {
           element.isSelected = false;
           element.amount = null;
-          element.change_by = null;
+          element.changed_by = null;
           element.operation = null;
           element.option_id = null;
         }
@@ -229,8 +229,8 @@ export class OptionAndSkusComponent implements OnInit {
         this.optionSets[index].options[opt_index].isSelected = true;
         this.optionSets[index].options[opt_index].ps_id = res.res.data.id;
         this.optionSets[index].options[opt_index].amount = res.res.data.amount;
-        this.optionSets[index].options[opt_index].change_by =
-          res.res.data.change_by === "absolute" ? 1 : 2;
+        this.optionSets[index].options[opt_index].changed_by =
+          res.res.data.changed_by === "absolute" ? 1 : 2;
         this.optionSets[index].options[opt_index].operation =
           res.res.data.operation === "add" ? 2 : 3;
         this.optionSets[index].options[opt_index].option_id =
@@ -301,7 +301,7 @@ export class OptionAndSkusComponent implements OnInit {
 
             this.optionSets[index].options[opt_index].isSelected = false;
             this.optionSets[index].options[opt_index].amount = null;
-            this.optionSets[index].options[opt_index].change_by = null;
+            this.optionSets[index].options[opt_index].changed_by = null;
             this.optionSets[index].options[opt_index].operation = null;
             this.optionSets[index].options[opt_index].option_id = null;
             // Updation after deletion
@@ -335,7 +335,7 @@ export class OptionAndSkusComponent implements OnInit {
           let ps_id = ps_ids._ps_id;
           this.product_id = +product_id;
           this.supplier_id = +supplier_id;
-          this.ps_id = ps_id;
+          this.ps_id = +ps_id;
         }
       }
     });
