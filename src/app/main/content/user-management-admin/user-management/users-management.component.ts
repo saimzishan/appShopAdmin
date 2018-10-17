@@ -26,7 +26,7 @@ export class UsersManagementComponent implements OnInit {
   filter: ElementRef;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns: string[] = ["id", "name", "email", "level", "roles"];
+  displayedColumns: string[] = ["name", "email", "level", "roles"];
   user: User;
   dataSource;
   roles = new FormControl();

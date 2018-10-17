@@ -25,7 +25,7 @@ export class PermissionsManagementComponent implements OnInit {
   filter: ElementRef;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns: string[] = ["id", "name"];
+  displayedColumns: string[] = ["name"];
   permission: Permission;
   dataSource;
   constructor(

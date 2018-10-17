@@ -44,14 +44,6 @@
       <mat-table class="tags-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
         fusePerfectScrollbar>
 
-        <!-- ID Column -->
-        <ng-container cdkColumnDef="id">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-          <mat-cell *cdkCellDef="let tag">
-            <p class="text-truncate">{{tag.id}}</p>
-          </mat-cell>
-        </ng-container>
-
         <!-- Name Column -->
         <ng-container cdkColumnDef="name">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>

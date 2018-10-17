@@ -20,7 +20,7 @@ export class TagsComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource: any;
-  displayedColumns = ["id", "name", "notes"];
+  displayedColumns = ["name", "notes"];
   tag: Tag;
   constructor(
     private tagsService: TagsService,

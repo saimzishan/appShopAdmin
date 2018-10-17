@@ -60,25 +60,6 @@
                     </td>
                 </ng-container> -->
 
-                <!-- ID Column -->
-                <ng-container cdkColumnDef="id">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *cdkCellDef="let brand">
-                        <p class="text-truncate">{{brand.id}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Image Column -->
-                <!-- <ng-container cdkColumnDef="image">
-                    <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-                    <mat-cell *cdkCellDef="let brand">
-                        <img class="brand-image"
-                             *ngIf="brand.images[0]" [alt]="brand.name"
-                             [src]="brand.images[0].url"/>
-                        <img *ngIf="!brand.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'">
-                    </mat-cell>
-                </ng-container> -->
-
                 <!-- Name Column -->
                 <ng-container cdkColumnDef="name">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Name</mat-header-cell>

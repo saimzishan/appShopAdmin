@@ -15,7 +15,7 @@
 
             <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNav">
                 <div class="logo ml-16">
-                    <img class="logo-icon" src="assets/images/logos/fuse.svg">
+                    <img class="logo-icon" src="assets/images/logos/appshop.png">
                 </div>
             </div>
 
@@ -50,7 +50,7 @@
 
                 <button mat-menu-item class="">
                     <mat-icon>exit_to_app</mat-icon>
-                    <span>Logout</span>
+                    <span (click)="logout()">Logout</span>
                 </button>
 
             </mat-menu>

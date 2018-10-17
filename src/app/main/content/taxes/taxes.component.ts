@@ -26,7 +26,7 @@ export class TaxesComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource: any;
-  displayedColumns = ["id", "title", "value"];
+  displayedColumns = ["title", "value"];
   tax: Tax;
   constructor(
     private taxesService: TaxesService,

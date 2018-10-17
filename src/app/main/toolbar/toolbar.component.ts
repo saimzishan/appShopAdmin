@@ -98,4 +98,9 @@ export class FuseToolbarComponent
         // Use the selected language for translations
         this.translate.use(lang.id);
     }
+
+    logout() {
+        localStorage.clear();
+        window.location.reload();
+    }
 }

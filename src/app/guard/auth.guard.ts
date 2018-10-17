@@ -44,6 +44,7 @@ export class AuthGuard implements CanActivate {
 
     public static logout() {
        localStorage.clear();
+       window.location.reload();
     }
 
 

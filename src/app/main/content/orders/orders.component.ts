@@ -23,7 +23,7 @@ export class OrdersComponent implements OnInit {
   @ViewChild(MatSort)
   sort: MatSort;
   dataSource: any;
-  displayedColumns = ["id", "date", "order_id", "customer", "status", "total"];
+  displayedColumns = ["date", "order_id", "customer", "status", "total"];
   order: Order;
   statusList: any[];
   orders: any[];

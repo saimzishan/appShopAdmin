@@ -38,17 +38,12 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
+        <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
 
       <mat-table class="suppliers-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
         fusePerfectScrollbar>
-
-        <!-- ID Column -->
-        <ng-container cdkColumnDef="id">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
-            <p class="text-truncate">{{supplier.id}}</p>
-          </mat-cell>
-        </ng-container>
 
         <!-- Name Column -->
         <ng-container cdkColumnDef="name">

@@ -46,12 +46,6 @@
 
             <mat-table class="options-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
                 fusePerfectScrollbar>
-                <ng-container cdkColumnDef="id">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *cdkCellDef="let option">
-                        <p class="text-truncate">{{option.id}}</p>
-                    </mat-cell>
-                </ng-container>
                 <ng-container cdkColumnDef="option_set">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Option Name</mat-header-cell>
                     <mat-cell *cdkCellDef="let option">
