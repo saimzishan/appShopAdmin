@@ -16,7 +16,7 @@ import { SnotifyService } from "ng-snotify";
 })
 export class OptionsComponent implements OnInit {
   dataSource: any;
-  displayedColumns = ["id", "option_set", "option_values"];
+  displayedColumns = ["option_set", "option_values"];
   selection = new SelectionModel<Option>(true, []);
   options;
   baseURL = GLOBAL.USER_IMAGE_API;

@@ -29,7 +29,7 @@ import { SnotifyService } from "ng-snotify";
 })
 export class BrandsComponent implements OnInit {
   dataSource: any;
-  displayedColumns = ["id", "name", "notes", "image"];
+  displayedColumns = ["name", "notes", "image"];
   selection = new SelectionModel<Brand>(true, []);
   brands;
   baseURL = GLOBAL.USER_IMAGE_API;

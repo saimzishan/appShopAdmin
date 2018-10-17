@@ -17,11 +17,15 @@
           <mat-icon>arrow_back</mat-icon>
         </button>
 
-        <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+        <!-- <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}"> -->
           <!-- <img *ngIf="supplier.contact.profile_image" [src]="supplier.contact.profile_image">
           <img *ngIf="!supplier.contact.profile_image" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
-          <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">category</mat-icon>
-        </div>
+          <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">category</mat-icon>
+        </div> -->
+
+        <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">category</mat-icon>
+          </div>
 
         <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
           <div class="h2" *ngIf="pageType ==='edit'">

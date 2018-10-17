@@ -47,25 +47,6 @@
             <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
                 fusePerfectScrollbar>
 
-                <!-- ID Column -->
-                <ng-container cdkColumnDef="id">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product">
-                        <p class="text-truncate">{{product.id}}</p>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Image Column -->
-                <ng-container cdkColumnDef="image">
-                    <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-                    <mat-cell *cdkCellDef="let product">
-                        <!-- <img class="product-image"
-                             *ngIf="product.images[0]" [alt]="product.name"
-                             [src]="product.images[0].url"/>
-                        <img *ngIf="!product.images[0]" [src]="'assets/images/ecommerce/product-image-placeholder.png'"> -->
-                    </mat-cell>
-                </ng-container>
-
                 <!-- Name Column -->
                 <ng-container cdkColumnDef="name">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>

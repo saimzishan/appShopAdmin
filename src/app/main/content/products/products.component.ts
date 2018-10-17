@@ -16,8 +16,6 @@ import { SnotifyService } from "ng-snotify";
 export class ProductsComponent implements OnInit {
   dataSource;
   displayedColumns = [
-    "id",
-    "image",
     "name",
     "category",
     "brand",

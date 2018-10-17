@@ -42,14 +42,6 @@
       <mat-table class="taxes-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
         fusePerfectScrollbar>
 
-        <!-- ID Column -->
-        <ng-container cdkColumnDef="id">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-          <mat-cell *cdkCellDef="let tax">
-            <p class="text-truncate">{{tax.id}}</p>
-          </mat-cell>
-        </ng-container>
-
         <!-- Tax Title Column -->
         <ng-container cdkColumnDef="title">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header>Tax Title</mat-header-cell>

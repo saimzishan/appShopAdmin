@@ -40,14 +40,6 @@
             <mat-table class="roles-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
                 fusePerfectScrollbar>
 
-                <!-- id Column -->
-                <ng-container cdkColumnDef="id">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-                    <mat-cell *cdkCellDef="let role">
-                        <p class="text-truncate">{{role.id}}</p>
-                    </mat-cell>
-                </ng-container>
-
                 <!-- role Column -->
                 <ng-container cdkColumnDef="role">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Role</mat-header-cell>

@@ -40,14 +40,6 @@
       <mat-table class="orders-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
         fusePerfectScrollbar>
 
-        <!-- ID Column -->
-        <ng-container cdkColumnDef="id">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
-          <mat-cell *cdkCellDef="let order">
-            <p class="text-truncate">{{order.id}}</p>
-          </mat-cell>
-        </ng-container>
-
         <!-- Date Column -->
         <ng-container cdkColumnDef="date">
           <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Date</mat-header-cell>

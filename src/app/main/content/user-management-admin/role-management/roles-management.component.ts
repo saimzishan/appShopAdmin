@@ -26,7 +26,7 @@ export class RolesManagementComponent implements OnInit {
   filter: ElementRef;
   @ViewChild(MatSort)
   sort: MatSort;
-  displayedColumns: string[] = ["id", "role", "permissions"];
+  displayedColumns: string[] = ["role", "permissions"];
   role: Role;
   dataSource;
   permissions = new FormControl();
