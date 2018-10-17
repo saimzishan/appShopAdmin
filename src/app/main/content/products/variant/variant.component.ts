@@ -105,21 +105,18 @@ export class VariantComponent implements OnInit {
         this.addPicture(iterator);
       }
     }
-
+    if (this.variant.track_stock === false) {
+      this.variant.stock = 0;
+      this.variant.low_level_stock = 0;
+    }
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
-    // if (this.pageType === "edit") {
       let pVariants = new ProductVariant();
       pVariants.supplier_id = this.supplierID;
       pVariants.variants.push(this.variant);
       this.lImages = new Array<Image>();
       this.resetDropzone();
       return this.saveProductVariants(pVariants);
-    // } else if (this.pageType === "new") {
-    //   this.productVariants.variants.push(this.variant);
-    //   this.lImages = new Array<Image>();
-    //   this.resetDropzone();
-    // }
   }
 
   saveProductVariants(productVariants?: ProductVariant) {
@@ -391,6 +388,7 @@ export class VariantComponent implements OnInit {
   isNewVariant() {
     this.isNew = true;
     this.isNewPressed = true;
+    this.productSupplier.images = [];
     this.variant = this.productSupplier;
     this.variant.amount = this.productSupplier.price;
   }

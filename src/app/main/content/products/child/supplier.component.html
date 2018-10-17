@@ -188,26 +188,40 @@
                     <h2>Other Details</h2>
                 </legend>
                 <div class="row">
-                    <div class="col-md-2">
-                        <!-- <mat-form-field class="w-100-p"> -->
-                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track
-                            Stock
-                        </mat-checkbox>
-                        <!-- </mat-form-field> -->
-                    </div>
-
-                    <div class="col-md-2">
-                        <!-- <mat-form-field class="w-100-p"> -->
-                        <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing
-                            option
-                        </mat-checkbox>
-                        <!-- </mat-form-field> -->
-                    </div>
-                    <div class="col-md-2">
-                        <!-- <mat-form-field class="w-100-p"> -->
-                        <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.supplier.active">Active
-                        </mat-checkbox>
-                        <!-- </mat-form-field> -->
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <!-- <mat-form-field class="w-100-p"> -->
+                                <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track Stock
+                                </mat-checkbox>
+                                <!-- </mat-form-field> -->
+                            </div>
+                
+                            <div class="col-md-4">
+                                <!-- <mat-form-field class="w-100-p"> -->
+                                <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing option
+                                </mat-checkbox>
+                                <!-- </mat-form-field> -->
+                            </div>
+                            <div class="col-md-4">
+                                <!-- <mat-form-field class="w-100-p"> -->
+                                <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.supplier.active">Active
+                                </mat-checkbox>
+                                <!-- </mat-form-field> -->
+                            </div>
+                        </div>
+                        <div *ngIf="true" class="row" style="margin-top: 12%">
+                            <div class="col-md-12">
+                                <mat-selection-list id="sides" name="sides" [(ngModel)]="product.supplier.sides">
+                                    <mat-list-option value="left">Left</mat-list-option>
+                                    <mat-list-option value="right">Right</mat-list-option>
+                                    <mat-list-option value="top">Top</mat-list-option>
+                                    <mat-list-option value="bottom">Bottom</mat-list-option>
+                                    <mat-list-option value="front">Front</mat-list-option>
+                                    <mat-list-option value="back">Back</mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <mat-selection-list name="class" [(ngModel)]="product.supplier.class">

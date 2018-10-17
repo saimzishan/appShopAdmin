@@ -48,6 +48,7 @@ export class Supplier {
   bulk_prices: BluckPrice[];
   track_stock: boolean;
   printing_option: boolean;
+  sides: any;
   stock: number;
   low_level_stock: number;
   active: boolean;
@@ -72,9 +73,10 @@ export class Supplier {
     this.bulk_prices = new Array<BluckPrice>();
     this.track_stock = supplier.ttrack_stock || false;
     this.printing_option = supplier.printing_option || false;
+    this.sides = supplier.sides || []
     this.active = supplier.active || false;
-    this.low_level_stock = supplier.low_level_stock;
-    this.stock = supplier.stock;
+    this.low_level_stock = supplier.low_level_stock || 0;
+    this.stock = supplier.stock || 0;
     this.class = supplier.class || new Array();
     this.product_supplier_attributes = new Array<ProductSupplierAttribute>();
     this.product_variants = supplier.product_variants || new ProductVariant();
@@ -136,8 +138,8 @@ export class Variant {
     this.width = variant.width;
     this.height = variant.height;
     this.depth = variant.depth;
-    this.low_level_stock = variant.low_level_stock;
-    this.stock = variant.stock;
+    this.low_level_stock = variant.low_level_stock || 0;
+    this.stock = variant.stock || 0;
     this.operation = variant.operation || null;
     this.changed_by = variant.changed_by || null;
     this.amount = variant.amount || null;
