@@ -19,15 +19,18 @@ import { Tax } from "../models/tax.model";
   animations: fuseAnimations
 })
 export class TaxesComponent implements OnInit {
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild("filter") filter: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  @ViewChild("filter")
+  filter: ElementRef;
+  @ViewChild(MatSort)
+  sort: MatSort;
   dataSource: any;
   displayedColumns = ["id", "title", "value"];
   tax: Tax;
   constructor(
-    private taxesService: TaxesService, private spinnerService: SpinnerService,
+    private taxesService: TaxesService,
+    private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {
     this.tax = new Tax();
@@ -39,20 +42,24 @@ export class TaxesComponent implements OnInit {
 
   getTaxList() {
     this.spinnerService.requestInProcess(true);
-    this.taxesService.getTaxs().subscribe((res: any) => {
-      let data = res.res.data;
-      this.setDataSource(data);
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.taxesService.getTaxs().subscribe(
+      (res: any) => {
+        let data = res.res.data;
+        this.setDataSource(data);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   setDataSource(taxs) {
     this.dataSource = new MatTableDataSource<Tax>(taxs);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {

@@ -22,16 +22,6 @@ export class BrandsService extends ApiService {
    * @param {RouterStateSnapshot} state
    * @returns {Observable<any> | Promise<any> | any}
    */
-  resolve(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<any> | Promise<any> | any {
-    return new Promise((resolve, reject) => {
-      Promise.all([this.getBrands()]).then(() => {
-        resolve();
-      }, reject);
-    });
-  }
 
   // getBrands(): Promise<any>
   // {

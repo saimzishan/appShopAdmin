@@ -13,15 +13,18 @@ import { Tag } from "../models/tag.model";
   animations: fuseAnimations
 })
 export class TagsComponent implements OnInit {
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild("filter") filter: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  @ViewChild("filter")
+  filter: ElementRef;
+  @ViewChild(MatSort)
+  sort: MatSort;
   dataSource: any;
   displayedColumns = ["id", "name", "notes"];
   tag: Tag;
   constructor(
-    private tagsService: TagsService, private spinnerService: SpinnerService,
+    private tagsService: TagsService,
+    private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {
     this.tag = new Tag();
@@ -33,20 +36,24 @@ export class TagsComponent implements OnInit {
 
   getTagList() {
     this.spinnerService.requestInProcess(true);
-    this.tagsService.getTags().subscribe((res: any) => {
-      let data = res.res.data;
-      this.setDataSource(data);
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.tagsService.getTags().subscribe(
+      (res: any) => {
+        let data = res.res.data;
+        this.setDataSource(data);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   setDataSource(tags) {
     this.dataSource = new MatTableDataSource<Tag>(tags);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {

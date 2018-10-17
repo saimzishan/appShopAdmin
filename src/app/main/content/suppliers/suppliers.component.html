@@ -8,7 +8,8 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -38,7 +39,8 @@
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
 
-      <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
+      <mat-table class="suppliers-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
+        fusePerfectScrollbar>
 
         <!-- ID Column -->
         <ng-container cdkColumnDef="id">
@@ -119,7 +121,8 @@
           <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-sm>
 
             <p>
-              {{supplier.contact.no}}, {{supplier.contact.street}}, {{supplier.contact.city}}, {{supplier.contact.country}}
+              {{supplier.contact.no}}, {{supplier.contact.street}}, {{supplier.contact.city}},
+              {{supplier.contact.country}}
             </p>
 
           </mat-cell>

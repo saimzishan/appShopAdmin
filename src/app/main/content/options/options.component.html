@@ -8,7 +8,8 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+            fxLayoutAlign.gt-xs="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -38,8 +39,13 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card mat-white-bg">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
 
-            <mat-table class="options-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
+
+            <mat-table class="options-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
+                fusePerfectScrollbar>
                 <ng-container cdkColumnDef="id">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>ID</mat-header-cell>
                     <mat-cell *cdkCellDef="let option">
@@ -62,7 +68,7 @@
                 </ng-container>
                 <br>
                 <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *cdkRowDef="let option; columns: displayedColumns;" class="brand" matRipple [routerLink]="'/options/option/'+option.id">
+                <mat-row *cdkRowDef="let option; columns: displayedColumns;" class="option" matRipple [routerLink]="'/options/option/'+option.id">
                 </mat-row>
             </mat-table>
             <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">

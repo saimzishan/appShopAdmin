@@ -1,4 +1,8 @@
-@import "../../../../../src/app/core/scss/fuse";
+.search-input-wrapper {
+  max-width: 480px;
+}
+
+@import "../../../../../../src/app/core/scss/fuse";
 
 :host {
   .header {
@@ -19,7 +23,7 @@
     }
   }
 
-  .tags-table {
+  .roles-table {
     flex: 1 1 auto;
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     overflow: auto;
@@ -28,7 +32,7 @@
       min-height: 64px;
     }
 
-    .tag {
+    .role {
       position: relative;
       cursor: pointer;
       height: 84px;
@@ -47,7 +51,7 @@
     .mat-column-image {
       flex: 0 1 84px;
 
-      .tag-image {
+      .brand-image {
         width: 52px;
         height: 52px;
         border: 1px solid rgba(0, 0, 0, 0.12);

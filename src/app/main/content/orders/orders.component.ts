@@ -9,7 +9,6 @@ import { CdkDetailRowDirective } from "./cdk-detail-row.directive";
 import { Address } from "../models/address.model";
 import { GLOBAL } from "../../../shared/globel";
 
-
 @Component({
   selector: "app-orders",
   templateUrl: "./orders.component.html",
@@ -17,10 +16,12 @@ import { GLOBAL } from "../../../shared/globel";
   animations: fuseAnimations
 })
 export class OrdersComponent implements OnInit {
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild("filter") filter: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  @ViewChild("filter")
+  filter: ElementRef;
+  @ViewChild(MatSort)
+  sort: MatSort;
   dataSource: any;
   displayedColumns = ["id", "date", "order_id", "customer", "status", "total"];
   order: Order;
@@ -30,7 +31,8 @@ export class OrdersComponent implements OnInit {
   clipUI: boolean;
   shipClipUI: boolean;
   constructor(
-    private ordersService: OrdersService, private spinnerService: SpinnerService,
+    private ordersService: OrdersService,
+    private spinnerService: SpinnerService,
     private snotifyService: SnotifyService
   ) {
     this.order = new Order();
@@ -41,51 +43,66 @@ export class OrdersComponent implements OnInit {
     this.getOrderList();
   }
 
-  @Input() singleChildRowDetail: boolean;
+  @Input()
+  singleChildRowDetail: boolean;
 
-  private openedRow: CdkDetailRowDirective
-  onToggleChange(cdkDetailRow: CdkDetailRowDirective, order: Order) : void {
-    if (this.singleChildRowDetail && this.openedRow && this.openedRow.expended) {
-      this.openedRow.toggle();      
+  private openedRow: CdkDetailRowDirective;
+  onToggleChange(cdkDetailRow: CdkDetailRowDirective, order: Order): void {
+    if (
+      this.singleChildRowDetail &&
+      this.openedRow &&
+      this.openedRow.expended
+    ) {
+      this.openedRow.toggle();
     }
-    this.orderStatus = GLOBAL.STATUS
-                    .find(status => status.name.toLowerCase() === order.status).id;
+    this.orderStatus = GLOBAL.STATUS.find(
+      status => status.name.toLowerCase() === order.status
+    ).id;
     this.openedRow = cdkDetailRow.expended ? cdkDetailRow : undefined;
   }
 
   getOrderList() {
     this.spinnerService.requestInProcess(true);
-    this.ordersService.getOrders().subscribe((res: any) => {
-      this.orders = res.res.data;
-      this.setDataSource(this.orders);
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.ordersService.getOrders().subscribe(
+      (res: any) => {
+        this.orders = res.res.data;
+        this.setDataSource(this.orders);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
-  updateOrderStatus(orderId: number, perviousStatus:number, status: number) {
+  updateOrderStatus(orderId: number, perviousStatus: number, status: number) {
     this.spinnerService.requestInProcess(true);
-    this.ordersService.updateOrderStatus(orderId, perviousStatus, status).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      // this.getOrderList();
-      let index = this.orders.findIndex(order => order.id === orderId);
-      let newStatus = GLOBAL.STATUS.find(item => item.id === status).name;
-      this.orders[index].status = newStatus;
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.ordersService
+      .updateOrderStatus(orderId, perviousStatus, status)
+      .subscribe(
+        (res: any) => {
+          let e = res.res.message;
+          this.snotifyService.success(e, "Success !");
+          // this.getOrderList();
+          let index = this.orders.findIndex(order => order.id === orderId);
+          let newStatus = GLOBAL.STATUS.find(item => item.id === status).name;
+          this.orders[index].status = newStatus;
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error.message;
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 
   setDataSource(orders) {
     this.dataSource = new MatTableDataSource<Order>(orders);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(filterValue: string) {
@@ -113,9 +130,10 @@ export class OrdersComponent implements OnInit {
   }
 
   onStatusChange(order: Order) {
-    let perviousStatus = GLOBAL.STATUS
-                    .find(status => status.name.toLowerCase() === order.status).id;
-    this.updateOrderStatus(order.id, perviousStatus,  this.orderStatus);
+    let perviousStatus = GLOBAL.STATUS.find(
+      status => status.name.toLowerCase() === order.status
+    ).id;
+    this.updateOrderStatus(order.id, perviousStatus, this.orderStatus);
   }
 
   copied() {

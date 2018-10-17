@@ -6,7 +6,8 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -35,8 +36,11 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-
-      <mat-table class="taxes-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
+      <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+      <mat-table class="taxes-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
+        fusePerfectScrollbar>
 
         <!-- ID Column -->
         <ng-container cdkColumnDef="id">
@@ -61,7 +65,6 @@
             <p class="text-truncate">{{tax.value}}</p>
           </mat-cell>
         </ng-container>
-        <br>
         <!-- Action Column -->
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
