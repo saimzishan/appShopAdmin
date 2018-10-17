@@ -3,7 +3,7 @@ import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import { ProductVariant, Image, Variant } from "../../models/product.model";
+import { ProductVariant, Image, Variant, Supplier } from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
 import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
@@ -20,6 +20,8 @@ export class VariantComponent implements OnInit {
   @Input()
   productVariants: ProductVariant;
   @Input()
+  productSupplier: any;
+  @Input()
   pageType: string;
   @Input()
   ps_id: number;
@@ -33,7 +35,6 @@ export class VariantComponent implements OnInit {
 
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
-  isAddorEditSKU = false;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   option_skus;
   enableOptions = false;
@@ -46,6 +47,7 @@ export class VariantComponent implements OnInit {
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
   isNew = false;
+  isNewPressed = false;
 
   constructor(
     private productService: ProductService,
@@ -106,22 +108,22 @@ export class VariantComponent implements OnInit {
 
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
-    if (this.pageType === "edit") {
+    // if (this.pageType === "edit") {
       let pVariants = new ProductVariant();
       pVariants.supplier_id = this.supplierID;
       pVariants.variants.push(this.variant);
       this.lImages = new Array<Image>();
       this.resetDropzone();
       return this.saveProductVariants(pVariants);
-    } else if (this.pageType === "new") {
-      this.productVariants.variants.push(this.variant);
-      this.lImages = new Array<Image>();
-      this.resetDropzone();
-    }
+    // } else if (this.pageType === "new") {
+    //   this.productVariants.variants.push(this.variant);
+    //   this.lImages = new Array<Image>();
+    //   this.resetDropzone();
+    // }
   }
 
   saveProductVariants(productVariants?: ProductVariant) {
-    if (this.productVariants.variants.length === 0 && this.pageType === "new") {
+    if (productVariants.variants.length === 0) {
       this.snotifyService.warning("Please add option", "Warning !");
       return;
     }
@@ -129,18 +131,13 @@ export class VariantComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     this.productVariants.supplier_id = this.supplierID;
     this.productService
-      .saveProductVariants(
-        this.pageType === "edit" ? productVariants : this.productVariants,
-        this.ps_id,
-        "ps_variants"
-      )
-      .subscribe(
-        (res: any) => {
+      .saveProductVariants(productVariants, this.ps_id, "ps_variants")
+      .subscribe((res: any) => {
           this.snotifyService.success(res.res.message, "Success !");
           this.variant = new Variant();
           this.productVariants.variants = res.res.data;
           this.product_variant_attributes = [];
-
+          this.isNew = false;
           this.spinnerService.requestInProcess(false);
         },
         errors => {
@@ -190,6 +187,7 @@ export class VariantComponent implements OnInit {
           this.productVariants.variants.splice(index, 1);
           this.productVariants.variants.push(updatedVariant);
           this.variant = updatedVariant;
+          this.isNew = false;
           this.spinnerService.requestInProcess(false);
         },
         errors => {
@@ -303,11 +301,11 @@ export class VariantComponent implements OnInit {
         }
       });
     }
-    this.isAddorEditSKU = true;
   }
 
   selectVariant(selectedVariant: Variant) {
-    this.isNew = false;
+    this.isNew = true;
+    this.isNewPressed = false;
     this.variant = selectedVariant;
   }
 
@@ -320,8 +318,9 @@ export class VariantComponent implements OnInit {
     }
   }
 
-  addOrEditSku() {
-    this.isAddorEditSKU = !this.isAddorEditSKU;
+  cancelVariant() {
+    this.isNew = false;
+    this.variant = new Variant();
   }
 
   addOptionSet(option_id, option_set_id) {
@@ -391,7 +390,9 @@ export class VariantComponent implements OnInit {
 
   isNewVariant() {
     this.isNew = true;
-    this.variant = new Variant();
+    this.isNewPressed = true;
+    this.variant = this.productSupplier;
+    this.variant.amount = this.productSupplier.price;
   }
 
   onUploadError(event: any) {}

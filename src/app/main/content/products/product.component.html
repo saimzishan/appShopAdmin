@@ -54,7 +54,7 @@
             <!-- CONTENT -->
             <div class="content">
 
-                <div class="tab-content p-24" fusePerfectScrollbar>
+                <div class="tab-content p-24">
                     <ng-container *ngIf="product">
                         <mat-accordion>
                             <mat-expansion-panel [expanded]="ps_panelOpenState">
@@ -94,7 +94,7 @@
                                 </mat-panel-title>
 
                             </mat-expansion-panel-header>
-                            <app-variant-form [productVariants]="product.supplier.product_variants" [ps_id]="product.id" [pageType]="pageType">
+                            <app-variant-form [productVariants]="product.supplier.product_variants" [productSupplier]="product.supplier" [ps_id]="product.id" [pageType]="pageType">
                             </app-variant-form>
                             </mat-expansion-panel>
                         </mat-accordion>

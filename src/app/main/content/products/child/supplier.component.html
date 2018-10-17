@@ -221,21 +221,25 @@
                         </mat-selection-list>
                     </div>
                 </div>
-                <div class="row">
+                <div *ngIf="product.supplier.track_stock" class="row">
                     <div class="col-md-2">
                         <mat-form-field class="w-70-p">
                             <input matInput #stock="ngModel" name="stock" [(ngModel)]="product.supplier.stock"
-                                placeholder="Stock">
+                                placeholder="Stock" required>
                         </mat-form-field>
+                        <span *ngIf="stock.touched && stock.errors?.required;" class="inline-icon error">
+                                <span>Please enter Stock.</span>!</span>
                     </div>
 
                 </div>
-                <div class="row">
+                <div *ngIf="product.supplier.track_stock" class="row">
                     <div class="col-md-2">
                         <mat-form-field class="w-70-p">
                             <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="product.supplier.low_level_stock"
-                                placeholder="Low level Stock">
+                                placeholder="Low level Stock" required>
                         </mat-form-field>
+                        <span *ngIf="low_level_stock.touched && low_level_stock.errors?.required;" class="inline-icon error">
+                                <span>Please enter Low Level Stock.</span>!</span>
                     </div>
                 </div>
             </mat-card>
