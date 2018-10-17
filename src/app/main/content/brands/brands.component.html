@@ -8,7 +8,8 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+            fxLayoutAlign.gt-xs="space-between center">
 
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -38,8 +39,13 @@
 
         <!-- CONTENT CARD -->
         <div class="content-card mat-white-bg">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
 
-            <mat-table class="brands-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}" fusePerfectScrollbar>
+
+            <mat-table class="brands-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
+                fusePerfectScrollbar>
 
 
 
@@ -93,7 +99,7 @@
 
                 <!-- Name Column -->
                 <ng-container cdkColumnDef="image">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Name</mat-header-cell>
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Image</mat-header-cell>
                     <mat-cell *cdkCellDef="let brand">
                         <ng-container *ngIf="brand.image">
                             <img src="{{baseURL+brand.image.small}}" height="100" width="100">

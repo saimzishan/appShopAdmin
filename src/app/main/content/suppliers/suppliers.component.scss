@@ -1,9 +1,7 @@
 @import "../../../../../src/app/core/scss/fuse";
 
 :host {
-
   .header {
-
     .search-input-wrapper {
       max-width: 480px;
     }
@@ -21,16 +19,16 @@
     }
   }
 
-  .products-table {
+  .suppliers-table {
     flex: 1 1 auto;
-    border-bottom: 1px solid rgba(0, 0, 0, .12);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     overflow: auto;
 
     .mat-header-row {
       min-height: 64px;
     }
 
-    .product {
+    .supplier {
       position: relative;
       cursor: pointer;
       height: 84px;
@@ -52,7 +50,7 @@
       .product-image {
         width: 52px;
         height: 52px;
-        border: 1px solid rgba(0, 0, 0, .12);
+        border: 1px solid rgba(0, 0, 0, 0.12);
       }
     }
 

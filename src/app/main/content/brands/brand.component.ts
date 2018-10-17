@@ -35,6 +35,7 @@ import {
 import { GLOBAL } from "../../../shared/globel";
 import { SnotifyService } from "ng-snotify";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
+import { ActivatedRoute } from "@angular/router";
 // import { $ } from 'protractor';
 declare var $: any;
 
@@ -56,32 +57,10 @@ export class BrandComponent implements OnInit, OnDestroy {
   files: UploadFile[] = [];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   baseURL = GLOBAL.USER_IMAGE_API;
-  // nodes = [
-  //   {
-  //     id: 1,
-  //     name: 'cat 1',
-  //     children: [
-  //       { id: 2, name: 'cat 1-1' },
-  //       { id: 3, name: 'cat 1-2' }
-  //     ]
-  //   },
-  //   {
-  //     id: 4,
-  //     name: 'cat 2',
-  //     children: [
-  //       { id: 5, name: 'cat 2-1' },
-  //       {
-  //         id: 6,
-  //         name: 'cat 2-2',
-  //         children: [
-  //           { id: 7, name: 'cat 2-2-1' }
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // ];
+
   options = {};
   base64textString: string;
+  sub: any;
 
   constructor(
     private brandService: BrandService,
@@ -89,22 +68,22 @@ export class BrandComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private location: Location,
     private snotifyService: SnotifyService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     // Subscribe to update product on changes
-    this.onBrandChanged = this.brandService.onBrandChanged.subscribe(brand => {
-      if (brand) {
-        this.brand = new Brand(brand);
-        this.pageType = "edit";
-      } else {
-        this.pageType = "new";
-        this.brand = new Brand();
+    this.sub = this.route.params.subscribe(params => {
+      if (params) {
+        if (params.id === "new") {
+          this.pageType = "new";
+        } else {
+          this.pageType = "edit";
+        }
       }
-
-      this.brandForm = this.createBrandForm();
     });
+    console.log(this.pageType);
   }
 
   createBrandForm() {
@@ -209,22 +188,6 @@ export class BrandComponent implements OnInit, OnDestroy {
         fileEntry.file((file: File) => {
           // Here you can access the real file
           console.log(droppedFile.relativePath, file);
-
-          /**
-           // You could upload it like this:
-           const formData = new FormData()
-           formData.append('logo', file, relativePath)
-
-           // Headers
-           const headers = new HttpHeaders({
-            'security-token': 'mytoken'
-          })
-
-           this.http.post('https://mybackend.com/api/upload/sanitize-and-save-logo', formData, { headers: headers, responseType: 'blob' })
-           .subscribe(data => {
-            // Sanitized logo returned from backend
-          })
-           **/
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)

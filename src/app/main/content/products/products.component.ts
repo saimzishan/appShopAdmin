@@ -91,5 +91,9 @@ export class ProductsComponent implements OnInit {
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
