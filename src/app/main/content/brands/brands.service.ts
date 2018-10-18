@@ -1,39 +1,12 @@
 import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  RouterStateSnapshot
-} from "@angular/router";
 import { Observable } from "rxjs/Observable";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { HttpHeaders } from "@angular/common/http";
 import { GLOBAL } from "../../../shared/globel";
 import { ApiService } from "../../../api/api.service";
 import { AuthGuard } from "../../../guard/auth.guard";
 
 @Injectable()
 export class BrandsService extends ApiService {
-  brands: any[];
-  onBrandsChanged: BehaviorSubject<any> = new BehaviorSubject({});
-
-  /**
-   * Resolve
-   * @param {ActivatedRouteSnapshot} route
-   * @param {RouterStateSnapshot} state
-   * @returns {Observable<any> | Promise<any> | any}
-   */
-
-  // getBrands(): Promise<any>
-  // {
-  //     return new Promise((resolve, reject) => {
-  //         this.http.get('api/e-commerce-brands')
-  //             .subscribe((response: any) => {
-  //                 this.brands = response;
-  //                 this.onBrandsChanged.next(this.brands);
-  //                 resolve(response);
-  //             }, reject);
-  //     });
-  // }
 
   getBrands() {
     const access_token = AuthGuard.getToken();

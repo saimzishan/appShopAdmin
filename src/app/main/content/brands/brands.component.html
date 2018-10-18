@@ -30,7 +30,7 @@
             </div>
             <!-- / SEARCH -->
 
-            <button mat-raised-button [routerLink]="'/brands/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
+            <button mat-raised-button [routerLink]="'/brands/brand/new'" class="add-brand-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW BRAND</span>
             </button>
 
@@ -47,19 +47,6 @@
             <mat-table class="brands-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
                 fusePerfectScrollbar>
 
-
-
-                <!-- <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
-                    </td>
-                </ng-container> -->
-
                 <!-- Name Column -->
                 <ng-container cdkColumnDef="name">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Name</mat-header-cell>
@@ -68,7 +55,7 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Category Column -->
+                <!-- Notes Column -->
                 <ng-container cdkColumnDef="notes">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Notes</mat-header-cell>
                     <mat-cell *cdkCellDef="let brand" fxHide fxShow.gt-md>
@@ -78,7 +65,7 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Name Column -->
+                <!-- Image Column -->
                 <ng-container cdkColumnDef="image">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Brand Image</mat-header-cell>
                     <mat-cell *cdkCellDef="let brand">
@@ -90,15 +77,12 @@
                         </ng-container>
                     </mat-cell>
                 </ng-container>
-
                 <br>
 
                 <!-- Action Column -->
-
-
                 <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-                <mat-row *cdkRowDef="let brand; columns: displayedColumns;" class="brand" matRipple [routerLink]="'/brands/'+brand.id">
+                <mat-row *cdkRowDef="let brand; columns: displayedColumns;" class="brand" matRipple [routerLink]="'/brands/brand/'+brand.id">
                 </mat-row>
 
             </mat-table>
