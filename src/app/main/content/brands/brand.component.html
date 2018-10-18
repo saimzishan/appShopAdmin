@@ -24,8 +24,8 @@
 
                 <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
 
-                    <div class="h2" *ngIf="pageType ==='new'">
-                        New Brand
+                    <div class="h2">
+                        {{pageType === 'edit' ? 'Update Brand': 'New Brand'}}
                     </div>
                     <div class="subtitle secondary-text">
                         <span>Brand Detail</span>
@@ -41,7 +41,6 @@
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteBrand()">
                 <span>DELETE</span>
             </button>
-
 
             <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editbrandFormSubmition.click()">
 
@@ -60,7 +59,6 @@
 
                     <!-- <mat-tab-group> -->
 
-                    <!-- <mat-tab label="Details"> -->
                     <div class="tab-content p-24" fusePerfectScrollbar>
 
                         <mat-form-field class="w-100-p">
@@ -74,39 +72,43 @@
                             <textarea matInput name="notes" [(ngModel)]="brand.notes" #notes="ngModel" placeholder="Notes"></textarea>
                         </mat-form-field>
 
-                        <!-- <mat-form-field class="w-100-p"> -->
-                        <fieldset class="w-100-p" *ngIf="pageType ==='new'">
-                            <div>
-                                <input type="file" name="fileUp" (change)="handleFileSelect($event)">
-                            </div>
-                        </fieldset>
+                        <!-- Image upload -->
                         <br>
-                        <fieldset class="w-100-p" *ngIf="pageType ==='edit'">
-                            <mat-card>
-                                <ng-container *ngIf="brand.image">
-                                    <img src="{{baseURL+brand.image.small}}" width="100" height="100">
-                                </ng-container>
-                                <ng-container *ngIf="!brand.image">
-                                    <p> No Image</p>
-                                </ng-container>
-                            </mat-card>
-                            <input type="file" name="fileUp" (change)="handleFileSelect($event)">
-                        </fieldset>
-                        <!-- </mat-form-field> -->
-                        <!-- <mat-form-field class="w-100-p">
-                                    <input matInput name="taxRate" formControlName="taxRate" placeholder="Tax Class">
-                                </mat-form-field> -->
-
-                        <!-- <h3 class="mb-0">Categories</h3> -->
-
-                        <!-- <tree-root [nodes]="nodes" [options]="options"></tree-root> -->
+                        <div class="row">
+                            <div class="col-md-12" style="text-align:center">
+                                <label>Image Max size 2 MB</label>
+                                <div class="center">
+                                    <div [disabled]="hasImage" class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                                        (success)="onUploadSuccess($event)">
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" style="text-align:center">
+    
+                            <ng-container *ngIf="pageType === 'edit' && this.hasImage && this.brand.image.id !== -1">
+                                <div class="col-md-2">
+                                    <img src="{{baseURL}}{{brand.image.small}}" style="width: 150px; height: 150px;">
+                                    <br>
+                                    <br>
+                                    <button (click)="removeImage(brand.image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                        <i class="material-icons">
+                                            delete
+                                        </i>
+                                    </button>
+                                    <br>
+                                </div>
+                            </ng-container>
+                        </div>
                     </div>
                     <!-- </mat-tab> -->
 
 
                     <!-- </mat-tab-group> -->
                     <input type="button" class="btn btn-primary" hidden #brandFormSubmition (click)="addBrand(brandForm)">
-                    <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="saveBrand(brandForm)">
+                    <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="editBrand(brandForm)">
                 </form>
 
             </div>
