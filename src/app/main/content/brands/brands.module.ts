@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../../../core/modules/shared.module";
 import { RouterModule } from "@angular/router";
-import { FuseAngularMaterialModule } from "../components/angular-material/angular-material.module";
 import { BrandsComponent } from "./brands.component";
 import { BrandComponent } from "./brand.component";
 import { BrandsService } from "./brands.service";
@@ -33,7 +32,6 @@ const routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseAngularMaterialModule,
     DropzoneModule
   ],
   declarations: [BrandsComponent, BrandComponent],
