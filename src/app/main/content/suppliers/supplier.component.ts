@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
@@ -19,6 +19,8 @@ import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Router } from "@angular/router";
 import { GLOBAL } from "../../../shared/globel";
+import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { Image } from '../models/product.model';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -29,6 +31,7 @@ import { GLOBAL } from "../../../shared/globel";
   animations: fuseAnimations
 })
 export class SupplierComponent implements OnInit, OnDestroy {
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   supplier = new Supplier();
   supplier_contact = new Contact();
   onSupplierChanged: Subscription;
@@ -38,6 +41,12 @@ export class SupplierComponent implements OnInit, OnDestroy {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   base64textString;
   baseURL = GLOBAL.USER_IMAGE_API;
+  images: Image[];
+  lImages: any[] = [];
+  image: Image;
+
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
 
   constructor(
     private supplierService: SupplierService,
@@ -48,7 +57,10 @@ export class SupplierComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private spinnerService: SpinnerService,
     private router: Router
-  ) {}
+  ) {
+    this.images = new Array<Image>();
+    this.image = new Image();
+  }
 
   ngOnInit() {
     this.onSupplierChanged = this.supplierService.onSupplierChanged.subscribe(
@@ -163,19 +175,20 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addSupplier(form) {
-    // this.supplier.contact = this.supplier_contact;
-    // this.supplier.contact = this.supplier_contact;
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
-      return;
+    // if (form.invalid) {
+    //   this.validateAllFormFields(form.control);
+    //   this.snotifyService.warning("Please Fill All Fields");
+    //   return;
+    // }
+    if (this.lImages.length < 1) {
+      const a = this.directiveRef.dropzone();
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
     }
-    // this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
+    this.supplier.images = this.lImages;
     this.spinnerService.requestInProcess(true);
-    if (this.base64textString) {
-      this.supplier.image = this.base64textString;
-    }
+    return;
     this.supplierService.addSupplier(this.supplier).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
@@ -191,24 +204,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
         this.snotifyService.error(e, "Error !");
       }
     );
-  }
-
-  handleFileSelect(evt) {
-    const files = evt.target.files;
-    const file = files[0];
-    if (files && file) {
-      const reader = new FileReader();
-      this.supplier.content_type = "." + file.type.split("/")[1];
-      reader.onload = this._handleReaderLoaded.bind(this);
-
-      reader.readAsBinaryString(file);
-    }
-  }
-
-  _handleReaderLoaded(readerEvt) {
-    const binaryString = readerEvt.target.result;
-    this.base64textString = btoa(binaryString);
-    // this.supplier.image = this.base64textString;
   }
 
   deleteSupplier() {
@@ -229,6 +224,30 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.confirmDialogRef = null;
     });
   }
+
+  addPicture(obj) {
+    this.image = new Image();
+    this.image.base64String = obj.dataURL.split(",")[1];
+    this.image.content_type = obj.type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
+    //
+    for (let index = 0; index < 3; index++) {
+      this.images.push(new Image(this.image));
+      if (index === 0) {
+        this.image.type = "medium";
+      }
+      if (index === 1) {
+        this.image.type = "large";
+      }
+    }
+    this.lImages.push(this.images);
+    this.images = new Array<Image>();
+  }
+
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {}
+  onCanceled(event) {}
 
   ngOnDestroy() {
     this.onSupplierChanged.unsubscribe();

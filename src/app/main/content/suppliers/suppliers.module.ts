@@ -7,6 +7,9 @@ import { SuppliersComponent } from './suppliers.component';
 import { SuppliersService } from './suppliers.service';
 import { SupplierComponent } from './supplier.component';
 import { SupplierService } from './supplier.service';
+import { DropzoneModule } from "ngx-dropzone-wrapper";
+import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
+import { GLOBAL } from "../../../shared/globel";
 
 const routes = [
   {
@@ -37,10 +40,18 @@ const routes = [
     SharedModule,
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
-    MatExpansionModule
+    MatExpansionModule,
+    DropzoneModule
   ],
   declarations: [SuppliersComponent, SupplierComponent],
-  providers: [SuppliersService, SupplierService]
+  providers: [
+    SuppliersService,
+    SupplierService,
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG
+    }
+  ]
 })
 export class SuppliersModule {
 }

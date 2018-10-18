@@ -2,7 +2,7 @@ import { GLOBAL } from "./../../../shared/globel";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { CategoryService } from "./category.service";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
@@ -21,6 +21,8 @@ import { ITreeOptions, TreeNode, TreeModel } from "angular-tree-component";
 import { Supplier } from "../models/supplier.model";
 import { CategoriesService } from "./categories.service";
 import { Router, ActivatedRoute, Params, NavigationEnd } from "@angular/router";
+import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { Image } from '../models/product.model';
 
 @Component({
   selector: "app-category",
@@ -30,12 +32,20 @@ import { Router, ActivatedRoute, Params, NavigationEnd } from "@angular/router";
   animations: fuseAnimations
 })
 export class CategoryComponent implements OnInit, OnDestroy {
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   category = new Category();
   supplier = new Supplier();
+  images: Image[];
+  image: Image;
+  lImages: any[] = [];
   onSupplierChanged: Subscription;
   pageType: boolean;
   categoryForm: FormGroup;
   private sub: Subscription;
+  baseURL = GLOBAL.USER_IMAGE_API;
+
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
 
   parentCat;
   model = {};
@@ -73,7 +83,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     protected http: HttpClient
-  ) {}
+  ) {
+    this.images = new Array<Image>();
+    this.image = new Image();
+  }
 
   ngOnInit() {
     this.index();
@@ -84,7 +97,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         let pageType: any = event.url.split("/");
-
         if (pageType.length > 2) {
           pageType = pageType[2].toString();
           if (pageType !== "new") {
@@ -98,7 +110,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this.pageType;
   }
   addNode(tree: any) {
-    // console.log(tree);
     const data = this.categoryForm.getRawValue();
     data.handle = FuseUtils.handleize(data.name);
     this.nodes[0].children.push({
@@ -149,7 +160,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       } else {
         tempObj = { name: row.name, my_id: row.id };
       }
-
       tempNode.push(tempObj);
     });
     return tempNode;
@@ -170,7 +180,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -192,7 +201,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
@@ -210,10 +218,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     const data = this.categoryForm.getRawValue();
     data.handle = FuseUtils.handleize(data.name);
     this.categoryService.saveSupplier(data).then(() => {
-      // Trigger the subscription with new data
       this.categoryService.onSupplierChanged.next(data);
-
-      // Show the success message
       this.snackBar.open("Supplier saved", "OK", {
         verticalPosition: "top",
         duration: 2000
@@ -222,14 +227,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   store() {
+    if (this.lImages.length < 1) {
+      let a = this.directiveRef.dropzone();
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    }
     const data = this.categoryForm.getRawValue();
-    // if (this.parentCatId === undefined) {
-    //   this.snotifyService.warning("Please select a parent category");
-    //   return;
-    // }
     data["parent_id"] = this.parentCatId;
-    this.spinnerService.requestInProcess(true);
-
+    data["images"] = this.lImages;
     this.categoryService.store(data).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
@@ -245,7 +251,18 @@ export class CategoryComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
-    // this.onSupplierChanged.unsubscribe();
+  addPicture(obj) {
+    this.image = new Image();
+    this.image.base64String = obj.dataURL.split(",")[1];
+    this.image.content_type = obj.type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
+    this.lImages.push(this.image);
   }
+
+  onCanceled(event) { }
+  onUploadError(evt) { }
+  onUploadSuccess(evt) { }
+
+  ngOnDestroy() { }
 }
