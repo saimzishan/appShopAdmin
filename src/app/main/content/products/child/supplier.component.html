@@ -184,34 +184,23 @@
     <form name="otherSuppForm" #otherSuppForm="ngForm">
         <div class="tab-content p-24" fusePerfectScrollbar>
             <mat-card>
-                <legend style="padding: 10px">
-                    <h2>Other Details</h2>
-                </legend>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <!-- <mat-form-field class="w-100-p"> -->
-                                <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track Stock
-                                </mat-checkbox>
-                                <!-- </mat-form-field> -->
-                            </div>
-                
-                            <div class="col-md-4">
-                                <!-- <mat-form-field class="w-100-p"> -->
-                                <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing option
-                                </mat-checkbox>
-                                <!-- </mat-form-field> -->
-                            </div>
-                            <div class="col-md-4">
-                                <!-- <mat-form-field class="w-100-p"> -->
+                        <legend style="padding: 10px">
+                            <h2>Other Details</h2>
+                        </legend>
+                        <div style="margin-top: 4%" class="row">
+                            <div class="col-md-12">
                                 <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.supplier.active">Active
                                 </mat-checkbox>
-                                <!-- </mat-form-field> -->
                             </div>
                         </div>
-                        <div *ngIf="true" class="row" style="margin-top: 12%">
+                        <div style="margin-top: 4%" class="row">
                             <div class="col-md-12">
+                                <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing option
+                                </mat-checkbox>
+                            </div>
+                            <div *ngIf="product.supplier.printing_option" class="col-md-12">
                                 <mat-selection-list id="sides" name="sides" [(ngModel)]="product.supplier.sides">
                                     <mat-list-option value="left">Left</mat-list-option>
                                     <mat-list-option value="right">Right</mat-list-option>
@@ -222,8 +211,38 @@
                                 </mat-selection-list>
                             </div>
                         </div>
+                        <div style="margin-top: 4%" class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track Stock
+                                        </mat-checkbox>
+                                    </div>
+                                </div>
+                                <div *ngIf="product.supplier.track_stock" class="row" style="margin-top: 2%">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput #stock="ngModel" name="stock" [(ngModel)]="product.supplier.stock" placeholder="Stock" required>
+                                        </mat-form-field>
+                                        <span *ngIf="stock.touched && stock.errors?.required;" class="inline-icon error">
+                                            <span>Please enter Stock.</span>!</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="product.supplier.low_level_stock" placeholder="Low level Stock"
+                                                required>
+                                        </mat-form-field>
+                                        <span *ngIf="low_level_stock.touched && low_level_stock.errors?.required;" class="inline-icon error">
+                                            <span>Please enter Low Level Stock.</span>!</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
+                        <legend style="padding: 10px">
+                            <h2>Classes</h2>
+                        </legend>
                         <mat-selection-list name="class" [(ngModel)]="product.supplier.class">
                             <mat-list-option [value]="1">Slider</mat-list-option>
                             <mat-list-option [value]="2">Featured</mat-list-option>
@@ -233,27 +252,6 @@
                             <mat-list-option [value]="6">Add-on</mat-list-option>
                             <!-- <mat-list-option value="6">none</mat-list-option> -->
                         </mat-selection-list>
-                    </div>
-                </div>
-                <div *ngIf="product.supplier.track_stock" class="row">
-                    <div class="col-md-2">
-                        <mat-form-field class="w-70-p">
-                            <input matInput #stock="ngModel" name="stock" [(ngModel)]="product.supplier.stock"
-                                placeholder="Stock" required>
-                        </mat-form-field>
-                        <span *ngIf="stock.touched && stock.errors?.required;" class="inline-icon error">
-                                <span>Please enter Stock.</span>!</span>
-                    </div>
-
-                </div>
-                <div *ngIf="product.supplier.track_stock" class="row">
-                    <div class="col-md-2">
-                        <mat-form-field class="w-70-p">
-                            <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="product.supplier.low_level_stock"
-                                placeholder="Low level Stock" required>
-                        </mat-form-field>
-                        <span *ngIf="low_level_stock.touched && low_level_stock.errors?.required;" class="inline-icon error">
-                                <span>Please enter Low Level Stock.</span>!</span>
                     </div>
                 </div>
             </mat-card>
