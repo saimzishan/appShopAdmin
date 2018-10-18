@@ -223,7 +223,5 @@ export class BrandComponent implements OnInit, OnDestroy {
     // this.brand.image = this.base64textString;
   }
 
-  ngOnDestroy() {
-    this.onBrandChanged.unsubscribe();
-  }
+  ngOnDestroy() {}
 }

@@ -146,7 +146,7 @@ export class ProductService extends ApiService {
       });
   }
 
-  saveProductVariants(product, ps_id, option: string) {
+  saveProductVariants(productVariants, ps_id, option: string) {
     // return new Promise((resolve, reject) => {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -165,7 +165,7 @@ export class ProductService extends ApiService {
     return this.http
       .put(
         GLOBAL.USER_API + "products/" + ps_id + "?" + option,
-        product,
+        productVariants,
         httpOptions
       )
       .map(this.extractData)

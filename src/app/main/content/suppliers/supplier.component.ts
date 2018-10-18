@@ -188,7 +188,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
     }
     this.supplier.images = this.lImages;
     this.spinnerService.requestInProcess(true);
-    return;
     this.supplierService.addSupplier(this.supplier).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");

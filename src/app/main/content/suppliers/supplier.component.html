@@ -87,10 +87,10 @@
               </div>
             </div>
             <br>
-            <div class="row" *ngIf="pageType !== 'new'" style="text-align:center">
-              <ng-container *ngFor="let image of supplier.images">
+            <div class="row" *ngIf="pageType === 'edit'" style="text-align:center">
+              <ng-container *ngIf="supplier.image">
                 <div class="col-md-2">
-                  <img src="{{baseURL}}{{image.medium}}" width="150" height="150">
+                  <img src="{{baseURL}}{{supplier.image.small}}" width="150" height="150">
                   <br>
                   <br>
                   <button (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">

@@ -1,4 +1,5 @@
 import { DropzoneConfigInterface } from "ngx-dropzone-wrapper";
+import { HttpHeaders } from "@angular/common/http";
 
 export class GLOBAL {
   // public static USER_API = "http://127.0.0.1:8080/api/auth/";
@@ -26,6 +27,9 @@ export class GLOBAL {
     url: GLOBAL.USER_API + "drop-image",
     maxFilesize: 2, // size MB
     acceptedFiles: "image/png, image/jpeg",
+    headers: {
+      "Content-Type": "application/json",
+    },
     createImageThumbnails: true,
     clickable: true,
     addRemoveLinks: true

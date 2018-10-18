@@ -30,7 +30,8 @@ import { MatDialogRef } from "@angular/material";
 
 @Component({
   selector: "app-product-supplier-form",
-  templateUrl: "./supplier.component.html"
+  templateUrl: "./supplier.component.html",
+  styleUrls: ["./supplier.component.css"]
 })
 export class SupplierFormComponent implements OnInit {
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
@@ -100,6 +101,7 @@ export class SupplierFormComponent implements OnInit {
         }
       }
     });
+    this.makeArrayOfSides();
     this.converter();
   }
 
@@ -255,6 +257,14 @@ export class SupplierFormComponent implements OnInit {
     if (!this.category_id) {
       this.snotifyService.warning("Please Select a category");
       return;
+    }
+    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
+      this.snotifyService.warning("Please select atleast one side for printing");
+      return;
+    }
+    if (this.product.supplier.track_stock === false) {
+      this.product.supplier.low_level_stock = 0;
+      this.product.supplier.stock = 0;
     }
     if (this.lImages.length < 1) {
       let a = this.directiveRef.dropzone();
@@ -548,10 +558,14 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  putSupplier(obj) {
+  putSupplier(updatedSupplier) {
     this.spinnerService.requestInProcess(true);
-    obj.id = this.product.id;
-    this.productService.saveProduct(obj, "ps_update").subscribe(
+    updatedSupplier.id = this.product.id;
+    if (updatedSupplier.track_stock === false) {
+      updatedSupplier.low_level_stock = 0;
+      updatedSupplier.stock = 0;
+    }
+    this.productService.saveProduct(updatedSupplier, "ps_update").subscribe(
       (res: any) => {
         this.product.supplier.images = res.res.data;
         this.directiveRef.reset();
@@ -613,5 +627,11 @@ export class SupplierFormComponent implements OnInit {
       temp.push(c);
     });
     this.product.supplier.class = temp;
+  }
+
+  makeArrayOfSides() {
+    if(this.pageType === 'edit'){
+      this.product.supplier.sides = this.product.supplier.sides.split(',');
+    }
   }
 }

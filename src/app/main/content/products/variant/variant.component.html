@@ -29,150 +29,153 @@
         </table>
         <div class="row" style="margin-bottom:10px">
             <div class="col-md-12">
-                <button class="btn btn-success" [disabled]="isAddorEditSKU" (click)="addOrEditSku()">Add Variant</button>
                 <button class="btn btn-info">Generate Sku</button>
             </div>
 
         </div>
-        <div *ngIf="isAddorEditSKU">
+        <div>
             <mat-card>
-                <button (click)="isNewVariant()" class="btn btn-info float-right">Add New Variant</button>
-                <form name="skuForm" #skuForm="ngForm">
+                <div style="text-align: right">
+                    <button (click)="isNewVariant()" class="btn btn-info" style="margin-bottom: 2%">Add New Variant</button>
+                </div>
+                <ng-container *ngIf="isNew">
+                    <form name="skuForm" #skuForm="ngForm">
 
-                    <mat-card-content>
-                        <br>
+                        <mat-card-content>
+                            <br>
+                                <div class="row">
+                                    <ng-container *ngIf="pageType === 'new' || isNewPressed">
+                                        <div class="col-md-6" *ngFor="let optionSet of productOptionSetAndValue">
+                                            <mat-form-field class="w-100-p">
+                                                <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
+                                                    <mat-option *ngFor="let opt of getOptions(optionSet.id)" [value]="opt.id">
+                                                        {{opt.value}}</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="sku" [(ngModel)]="variant.sku" placeholder="SKU" required>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="weight" [(ngModel)]="variant.weight" min="0" placeholder="Weight (kg)">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="depth" [(ngModel)]="variant.depth" min="0" placeholder="Depth (mm)">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="width" [(ngModel)]="variant.width" min="0" placeholder="Width (mm)">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput name="height" [(ngModel)]="variant.height" min="0" placeholder="Height (mm)">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation" style="margin-top: 5px;">
+                                                <mat-option [value]="2">Add</mat-option>
+                                                <mat-option [value]="3">Subtract</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.changed_by" style="margin-top: 5px;">
+                                                <mat-option [value]="1">Absolute</mat-option>
+                                                <mat-option [value]="2">Percentage</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="variant.amount" min="0" required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-top: 20px;">
+                                        <!-- <mat-form-field class="w-100-p"> -->
+                                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="variant.track_stock">Track Stock
+                                        </mat-checkbox>
+                                        <!-- </mat-form-field> -->
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="variant.track_stock">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput #stock="ngModel" name="stock" [(ngModel)]="variant.stock" placeholder="Stock" required>
+                                        </mat-form-field>
+                                        <span *ngIf="stock.touched && stock.errors?.required;" class="inline-icon error">
+                                                <span>Please enter Stock.</span>!</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="w-100-p">
+                                            <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="variant.low_level_stock" placeholder="Low level Stock" required>
+                                        </mat-form-field>
+                                        <span *ngIf="low_level_stock.touched && low_level_stock.errors?.required;" class="inline-icon error">
+                                                <span>Please enter Low Level Stock.</span>!</span>
+                                    </div>
+                                </div>
+                        </mat-card-content>
                         <div class="row">
-                            <ng-container *ngIf="pageType === 'new' || isNew">
-                                <div class="col-md-1" *ngFor="let optionSet of productOptionSetAndValue">
-                                    <label>{{optionSet.name}}</label>
-                                    <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)"
-                                        required>
-                                        <mat-option *ngFor="let opt of getOptions(optionSet.id)" [value]="opt.id">
-                                            {{opt.value}}</mat-option>
-                                    </mat-select>
+                            <div class="col-md-12" style="text-align:center">
+                                <label>Image Max size 2 MB</label>
+                                <div class="center">
+                                    <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                                        (success)="onUploadSuccess($event)">
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" style="text-align:center">
+    
+                            <ng-container *ngFor="let image of variant.images">
+                                <div class="col-md-2">
+                                    <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
+                                    <br>
+                                    <br>
+                                    <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                        <i class="material-icons">
+                                            delete
+                                        </i>
+                                    </button>
+                                    <br>
                                 </div>
                             </ng-container>
-
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="sku" [(ngModel)]="variant.sku" placeholder="SKU" required>
-                                </mat-form-field>
-                            </div>
-                            <!-- <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="upc" [(ngModel)]="product_variant.upc" placeholder="UPC/EAN">
-                                </mat-form-field>
-                            </div> -->
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="weight" [(ngModel)]="variant.weight" min="0" placeholder="Weight (kg)">
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="depth" [(ngModel)]="variant.depth" min="0" placeholder="Depth (mm)">
-                                </mat-form-field>
-                            </div>
-
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="width" [(ngModel)]="variant.width" min="0" placeholder="Width (mm)">
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput name="height" [(ngModel)]="variant.height" min="0" placeholder="Height (mm)">
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field>
-                                    <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation"
-                                        style="margin-top: 5px;">
-                                        <mat-option [value]="2">Add</mat-option>
-                                        <mat-option [value]="3">Subtract</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field>
-                                    <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.changed_by"
-                                        style="margin-top: 5px;">
-                                        <mat-option [value]="1">Absolute</mat-option>
-                                        <mat-option [value]="2">Percentage</mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number"
-                                        [(ngModel)]="variant.amount" min="0" required>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput #stock="ngModel" name="stock" [(ngModel)]="variant.stock"
-                                        placeholder="Stock" required>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1">
-                                <mat-form-field class="w-70-p">
-                                    <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="variant.low_level_stock"
-                                        placeholder="Low level Stock">
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-1" style="margin-top: 20px;">
-                                <!-- <mat-form-field class="w-100-p"> -->
-                                <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="variant.track_stock">Track
-                                    Stock</mat-checkbox>
-                                <!-- </mat-form-field> -->
-                            </div>
-                            <div class="col-md-1" style="text-align: right;">
-                                <button *ngIf="pageType === 'new' || isNew" (click)="mangeOption(skuForm);" class="btn btn-info btn-group-vertical"
-                                    style="border-radius: 50%;
-                                margin-top: 20px; padding: 0px !important;">
-                                    <i class="material-icons">
-                                        add
-                                    </i>
-                                </button>
-                                <button *ngIf="pageType === 'edit' && !isNew" (click)="editVariant(skuForm);" class="btn btn-info"
-                                    style="margin-top: 20px;">
-                                    Save
-                                </button>
-                            </div>
                         </div>
-                    </mat-card-content>
-                    <div class="row">
-                        <div class="col-md-12" style="text-align:center">
-                            <label>Image Max size 2 MB</label>
-                            <div class="center">
-                                <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
-                                    (success)="onUploadSuccess($event)">
+                        <mat-card-actions>
+                            <div style="text-align: right;">
+                                <button class="btn btn-primary" mat-raised-button (click)="cancelVariant()">Cancel</button>
 
-                                </div>
+                                <button mat-raised-button style="background-color: #3E81CC; color: white"
+                                *ngIf="isNew && isNewPressed" (click)="mangeOption(skuForm);">Add</button>
+                                
+                                <button mat-raised-button style="background-color: #3E81CC;color: white"
+                                *ngIf="pageType === 'edit' && !isNewPressed" (click)="editVariant(skuForm);">Save</button>
                             </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row" style="text-align:center">
-
-                        <ng-container *ngFor="let image of variant.images">
-                            <div class="col-md-2">
-                                <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
-                                <br>
-                                <br>
-                                <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
-                                    <i class="material-icons">
-                                        delete
-                                    </i>
-                                </button>
-                                <br>
-                            </div>
-                        </ng-container>
-                    </div>
-
-                </form>
-
-                <table class="table" *ngIf="productVariants.variants">
+                        </mat-card-actions>
+                    </form>
+                </ng-container>
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Sku</th>
@@ -190,6 +193,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td colspan="12" style="text-align: center;" *ngIf="productVariants.variants.length === 0">No Variant Added</td>
+                        </tr>
                         <ng-container *ngFor="let variant of productVariants.variants">
                             <tr style="cursor:pointer" (click)="selectVariant(variant)">
                                 <td>{{variant.sku}}</td>
@@ -215,12 +221,6 @@
                         </ng-container>
                     </tbody>
                 </table>
-
-                <mat-card-actions style="text-align: right;">
-                    <button class="btn btn-primary" mat-button (click)="addOrEditSku()">Cancel</button>
-                    <button class="btn btn-info" [disabled]="pageType === 'edit'" mat-button (click)="saveProductVariants()">Save
-                        & Close</button>
-                </mat-card-actions>
 
             </mat-card>
         </div>

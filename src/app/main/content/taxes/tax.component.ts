@@ -128,7 +128,7 @@ export class TaxComponent implements OnInit, OnDestroy {
       this.router.navigate(['/tax-management/taxes']);
     }, errors => {
       this.spinnerService.requestInProcess(false);
-      let e = errors.message;
+      let e = errors.error.message;
       this.snotifyService.error(e, 'Error !');
     });
   }
