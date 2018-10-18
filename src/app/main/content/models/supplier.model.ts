@@ -1,5 +1,5 @@
 import { Contact } from "./contact.model";
-import { Product } from "./product.model";
+import { Product, Image } from "./product.model";
 
 export class Supplier {
   id: number;
@@ -8,13 +8,7 @@ export class Supplier {
   contact: Contact;
   products: Product[];
   handle: string;
-  image: string; // base64string
-  image_name: string;
-  images: {
-    id: string;
-    url: string;
-  }[];
-  content_type: string; // '.png/.jpg' etc...
+  image: Image;
 
   constructor(supplier?) {
     supplier = supplier || {};
@@ -24,7 +18,6 @@ export class Supplier {
     this.contact = supplier.contact || {};
     this.products = supplier.products || [];
     this.handle = supplier.handle || "";
-    this.image = supplier.image || "";
-    this.image_name = supplier.image_name || "";
+    this.image = supplier.image || new Image();
   }
 }

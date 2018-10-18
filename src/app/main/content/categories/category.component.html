@@ -99,11 +99,10 @@
 
           </div>
           <br>
-          <div class="row" *ngIf="pageType !== 'new'" style="text-align:center">
-
-              <ng-container *ngFor="let image of categories.images">
+          <div class="row" *ngIf="pageType" style="text-align:center">
+              <ng-container>
                   <div class="col-md-2">
-                      <img src="{{baseURL}}{{image.small}}" width="150" height="150">
+                      <img src="{{baseURL}}{{categories.image.small}}" width="150" height="150">
                       <br>
                       <br>
                       <button (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">

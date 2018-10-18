@@ -1,3 +1,5 @@
+import { Image } from "./product.model";
+
 export class Category {
   id = -1;
   name = "";
@@ -5,13 +7,7 @@ export class Category {
   parent_id: number;
   notes = "";
   handle: string;
-  image: string; // base64string
-  image_name: string;
-  images: {
-    id: string;
-    url: string;
-  }[];
-  content_type: string; // '.png/.jpg' etc...
+  image: Image;
   children: Array<Category> = new Array<Category>();
 
   constructor(category?) {
@@ -21,7 +17,6 @@ export class Category {
     this.value = category.name || "";
     this.parent_id = category.parent_id || -1;
     this.handle = category.handle || "";
-    this.image = category.image || "";
-    this.image_name = category.image_name || "";
+    this.image = category.image || new Image();
   }
 }

@@ -42,7 +42,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
   base64textString;
   baseURL = GLOBAL.USER_IMAGE_API;
   images: Image[];
-  lImages: any[] = [];
+  lImages: any;
   image: Image;
 
   @ViewChild(DropzoneDirective)
@@ -82,7 +82,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getGermanyJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -94,7 +94,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getCanadaJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -138,28 +138,12 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    if (this.supplier.content_type) {
-      let preImageName: any;
-      if (this.supplier.image) {
-        preImageName = this.supplier.image;
-        preImageName = preImageName.small.split("/");
-        this.supplier.image_name = preImageName[3];
-      } else {
-        let date = new Date(null);
-        date.setSeconds(45); // specify value for SECONDS here
-        let timeString = date.toISOString().substr(11, 8);
-        this.supplier.image_name = timeString + this.supplier.content_type;
-      }
-
-      this.supplier.image = this.base64textString;
-    } else {
-      delete this.supplier.image;
+    const a = this.directiveRef.dropzone();
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
     }
-    const data = this.supplier;
-    this.supplierService.saveSupplier(data).then(() => {
+    this.supplierService.saveSupplier(this.supplier).then(() => {
       this.router.navigate(["/suppliers"]);
-      // this.supplierService.onSupplierChanged.next(data);
-      // this.snotifyService.success("Supplier saved", "Success !");
     });
   }
 
@@ -175,19 +159,15 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addSupplier(form) {
-    // if (form.invalid) {
-    //   this.validateAllFormFields(form.control);
-    //   this.snotifyService.warning("Please Fill All Fields");
-    //   return;
-    // }
-    if (this.lImages.length < 1) {
-      const a = this.directiveRef.dropzone();
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
     }
-    this.supplier.images = this.lImages;
-    this.spinnerService.requestInProcess(true);
+    const a = this.directiveRef.dropzone();
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
+    }
     this.supplierService.addSupplier(this.supplier).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
@@ -225,28 +205,15 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addPicture(obj) {
-    this.image = new Image();
-    this.image.base64String = obj.dataURL.split(",")[1];
-    this.image.content_type = obj.type.split("/")[1];
-    this.image.content_type = "." + this.image.content_type.split(";")[0];
-    this.image.type = "small";
-    //
-    for (let index = 0; index < 3; index++) {
-      this.images.push(new Image(this.image));
-      if (index === 0) {
-        this.image.type = "medium";
-      }
-      if (index === 1) {
-        this.image.type = "large";
-      }
-    }
-    this.lImages.push(this.images);
-    this.images = new Array<Image>();
+    this.supplier.image.base64String = obj.dataURL.split(",")[1];
+    this.supplier.image.content_type = obj.type.split("/")[1];
+    this.supplier.image.content_type = "." + this.supplier.image.content_type;
+    this.supplier.image.type = "small";
   }
 
-  onUploadError(evt) {}
-  onUploadSuccess(evt) {}
-  onCanceled(event) {}
+  onUploadError(evt) { }
+  onUploadSuccess(evt) { }
+  onCanceled(event) { }
 
   ngOnDestroy() {
     this.onSupplierChanged.unsubscribe();

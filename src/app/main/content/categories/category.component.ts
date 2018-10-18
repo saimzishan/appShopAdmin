@@ -227,15 +227,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   store() {
-    if (this.lImages.length < 1) {
-      let a = this.directiveRef.dropzone();
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
+    const a = this.directiveRef.dropzone();
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
     }
     const data = this.categoryForm.getRawValue();
     data["parent_id"] = this.parentCatId;
-    data["images"] = this.lImages;
+    data["images"] = this.category.image;
     this.categoryService.store(data).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");
@@ -252,17 +250,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   addPicture(obj) {
-    this.image = new Image();
-    this.image.base64String = obj.dataURL.split(",")[1];
-    this.image.content_type = obj.type.split("/")[1];
-    this.image.content_type = "." + this.image.content_type.split(";")[0];
-    this.image.type = "small";
-    this.lImages.push(this.image);
+    this.category.image.base64String = obj.dataURL.split(",")[1];
+    this.category.image.content_type = obj.type.split("/")[1];
+    this.category.image.content_type = "." + this.category.image.content_type;
+    this.category.image.type = "small";
   }
 
-  onCanceled(event) { }
   onUploadError(evt) { }
   onUploadSuccess(evt) { }
+  onCanceled(event) { }
 
   ngOnDestroy() { }
 }
