@@ -34,4 +34,23 @@ export class GLOBAL {
     clickable: true,
     addRemoveLinks: true
   };
+
+  public static DEFAULT_DROPZONE_CONFIG_FOR_BRAND: DropzoneConfigInterface = {
+    // Change this to your upload POST address:
+    url: GLOBAL.USER_API + "drop-image",
+    maxFilesize: 2, // size MB
+    maxFiles: 1,
+    init: function() {
+      this.on("maxfilesexceeded", function(file) {
+            this.removeAllFiles();
+            this.addFile(file);
+      })},
+    acceptedFiles: "image/png, image/jpeg",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    createImageThumbnails: true,
+    clickable: true,
+    addRemoveLinks: true
+  };
 }

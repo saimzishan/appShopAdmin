@@ -49,40 +49,30 @@ export class BrandsComponent implements OnInit {
 
   ngOnInit() {
     this.getBrands();
-    // this.dataSource = new FilesDataSource(this.brandsService, this.paginator, this.sort);
-    // Observable.fromEvent(this.filter.nativeElement, 'keyup')
-    //     .debounceTime(150)
-    //     .distinctUntilChanged()
-    //     .subscribe(() => {
-    //         if (!this.dataSource) {
-    //             return;
-    //         }
-    //         this.dataSource.filter = this.filter.nativeElement.value;
-    //     });
   }
 
   getBrands() {
     this.spinnerService.requestInProcess(true);
     this.brandsService.getBrands().subscribe(
       (res: any) => {
-        this.brands = res.res.data;
-        this.setDataSuorce(res.res.data);
+        let brands = res.res.data;
+        this.setDataSuorce(brands);
         this.spinnerService.requestInProcess(false);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
         const e = errors.error.message;
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
 
-  setDataSuorce(obj) {
-    this.dataSource = new MatTableDataSource<any>(obj);
+  setDataSuorce(brands) {
+    this.dataSource = new MatTableDataSource<Brand>(brands);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }

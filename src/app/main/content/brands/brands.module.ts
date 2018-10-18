@@ -6,20 +6,25 @@ import { BrandsComponent } from "./brands.component";
 import { BrandComponent } from "./brand.component";
 import { BrandsService } from "./brands.service";
 import { BrandService } from "./brand.service";
-import { FileDropModule } from "ngx-file-drop";
-import { TreeModule } from "angular-tree-component";
+import { DropzoneModule } from "ngx-dropzone-wrapper";
+import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
+import { AuthGuard } from "../../../guard/auth.guard";
+import { GLOBAL } from "../../../shared/globel";
 
 const routes = [
   {
-    path: "",
+    canActivate:[AuthGuard],
+    path: '',
     component: BrandsComponent
   },
   {
-    path: ":id",
+    canActivate:[AuthGuard],
+    path: 'brand/:id',
     component: BrandComponent
   },
   {
-    path: ":id/:handle",
+    canActivate:[AuthGuard],
+    path: 'brand/new',
     component: BrandComponent
   }
 ];
@@ -29,10 +34,13 @@ const routes = [
     SharedModule,
     RouterModule.forChild(routes),
     FuseAngularMaterialModule,
-    FileDropModule,
-    TreeModule
+    DropzoneModule
   ],
   declarations: [BrandsComponent, BrandComponent],
-  providers: [BrandsService, BrandService]
+  providers: [BrandsService, BrandService,
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG_FOR_BRAND,
+    }]
 })
 export class BrandsModule {}

@@ -9,23 +9,10 @@ import {
 } from "@angular/core";
 import { BrandService } from "./brand.service";
 import { fuseAnimations } from "../../../core/animations";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
 import { Subscription } from "rxjs/Subscription";
 import { Brand } from "../models/brand.model";
 import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
-import { FuseUtils } from "../../../core/fuseUtils";
-import {
-  MatSnackBar,
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef
-} from "@angular/material";
-import { Location } from "@angular/common";
+import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import {
   FileSystemDirectoryEntry,
   FileSystemFileEntry,
@@ -35,8 +22,10 @@ import {
 import { GLOBAL } from "../../../shared/globel";
 import { SnotifyService } from "ng-snotify";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
-import { ActivatedRoute } from "@angular/router";
-// import { $ } from 'protractor';
+import { ActivatedRoute, Router } from "@angular/router";
+import { Image } from "../models/product.model";
+import { SpinnerService } from "../../../spinner/spinner.service";
+import { MatDialogRef, MatDialog } from "@angular/material";
 declare var $: any;
 
 @Component({
@@ -49,84 +38,131 @@ declare var $: any;
 export class BrandComponent implements OnInit, OnDestroy {
   @ViewChild("dialogContent")
   dialogContent: TemplateRef<any>;
-
-  brand = new Brand();
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
+  brand: Brand;
   onBrandChanged: Subscription;
   pageType: string;
   brandForm: FormGroup;
   files: UploadFile[] = [];
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   baseURL = GLOBAL.USER_IMAGE_API;
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
 
   options = {};
   base64textString: string;
   sub: any;
+  lImages: any[] = [];
+  image: Image;
+  images: Image[];
+  brandID: any;
+  hasImage = false;
 
   constructor(
     private brandService: BrandService,
-    private formBuilder: FormBuilder,
-    public snackBar: MatSnackBar,
-    private location: Location,
     private snotifyService: SnotifyService,
+    private spinnerService: SpinnerService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    public router: Router,
+  ) {
+    this.brand = new Brand();
+    this.images = new Array<Image>();
+    this.image = new Image();
+  }
 
   ngOnInit() {
-    // Subscribe to update product on changes
     this.sub = this.route.params.subscribe(params => {
-      if (params) {
-        if (params.id === "new") {
-          this.pageType = "new";
-        } else {
-          this.pageType = "edit";
-        }
+      this.brandID = params['id'] || '';
+      if (Boolean(this.brandID) && parseInt(this.brandID, 10) > 0) {
+        this.getBrandById(this.brandID);
+        this.pageType = 'edit';
+      } else {
+        this.brand = new Brand();
+        this.hasImage = false;
+        this.pageType = 'new';
       }
     });
-    console.log(this.pageType);
   }
 
-  createBrandForm() {
-    return this.formBuilder.group({
-      id: [this.brand.id],
-      name: [this.brand.name],
-      notes: [this.brand.notes],
-      images: [this.brand.images]
+  ngOnDestroy(): void {
+    return this.sub && this.sub.unsubscribe();
+  }
+
+  getBrandById(id: number) {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.brandService.getBrandById(id).subscribe((res: any) => {
+      this.brand = new Brand(res.res.data);
+      this.hasImage = this.brand.image.id === -1 ? false : true;
+      this.spinnerService.requestInProcess(false);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
     });
   }
 
-  saveBrand(form) {
+  addBrand(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-    if (this.brand.content_type) {
-      let preImageName: any;
-      if (this.brand.image) {
-        preImageName = this.brand.image;
-        preImageName = preImageName.small.split("/");
-        this.brand.image_name = preImageName[3];
-      } else {
-        let date = new Date(null);
-        date.setSeconds(45); // specify value for SECONDS here
-        let timeString = date.toISOString().substr(11, 8);
-        this.brand.image_name = timeString + this.brand.content_type;
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
       }
-      this.brand.image = this.base64textString;
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    
+    this.brand.image = this.image;
+    this.spinnerService.requestInProcess(true);
+    this.brandService.addBrand(this.brand).subscribe((res) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/brands']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  editBrand(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Required Fields");
+      return;
+    }
+    if (this.hasImage === false) {
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
+      }
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+      this.brand.image = this.image;
     } else {
       delete this.brand.image;
     }
-    this.brandService.saveBrand(this.brand).then(() => {
-      // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(this.brand);
-
-      // Show the success message
+    this.brandService.updateBrand(this.brand).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/brands']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
     });
   }
 
   deleteBrand() {
-    // {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
     });
@@ -136,15 +172,56 @@ export class BrandComponent implements OnInit, OnDestroy {
 
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const data = this.brandForm.getRawValue();
-        data.handle = FuseUtils.handleize(data.name);
-        this.brandService.deleteBrand(data).then(() => {
-          this.brandService.onBrandChanged.next(data);
-        });
+        this.removeBrand();
       }
       this.confirmDialogRef = null;
     });
   }
+
+  removeBrand() {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.brandService.deleteBrand(this.brand.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/brands']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  removeImage(image_id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.brandService
+          .deleteBrandImage(+this.brand.id, image_id).subscribe(
+            res => {
+              this.spinnerService.requestInProcess(false);
+              if (!res.error) {
+                this.snotifyService.success("Deleted successfully !", "Success");
+                this.brand.image = new Image();
+                this.hasImage = false;
+              }
+            },
+            errors => {
+              this.spinnerService.requestInProcess(false);
+              let e = JSON.stringify(errors.error.message);
+              this.snotifyService.error(e, "Fail");
+            }
+          );
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
@@ -155,75 +232,15 @@ export class BrandComponent implements OnInit, OnDestroy {
       }
     });
   }
-  addBrand(form) {
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Required Fields");
-      return;
-    }
-    if (this.base64textString) {
-      this.brand.image = this.base64textString;
-    }
-    // const data = this.brandForm.getRawValue();
-    // data.handle = FuseUtils.handleize(data.name);
-    this.brandService.addBrand(this.brand).then(() => {
-      // Trigger the subscription with new data
-      this.brandService.onBrandChanged.next(this.brand);
-      // Show the success message
-      // this.snackBar.open('Brand added', 'OK', {
-      //   verticalPosition: 'top',
-      //   duration: 2000
-    });
 
-    // Change the location with new one
-    // this.location.go('/brands');
+  addPicture(image) {
+    this.image = new Image();
+    this.image.base64String = image.dataURL.split(",")[1];
+    this.image.content_type = image.type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
   }
 
-  dropped(event: UploadEvent) {
-    this.files = event.files;
-    for (const droppedFile of event.files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          // Here you can access the real file
-          console.log(droppedFile.relativePath, file);
-        });
-      } else {
-        // It was a directory (empty directories are added, otherwise only files)
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
-      }
-    }
-  }
-
-  fileOver(event) {
-    console.log(event);
-  }
-
-  fileLeave(event) {
-    console.log(event);
-  }
-
-  handleFileSelect(evt) {
-    const files = evt.target.files;
-    const file = files[0];
-    if (files && file) {
-      const reader = new FileReader();
-      this.brand.content_type = "." + file.type.split("/")[1];
-      reader.onload = this._handleReaderLoaded.bind(this);
-
-      reader.readAsBinaryString(file);
-    }
-  }
-
-  _handleReaderLoaded(readerEvt) {
-    const binaryString = readerEvt.target.result;
-    this.base64textString = btoa(binaryString);
-    // this.brand.image = this.base64textString;
-  }
-
-  ngOnDestroy() {
-    this.onBrandChanged.unsubscribe();
-  }
+  onUploadError(event: any) {}
+  onUploadSuccess(event: any) {}
 }

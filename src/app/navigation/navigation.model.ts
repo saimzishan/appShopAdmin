@@ -163,16 +163,9 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                         'title': 'Add',
                         'type': 'item',
                         'icon': 'add_circle',
-                        'url': '/brands/new',
+                        'url': '/brands/brand/new',
                         'exactMatch': true
                     },
-                    /*{
-                      'id'        : 'productDetail',
-                      'title'     : 'Product Detail',
-                      'type'      : 'item',
-                      'url'       : '/products/:id/:handle',
-                      'exactMatch': true
-                    },*/
                 ]
             },
             {
