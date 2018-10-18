@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild
+} from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
@@ -20,7 +26,7 @@ import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Router } from "@angular/router";
 import { GLOBAL } from "../../../shared/globel";
 import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
-import { Image } from '../models/product.model';
+import { Image } from "../models/product.model";
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -82,7 +88,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getGermanyJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
       },
       errors => {
         const e = errors.json();
@@ -94,7 +100,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getCanadaJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
       },
       errors => {
         const e = errors.json();
@@ -109,42 +115,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.getStatesOfCanada();
     }
   }
-
-  // createSupplierForm() {
-  //   return this.formBuilder.group({
-  //     id: [this.supplier.id],
-  //     name: [this.supplier.name],
-  //     type: [this.supplier.type],
-  //     email: [this.supplier.contact.email],
-  //     no: [this.supplier.contact.no],
-  //     street: [this.supplier.contact.street],
-  //     postal_code: [this.supplier.contact.postal_code],
-  //     city: [this.supplier.contact.city],
-  //     country: [this.supplier.contact.country],
-  //     po_box: [this.supplier.contact.po_box],
-  //     ph_landline1: [this.supplier.contact.ph_landline1],
-  //     ph_landline2: [this.supplier.contact.ph_landline2],
-  //     ph_landline3: [this.supplier.contact.ph_landline3],
-  //     ph_mobile1: [this.supplier.contact.ph_mobile1],
-  //     ph_mobile2: [this.supplier.contact.ph_mobile2],
-  //     ph_mobile3: [this.supplier.contact.ph_mobile3],
-  //     handle: [this.supplier.handle],
-  //   });
-  // }
-
   saveSupplier(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    const a = this.directiveRef.dropzone();
-    for (const iterator of a.files) {
-      this.addPicture(iterator);
-    }
+    // const a = this.directiveRef.dropzone();
+    // for (const iterator of a.files) {
+    //   this.addPicture(iterator);
+    // }
+    delete this.supplier.image;
     this.supplierService.saveSupplier(this.supplier).then(() => {
       this.router.navigate(["/suppliers"]);
-
     });
   }
 
@@ -194,9 +177,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        alert("a");
-        // const data = this.supplierForm.getRawValue();
-        // data.handle = FuseUtils.handleize(data.name);
         this.supplierService.deleteSuppler(this.supplier).then(() => {
           this.supplierService.onSupplierChanged.next(this.supplier);
         });
@@ -212,9 +192,9 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplier.image.type = "small";
   }
 
-  onUploadError(evt) { }
-  onUploadSuccess(evt) { }
-  onCanceled(event) { }
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {}
+  onCanceled(event) {}
 
   ngOnDestroy() {
     this.onSupplierChanged.unsubscribe();

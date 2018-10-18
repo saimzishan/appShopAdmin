@@ -35,13 +35,15 @@
       </div>
       <!-- / APP TITLE -->
 
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="supplierFormSubmition.click()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'"
+        (click)="supplierFormSubmition.click()">
         <span>ADD</span>
       </button>
       <!-- <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteSupplier()">
         <span>Delete</span>
       </button> -->
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editSupplierFormSubmition.click()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
+        (click)="editSupplierFormSubmition.click()">
         <span>SAVE</span>
       </button>
     </div>
@@ -62,7 +64,8 @@
 
             <mat-form-field class="w-100-p">
               <mat-label>Name</mat-label>
-              <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name" required>
+              <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name"
+                required>
             </mat-form-field>
             <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Name is required.</span>!</span>
@@ -80,10 +83,11 @@
             <span *ngIf="type.touched && type.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Type is required.</span>!</span>
             <br>
-            <div class="row">
+            <div class="row" *ngIf="pageType !== 'edit'">
               <div class="col-md-12" style="text-align:center">
                 <label>Small (180x135)</label>
-                <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></div>
+                <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
+                  (success)="onUploadSuccess($event)"></div>
               </div>
             </div>
             <br>
@@ -93,7 +97,7 @@
                   <img src="{{baseURL}}{{supplier.image.small}}" width="150" height="150">
                   <br>
                   <br>
-                  <button (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">
+                  <button *ngIf="pageType !== 'edit'" (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">
                     <i class="material-icons">
                       delete
                     </i></button>
@@ -110,21 +114,23 @@
                 </mat-expansion-panel-header>
                 <mat-form-field class="w-100-p">
                   <mat-label>Contact Person Name</mat-label>
-                  <input matInput name="contact_name" #contact_name="ngModel" [(ngModel)]="supplier.contact.name" placeholder="Name" required>
+                  <input matInput name="contact_name" #contact_name="ngModel" [(ngModel)]="supplier.contact.name"
+                    placeholder="Name" required>
                 </mat-form-field>
                 <br>
                 <span *ngIf="contact_name.touched && contact_name.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Contact Name is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Email</mat-label>
-                  <input matInput name="email" #email="ngModel" [(ngModel)]="supplier.contact.email" placeholder="Email" required>
+                  <input matInput name="email" #email="ngModel" [(ngModel)]="supplier.contact.email" placeholder="Email"
+                    required>
                 </mat-form-field>
                 <span *ngIf="email.touched && email.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Email is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Postal Code</mat-label>
-                  <input matInput name="postal_code" #postal_code="ngModel" [(ngModel)]="supplier.contact.postal_code" placeholder="Postal Code"
-                    required>
+                  <input matInput name="postal_code" #postal_code="ngModel" [(ngModel)]="supplier.contact.postal_code"
+                    placeholder="Postal Code" required>
                 </mat-form-field>
                 <span *ngIf="postal_code.touched && postal_code.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Postal Code is required.</span>!</span>
@@ -136,14 +142,15 @@
                   <span style="color: rgb(255, 0, 0)">Number is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Street</mat-label>
-                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="street" required>
+                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="street"
+                    required>
                 </mat-form-field>
                 <span *ngIf="street.touched && street.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Street is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Country</mat-label>
-                  <mat-select matInput name="country" #country="ngModel" [(ngModel)]="supplier.contact.country" (change)="countrySelected($event.value)"
-                    required>
+                  <mat-select matInput name="country" #country="ngModel" [(ngModel)]="supplier.contact.country"
+                    (change)="countrySelected($event.value)" required>
                     <mat-option value="Germany">Germany</mat-option>
                     <mat-option value="Canada">Canada</mat-option>
                   </mat-select>
@@ -160,7 +167,8 @@
                   <span style="color: rgb(255, 0, 0)">Country is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>PO Box</mat-label>
-                  <input matInput name="po_box" #po_box="ngModel" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box" required>
+                  <input matInput name="po_box" #po_box="ngModel" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box"
+                    required>
                 </mat-form-field>
                 <span *ngIf="po_box.touched && po_box.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Country is required.</span>!</span>
@@ -194,56 +202,6 @@
             <input type="button" class="btn btn-primary" hidden #supplierFormSubmition (click)="addSupplier(supplierForm)">
             <input type="button" class="btn btn-primary" hidden #editSupplierFormSubmition (click)="saveSupplier(supplierForm)">
 
-
-
-
-
-            <!--<mat-form-field class="w-100-p">
-                                    <textarea matInput
-                                              name="description"
-                                              formControlName="description"
-                                              placeholder="Product Description"
-                                              rows="5">
-                                    </textarea>
-                </mat-form-field>
-
-                <h3 class="mb-0">Categories</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #categoryList
-                                 name="categories"
-                                 formControlName="categories">
-
-                    <mat-chip *ngFor="let category of supplier.categories"
-                              removable="true" (removed)="supplier.removeCategory(category)">
-                      {{category}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addCategory($event)"
-                         placeholder="Add category..."
-                         [matChipInputFor]="categoryList"/>
-                </mat-form-field>
-
-                <h3 class="mb-0">Tags</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #tagList
-                                 name="tags"
-                                 formControlName="tags">
-
-                    <mat-chip *ngFor="let tag of supplier.tags"
-                              removable="true" (removed)="supplier.removeTag(tag)">
-                      {{tag}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addTag($event)"
-                         placeholder="Add tag..."
-                         [matChipInputFor]="tagList"/>
-                </mat-form-field>-->
           </div>
           <!--</mat-tab>
 
