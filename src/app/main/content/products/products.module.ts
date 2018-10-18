@@ -2,7 +2,6 @@ import { OptionAndSkusComponent } from "./option-and-skus/option-and-sku.compone
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../../../core/modules/shared.module";
 import { RouterModule } from "@angular/router";
-import { FuseAngularMaterialModule } from "../components/angular-material/angular-material.module";
 import { ProductsComponent } from "./products.component";
 import { ProductComponent } from "./product.component";
 import { ProductsService } from "./products.service";
@@ -46,7 +45,6 @@ const routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseAngularMaterialModule,
     FileDropModule,
     TreeModule,
     DropzoneModule

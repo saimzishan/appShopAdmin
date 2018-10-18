@@ -1,25 +1,24 @@
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../../../core/modules/shared.module';
-import { RouterModule } from '@angular/router';
-import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
-import { OrdersService } from './orders.service';
-import { FileDropModule } from 'ngx-file-drop';
-import { ClipboardModule } from 'ngx-clipboard';
-import { TreeModule } from 'angular-tree-component';
-import { AuthGuard } from '../../../guard/auth.guard';
-import { OrdersComponent } from './orders.component';
-import { CdkDetailRowDirective } from './cdk-detail-row.directive';
+import { NgModule } from "@angular/core";
+import { SharedModule } from "../../../core/modules/shared.module";
+import { RouterModule } from "@angular/router";
+import { OrdersService } from "./orders.service";
+import { FileDropModule } from "ngx-file-drop";
+import { ClipboardModule } from "ngx-clipboard";
+import { TreeModule } from "angular-tree-component";
+import { AuthGuard } from "../../../guard/auth.guard";
+import { OrdersComponent } from "./orders.component";
+import { CdkDetailRowDirective } from "./cdk-detail-row.directive";
 
 const routes = [
   {
     canActivate: [AuthGuard],
-    path: '',
-    component: OrdersComponent,
+    path: "",
+    component: OrdersComponent
   },
   {
     canActivate: [AuthGuard],
-    path: 'orders',
-    component: OrdersComponent,
+    path: "orders",
+    component: OrdersComponent
   }
 ];
 
@@ -27,7 +26,6 @@ const routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseAngularMaterialModule,
     FileDropModule,
     ClipboardModule,
     TreeModule
@@ -35,5 +33,4 @@ const routes = [
   declarations: [OrdersComponent, CdkDetailRowDirective],
   providers: [OrdersService]
 })
-export class OrdersModule {
-}
+export class OrdersModule {}

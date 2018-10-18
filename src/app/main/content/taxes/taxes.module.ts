@@ -1,34 +1,33 @@
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../../../core/modules/shared.module';
-import { RouterModule } from '@angular/router';
-import { FuseAngularMaterialModule } from '../components/angular-material/angular-material.module';
-import { TaxesComponent } from './taxes.component';
-import { TaxComponent } from './tax.component';
-import { TaxesService } from './taxes.service';
-import { FileDropModule } from 'ngx-file-drop';
-import { TreeModule } from 'angular-tree-component';
-import { AuthGuard } from '../../../guard/auth.guard';
+import { NgModule } from "@angular/core";
+import { SharedModule } from "../../../core/modules/shared.module";
+import { RouterModule } from "@angular/router";
+import { TaxesComponent } from "./taxes.component";
+import { TaxComponent } from "./tax.component";
+import { TaxesService } from "./taxes.service";
+import { FileDropModule } from "ngx-file-drop";
+import { TreeModule } from "angular-tree-component";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 const routes = [
   {
     canActivate: [AuthGuard],
-    path: '',
-    component: TaxesComponent,
+    path: "",
+    component: TaxesComponent
   },
   {
     canActivate: [AuthGuard],
-    path: 'taxes',
-    component: TaxesComponent,
+    path: "taxes",
+    component: TaxesComponent
   },
   {
     canActivate: [AuthGuard],
-    path: 'tax/new',
-    component: TaxComponent,
+    path: "tax/new",
+    component: TaxComponent
   },
   {
     canActivate: [AuthGuard],
-    path: 'tax/:id',
-    component: TaxComponent,
+    path: "tax/:id",
+    component: TaxComponent
   }
 ];
 
@@ -36,12 +35,10 @@ const routes = [
   imports: [
     SharedModule,
     RouterModule.forChild(routes),
-    FuseAngularMaterialModule,
     FileDropModule,
     TreeModule
   ],
   declarations: [TaxesComponent, TaxComponent],
   providers: [TaxesService]
 })
-export class TaxesModule {
-}
+export class TaxesModule {}

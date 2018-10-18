@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { SharedModule } from "../../../core/modules/shared.module";
 import { RouterModule } from "@angular/router";
-import { FuseAngularMaterialModule } from "../components/angular-material/angular-material.module";
 import { CategoriesComponent } from "./categories.component";
 import { CategoriesService } from "./categories.service";
 import { CategoryComponent } from "./category.component";
@@ -34,12 +33,7 @@ const routes = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
-    FuseAngularMaterialModule,
-    TreeModule
-  ],
+  imports: [SharedModule, RouterModule.forChild(routes), TreeModule],
   declarations: [
     CategoriesComponent,
     CategoryComponent,
