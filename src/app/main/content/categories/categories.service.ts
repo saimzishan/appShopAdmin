@@ -30,7 +30,7 @@ export class CategoriesService extends ApiService implements Resolve<any> {
     state: RouterStateSnapshot
   ): Observable<any> | Promise<any> | any {
     return new Promise((resolve, reject) => {
-      Promise.all([this.getSuppliers()]).then(() => {
+      Promise.all([]).then(() => {
         resolve();
       }, reject);
     });

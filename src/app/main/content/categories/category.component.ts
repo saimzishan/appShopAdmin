@@ -233,7 +233,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
     const data = this.categoryForm.getRawValue();
     data["parent_id"] = this.parentCatId;
-    data["images"] = this.category.image;
+    data["image"] = this.category.image;
     this.categoryService.store(data).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");

@@ -144,6 +144,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     }
     this.supplierService.saveSupplier(this.supplier).then(() => {
       this.router.navigate(["/suppliers"]);
+
     });
   }
 
