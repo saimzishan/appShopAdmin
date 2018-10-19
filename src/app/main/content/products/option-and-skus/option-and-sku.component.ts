@@ -89,8 +89,8 @@ export class OptionAndSkusComponent implements OnInit {
           element.ps_id = res.id;
           element.isSelected = true;
           element.amount = res.amount;
-          element.changed_by = res.changed_by === "absolute" ? 1 : 2;
-          element.operation = res.operation === "add" ? 2 : 3;
+          element.changed_by = res.changed_by === "absolute" ? 1 : res.changed_by === null ? '' : 2;
+          element.operation = res.operation === "none" ? 1 : res.operation === "add" ? 2 : 3;
           element.option_id = res.option_id;
         } else {
           element.isSelected = false;
@@ -129,8 +129,17 @@ export class OptionAndSkusComponent implements OnInit {
       let obj = [];
       if (this.pageType === "edit") {
         obj = res.options;
+        obj.forEach(element => {
+          if (element.isSelected === false) {
+            element.operation = 1;
+          }
+        });
       } else {
         obj = res.options;
+        obj.forEach(element => {
+          element.amount = null;
+          element.operation = 1;
+        });
       }
       return obj;
     }

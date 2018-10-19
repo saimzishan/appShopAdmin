@@ -134,6 +134,7 @@ export class VariantComponent implements OnInit {
           this.snotifyService.success(res.res.message, "Success !");
           this.variant = new Variant();
           this.productVariants.variants = res.res.data;
+          this.converter(this.productVariants.variants);
           this.product_variant_attributes = [];
           this.isEdit = false;
           this.isAction = false;
@@ -179,7 +180,7 @@ export class VariantComponent implements OnInit {
         (res: any) => {
           this.snotifyService.success(res.res.message, "Success !");
           let updatedVariant = new Variant(res.res.data);
-
+          this.converter([updatedVariant]);
           let index = this.productVariants.variants.findIndex(
             v => v.id === updatedVariant.id
           );
