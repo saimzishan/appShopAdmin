@@ -46,8 +46,9 @@ export class VariantComponent implements OnInit {
   lImages: any = [];
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
-  isNew = false;
+  isEdit = false;
   isNewPressed = false;
+  isAction = false;
 
   constructor(
     private productService: ProductService,
@@ -133,8 +134,10 @@ export class VariantComponent implements OnInit {
           this.snotifyService.success(res.res.message, "Success !");
           this.variant = new Variant();
           this.productVariants.variants = res.res.data;
+          this.converter(this.productVariants.variants);
           this.product_variant_attributes = [];
-          this.isNew = false;
+          this.isEdit = false;
+          this.isAction = false;
           this.spinnerService.requestInProcess(false);
         },
         errors => {
@@ -177,14 +180,15 @@ export class VariantComponent implements OnInit {
         (res: any) => {
           this.snotifyService.success(res.res.message, "Success !");
           let updatedVariant = new Variant(res.res.data);
-
+          this.converter([updatedVariant]);
           let index = this.productVariants.variants.findIndex(
             v => v.id === updatedVariant.id
           );
           this.productVariants.variants.splice(index, 1);
           this.productVariants.variants.push(updatedVariant);
           this.variant = updatedVariant;
-          this.isNew = false;
+          this.isEdit = false;
+          this.isAction = false;
           this.spinnerService.requestInProcess(false);
         },
         errors => {
@@ -301,8 +305,9 @@ export class VariantComponent implements OnInit {
   }
 
   selectVariant(selectedVariant: Variant) {
-    this.isNew = true;
+    this.isEdit = true;
     this.isNewPressed = false;
+    this.isAction = true;
     this.variant = selectedVariant;
   }
 
@@ -316,7 +321,7 @@ export class VariantComponent implements OnInit {
   }
 
   cancelVariant() {
-    this.isNew = false;
+    this.isEdit = false;
     this.variant = new Variant();
   }
 
@@ -386,8 +391,9 @@ export class VariantComponent implements OnInit {
   }
 
   isNewVariant() {
-    this.isNew = true;
+    this.isEdit = false;
     this.isNewPressed = true;
+    this.isAction = true;
     this.productSupplier.images = [];
     this.variant = this.productSupplier;
     this.variant.amount = this.productSupplier.price;

@@ -73,6 +73,27 @@ export class OptionsService extends ApiService {
             });
     }
 
+    editOption(option: Option) {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http.put(GLOBAL.USER_API + 'optionsets/' + option.id, option, httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
+    }
+
     deleteOption(id: number) {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {

@@ -5,23 +5,16 @@ import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { CategoryService } from "./category.service";
 import { fuseAnimations } from "../../../core/animations";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
 import { Subscription } from "rxjs/Subscription";
 import { Category } from "../models/category.model";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { FuseUtils } from "../../../core/fuseUtils";
 import { MatSnackBar } from "@angular/material";
-import { Location } from "@angular/common";
-import { ITreeOptions, TreeNode, TreeModel } from "angular-tree-component";
+import { ITreeOptions } from "angular-tree-component";
 import { Supplier } from "../models/supplier.model";
 import { CategoriesService } from "./categories.service";
-import { Router, ActivatedRoute, Params, NavigationEnd } from "@angular/router";
-import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { Router, NavigationEnd } from "@angular/router";
+import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { Image } from '../models/product.model';
 
 @Component({
@@ -41,7 +34,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
   onSupplierChanged: Subscription;
   pageType: boolean;
   categoryForm: FormGroup;
-  private sub: Subscription;
   baseURL = GLOBAL.USER_IMAGE_API;
 
   @ViewChild(DropzoneDirective)
@@ -76,11 +68,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
-    private location: Location,
     private categoriesService: CategoriesService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
-    private route: ActivatedRoute,
     private router: Router,
     protected http: HttpClient
   ) {
@@ -186,7 +176,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   show(id) {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.show(id).subscribe(
+    this.categoriesService.getCategoryById(id).subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         if (!res.status) {
@@ -211,18 +201,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       name: [this.category.name],
       parent_id: [this.category.parent_id],
       parentName: [""]
-    });
-  }
-
-  saveSupplier() {
-    const data = this.categoryForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.categoryService.saveSupplier(data).then(() => {
-      this.categoryService.onSupplierChanged.next(data);
-      this.snackBar.open("Supplier saved", "OK", {
-        verticalPosition: "top",
-        duration: 2000
-      });
     });
   }
 
@@ -259,6 +237,5 @@ export class CategoryComponent implements OnInit, OnDestroy {
   onUploadError(evt) { }
   onUploadSuccess(evt) { }
   onCanceled(event) { }
-
   ngOnDestroy() { }
 }

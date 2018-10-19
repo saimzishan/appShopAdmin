@@ -99,6 +99,31 @@ export class OptionComponent implements OnInit {
     });
   }
 
+  editOption(form: NgForm) {
+    if (form.invalid || this.option.options.length <= 0) {
+      this.validateForm(form);
+      return;
+    } else {
+      this.updateOption();
+    }
+  }
+
+  updateOption() {
+    this.spinnerService.requestInProcess(true);
+    let tempOption = new Option(this.option);
+    tempOption.options = tempOption.options.filter(ov => ov.id === -1);
+    this.sub = this.optionService.editOption(tempOption).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/options']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
   delOption() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false

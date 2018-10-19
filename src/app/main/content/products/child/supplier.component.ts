@@ -262,6 +262,11 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please select atleast one side for printing");
       return;
     }
+    if (this.product.supplier.track_stock && this.product.supplier.stock === 0 &&
+      this.product.supplier.low_level_stock === 0) {
+      this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
+      return;
+    }
     if (this.product.supplier.track_stock === false) {
       this.product.supplier.low_level_stock = 0;
       this.product.supplier.stock = 0;
@@ -317,13 +322,6 @@ export class SupplierFormComponent implements OnInit {
       this.addPicture(iterator);
     }
 
-    this.spinnerService.requestInProcess(true);
-
-    // let supplier = {
-    //   ps_id: this.ps_id,
-
-    //   images: this.lImages
-    // };
     setTimeout(() => {
       this.product.supplier.images = this.lImages;
       this.putSupplier(this.product.supplier);
@@ -559,12 +557,21 @@ export class SupplierFormComponent implements OnInit {
   }
 
   putSupplier(updatedSupplier) {
-    this.spinnerService.requestInProcess(true);
     updatedSupplier.id = this.product.id;
     if (updatedSupplier.track_stock === false) {
       updatedSupplier.low_level_stock = 0;
       updatedSupplier.stock = 0;
     }
+    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
+      this.snotifyService.warning("Please select atleast one side for printing");
+      return;
+    }
+    if (this.product.supplier.track_stock && +this.product.supplier.stock === 0 &&
+      +this.product.supplier.low_level_stock === 0) {
+      this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
+      return;
+    }
+    this.spinnerService.requestInProcess(true);
     this.productService.saveProduct(updatedSupplier, "ps_update").subscribe(
       (res: any) => {
         this.product.supplier.images = res.res.data;
