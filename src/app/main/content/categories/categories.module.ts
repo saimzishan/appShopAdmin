@@ -7,29 +7,19 @@ import { CategoryComponent } from "./category.component";
 import { CategoryService } from "./category.service";
 import { TreeModule } from "angular-tree-component";
 import { CategoryChildComponent } from "./child/child.component";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 const routes = [
   {
+    canActivate:[AuthGuard],
     path: "",
-    component: CategoriesComponent,
-    resolve: {
-      academy: CategoriesService
-    }
+    component: CategoriesComponent
   },
   {
+    canActivate:[AuthGuard],
     path: ":id",
     component: CategoryComponent,
-    resolve: {
-      academy: CategoryService
-    }
   }
-  /*{
-    path     : ':id/:handle',
-    component: SupplierComponent,
-    resolve  : {
-      academy: SupplierService
-    }
-  },*/
 ];
 
 @NgModule({

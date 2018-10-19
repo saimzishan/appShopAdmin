@@ -114,7 +114,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       },
       errors => {
         this.spinnerService.requestInProcess(false);
-        let e = errors.message;
+        let e = errors.error.message;
         this.snotifyService.error(e, "Error !");
       }
     );
@@ -221,6 +221,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.userMService.getRoles().subscribe(
       (res: any) => {
         this.roleList = res.res.data;
+        this.roleList.splice(this.roleList.findIndex(role => role.id === 2), 1);
+        this.roleList.splice(this.roleList.findIndex(role => role.id === 3), 1);
         this.spinnerService.requestInProcess(false);
       },
       errors => {

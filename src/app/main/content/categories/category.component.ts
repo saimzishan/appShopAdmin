@@ -177,7 +177,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   show(id) {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.show(id).subscribe(
+    this.categoriesService.getCategoryById(id).subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         if (!res.status) {
@@ -203,21 +203,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
       name: [this.category.name],
       parent_id: [this.category.parent_id],
       parentName: [""]
-    });
-  }
-
-  saveSupplier() {
-    const data = this.categoryForm.getRawValue();
-    data.handle = FuseUtils.handleize(data.name);
-    this.categoryService.saveSupplier(data).then(() => {
-      // Trigger the subscription with new data
-      this.categoryService.onSupplierChanged.next(data);
-
-      // Show the success message
-      this.snackBar.open("Supplier saved", "OK", {
-        verticalPosition: "top",
-        duration: 2000
-      });
     });
   }
 

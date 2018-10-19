@@ -126,7 +126,7 @@ export class CategoriesComponent implements OnInit {
 
   show(id) {
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.show(id).subscribe(
+    this.categoriesService.getCategoryById(id).subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         if (!res.status) {
