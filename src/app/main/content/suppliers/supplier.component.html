@@ -83,17 +83,27 @@
             <span *ngIf="type.touched && type.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Type is required.</span>!</span>
             <br>
-            <fieldset class="w-100-p">
-              <mat-card *ngIf="pageType ==='edit'">
-                <ng-container *ngIf="supplier.image">
-                  <img src="{{baseURL+supplier.image.small}}" width="100" height="100">
-                </ng-container>
-                <ng-container *ngIf="!supplier.image">
-                  <p> No Image</p>
-                </ng-container>
-              </mat-card>
-              <input type="file" name="fileUp" (change)="handleFileSelect($event)">
-            </fieldset>
+            <div class="row" *ngIf="pageType !== 'edit'">
+              <div class="col-md-12" style="text-align:center">
+                <label>Small (180x135)</label>
+                <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
+                  (success)="onUploadSuccess($event)"></div>
+              </div>
+            </div>
+            <br>
+            <div class="row" *ngIf="pageType === 'edit'" style="text-align:center">
+              <ng-container *ngIf="supplier.image">
+                <div class="col-md-2">
+                  <img src="{{baseURL}}{{supplier.image.small}}" width="150" height="150">
+                  <br>
+                  <br>
+                  <button *ngIf="pageType !== 'edit'" (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">
+                    <i class="material-icons">
+                      delete
+                    </i></button>
+                </div>
+              </ng-container>
+            </div>
             <br>
             <mat-accordion>
               <mat-expansion-panel>
@@ -192,56 +202,6 @@
             <input type="button" class="btn btn-primary" hidden #supplierFormSubmition (click)="addSupplier(supplierForm)">
             <input type="button" class="btn btn-primary" hidden #editSupplierFormSubmition (click)="saveSupplier(supplierForm)">
 
-
-
-
-
-            <!--<mat-form-field class="w-100-p">
-                                    <textarea matInput
-                                              name="description"
-                                              formControlName="description"
-                                              placeholder="Product Description"
-                                              rows="5">
-                                    </textarea>
-                </mat-form-field>
-
-                <h3 class="mb-0">Categories</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #categoryList
-                                 name="categories"
-                                 formControlName="categories">
-
-                    <mat-chip *ngFor="let category of supplier.categories"
-                              removable="true" (removed)="supplier.removeCategory(category)">
-                      {{category}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addCategory($event)"
-                         placeholder="Add category..."
-                         [matChipInputFor]="categoryList"/>
-                </mat-form-field>
-
-                <h3 class="mb-0">Tags</h3>
-                <mat-form-field class="w-100-p" floatPlaceholder="never">
-                  <mat-chip-list matPrefix #tagList
-                                 name="tags"
-                                 formControlName="tags">
-
-                    <mat-chip *ngFor="let tag of supplier.tags"
-                              removable="true" (removed)="supplier.removeTag(tag)">
-                      {{tag}}
-                      <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                  </mat-chip-list>
-                  <input matInput
-                         matChipInputAddOnBlur="true"
-                         (matChipInputTokenEnd)="supplier.addTag($event)"
-                         placeholder="Add tag..."
-                         [matChipInputFor]="tagList"/>
-                </mat-form-field>-->
           </div>
           <!--</mat-tab>
 

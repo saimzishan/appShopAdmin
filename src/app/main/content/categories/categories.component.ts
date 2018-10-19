@@ -4,15 +4,7 @@ import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { CategoriesService } from "./categories.service";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
-import { FuseUtils } from "../../../core/fuseUtils";
-import { ITreeOptions, TreeNode, TreeComponent } from "angular-tree-component";
+import { ITreeOptions, TreeComponent } from "angular-tree-component";
 import { SpinnerService } from "../../../spinner/spinner.service";
 @Component({
   selector: "app-categories",

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild
+} from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { fuseAnimations } from "../../../core/animations";
 import "rxjs/add/operator/startWith";
@@ -19,6 +25,8 @@ import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Router } from "@angular/router";
 import { GLOBAL } from "../../../shared/globel";
+import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { Image } from "../models/product.model";
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -29,6 +37,7 @@ import { GLOBAL } from "../../../shared/globel";
   animations: fuseAnimations
 })
 export class SupplierComponent implements OnInit, OnDestroy {
+  config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   supplier = new Supplier();
   supplier_contact = new Contact();
   onSupplierChanged: Subscription;
@@ -38,6 +47,12 @@ export class SupplierComponent implements OnInit, OnDestroy {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   base64textString;
   baseURL = GLOBAL.USER_IMAGE_API;
+  images: Image[];
+  lImages: any;
+  image: Image;
+
+  @ViewChild(DropzoneDirective)
+  directiveRef: DropzoneDirective;
 
   constructor(
     private supplierService: SupplierService,
@@ -48,7 +63,10 @@ export class SupplierComponent implements OnInit, OnDestroy {
     private snotifyService: SnotifyService,
     private spinnerService: SpinnerService,
     private router: Router
-  ) {}
+  ) {
+    this.images = new Array<Image>();
+    this.image = new Image();
+  }
 
   ngOnInit() {
     this.onSupplierChanged = this.supplierService.onSupplierChanged.subscribe(
@@ -97,57 +115,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.getStatesOfCanada();
     }
   }
-
-  // createSupplierForm() {
-  //   return this.formBuilder.group({
-  //     id: [this.supplier.id],
-  //     name: [this.supplier.name],
-  //     type: [this.supplier.type],
-  //     email: [this.supplier.contact.email],
-  //     no: [this.supplier.contact.no],
-  //     street: [this.supplier.contact.street],
-  //     postal_code: [this.supplier.contact.postal_code],
-  //     city: [this.supplier.contact.city],
-  //     country: [this.supplier.contact.country],
-  //     po_box: [this.supplier.contact.po_box],
-  //     ph_landline1: [this.supplier.contact.ph_landline1],
-  //     ph_landline2: [this.supplier.contact.ph_landline2],
-  //     ph_landline3: [this.supplier.contact.ph_landline3],
-  //     ph_mobile1: [this.supplier.contact.ph_mobile1],
-  //     ph_mobile2: [this.supplier.contact.ph_mobile2],
-  //     ph_mobile3: [this.supplier.contact.ph_mobile3],
-  //     handle: [this.supplier.handle],
-  //   });
-  // }
-
   saveSupplier(form) {
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    if (this.supplier.content_type) {
-      let preImageName: any;
-      if (this.supplier.image) {
-        preImageName = this.supplier.image;
-        preImageName = preImageName.small.split("/");
-        this.supplier.image_name = preImageName[3];
-      } else {
-        let date = new Date(null);
-        date.setSeconds(45); // specify value for SECONDS here
-        let timeString = date.toISOString().substr(11, 8);
-        this.supplier.image_name = timeString + this.supplier.content_type;
-      }
-
-      this.supplier.image = this.base64textString;
-    } else {
-      delete this.supplier.image;
-    }
-    const data = this.supplier;
-    this.supplierService.saveSupplier(data).then(() => {
+    // const a = this.directiveRef.dropzone();
+    // for (const iterator of a.files) {
+    //   this.addPicture(iterator);
+    // }
+    delete this.supplier.image;
+    this.supplierService.saveSupplier(this.supplier).then(() => {
       this.router.navigate(["/suppliers"]);
-      // this.supplierService.onSupplierChanged.next(data);
-      // this.snotifyService.success("Supplier saved", "Success !");
     });
   }
 
@@ -163,18 +143,14 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   addSupplier(form) {
-    // this.supplier.contact = this.supplier_contact;
-    // this.supplier.contact = this.supplier_contact;
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Fields");
       return;
     }
-    // this.product.category_id = this.category_id;
-    // this.product.suppliers[0].productVariants
-    this.spinnerService.requestInProcess(true);
-    if (this.base64textString) {
-      this.supplier.image = this.base64textString;
+    const a = this.directiveRef.dropzone();
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
     }
     this.supplierService.addSupplier(this.supplier).subscribe(
       (res: any) => {
@@ -193,24 +169,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleFileSelect(evt) {
-    const files = evt.target.files;
-    const file = files[0];
-    if (files && file) {
-      const reader = new FileReader();
-      this.supplier.content_type = "." + file.type.split("/")[1];
-      reader.onload = this._handleReaderLoaded.bind(this);
-
-      reader.readAsBinaryString(file);
-    }
-  }
-
-  _handleReaderLoaded(readerEvt) {
-    const binaryString = readerEvt.target.result;
-    this.base64textString = btoa(binaryString);
-    // this.supplier.image = this.base64textString;
-  }
-
   deleteSupplier() {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
@@ -219,9 +177,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        alert("a");
-        // const data = this.supplierForm.getRawValue();
-        // data.handle = FuseUtils.handleize(data.name);
         this.supplierService.deleteSuppler(this.supplier).then(() => {
           this.supplierService.onSupplierChanged.next(this.supplier);
         });
@@ -229,6 +184,17 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.confirmDialogRef = null;
     });
   }
+
+  addPicture(obj) {
+    this.supplier.image.base64String = obj.dataURL.split(",")[1];
+    this.supplier.image.content_type = obj.type.split("/")[1];
+    this.supplier.image.content_type = "." + this.supplier.image.content_type;
+    this.supplier.image.type = "small";
+  }
+
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {}
+  onCanceled(event) {}
 
   ngOnDestroy() {
     this.onSupplierChanged.unsubscribe();
