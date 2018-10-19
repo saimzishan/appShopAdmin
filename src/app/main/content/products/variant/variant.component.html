@@ -38,13 +38,13 @@
                 <div style="text-align: right">
                     <button (click)="isNewVariant()" class="btn btn-info" style="margin-bottom: 2%">Add New Variant</button>
                 </div>
-                <ng-container *ngIf="isNew">
+                <ng-container *ngIf="isAction">
                     <form name="skuForm" #skuForm="ngForm">
 
                         <mat-card-content>
                             <br>
                                 <div class="row">
-                                    <ng-container *ngIf="pageType === 'new' || isNewPressed">
+                                    <ng-container *ngIf="isNewPressed">
                                         <div class="col-md-6" *ngFor="let optionSet of productOptionSetAndValue">
                                             <mat-form-field class="w-100-p">
                                                 <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
@@ -167,10 +167,10 @@
                                 <button class="btn btn-primary" mat-raised-button (click)="cancelVariant()">Cancel</button>
 
                                 <button mat-raised-button style="background-color: #3E81CC; color: white"
-                                *ngIf="isNew && isNewPressed" (click)="mangeOption(skuForm);">Add</button>
+                                *ngIf="isNewPressed" (click)="mangeOption(skuForm);">Add</button>
                                 
                                 <button mat-raised-button style="background-color: #3E81CC;color: white"
-                                *ngIf="pageType === 'edit' && !isNewPressed" (click)="editVariant(skuForm);">Save</button>
+                                *ngIf="isEdit" (click)="editVariant(skuForm);">Save</button>
                             </div>
                         </mat-card-actions>
                     </form>
