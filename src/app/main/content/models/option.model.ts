@@ -7,7 +7,7 @@ export class Option {
         option = option || {};
         this.id = option.id || -1;
         this.name = option.name || '';
-        this.options = this.options || new Array<OptionValues>();
+        this.options = option.options || new Array<OptionValues>();
     }
 }
 
