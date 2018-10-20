@@ -15,7 +15,7 @@ export class Supplier {
     this.id = supplier.id || -1;
     this.name = supplier.name || "";
     this.type = supplier.type || "";
-    this.contact = supplier.contact || {};
+    this.contact = supplier.contact || new Contact();
     this.products = supplier.products || [];
     this.handle = supplier.handle || "";
     this.image = supplier.image || new Image();

@@ -1,35 +1,19 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-  ViewChild
-} from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { fuseAnimations } from "../../../core/animations";
-import "rxjs/add/operator/startWith";
-import "rxjs/add/observable/merge";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
-import "rxjs/add/observable/fromEvent";
-import { Subscription } from "rxjs/Subscription";
 import { Supplier } from "../models/supplier.model";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
-import { FuseUtils } from "../../../core/fuseUtils";
+import { FormGroup, FormControl } from "@angular/forms";
 import { MatSnackBar, MatDialog, MatDialogRef } from "@angular/material";
-import { Location } from "@angular/common";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 import { Contact } from "../models/contact.model";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { GLOBAL } from "../../../shared/globel";
-import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
+import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { Image } from "../models/product.model";
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: "app-supplier",
   templateUrl: "./supplier.component.html",
   styleUrls: ["./supplier.component.scss"],
@@ -40,10 +24,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   supplier = new Supplier();
   supplier_contact = new Contact();
-  onSupplierChanged: Subscription;
-  pageType: string;
   supplierForm: FormGroup;
-  stateJSON;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   base64textString;
   baseURL = GLOBAL.USER_IMAGE_API;
@@ -53,15 +34,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
+  sub: any;
+  supplierID: any;
+  hasImage = false;
+  pageType: string;
+  stateJSON: any;
 
   constructor(
     private supplierService: SupplierService,
-    private formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
-    private location: Location,
     private dialog: MatDialog,
     private snotifyService: SnotifyService,
     private spinnerService: SpinnerService,
+    private route: ActivatedRoute,
     private router: Router
   ) {
     this.images = new Array<Image>();
@@ -69,26 +54,161 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.onSupplierChanged = this.supplierService.onSupplierChanged.subscribe(
-      supplier => {
-        if (supplier) {
-          this.supplier = new Supplier(supplier);
-          this.pageType = "edit";
-          this.countrySelected(supplier.country);
-        } else {
-          this.pageType = "new";
-          this.supplier = new Supplier();
-        }
-        // this.supplierForm = this.createSupplierForm();
+    this.sub = this.route.params.subscribe(params => {
+      this.supplierID = params['id'] || '';
+      if (Boolean(this.supplierID) && parseInt(this.supplierID, 10) > 0) {
+        this.getSupplierById(this.supplierID);
+        this.pageType = 'edit';
+      } else {
+        this.supplier = new Supplier();
+        this.hasImage = false;
+        this.pageType = 'new';
+      }
+    });
+  }
+
+  getSupplierById(id: number) {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.supplierService.getSupplierById(id).subscribe((res: any) => {
+      this.supplier = new Supplier(res.res.data);
+      this.hasImage = this.supplier.image.id === -1 ? false : true;
+      this.spinnerService.requestInProcess(false);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  addSupplier(form) {
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
+    }
+    let a = this.directiveRef.dropzone();
+    if (a.files.length === 0) {
+      this.snotifyService.warning("Please Upload image", "Warning !");
+      return;
+    }
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
+    }
+    this.supplier.image = this.image;
+    this.supplierService.addSupplier(this.supplier).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.supplier = new Supplier();
+        this.supplier.contact = new Contact();
+        this.router.navigate(["/suppliers"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
       }
     );
+  }
+
+  editSupplier(form) {
+    let tempImage: Image;
+    if (form.invalid) {
+      this.validateAllFormFields(form.control);
+      this.snotifyService.warning("Please Fill All Fields");
+      return;
+    }
+    if (this.hasImage === false) {
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
+      }
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+      this.supplier.image = this.image;
+    } else {
+      tempImage = new Image(this.supplier.image);
+      delete this.supplier.image;
+    }
+    this.supplierService.editSupplier(this.supplier).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/suppliers']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+    this.supplier.image = tempImage;
+  }
+
+  deleteSupplier() {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.removeSupplier();
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  removeSupplier() {
+    this.spinnerService.requestInProcess(true);
+    this.sub = this.supplierService.deleteSupplier(this.supplier.id).subscribe((res: any) => {
+      let e = res.res.message;
+      this.snotifyService.success(e, 'Success !');
+      this.spinnerService.requestInProcess(false);
+      this.router.navigate(['/suppliers']);
+    }, errors => {
+      this.spinnerService.requestInProcess(false);
+      let e = errors.error.message;
+      this.snotifyService.error(e, 'Error !');
+    });
+  }
+
+  removeImage(image_id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.supplierService
+          .deleteSupplierImage(+this.supplier.id, image_id).subscribe(
+            res => {
+              this.spinnerService.requestInProcess(false);
+              if (!res.error) {
+                this.snotifyService.success("Deleted successfully !", "Success");
+                this.supplier.image = new Image();
+                this.hasImage = false;
+              }
+            },
+            errors => {
+              this.spinnerService.requestInProcess(false);
+              let e = JSON.stringify(errors.error.message);
+              this.snotifyService.error(e, "Fail");
+            }
+          );
+      }
+      this.confirmDialogRef = null;
+    });
   }
 
   getStatesOfGermany() {
     this.supplierService.getGermanyJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -100,7 +220,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getCanadaJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => {}, 500);
+        setTimeout(() => { }, 500);
       },
       errors => {
         const e = errors.json();
@@ -115,21 +235,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.getStatesOfCanada();
     }
   }
-  saveSupplier(form) {
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
-      return;
-    }
-    // const a = this.directiveRef.dropzone();
-    // for (const iterator of a.files) {
-    //   this.addPicture(iterator);
-    // }
-    delete this.supplier.image;
-    this.supplierService.saveSupplier(this.supplier).then(() => {
-      this.router.navigate(["/suppliers"]);
-    });
-  }
+
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -142,61 +248,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
     });
   }
 
-  addSupplier(form) {
-    if (form.invalid) {
-      this.validateAllFormFields(form.control);
-      this.snotifyService.warning("Please Fill All Fields");
-      return;
-    }
-    const a = this.directiveRef.dropzone();
-    for (const iterator of a.files) {
-      this.addPicture(iterator);
-    }
-    this.supplierService.addSupplier(this.supplier).subscribe(
-      (res: any) => {
-        this.snotifyService.success(res.res.message, "Success !");
-        this.spinnerService.requestInProcess(false);
-        this.supplier = new Supplier();
-        this.supplier.contact = new Contact();
-        this.router.navigate(["/suppliers"]);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
-      }
-    );
+  addPicture(image) {
+    this.image = new Image();
+    this.image.base64String = image.dataURL.split(",")[1];
+    this.image.content_type = image.type.split("/")[1];
+    this.image.content_type = "." + this.image.content_type.split(";")[0];
+    this.image.type = "small";
   }
 
-  deleteSupplier() {
-    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
-      disableClose: false
-    });
-    this.confirmDialogRef.componentInstance.confirmMessage =
-      "Are you sure you want to delete?";
-    this.confirmDialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.supplierService.deleteSuppler(this.supplier).then(() => {
-          this.supplierService.onSupplierChanged.next(this.supplier);
-        });
-      }
-      this.confirmDialogRef = null;
-    });
-  }
-
-  addPicture(obj) {
-    this.supplier.image.base64String = obj.dataURL.split(",")[1];
-    this.supplier.image.content_type = obj.type.split("/")[1];
-    this.supplier.image.content_type = "." + this.supplier.image.content_type;
-    this.supplier.image.type = "small";
-  }
-
-  onUploadError(evt) {}
-  onUploadSuccess(evt) {}
-  onCanceled(event) {}
+  onUploadError(evt) { }
+  onUploadSuccess(evt) { }
+  onCanceled(event) { }
 
   ngOnDestroy() {
-    this.onSupplierChanged.unsubscribe();
+    this.sub.unsubscribe();
   }
 }

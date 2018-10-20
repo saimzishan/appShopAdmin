@@ -132,6 +132,7 @@ export class BrandComponent implements OnInit, OnDestroy {
   }
 
   editBrand(form) {
+    let tempImage: Image;
     if (form.invalid) {
       this.validateAllFormFields(form.control);
       this.snotifyService.warning("Please Fill All Required Fields");
@@ -148,6 +149,7 @@ export class BrandComponent implements OnInit, OnDestroy {
       }
       this.brand.image = this.image;
     } else {
+      tempImage = new Image(this.brand.image);
       delete this.brand.image;
     }
     this.brandService.updateBrand(this.brand).subscribe((res: any) => {
@@ -160,6 +162,7 @@ export class BrandComponent implements OnInit, OnDestroy {
       let e = errors.error.message;
       this.snotifyService.error(e, 'Error !');
     });
+    this.brand.image = tempImage;
   }
 
   deleteBrand() {

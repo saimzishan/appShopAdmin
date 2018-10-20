@@ -221,7 +221,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       errors => {
         this.spinnerService.requestInProcess(false);
         let e = errors.error;
-        e = JSON.stringify(e.error);
+        e = JSON.stringify(e);
         this.snotifyService.error(e, "Error !");
       }
     );
