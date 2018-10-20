@@ -164,14 +164,14 @@
                   </mat-select>
                 </mat-form-field>
                 <span *ngIf="city.touched && city.errors?.required;" class="inline-icon error">
-                  <span style="color: rgb(255, 0, 0)">Country is required.</span>!</span>
+                  <span style="color: rgb(255, 0, 0)">City is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>PO Box</mat-label>
                   <input matInput name="po_box" #po_box="ngModel" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box"
                     required>
                 </mat-form-field>
                 <span *ngIf="po_box.touched && po_box.errors?.required;" class="inline-icon error">
-                  <span style="color: rgb(255, 0, 0)">Country is required.</span>!</span>
+                  <span style="color: rgb(255, 0, 0)">PO BOX is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Phone Landline 1</mat-label>
                   <input matInput name="ph_landline1" [(ngModel)]="supplier.contact.ph_landline1" placeholder="Phone Landline 1">
