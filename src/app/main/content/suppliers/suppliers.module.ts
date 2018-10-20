@@ -9,29 +9,19 @@ import { SupplierService } from './supplier.service';
 import { DropzoneModule } from "ngx-dropzone-wrapper";
 import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
 import { GLOBAL } from "../../../shared/globel";
+import { AuthGuard } from '../../../guard/auth.guard';
 
 const routes = [
   {
+    canActivate: [AuthGuard],
     path: "",
     component: SuppliersComponent,
-    resolve: {
-      academy: SuppliersService
-    }
   },
   {
+    canActivate: [AuthGuard],
     path: ":id",
     component: SupplierComponent,
-    resolve: {
-      academy: SupplierService
-    }
   }
-  /*{
-    path     : ':id/:handle',
-    component: SupplierComponent,
-    resolve  : {
-      academy: SupplierService
-    }
-  },*/
 ];
 
 @NgModule({

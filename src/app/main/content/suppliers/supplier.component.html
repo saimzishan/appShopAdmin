@@ -83,21 +83,21 @@
             <span *ngIf="type.touched && type.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Type is required.</span>!</span>
             <br>
-            <div class="row" *ngIf="pageType !== 'edit'">
+            <div class="row">
               <div class="col-md-12" style="text-align:center">
-                <label>Small (180x135)</label>
-                <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
+                <label>Image Max size 2 MB</label>
+                <div class="dropzone" [disabled]="hasImage" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
                   (success)="onUploadSuccess($event)"></div>
               </div>
             </div>
             <br>
-            <div class="row" *ngIf="pageType === 'edit'" style="text-align:center">
-              <ng-container *ngIf="supplier.image">
+            <div *ngIf="true" class="row" style="text-align:center">
+              <ng-container *ngIf="pageType === 'edit' && this.hasImage && this.supplier.image.id !== -1">
                 <div class="col-md-2">
                   <img src="{{baseURL}}{{supplier.image.small}}" width="150" height="150">
                   <br>
                   <br>
-                  <button *ngIf="pageType !== 'edit'" (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">
+                  <button (click)="removeImage(supplier.image.id)" type="btn" class="btn btn-danger btn-xs">
                     <i class="material-icons">
                       delete
                     </i></button>
@@ -200,7 +200,7 @@
             </mat-accordion>
 
             <input type="button" class="btn btn-primary" hidden #supplierFormSubmition (click)="addSupplier(supplierForm)">
-            <input type="button" class="btn btn-primary" hidden #editSupplierFormSubmition (click)="saveSupplier(supplierForm)">
+            <input type="button" class="btn btn-primary" hidden #editSupplierFormSubmition (click)="editSupplier(supplierForm)">
 
           </div>
           <!--</mat-tab>

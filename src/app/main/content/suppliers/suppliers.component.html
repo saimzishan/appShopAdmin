@@ -18,17 +18,6 @@
       </div>
       <!-- / APP TITLE -->
 
-      <!-- SEARCH -->
-      <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-        <label for="search" class="mr-8">
-          <mat-icon class="secondary-text">search</mat-icon>
-        </label>
-        <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-          <input id="search" matInput #filter placeholder="Search">
-        </mat-form-field>
-      </div>
-      <!-- / SEARCH -->
-
       <button mat-raised-button [routerLink]="'/suppliers/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
         <span>ADD NEW SUPPLIER</span>
       </button>
@@ -38,8 +27,8 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-        <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        <mat-form-field class="w-50-p" style="align-self: center; margin-top: 2%;">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
         </mat-form-field>
 
       <mat-table class="suppliers-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
@@ -53,15 +42,7 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Category Column -->
-        <!--<ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-md>
-            <p class="category text-truncate">
-              {{supplier.categories[0]}}
-            </p>
-          </mat-cell>
-        </ng-container>-->
+        <!-- Email Column -->
         <ng-container cdkColumnDef="email">
           <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Email</mat-header-cell>
           <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-md>
@@ -71,15 +52,7 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Price Column -->
-        <!--<ng-container cdkColumnDef="price">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
-            <p class="price text-truncate">
-              {{supplier.priceTaxIncl | currency:'USD':'symbol'}}
-            </p>
-          </mat-cell>
-        </ng-container>-->
+        <!-- Phone Column -->
         <ng-container cdkColumnDef="phone">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Phone</mat-header-cell>
           <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
@@ -89,6 +62,7 @@
           </mat-cell>
         </ng-container>
 
+        <!-- Type Column -->
         <ng-container cdkColumnDef="type">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Supplier Type</mat-header-cell>
           <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
@@ -97,10 +71,22 @@
             </p>
           </mat-cell>
         </ng-container>
+
+        <!-- Address Column -->
+        <ng-container cdkColumnDef="address">
+            <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Address</mat-header-cell>
+            <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-sm>
+              <p class="text-truncate">
+                {{supplier.contact.no}}, {{supplier.contact.street}},<br>{{supplier.contact.city}},
+                {{supplier.contact.country}}
+              </p>
+            </mat-cell>
+          </ng-container>
+
         <!-- Image Column -->
         <ng-container cdkColumnDef="image">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Image</mat-header-cell>
+          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-xs>
             <ng-container *ngIf="supplier.image">
               <img src="{{baseURL+supplier.image.small}}" width="100" height="100">
             </ng-container>
@@ -110,26 +96,8 @@
 
           </mat-cell>
         </ng-container>
-        <!-- Quantity Column -->
-        <ng-container cdkColumnDef="address">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Address</mat-header-cell>
-          <mat-cell *cdkCellDef="let supplier" fxHide fxShow.gt-sm>
-
-            <p>
-              {{supplier.contact.no}}, {{supplier.contact.street}}, {{supplier.contact.city}},
-              {{supplier.contact.country}}
-            </p>
-
-          </mat-cell>
-        </ng-container>
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
-
-        <!-- <mat-row *cdkRowDef="let supplier; columns: displayedColumns;"
-                 class="supplier"
-                 matRipple
-                 [routerLink]="'/suppliers/'+supplier.id">
-        </mat-row> -->
 
         <mat-row *cdkRowDef="let supplier; columns: displayedColumns;" class="supplier" matRipple [routerLink]="'/suppliers/'+supplier.id">
         </mat-row>
