@@ -17,7 +17,18 @@
         <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Suppliers</span>
       </div>
       <!-- / APP TITLE -->
-
+      
+      <!-- SEARCH -->
+      <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <label for="search" class="mr-8">
+          <mat-icon class="secondary-text">search</mat-icon>
+        </label>
+        <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+          <input id="search" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+      </div>
+      <!-- / SEARCH -->
+      
       <button mat-raised-button [routerLink]="'/suppliers/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
         <span>ADD NEW SUPPLIER</span>
       </button>
@@ -27,12 +38,8 @@
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
-        <mat-form-field class="w-50-p" style="align-self: center; margin-top: 2%;">
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-        </mat-form-field>
 
-      <mat-table class="suppliers-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
-        fusePerfectScrollbar>
+      <mat-table class="suppliers-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}">
 
         <!-- Name Column -->
         <ng-container cdkColumnDef="name">
