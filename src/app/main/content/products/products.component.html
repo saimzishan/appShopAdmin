@@ -8,9 +8,8 @@
     <div class="center">
 
         <!-- HEADER -->
-        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
-            fxLayoutAlign.gt-xs="space-between center">
-
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+        
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
                 <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
@@ -19,19 +18,26 @@
             </div>
             <!-- / APP TITLE -->
 
+            <!-- SEARCH -->
+            <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                <label for="search" class="mr-8">
+                    <mat-icon class="secondary-text">search</mat-icon>
+                </label>
+                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+                    <input id="search" matInput  (keyup)="applyFilter($event.target.value)" placeholder="Search">
+                </mat-form-field>
+            </div>
+            <!-- / SEARCH -->
+        
             <button mat-raised-button [routerLink]="'/products/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW PRODUCT</span>
             </button>
-
+        
         </div>
         <!-- / HEADER -->
 
         <!-- CONTENT CARD -->
         <div class="content-card mat-white-bg">
-            <mat-form-field class="w-50-p" style="align-self: center; margin-top: 2%;">
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-            </mat-form-field>
-
 
             <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}"
                 fusePerfectScrollbar>
@@ -106,7 +112,7 @@
 
             </mat-table>
 
-            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+            <mat-paginator #paginator [length]="totalItems" [pageSize]="perPage" (page)="pageChange($event)">
             </mat-paginator>
 
         </div>
