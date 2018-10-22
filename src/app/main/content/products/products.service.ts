@@ -75,4 +75,26 @@ export class ProductsService extends ApiService {
         return this.handleError(err);
       });
   }
+
+  getProductsWithPage(page: number) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "products?page="+ page, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }

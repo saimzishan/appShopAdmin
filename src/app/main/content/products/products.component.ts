@@ -2,7 +2,6 @@ import { Router } from "@angular/router";
 import { SpinnerService } from "./../../../spinner/spinner.service";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ProductsService } from "./products.service";
-import { DataSource } from "@angular/cdk/collections";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
@@ -34,6 +33,8 @@ export class ProductsComponent implements OnInit {
   supplier_id: any;
   product_id: any;
   selectedSupplier: any;
+  totalItems: number;
+  perPage: number;
 
   constructor(
     private productsService: ProductsService,
@@ -51,6 +52,8 @@ export class ProductsComponent implements OnInit {
     this.productsService.getProducts().subscribe(
       (res: any) => {
         if (!res.status) {
+          this.totalItems = res.res.data.total;
+          this.perPage = res.res.data.per_page;
           this.setDataSuorce(res.res.data.data);
         }
         this.spinnerService.requestInProcess(false);
@@ -60,10 +63,29 @@ export class ProductsComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
+
+  getProductsWithPage(page: number) {
+    this.spinnerService.requestInProcess(true);
+    this.productsService.getProductsWithPage(page).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.totalItems = res.res.data.total;
+          this.perPage = res.res.data.per_page;
+          this.setNewPageDataSuorce(res.res.data.data);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+      });
+  }
+
   getSupplier(product_id) {
     var result = this.dataSource.data.filter(function(obj) {
       if (obj.id === product_id) {
@@ -91,7 +113,16 @@ export class ProductsComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
+  setNewPageDataSuorce(products) {
+    this.dataSource = new MatTableDataSource<any>(products);
+  }
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  pageChange(event) {
+    this.getProductsWithPage(event.pageIndex + 1);
   }
 }
