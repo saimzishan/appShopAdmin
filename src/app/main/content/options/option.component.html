@@ -12,29 +12,11 @@
 
             <!-- APP TITLE -->
             <div fxLayout="row" fxLayoutAlign="start center">
-
                 <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/options'">
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">local_mall</mat-icon>
-
-                <!-- <div class="product-image mr-8 mr-sm-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
-
-                </div> -->
-
-                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    <div class="h2" *ngIf="pageType ==='edit'">
-                        {{option.name}}
-                    </div>
-
-                    <div class="h2" *ngIf="pageType ==='new'">
-                        New Option Set
-                    </div>
-
-                    <div class="subtitle secondary-text">
-                        <span>Option Detail</span>
-                    </div>
-                </div>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Option': 'New Option'}}</span>
             </div>
             <!-- / APP TITLE -->
 

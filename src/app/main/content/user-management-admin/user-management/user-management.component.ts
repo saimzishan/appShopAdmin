@@ -82,7 +82,9 @@ export class UserManagementComponent implements OnInit, OnDestroy {
           this.user.level = GLOBAL.LEVELS.find(
             level => level.name.toLowerCase() === this.user.level
           ).id;
-          this.onChange({ isUserInput: true });
+          setTimeout(() => {
+            this.onChange({ isUserInput: true });
+          }, 100);
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -221,8 +223,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.userMService.getRoles().subscribe(
       (res: any) => {
         this.roleList = res.res.data;
-        this.roleList.splice(this.roleList.findIndex(role => role.id === 2), 1);
-        this.roleList.splice(this.roleList.findIndex(role => role.id === 3), 1);
+        if (this.pageType === 'new') {
+          let role = this.roleList.find(role => role.id === 1);
+          this.firstSelectedRoleName = role.name;
+          this.user.roles = [role.id];
+        }
         this.spinnerService.requestInProcess(false);
       },
       errors => {

@@ -41,7 +41,11 @@ export class TageComponent implements OnInit {
       (res: any) => {
         if (res) {
           this.tags = res.res.data;
-          if (this.pageType === "edit") this.bindSelectedTags();
+          if (this.pageType === "edit") {
+            setTimeout(() => {
+              this.bindSelectedTags();
+            }, 500);
+          }
         }
         this.spinnerService.requestInProcess(false);
       },

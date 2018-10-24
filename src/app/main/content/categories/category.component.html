@@ -27,17 +27,7 @@
           <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">category</mat-icon>
         </div>
 
-        <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-          <div class="h2" *ngIf="pageType ==='edit'">
-            {{supplier.name}}
-          </div>
-          <div class="h2" *ngIf="pageType ==='new'">
-            New Category
-          </div>
-          <div class="subtitle secondary-text">
-            <span>Category Detail</span>
-          </div>
-        </div>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Category': 'New Category'}}</span>
       </div>
       <!-- / APP TITLE -->
 
@@ -46,7 +36,7 @@
         <span>ADD</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()">
-        <span>Delete</span>
+        <span>DELETE</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" [disabled]="categoryForm.invalid || categoryForm.pristine"
         *ngIf="checkPageType()" (click)="store()">

@@ -23,7 +23,6 @@ import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
 import { ITreeOptions } from "angular-tree-component";
-import { DetectChangesService } from "../../../../shared/detect-changes.services";
 import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
 import { MatDialogRef } from "@angular/material";
@@ -78,9 +77,9 @@ export class SupplierFormComponent implements OnInit {
     private snotifyService: SnotifyService,
     protected http: HttpClient,
     private categoriesService: CategoriesService,
-    private detectChanges: DetectChangesService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     // this.supplier = new Supplier();
     this.bluckPrices = new Array<BluckPrice>();
@@ -106,11 +105,13 @@ export class SupplierFormComponent implements OnInit {
       this.makeArrayOfSides();
       this.converter();
     }
-    this.route.queryParams.subscribe(params => {
-      let addedSuppliers = params["addedSuppliers"];
-      this.addedSuppliers = JSON.parse(atob(addedSuppliers));
-      // console.log(this.addedSuppliers);
-  });
+
+    if (!this.params.supplier_id && this.pageType === 'edit') {
+      this.route.queryParams.subscribe(params => {
+        let addedSuppliers = params["addedSuppliers"];
+        this.addedSuppliers = JSON.parse(atob(addedSuppliers));
+      });
+    }
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -156,7 +157,7 @@ export class SupplierFormComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.suppliers = res.res.data.data;
-          if (!this.params.supplier_id) {
+          if (!this.params.supplier_id && this.pageType === 'edit') {
             this.addedSuppliers.forEach(sp => {
               let index = this.suppliers.findIndex(s => s.id === sp.id);
               this.suppliers.splice(index, 1);
@@ -310,11 +311,7 @@ export class SupplierFormComponent implements OnInit {
           _ps_id: res.res.data.id
         };
         localStorage.setItem("_saveP", JSON.stringify(temp));
-        // this.detectChanges.notifyOther({
-        //   option: "addproduct",
-        //   value: res.res.data
-        // });
-        // this.router.navigate(["/products"]);
+        this.router.navigate(["/products/" + res.res.data.p_id + "/" + this.product.supplier.id]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -673,11 +670,6 @@ export class SupplierFormComponent implements OnInit {
           _ps_id: res.res.data.id
         };
         localStorage.setItem("_saveP", JSON.stringify(temp));
-        // this.detectChanges.notifyOther({
-        //   option: "addproduct",
-        //   value: res.res.data
-        // });
-        // this.router.navigate(["/products"]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
