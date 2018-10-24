@@ -1,6 +1,6 @@
 import { Router } from "@angular/router";
 import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { ProductsService } from "./products.service";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
@@ -35,6 +35,7 @@ export class ProductsComponent implements OnInit {
   selectedSupplier: any;
   totalItems: number;
   perPage: number;
+  addedSuppliers: any[];
 
   constructor(
     private productsService: ProductsService,
@@ -95,10 +96,13 @@ export class ProductsComponent implements OnInit {
     this.selectedSupplier = result.suppliers[0];
     return result.suppliers;
   }
-  onSupplierChange(supplier_id, product_id) {
+
+  onSupplierChange(supplier_id, product) {
     this.supplier_id = supplier_id;
-    this.product_id = product_id;
+    this.product_id = product.id;
+    // return product.suppliers.findIndex( s => s.id === supplier_id);
   }
+
   editProduct(p_id) {
     if (!this.supplier_id) {
       let index = this.dataSource.data.findIndex(
@@ -108,6 +112,15 @@ export class ProductsComponent implements OnInit {
     }
     this.router.navigate(["/products/" + p_id + "/" + this.supplier_id]);
   }
+
+  addNewSupplier(p_id) {
+    let index = this.dataSource.data.findIndex(
+      product => product.id === p_id
+    );
+    this.addedSuppliers = this.dataSource.data[index].suppliers;
+    this.router.navigate(["/products/" + p_id], {queryParams: {addedSuppliers: btoa(JSON.stringify(this.addedSuppliers))}});
+  }
+
   setDataSuorce(obj) {
     this.dataSource = new MatTableDataSource<any>(obj);
     this.dataSource.paginator = this.paginator;

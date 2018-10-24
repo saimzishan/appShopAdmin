@@ -46,7 +46,7 @@ export class SupplierFormComponent implements OnInit {
   bluckPrices: BluckPrice[];
   taxes: any;
   brands: any;
-  suppliers: Supplier;
+  suppliers: Supplier[] = [];
   categories: any;
   categoryNodes: any[] = [];
   parentCat: any;
@@ -69,6 +69,7 @@ export class SupplierFormComponent implements OnInit {
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
   ps_id: any;
   params: any;
+  addedSuppliers: any[];
 
   constructor(
     private productService: ProductService,
@@ -101,8 +102,15 @@ export class SupplierFormComponent implements OnInit {
         }
       }
     });
-    this.makeArrayOfSides();
-    this.converter();
+    if (this.params.supplier_id) {
+      this.makeArrayOfSides();
+      this.converter();
+    }
+    this.route.queryParams.subscribe(params => {
+      let addedSuppliers = params["addedSuppliers"];
+      this.addedSuppliers = JSON.parse(atob(addedSuppliers));
+      // console.log(this.addedSuppliers);
+  });
   }
 
   validateAllFormFields(formGroup: FormGroup) {
@@ -148,12 +156,18 @@ export class SupplierFormComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.suppliers = res.res.data.data;
+          if (!this.params.supplier_id) {
+            this.addedSuppliers.forEach(sp => {
+              let index = this.suppliers.findIndex(s => s.id === sp.id);
+              this.suppliers.splice(index, 1);
+            });
+          }
         }
         this.spinnerService.requestInProcess(false);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
-        let e = errors.error;
+        let e = errors;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
         // this.notificationServiceBus.launchNotification(true, e);
@@ -391,7 +405,7 @@ export class SupplierFormComponent implements OnInit {
       this.validateForm(form);
       return;
     }
-    if (this.pageType === "edit") {
+    if (this.pageType === "edit" && this.params.supplier_id) {
       let obj: any = this.bluckPrice;
       obj.ps_id = this.product.id;
       obj.id = this.product.id;
@@ -609,6 +623,70 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.error(e, "Error !");
       }
     );
+  }
+
+  addNewSupplierToProduct(form: NgForm) {
+    if (form.invalid) {
+      this.validateForm(form);
+      return;
+    }
+
+    if (!this.category_id) {
+      this.snotifyService.warning("Please Select a category");
+      return;
+    }
+    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
+      this.snotifyService.warning("Please select atleast one side for printing");
+      return;
+    }
+    if (this.product.supplier.track_stock && this.product.supplier.stock === 0 &&
+      this.product.supplier.low_level_stock === 0) {
+      this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
+      return;
+    }
+    if (this.product.supplier.track_stock === false) {
+      this.product.supplier.low_level_stock = 0;
+      this.product.supplier.stock = 0;
+    }
+    if (this.lImages.length < 1) {
+      let a = this.directiveRef.dropzone();
+      if (a.files.length === 0) {
+        this.snotifyService.warning("Please Upload image", "Warning !");
+        return;
+      }
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    }
+    this.product.supplier.images = this.lImages;
+    this.product.category_id = this.category_id;
+    this.spinnerService.requestInProcess(true);
+    this.product.supplier.ean = this.product.supplier.sku;
+    this.productService.addNewSupplierToProduct(this.product).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.onProductSaved(this.product);
+        let temp = {
+          _p_id: res.res.data.p_id,
+          _s_id: this.product.supplier.id,
+          _ps_id: res.res.data.id
+        };
+        localStorage.setItem("_saveP", JSON.stringify(temp));
+        // this.detectChanges.notifyOther({
+        //   option: "addproduct",
+        //   value: res.res.data
+        // });
+        // this.router.navigate(["/products"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+
   }
 
   addBulkPricetoServer() {}
