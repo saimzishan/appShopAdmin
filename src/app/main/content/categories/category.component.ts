@@ -32,7 +32,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   image: Image;
   lImages: any[] = [];
   onSupplierChanged: Subscription;
-  pageType: boolean;
+  pageType: any;
   categoryForm: FormGroup;
   baseURL = GLOBAL.USER_IMAGE_API;
 
@@ -86,13 +86,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
   checkPageType(): boolean {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        let pageType: any = event.url.split("/");
-        if (pageType.length > 2) {
-          pageType = pageType[2].toString();
-          if (pageType !== "new") {
-            this.pageType = false;
+        this.pageType = event.url.split("/");
+        if (this.pageType.length > 2) {
+          this.pageType = this.pageType[2].toString();
+          if (this.pageType !== "new") {
+            this.pageType = 'edit';
           } else {
-            this.pageType = true;
+            this.pageType = 'new';
           }
         }
       }

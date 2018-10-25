@@ -85,7 +85,7 @@
                                                 (+{{user.roles.length - 1}} {{user.roles?.length === 2 ? 'other' : 'others'}})
                                             </span>
                                         </mat-select-trigger>
-                                        <mat-option (onSelectionChange)="onChange($event)" *ngFor="let role of roleList" [value]="role.id">{{role.name}}</mat-option>
+                                        <mat-option (onSelectionChange)="onChange($event)" [disabled]="role.id === 2 || role.id === 3" *ngFor="let role of roleList" [value]="role.id">{{role.name}}</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                                 <span *ngIf="roles.touched && roles.errors?.required;" class="inline-icon error red-fg">

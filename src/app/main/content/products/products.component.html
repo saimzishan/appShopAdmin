@@ -68,7 +68,7 @@
                 <!-- Price Column -->
                 <ng-container cdkColumnDef="price">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
+                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
                         <p class="text-truncate">{{product.suppliers[0].pivot.price}}</p>
                     </mat-cell>
                 </ng-container>
@@ -76,7 +76,7 @@
                 <!-- Quantity Column -->
                 <ng-container cdkColumnDef="quantity">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-sm>
+                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
                         <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
                     </mat-cell>
                 </ng-container>
@@ -84,14 +84,15 @@
                 <!-- Active Column -->
                 <ng-container cdkColumnDef="supplier">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
+                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
                         <mat-form-field>
-                            <mat-select placeholder="Select supplier" [(value)]="product.suppliers[0].id" (change)="onSupplierChange($event.value, product.id)">
-                                <mat-option *ngFor="let supplier of getSupplier(product.id)" [value]="supplier.id">
+                            <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" (ngModelChange)="onSupplierChange($event, product);">
+                                <mat-option *ngFor="let supplier of getSupplier(product.id);" [value]="supplier.id">
                                     {{supplier.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+                        
                         <!-- <mat-icon class="active-icon mat-red-500-bg s-16">close</mat-icon> -->
                     </mat-cell>
                 </ng-container>
@@ -99,8 +100,11 @@
                 <ng-container cdkColumnDef="active">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="cursor:pointer">edit</mat-icon>
+                        <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
                         <!-- <mat-icon class="active-icon mat-red-500-bg s-16">close</mat-icon> -->
+                        <button mat-raised-button class="save-product-button mat-accent mt-16 mt-sm-0" (click)="addNewSupplier(product.id)">
+                            <span>ADD NEW SUPPLIER</span>
+                        </button>
                     </mat-cell>
                 </ng-container>
 

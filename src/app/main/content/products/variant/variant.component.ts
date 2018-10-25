@@ -322,6 +322,7 @@ export class VariantComponent implements OnInit {
 
   cancelVariant() {
     this.isEdit = false;
+    this.isAction = false;
     this.variant = new Variant();
   }
 

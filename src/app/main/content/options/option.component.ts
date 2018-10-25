@@ -153,6 +153,10 @@ export class OptionComponent implements OnInit {
   }
 
   deleteOptionValue(optionVal: OptionValues) {
+    if (optionVal.id === -1) {
+      this.remove(optionVal);
+      return;
+    }
     this.spinnerService.requestInProcess(true);
     this.sub = this.optionService.deleteOptionValue(optionVal.id).subscribe((res: any) => {
       let e = res.res.message;

@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Product } from "./../models/product.model";
+import { Product, Supplier } from "./../models/product.model";
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { fuseAnimations } from "../../../core/animations";
 import { MatDialog, MatDialogRef } from "@angular/material";
@@ -80,34 +80,40 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  edit(obj) {
+  edit(params) {
     this.spinnerService.requestInProcess(true);
-    this.productService
-      .getProductWithSupplier(obj.id, obj.supplier_id)
-      .subscribe(
-        (res: any) => {
-          if (!res.status) {
-            // let product: any = res.res.data;
-            //   this.productName = res.res.data.name;
-            //   res.res.data.supplier_id = +this.tempP.supplier_id;
-            //   res.res.data.ps_id = res.res.data.id;
-            //   res.res.data.product_id = +this.tempP.id;
-            //   this.detectChanges.notifyOther({
-            //     option: "editProduct",
-            //     value: res.res.data
-            //   });
-            this.product = new Product(res.res.data);
-            this.onProductSaved(obj); // for edit or after add product
-          }
-          this.spinnerService.requestInProcess(false);
-        },
+    if(params.supplier_id) {
+      this.productService.getProductWithSupplier(params.id, params.supplier_id)
+      .subscribe((res: any) => {
+        if (!res.status) {
+          this.product = new Product(res.res.data);
+          this.onProductSaved(params); // for edit or after add product
+        }
+        this.spinnerService.requestInProcess(false);
+      },
         errors => {
           this.spinnerService.requestInProcess(false);
-          let e = errors.error;
+          let e = errors;
           e = JSON.stringify(e.error);
           this.snotifyService.error(e, "Error !");
+        });
+    } else { // when want to add new supplier
+      this.productService.getProductWithId(params.id)
+      .subscribe((res: any) => {
+        if (!res.status) {
+          this.product = new Product(res.res.data);
+          this.product.supplier = new Supplier();
+          // this.onProductSaved(params);
         }
-      );
+        this.spinnerService.requestInProcess(false);
+      },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors;
+          e = JSON.stringify(e.error);
+          this.snotifyService.error(e, "Error !");
+        });
+    }
   }
 
   onProductSaved(evt) {

@@ -17,20 +17,7 @@
                     <mat-icon>arrow_back</mat-icon>
                 </button>
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_cart</mat-icon>
-
-
-
-                <div fxLayout="column" fxLayoutAlign="start start" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
-                    <div class="h2" *ngIf="pageType ==='edit'">
-                        {{productName}}
-                    </div>
-                    <div class="h2" *ngIf="pageType ==='new'">
-                        New Product
-                    </div>
-                    <div class="subtitle secondary-text">
-                        <span>Product Detail</span>
-                    </div>
-                </div>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Product': 'New Product'}}</span>
             </div>
             <!-- / APP TITLE -->
             <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
