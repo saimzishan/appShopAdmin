@@ -42,6 +42,7 @@ export class ProductsComponent implements OnInit {
     private productsService: ProductsService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
+    public cd: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -98,10 +99,14 @@ export class ProductsComponent implements OnInit {
     return result.suppliers;
   }
 
-  onSupplierChange(supplier_id, product) {
+  onSupplierChange(supplier_id, product, index) {
     this.supplier_id = supplier_id;
     this.product_id = product.id;
-    // return product.suppliers.findIndex( s => s.id === supplier_id);
+    let i = this.dataSource.data[index].suppliers.findIndex(s => s.id === supplier_id);
+    let sp = this.dataSource.data[index].suppliers.splice(i, 1);
+    this.dataSource.data[index].suppliers.push(sp[0]);
+    this.dataSource.data[index].suppliers.reverse();
+    this.cd.detectChanges();
   }
 
   editProduct(p_id) {

@@ -668,14 +668,6 @@ export class SupplierFormComponent implements OnInit {
       this.product.supplier.low_level_stock = 0;
       this.product.supplier.stock = 0;
     }
-    if (this.pTempImages.length === 0 && this.product.product_images.length === 0) {
-      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
-      return;
-    } else {
-      this.pTempImages.forEach(img => {
-        this.pImages.push(this.addPicture(img));
-      });
-    }
     if (this.sTempImages.length > 0) {
       this.sTempImages.forEach(img => {
         this.sImages.push(this.addPicture(img));
