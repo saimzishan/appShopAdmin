@@ -20,7 +20,7 @@ export class Product {
     this.category_id = product.category_id || -1;
     this.active = product.active || false;
     this.tax_id = product.tax_id || -1;
-    this.brand_id = product.brand_id || -1;
+    this.brand_id = product.brand_id || null;
     this.supplier = product.supplier || new Supplier();
     this.tags = product.tags || [];
     this.product_images = product.product_images || new Array<Image>();

@@ -61,7 +61,7 @@
                 <ng-container cdkColumnDef="brand">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Brand</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="text-truncate">{{product.brand.name}}</p>
+                        <p class="text-truncate" *ngIf="product && product.brand">{{product.brand.name}}</p>
                     </mat-cell>
                 </ng-container>
 
