@@ -131,14 +131,16 @@ export class OptionAndSkusComponent implements OnInit {
         obj = res.options;
         obj.forEach(element => {
           if (element.isSelected === false) {
-            element.operation = 1;
+            element.operation = 2;
+            element.changed_by = 1;
           }
         });
       } else {
         obj = res.options;
         obj.forEach(element => {
           element.amount = null;
-          element.operation = 1;
+          element.operation = 2;
+          element.changed_by = 1;
         });
       }
       return obj;
@@ -170,11 +172,8 @@ export class OptionAndSkusComponent implements OnInit {
   saveOptionSetAndValue(option_set_id, option, operation, change_by, amount) {
     this.setPSIds();
 
-    if (change_by === undefined || operation === undefined || amount === "") {
-      this.snotifyService.warning(
-        "Please Select Option, Opration, Change by and add amount",
-        "Warning !"
-      );
+    if (amount === "") {
+      this.snotifyService.warning("Please enter Amount", "Warning !");
       return;
     }
     if (this.optionSet.length === 3) {

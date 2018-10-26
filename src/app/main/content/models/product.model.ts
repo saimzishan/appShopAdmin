@@ -8,6 +8,7 @@ export class Product {
   brand_id: number;
   supplier: Supplier;
   tags: number[];
+  product_images: Image[];
   category: Category;
   constructor(product?) {
     product = product || {};
@@ -20,6 +21,7 @@ export class Product {
     this.brand_id = product.brand_id || -1;
     this.supplier = product.supplier || new Supplier();
     this.tags = product.tags || [];
+    this.product_images = product.product_images || new Array<Image>();
     this.category = product.category || new Category();
   }
 }
@@ -34,6 +36,7 @@ export class Category {
 }
 export class Supplier {
   id: number;
+  name: string;
   price: number;
   buying_price: number;
   market_price: number;
@@ -59,6 +62,7 @@ export class Supplier {
   constructor(supplier?) {
     supplier = supplier || {};
     this.id = supplier.id;
+    this.name = supplier.name;
     this.price = supplier.price;
     this.buying_price = supplier.buying_price;
     this.market_price = supplier.market_price;

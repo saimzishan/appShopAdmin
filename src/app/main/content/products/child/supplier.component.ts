@@ -40,7 +40,10 @@ export class SupplierFormComponent implements OnInit {
   pageType: string;
   // supplier: Supplier;
   images: Image[];
-  lImages: any[] = [];
+  pTempImages: any[] = [];
+  pImages: any[] = [];
+  sTempImages: any[] = [];
+  sImages: any[] = [];
   image: Image;
   bluckPrices: BluckPrice[];
   taxes: any;
@@ -286,17 +289,22 @@ export class SupplierFormComponent implements OnInit {
       this.product.supplier.low_level_stock = 0;
       this.product.supplier.stock = 0;
     }
-    if (this.lImages.length < 1) {
-      let a = this.directiveRef.dropzone();
-      if (a.files.length === 0) {
-        this.snotifyService.warning("Please Upload image", "Warning !");
-        return;
-      }
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
+    if (this.pTempImages.length === 0) {
+      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
+      return;
+    } else {
+      this.pTempImages.forEach(img => {
+        this.pImages.push(this.addPicture(img));
+      });
     }
-    this.product.supplier.images = this.lImages;
+    if (this.sTempImages.length > 0) {
+      this.sTempImages.forEach(img => {
+        this.sImages.push(this.addPicture(img));
+      });
+    }
+
+    this.product.product_images = this.pImages;
+    this.product.supplier.images = this.sImages;
     this.product.category_id = this.category_id;
     this.spinnerService.requestInProcess(true);
     this.product.supplier.ean = this.product.supplier.sku;
@@ -328,13 +336,14 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
 
-    let a = this.directiveRef.dropzone();
-    for (const iterator of a.files) {
-      this.addPicture(iterator);
+    if (this.sTempImages.length > 0) {
+      this.sTempImages.forEach(img => {
+        this.sImages.push(this.addPicture(img));
+      });
     }
 
     setTimeout(() => {
-      this.product.supplier.images = this.lImages;
+      this.product.supplier.images = this.sImages;
       this.putSupplier(this.product.supplier);
     }, 1000);
   }
@@ -373,24 +382,24 @@ export class SupplierFormComponent implements OnInit {
     // this.images = new Array<Image>();
   }
 
-  addPicture(obj) {
-    this.image = new Image();
-    this.image.base64String = obj.dataURL.split(",")[1];
-    this.image.content_type = obj.type.split("/")[1];
-    this.image.content_type = "." + this.image.content_type.split(";")[0];
-    this.image.type = "small";
+  addPicture(img) {
+    let images = new Array<Image>();
+    let image = new Image();
+    image.base64String = img.dataURL.split(",")[1];
+    image.content_type = img.type.split("/")[1];
+    image.content_type = "." + image.content_type.split(";")[0];
+    image.type = "small";
     //
     for (let index = 0; index < 3; index++) {
-      this.images.push(new Image(this.image));
+      images.push(new Image(image));
       if (index === 0) {
-        this.image.type = "medium";
+        image.type = "medium";
       }
       if (index === 1) {
-        this.image.type = "large";
+        image.type = "large";
       }
     }
-    this.lImages.push(this.images);
-    this.images = new Array<Image>();
+    return images;
   }
 
   onCanceled(event) {
@@ -448,11 +457,12 @@ export class SupplierFormComponent implements OnInit {
             this.spinnerService.requestInProcess(false);
             if (!res.error) {
               this.snotifyService.success("Deleted successfully !", "Success");
-              const result = this.product.supplier.images.findIndex(
+              this.directiveRef.reset();
+              const result = this.product.product_images.findIndex(
                 image => image.id === image_id
               );
               if (result !== -1) {
-                this.product.supplier.images.splice(result, 1);
+                this.product.product_images.splice(result, 1);
               }
             }
           },
@@ -537,8 +547,19 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
 
+    if (this.pTempImages.length === 0 && this.product.product_images.length === 0) {
+      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
+      return;
+    } else {
+      this.pTempImages.forEach(img => {
+        this.pImages.push(this.addPicture(img));
+      });
+    }
+
+
     let object = {
       id: this.product_id,
+      product_images:this.pImages,
       category_id: this.category_id,
       name: this.product.name,
       brand_id: this.product.brand_id,
@@ -554,6 +575,7 @@ export class SupplierFormComponent implements OnInit {
     this.spinnerService.requestInProcess(true);
     this.productService.saveProduct(obj, "p_update").subscribe(
       (res: any) => {
+        this.product.product_images = res.res.data;
         this.spinnerService.requestInProcess(false);
         this.snotifyService.success(res.res.message + "Success !");
       },
@@ -645,17 +667,21 @@ export class SupplierFormComponent implements OnInit {
       this.product.supplier.low_level_stock = 0;
       this.product.supplier.stock = 0;
     }
-    if (this.lImages.length < 1) {
-      let a = this.directiveRef.dropzone();
-      if (a.files.length === 0) {
-        this.snotifyService.warning("Please Upload image", "Warning !");
-        return;
-      }
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
+    if (this.pTempImages.length === 0 && this.product.product_images.length === 0) {
+      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
+      return;
+    } else {
+      this.pTempImages.forEach(img => {
+        this.pImages.push(this.addPicture(img));
+      });
     }
-    this.product.supplier.images = this.lImages;
+    if (this.sTempImages.length > 0) {
+      this.sTempImages.forEach(img => {
+        this.sImages.push(this.addPicture(img));
+      });
+    }
+    this.product.product_images = this.pImages;
+    this.product.supplier.images = this.sImages;
     this.product.category_id = this.category_id;
     this.spinnerService.requestInProcess(true);
     this.product.supplier.ean = this.product.supplier.sku;
@@ -709,6 +735,37 @@ export class SupplierFormComponent implements OnInit {
   makeArrayOfSides() {
     if(this.pageType === 'edit'){
       this.product.supplier.sides = this.product.supplier.sides.split(',');
+    }
+  }
+
+  getSupplierName(supplierId) {
+    let supplier = this.suppliers.find(s => s.id === supplierId);
+    if (supplier) {
+      return supplier.name;
+    } else {
+      return 'supplier';
+    }
+  }
+
+  onProductSuccess(event) {
+    this.pTempImages.push(event[0]);
+  }
+
+  onProductRemove(event) {
+    let index = this.pTempImages.findIndex(img => img.upload.uuid === event.upload.uuid);
+    if (index !== -1) {
+      this.pTempImages.splice(index, 1);
+    }
+  }
+
+  onSupplierSuccess(event) {
+    this.sTempImages.push(event[0]);
+  }
+
+  onSupplierRemove(event) {
+    let index = this.sTempImages.findIndex(img => img.upload.uuid === event.upload.uuid);
+    if (index !== -1) {
+      this.sTempImages.splice(index, 1);
     }
   }
 }
