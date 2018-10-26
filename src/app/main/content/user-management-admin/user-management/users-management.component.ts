@@ -47,6 +47,14 @@ export class UsersManagementComponent implements OnInit {
     this.userMService.getUsers().subscribe(
       (res: any) => {
         let data = res.res.data;
+        if (data) {
+          data.forEach(element => {
+            if (!element.active) {
+              let index = data.findIndex(u => u.id === element.id);
+              data.splice(index, 1);
+            }
+          });
+        }
         this.setDataSource(data);
         this.spinnerService.requestInProcess(false);
       },
