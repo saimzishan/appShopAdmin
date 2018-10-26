@@ -561,6 +561,7 @@ export class SupplierFormComponent implements OnInit {
       id: this.product_id,
       product_images:this.pImages,
       category_id: this.category_id,
+      active: this.product.active,
       name: this.product.name,
       brand_id: this.product.brand_id,
       long_description: this.product.long_description,

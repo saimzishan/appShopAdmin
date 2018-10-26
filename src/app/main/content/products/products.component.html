@@ -61,7 +61,7 @@
                 <ng-container cdkColumnDef="brand">
                     <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Brand</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="text-truncate">{{product.brand.name}}</p>
+                        <p class="text-truncate" *ngIf="product && product.brand">{{product.brand.name}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -93,11 +93,19 @@
                             </mat-select>
                         </mat-form-field>
                         
-                        <!-- <mat-icon class="active-icon mat-red-500-bg s-16">close</mat-icon> -->
                     </mat-cell>
                 </ng-container>
 
+                <!-- Active Column -->
                 <ng-container cdkColumnDef="active">
+                        <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                        <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+                                <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)" ></mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+
+                <!-- Action Column -->
+                <ng-container cdkColumnDef="action">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
                         <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
