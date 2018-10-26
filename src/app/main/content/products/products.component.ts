@@ -1,6 +1,12 @@
 import { Router } from "@angular/router";
 import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef
+} from "@angular/core";
 import { ProductsService } from "./products.service";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
@@ -86,7 +92,8 @@ export class ProductsComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 
   getSupplier(product_id) {
@@ -139,11 +146,11 @@ export class ProductsComponent implements OnInit {
   }
 
   addNewSupplier(p_id) {
-    let index = this.dataSource.data.findIndex(
-      product => product.id === p_id
-    );
+    let index = this.dataSource.data.findIndex(product => product.id === p_id);
     this.addedSuppliers = this.dataSource.data[index].suppliers;
-    this.router.navigate(["/products/" + p_id], {queryParams: {addedSuppliers: btoa(JSON.stringify(this.addedSuppliers))}});
+    this.router.navigate(["/products/" + p_id], {
+      queryParams: { addedSuppliers: btoa(JSON.stringify(this.addedSuppliers)) }
+    });
   }
 
   setDataSuorce(obj) {
