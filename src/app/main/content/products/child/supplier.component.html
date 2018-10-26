@@ -15,14 +15,14 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
+                        <mat-select placeholder="Select Brand" name="brand_id" [(ngModel)]="product.brand_id">
                             <mat-option *ngFor="let brand of brands" [value]="brand.id">
                                 {{brand.name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
-                        <span>Please Select a brand.</span>!</span>
+                    <!-- <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
+                        <span>Please Select a brand.</span>!</span> -->
                 </div>
             </div>
             <div class="row">
@@ -57,15 +57,14 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id"
-                            required>
+                        <mat-select placeholder="Select Taxes" name="tax_id" [(ngModel)]="product.tax_id">
                             <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                                 {{tax.title}} &nbsp; {{tax.value}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
-                        <span>Please Select taxes.</span>!</span>
+                    <!-- <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
+                        <span>Please Select taxes.</span>!</span> -->
                 </div>
 
 
