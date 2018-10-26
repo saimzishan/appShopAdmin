@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <input matInput required #name="ngModel" [disabled]="pageType === 'edit' && !params.supplier_id" name="name" [(ngModel)]="product.name" placeholder="Product Name">
+                        <input matInput required #name="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="name" [(ngModel)]="product.name" placeholder="Product Name">
                     </mat-form-field>
                     <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
                         <span>Product name is required.</span>!</span>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
+                        <mat-select placeholder="Select Brand" required #brand_id="ngModel" [disabled]="pageType === 'edit' && !params.supplier_id" name="brand_id" [(ngModel)]="product.brand_id">
                             <mat-option *ngFor="let brand of brands" [value]="brand.id">
                                 {{brand.name}}
                             </mat-option>
@@ -29,7 +29,7 @@
 
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <textarea matInput #long_description="ngModel" name="long_description" rows="3" [(ngModel)]="product.long_description"
+                        <textarea matInput #long_description="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="long_description" rows="3" [(ngModel)]="product.long_description"
                             placeholder="Product Long Description" required></textarea>
                     </mat-form-field>
                     <span *ngIf="long_description.touched && long_description.errors?.required;" class="inline-icon error">
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <textarea required matInput #short_description="ngModel" name="short_description" rows="3"
+                        <textarea required matInput #short_description="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="short_description" rows="3"
                             [(ngModel)]="product.short_description" placeholder="Product Short Description"></textarea>
                     </mat-form-field>
                     <span *ngIf="short_description.touched && short_description.errors?.required;" class="inline-icon error">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id"
+                        <mat-select placeholder="Select Taxes" #tax_id="ngModel" [disabled]="pageType === 'edit' && !params.supplier_id" name="tax_id" [(ngModel)]="product.tax_id"
                             required>
                             <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                                 {{tax.title}} &nbsp; {{tax.value}}
@@ -78,15 +78,19 @@
                             width="100" height="100" />
                     </mat-form-field>
                 </div>
+                <div class="col-md-6">
+                    <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.active">Active
+                    </mat-checkbox>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12" style="text-align:center">
                     <label>Drag images for {{pageType === 'edit' ? product.name : 'product'}} and image maximum size 2 MB</label>
-                    <div class="dropzone" [dropzone]="config" (success)="onProductSuccess($event)" (removedFile)="onProductRemove($event)" (error)="onUploadError($event)"></div>
+                    <div class="dropzone" [disabled]="pageType === 'edit' && !params.supplier_id" [dropzone]="config" (success)="onProductSuccess($event)" (removedFile)="onProductRemove($event)" (error)="onUploadError($event)"></div>
                 </div>
             </div>
             <br>
-            <div class="row" *ngIf="pageType !== 'new'" style="text-align:center">
+            <div class="row" *ngIf="pageType === 'edit'" style="text-align:center">
 
                 <ng-container *ngFor="let image of product.product_images">
                     <div class="col-md-2">
@@ -212,12 +216,11 @@
                         <legend style="padding: 10px">
                             <h2>Other Details</h2>
                         </legend>
-                        <div style="margin-top: 4%" class="row">
+                        <!-- <div style="margin-top: 4%" class="row">
                             <div class="col-md-12">
-                                <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.supplier.active">Active
-                                </mat-checkbox>
+
                             </div>
-                        </div>
+                        </div> -->
                         <div style="margin-top: 4%" class="row">
                             <div class="col-md-12">
                                 <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing option
@@ -289,7 +292,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                            <mat-select placeholder="Select Supplier" [disabled]="pageType === 'edit'" #supplier_id="ngModel" name="supplier_id"
                                 [(ngModel)]="product.supplier.id" required>
 
                                 <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
