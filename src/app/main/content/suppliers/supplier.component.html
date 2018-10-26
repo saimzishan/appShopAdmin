@@ -8,7 +8,8 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -17,17 +18,21 @@
           <mat-icon>arrow_back</mat-icon>
         </button>
         <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
-        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Supplier': 'New Supplier'}}</span>
+        <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType
+          === 'edit' ? 'Update Supplier': 'New Supplier'}}</span>
       </div>
       <!-- / APP TITLE -->
 
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="supplierFormSubmition.click()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'"
+        (click)="supplierFormSubmition.click()">
         <span>ADD</span>
       </button>
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="deleteSupplier()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
+        (click)="deleteSupplier()">
         <span>Delete</span>
       </button>
-      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'" (click)="editSupplierFormSubmition.click()">
+      <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'"
+        (click)="editSupplierFormSubmition.click()">
         <span>SAVE</span>
       </button>
     </div>
@@ -48,7 +53,8 @@
 
             <mat-form-field class="w-100-p">
               <mat-label>Name</mat-label>
-              <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name" required>
+              <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name"
+                required>
             </mat-form-field>
             <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Name is required.</span>!</span>
@@ -66,10 +72,10 @@
             <span *ngIf="type.touched && type.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Type is required.</span>!</span>
             <br>
-            <div class="row">
+            <div class="row" [hidden]="hasImage">
               <div class="col-md-12" style="text-align:center">
                 <label>Image Max size 2 MB</label>
-                <div class="dropzone" [disabled]="hasImage" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
+                <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
                   (success)="onUploadSuccess($event)"></div>
               </div>
             </div>
@@ -98,21 +104,23 @@
                 </mat-expansion-panel-header>
                 <mat-form-field class="w-100-p">
                   <mat-label>Contact Person Name</mat-label>
-                  <input matInput name="contact_name" #contact_name="ngModel" [(ngModel)]="supplier.contact.name" placeholder="Name" required>
+                  <input matInput name="contact_name" #contact_name="ngModel" [(ngModel)]="supplier.contact.name"
+                    placeholder="Name" required>
                 </mat-form-field>
                 <br>
                 <span *ngIf="contact_name.touched && contact_name.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Contact Name is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Email</mat-label>
-                  <input matInput name="email" #email="ngModel" [(ngModel)]="supplier.contact.email" placeholder="Email" required>
+                  <input matInput name="email" #email="ngModel" [(ngModel)]="supplier.contact.email" placeholder="Email"
+                    required>
                 </mat-form-field>
                 <span *ngIf="email.touched && email.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Email is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Postal Code</mat-label>
-                  <input matInput name="postal_code" #postal_code="ngModel" [(ngModel)]="supplier.contact.postal_code" placeholder="Postal Code"
-                    required>
+                  <input matInput name="postal_code" #postal_code="ngModel" [(ngModel)]="supplier.contact.postal_code"
+                    placeholder="Postal Code" required>
                 </mat-form-field>
                 <span *ngIf="postal_code.touched && postal_code.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Postal Code is required.</span>!</span>
@@ -124,14 +132,15 @@
                   <span style="color: rgb(255, 0, 0)">Number is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Street</mat-label>
-                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="street" required>
+                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="street"
+                    required>
                 </mat-form-field>
                 <span *ngIf="street.touched && street.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Street is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>Country</mat-label>
-                  <mat-select matInput name="country" #country="ngModel" [(ngModel)]="supplier.contact.country" (change)="countrySelected($event.value)"
-                    required>
+                  <mat-select matInput name="country" #country="ngModel" [(ngModel)]="supplier.contact.country"
+                    (change)="countrySelected($event.value)" required>
                     <mat-option value="Germany">Germany</mat-option>
                     <mat-option value="Canada">Canada</mat-option>
                   </mat-select>
@@ -148,7 +157,8 @@
                   <span style="color: rgb(255, 0, 0)">City is required.</span>!</span>
                 <mat-form-field class="w-100-p">
                   <mat-label>PO Box</mat-label>
-                  <input matInput name="po_box" #po_box="ngModel" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box" required>
+                  <input matInput name="po_box" #po_box="ngModel" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box"
+                    required>
                 </mat-form-field>
                 <span *ngIf="po_box.touched && po_box.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">PO BOX is required.</span>!</span>
