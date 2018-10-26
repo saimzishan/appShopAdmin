@@ -27,7 +27,8 @@ export class ProductsComponent implements OnInit {
     "price",
     "quantity",
     "supplier",
-    "active"
+    "active",
+    "action"
   ];
 
   @ViewChild(MatPaginator)
@@ -47,6 +48,7 @@ export class ProductsComponent implements OnInit {
     private productsService: ProductsService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
+    public cd: ChangeDetectorRef,
     private router: Router
   ) {}
 
@@ -104,11 +106,14 @@ export class ProductsComponent implements OnInit {
     return result.suppliers;
   }
 
-  onSupplierChange(supplier_id, product) {
+  onSupplierChange(supplier_id, product, index) {
     this.supplier_id = supplier_id;
     this.product_id = product.id;
-    console.log(this.dataSource);
-    // return product.suppliers.findIndex( s => s.id === supplier_id);
+    let i = this.dataSource.data[index].suppliers.findIndex(s => s.id === supplier_id);
+    let sp = this.dataSource.data[index].suppliers.splice(i, 1);
+    this.dataSource.data[index].suppliers.push(sp[0]);
+    this.dataSource.data[index].suppliers.reverse();
+    this.cd.detectChanges();
   }
 
   editProduct(p_id) {
@@ -119,6 +124,25 @@ export class ProductsComponent implements OnInit {
       this.supplier_id = this.dataSource.data[index].suppliers[0].id;
     }
     this.router.navigate(["/products/" + p_id + "/" + this.supplier_id]);
+  }
+
+  isActiveProduct(event, p_id) {
+    console.log(event.checked+ '$'+p_id);
+    this.productsService.isProductActive({active: event.checked}, p_id).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.totalItems = res.res.data.total;
+          this.perPage = res.res.data.per_page;
+          this.setNewPageDataSuorce(res.res.data.data);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+      });
   }
 
   addNewSupplier(p_id) {

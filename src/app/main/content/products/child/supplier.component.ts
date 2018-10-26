@@ -561,6 +561,7 @@ export class SupplierFormComponent implements OnInit {
       id: this.product_id,
       product_images:this.pImages,
       category_id: this.category_id,
+      active: this.product.active,
       name: this.product.name,
       brand_id: this.product.brand_id,
       long_description: this.product.long_description,
@@ -666,14 +667,6 @@ export class SupplierFormComponent implements OnInit {
     if (this.product.supplier.track_stock === false) {
       this.product.supplier.low_level_stock = 0;
       this.product.supplier.stock = 0;
-    }
-    if (this.pTempImages.length === 0 && this.product.product_images.length === 0) {
-      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
-      return;
-    } else {
-      this.pTempImages.forEach(img => {
-        this.pImages.push(this.addPicture(img));
-      });
     }
     if (this.sTempImages.length > 0) {
       this.sTempImages.forEach(img => {

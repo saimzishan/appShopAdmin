@@ -7,86 +7,78 @@
             <div class="row">
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <input matInput required #name="ngModel" [disabled]="pageType === 'edit' && !params.supplier_id" name="name" [(ngModel)]="product.name" placeholder="Product Name">
+                        <input matInput required #name="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="name" [(ngModel)]="product.name"
+                            placeholder="Product Name">
                     </mat-form-field>
                     <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
                         <span>Product name is required.</span>!</span>
-
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Brand" required #brand_id="ngModel" name="brand_id" [(ngModel)]="product.brand_id">
+                        <mat-select placeholder="Select Brand" name="brand_id" [(ngModel)]="product.brand_id">
                             <mat-option *ngFor="let brand of brands" [value]="brand.id">
                                 {{brand.name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <span *ngIf="brand_id.touched && brand_id.errors?.required;" class="inline-icon error">
-                        <span>Please Select a brand.</span>!</span>
                 </div>
             </div>
             <div class="row">
 
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <textarea matInput #long_description="ngModel" name="long_description" rows="3" [(ngModel)]="product.long_description"
-                            placeholder="Product Long Description" required></textarea>
+                        <textarea matInput #long_description="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="long_description"
+                            rows="3" [(ngModel)]="product.long_description" placeholder="Product Long Description" required></textarea>
                     </mat-form-field>
                     <span *ngIf="long_description.touched && long_description.errors?.required;" class="inline-icon error">
                         <span>Long description is required.</span>!</span>
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <textarea required matInput #short_description="ngModel" name="short_description" rows="3"
-                            [(ngModel)]="product.short_description" placeholder="Product Short Description"></textarea>
+                        <textarea required matInput #short_description="ngModel" [readonly]="pageType === 'edit' && !params.supplier_id" name="short_description"
+                            rows="3" [(ngModel)]="product.short_description" placeholder="Product Short Description"></textarea>
                     </mat-form-field>
                     <span *ngIf="short_description.touched && short_description.errors?.required;" class="inline-icon error">
                         <span>Short description is required.</span>!</span>
                 </div>
-
             </div>
             <div class="row">
-
                 <div class="col-md-6">
                     <ng-container>
-                        <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes"
-                            (activate)="activeNodes(tree.treeModel)"></tree-root>
-
+                        <tree-root class="expand-tree" #tree [options]="categoryOption" [nodes]="categoryNodes" (activate)="activeNodes(tree.treeModel)"></tree-root>
                     </ng-container>
-
                 </div>
                 <div class="col-md-6">
                     <mat-form-field class="w-100-p">
-                        <mat-select placeholder="Select Taxes" #tax_id="ngModel" name="tax_id" [(ngModel)]="product.tax_id"
-                            required>
+                        <mat-select placeholder="Select Taxes" name="tax_id" [(ngModel)]="product.tax_id">
                             <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                                 {{tax.title}} &nbsp; {{tax.value}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <span *ngIf="tax_id.touched && tax_id.errors?.required;" class="inline-icon error">
-                        <span>Please Select taxes.</span>!</span>
                 </div>
-
-
             </div>
             <div class="row">
                 <div class="col-md-6" fusePerfectScrollbar>
                     <mat-form-field class="w-50-p">
                         <mat-label>Select Category Above</mat-label>
-                        <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}"
-                            width="100" height="100" />
+                        <input matInput name="parentName" readonly placeholder="Parent Name" value="{{parentCat}}" width="100" height="100" />
                     </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-checkbox #active="ngModel" [disabled]="pageType === 'edit' && !params.supplier_id" name="active" [(ngModel)]="product.active">Active
+                    </mat-checkbox>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12" style="text-align:center">
                     <label>Drag images for {{pageType === 'edit' ? product.name : 'product'}} and image maximum size 2 MB</label>
-                    <div class="dropzone" [dropzone]="config" (success)="onProductSuccess($event)" (removedFile)="onProductRemove($event)" (error)="onUploadError($event)"></div>
+                    <div class="dropzone" [disabled]="pageType === 'edit' && !params.supplier_id" [dropzone]="config" (success)="onProductSuccess($event)"
+                        (removedFile)="onProductRemove($event)" (error)="onUploadError($event)"></div>
                 </div>
             </div>
             <br>
-            <div class="row" *ngIf="pageType !== 'new'" style="text-align:center">
+            <div class="row" *ngIf="pageType === 'edit'" style="text-align:center">
 
                 <ng-container *ngFor="let image of product.product_images">
                     <div class="col-md-2">
@@ -122,31 +114,27 @@
                         <div class="form-group">
                             <label for="name">Purchases between &nbsp; </label>
                             <mat-form-field>
-                                <input matInput id="name" required placeholder="Item" #form="ngModel" name="form"
-                                    [(ngModel)]="bluckPrice.from">
+                                <input matInput id="name" required placeholder="Item" #form="ngModel" name="form" [(ngModel)]="bluckPrice.from">
                             </mat-form-field>
 
                         </div>
                         <div class="form-group">
                             <label for="email">&nbsp; and &nbsp;</label>
                             <mat-form-field>
-                                <input matInput id="name" required placeholder="Item" #to="ngModel" name="to"
-                                    [(ngModel)]="bluckPrice.to">
+                                <input matInput id="name" required placeholder="Item" #to="ngModel" name="to" [(ngModel)]="bluckPrice.to">
                             </mat-form-field>
                         </div>
                         <div class="form-group">
                             <label for="pwd"> &nbsp; of this product will receive a &nbsp; </label>
                             <mat-form-field>
-                                <input matInput id="name" required placeholder="%" #discount="ngModel" name="discount"
-                                    [(ngModel)]="bluckPrice.discount">
+                                <input matInput id="name" required placeholder="%" #discount="ngModel" name="discount" [(ngModel)]="bluckPrice.discount">
                             </mat-form-field>
                         </div>
                         <div class="form-group">
                             <label for="pwd"> &nbsp; discount off each individual item &nbsp;&nbsp;&nbsp;
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-info btn-group-vertical" style="border-radius: 50%; padding: 0px !important;"
-                            (click)="addBluckPrice(bluckPriceForm)">
+                        <button type="submit" class="btn btn-info btn-group-vertical" style="border-radius: 50%; padding: 0px !important;" (click)="addBluckPrice(bluckPriceForm)">
                             <i class="material-icons">
                                 add
                             </i></button>
@@ -159,8 +147,7 @@
                         <div class="row" style="text-align: left">
                             <div class="col-md-3">
                                 <mat-form-field>
-                                    <input matInput placeholder="Purchases between" value="{{row.from}}" #p_between
-                                        name="p_between" style="margin-left: 91%;">
+                                    <input matInput placeholder="Purchases between" value="{{row.from}}" #p_between name="p_between" style="margin-left: 91%;">
                                 </mat-form-field>
                             </div>
                             <div class="col-md-3">
@@ -170,14 +157,14 @@
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field>
-                                    <input placeholder="of this product will receive a % discount off each individual item"
-                                        #discount name="discount" matInput value="{{row.discount}}">
+                                    <input placeholder="of this product will receive a % discount off each individual item" #discount name="discount" matInput
+                                        value="{{row.discount}}">
                                 </mat-form-field>
                             </div>
                             <div class="row">
                                 <div class="col-md-1" *ngIf="pageType === 'edit'">
-                                    <button class="btn btn-info btn-group-vertical" style="border-radius: 50%; margin-left:-30px; padding: 0px !important"
-                                        type="submit" class="btn btn-info btn-xs" (click)="editBulkPrice(row.id , p_between.value , and.value , discount.value)">
+                                    <button class="btn btn-info btn-group-vertical" style="border-radius: 50%; margin-left:-30px; padding: 0px !important" type="submit"
+                                        class="btn btn-info btn-xs" (click)="editBulkPrice(row.id , p_between.value , and.value , discount.value)">
                                         <i class="material-icons" style="margin-top: 2px ; font-size: 20px">
                                             create
                                         </i></button>
@@ -212,15 +199,15 @@
                         <legend style="padding: 10px">
                             <h2>Other Details</h2>
                         </legend>
-                        <div style="margin-top: 4%" class="row">
+                        <!-- <div style="margin-top: 4%" class="row">
                             <div class="col-md-12">
-                                <mat-checkbox #active="ngModel" name="active" [(ngModel)]="product.supplier.active">Active
-                                </mat-checkbox>
+
                             </div>
-                        </div>
+                        </div> -->
                         <div style="margin-top: 4%" class="row">
                             <div class="col-md-12">
-                                <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing option
+                                <mat-checkbox #printing_option="ngModel" name="printing_option" [(ngModel)]="product.supplier.printing_option">Printing
+                                    option
                                 </mat-checkbox>
                             </div>
                             <div *ngIf="product.supplier.printing_option" class="col-md-12">
@@ -238,7 +225,8 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track Stock
+                                        <mat-checkbox #track_stock="ngModel" name="track_stock" [(ngModel)]="product.supplier.track_stock">Track
+                                            Stock
                                         </mat-checkbox>
                                     </div>
                                 </div>
@@ -289,7 +277,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <mat-select placeholder="Select Supplier" #supplier_id="ngModel" name="supplier_id"
+                            <mat-select placeholder="Select Supplier" [disabled]="pageType === 'edit' && params.supplier_id" #supplier_id="ngModel" name="supplier_id"
                                 [(ngModel)]="product.supplier.id" required>
 
                                 <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
@@ -301,22 +289,19 @@
                     </div>
                     <div class="col-md-2">
                         <mat-form-field class="w-90-p">
-                            <input matInput #buying_price="ngModel" name="buying_price" [(ngModel)]="product.supplier.buying_price"
-                                placeholder="Buying price">
+                            <input matInput #buying_price="ngModel" name="buying_price" [(ngModel)]="product.supplier.buying_price" placeholder="Buying price">
                         </mat-form-field>
 
                     </div>
                     <div class="col-md-2">
                         <mat-form-field class="w-90-p">
-                            <input matInput #market_price="ngModel" name="market_price" [(ngModel)]="product.supplier.market_price"
-                                placeholder="Market price">
+                            <input matInput #market_price="ngModel" name="market_price" [(ngModel)]="product.supplier.market_price" placeholder="Market price">
                         </mat-form-field>
 
                     </div>
                     <div class="col-md-2">
                         <mat-form-field class="w-90-p">
-                            <input matInput #price="ngModel" name="price" [(ngModel)]="product.supplier.price"
-                                placeholder="Selling Price" required>
+                            <input matInput #price="ngModel" name="price" [(ngModel)]="product.supplier.price" placeholder="Selling Price" required>
                         </mat-form-field>
                         <span *ngIf="price.touched && price.errors?.required;" class="inline-icon error">
                             <span>Price is required.</span>!</span>
@@ -325,8 +310,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <input matInput #sku="ngModel" name="sku" [(ngModel)]="product.supplier.sku" placeholder="Product Code/SKU"
-                                required>
+                            <input matInput #sku="ngModel" name="sku" [(ngModel)]="product.supplier.sku" placeholder="Product Code/SKU" required>
                         </mat-form-field>
                         <span *ngIf="sku.touched && sku.errors?.required;" class="inline-icon error">
                             <span>SKU is required.</span>!</span>
@@ -343,8 +327,8 @@
 
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="product.supplier.width"
-                                placeholder="Width (Centimeters)" required>
+                            <input type="number" step="0.1" matInput #width="ngModel" name="width" [(ngModel)]="product.supplier.width" placeholder="Width (Centimeters)"
+                                required>
                         </mat-form-field>
                         <span *ngIf="width.touched && width.errors?.required;" class="inline-icon error">
                             <span>Width is required.</span>!</span>
@@ -353,16 +337,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="product.supplier.weight"
-                                placeholder="Weight (kg)" required>
+                            <input type="number" step="0.1" matInput #weight="ngModel" name="weight" [(ngModel)]="product.supplier.weight" placeholder="Weight (kg)"
+                                required>
                         </mat-form-field>
                         <span *ngIf="weight.touched && weight.errors?.required;" class="inline-icon error">
                             <span>Weight is required.</span>!</span>
                     </div>
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="product.supplier.height"
-                                placeholder="Height (Centimeters)" required>
+                            <input type="number" step="0.1" matInput #height="ngModel" name="height" [(ngModel)]="product.supplier.height" placeholder="Height (Centimeters)"
+                                required>
                         </mat-form-field>
                         <span *ngIf="height.touched && height.errors?.required;" class="inline-icon error">
                             <span>Height is required.</span>!</span>
@@ -371,8 +355,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <mat-form-field class="w-100-p">
-                            <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="product.supplier.depth"
-                                placeholder="Depth (Centimeters)" required>
+                            <input type="number" step="0.1" matInput #depth="ngModel" name="depth" [(ngModel)]="product.supplier.depth" placeholder="Depth (Centimeters)"
+                                required>
                         </mat-form-field>
                         <span *ngIf="depth.touched && depth.errors?.required;" class="inline-icon error">
                             <span>Depth is required.</span>!</span>
@@ -382,7 +366,8 @@
 
                 <div class="row">
                     <div class="col-md-12" style="text-align:center">
-                        <label>Drag images for {{product.name}} by {{getSupplierName(product.supplier.id)}} and image maximum size 2 MB</label>
+                        <label>Drag images for {{product.name}} by {{getSupplierName(product.supplier.id)}} and image maximum
+                            size 2 MB</label>
                         <div class="dropzone" id="d1" [dropzone]="config" (removedFile)="onSupplierRemove($event)" (error)="onUploadError($event)"
                             (success)="onSupplierSuccess($event)"></div>
                     </div>
@@ -407,8 +392,8 @@
                     <div class="col-md-6">
                     </div>
                     <div class="col-md-6" style="text-align: right;">
-                        <button *ngIf="pageType === 'new'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
-                            style="background-color: #1E8ACA !important ; color: #ffffff !important" (click)="addProduct(supplierForm)">
+                        <button *ngIf="pageType === 'new'" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important"
+                            (click)="addProduct(supplierForm)">
                             <span>Save Product</span>
                         </button>
                         <button *ngIf="pageType === 'edit' && this.params.supplier_id" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
@@ -416,8 +401,8 @@
                             <span>Update Product Supplier</span>
                         </button>
                         <button *ngIf="pageType === 'edit' && !this.params.supplier_id" mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0"
-                        style="background-color: #1E8ACA !important ; color: #ffffff !important" (click)="addNewSupplierToProduct(supplierForm)">
-                        <span>Add Product Supplier</span>
+                            style="background-color: #1E8ACA !important ; color: #ffffff !important" (click)="addNewSupplierToProduct(supplierForm)">
+                            <span>Add Product Supplier</span>
                         </button>
                     </div>
                 </div>

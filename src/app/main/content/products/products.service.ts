@@ -97,4 +97,27 @@ export class ProductsService extends ApiService {
         return this.handleError(err);
       });
   }
+
+  isProductActive(state, p_id) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+
+    return this.http
+      .put(GLOBAL.USER_API + "products/" + p_id + "?p_active", state, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }

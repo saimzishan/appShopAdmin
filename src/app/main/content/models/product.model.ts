@@ -4,6 +4,7 @@ export class Product {
   short_description: string;
   long_description: string;
   category_id: number;
+  active: boolean;
   tax_id: number;
   brand_id: number;
   supplier: Supplier;
@@ -17,8 +18,9 @@ export class Product {
     this.short_description = product.short_description || "";
     this.long_description = product.long_description || "";
     this.category_id = product.category_id || -1;
+    this.active = product.active || false;
     this.tax_id = product.tax_id || -1;
-    this.brand_id = product.brand_id || -1;
+    this.brand_id = product.brand_id || null;
     this.supplier = product.supplier || new Supplier();
     this.tags = product.tags || [];
     this.product_images = product.product_images || new Array<Image>();
@@ -54,7 +56,6 @@ export class Supplier {
   sides: any;
   stock: number;
   low_level_stock: number;
-  active: boolean;
   class: Array<any>;
   product_supplier_attributes: ProductSupplierAttribute[];
   product_variants: ProductVariant;
@@ -78,7 +79,6 @@ export class Supplier {
     this.track_stock = supplier.ttrack_stock || false;
     this.printing_option = supplier.printing_option || false;
     this.sides = supplier.sides || []
-    this.active = supplier.active || false;
     this.low_level_stock = supplier.low_level_stock || 0;
     this.stock = supplier.stock || 0;
     this.class = supplier.class || new Array();
