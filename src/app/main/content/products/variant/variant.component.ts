@@ -3,7 +3,12 @@ import { Component, OnInit, Input, ViewChild } from "@angular/core";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
-import { ProductVariant, Image, Variant, Supplier } from "../../models/product.model";
+import {
+  ProductVariant,
+  Image,
+  Variant,
+  Supplier
+} from "../../models/product.model";
 import { NgForm, FormGroup, FormControl } from "@angular/forms";
 import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
@@ -112,12 +117,12 @@ export class VariantComponent implements OnInit {
     }
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
-      let pVariants = new ProductVariant();
-      pVariants.supplier_id = this.supplierID;
-      pVariants.variants.push(this.variant);
-      this.lImages = new Array<Image>();
-      this.resetDropzone();
-      return this.saveProductVariants(pVariants);
+    let pVariants = new ProductVariant();
+    pVariants.supplier_id = this.supplierID;
+    pVariants.variants.push(this.variant);
+    this.lImages = new Array<Image>();
+    this.resetDropzone();
+    return this.saveProductVariants(pVariants);
   }
 
   saveProductVariants(productVariants?: ProductVariant) {
@@ -130,7 +135,8 @@ export class VariantComponent implements OnInit {
     this.productVariants.supplier_id = this.supplierID;
     this.productService
       .saveProductVariants(productVariants, this.ps_id, "ps_variants")
-      .subscribe((res: any) => {
+      .subscribe(
+        (res: any) => {
           this.snotifyService.success(res.res.message, "Success !");
           this.variant = new Variant();
           this.productVariants.variants = res.res.data;
@@ -397,7 +403,7 @@ export class VariantComponent implements OnInit {
     this.isAction = true;
     this.productSupplier.images = [];
     this.variant = this.productSupplier;
-    this.variant.amount = this.productSupplier.price;
+    // this.variant.amount = this.productSupplier.price;
   }
 
   onUploadError(event: any) {}

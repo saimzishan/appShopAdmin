@@ -9,6 +9,7 @@ import {
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { SnotifyService } from "ng-snotify";
 import { CategoriesService } from "../categories.service";
+import { Router } from "@angular/router";
 
 // @Directive({
 //     selector:'[my-custom-directive]',
@@ -21,10 +22,12 @@ import { CategoriesService } from "../categories.service";
     <mat-accordion>
         <mat-expansion-panel (opened)="show(category.id)">
             <mat-expansion-panel-header>
-                <mat-panel-title class="w-15-p"> {{category.name}}</mat-panel-title>
-                <mat-panel-title class="w-25-p"> {{getSpecificNotes(category.notes)}}</mat-panel-title>
-                <mat-panel-title class="w-15-p"> {{category.children.length}}</mat-panel-title>
-                <mat-panel-title class="w-15-p"> <button class="btn btn-info">View Products</button></mat-panel-title>
+                <mat-panel-title class="w-40-p"> {{category.name}}</mat-panel-title>
+                <mat-panel-title class="w-45-p"> {{getSpecificNotes(category.notes)}}</mat-panel-title>
+                <mat-panel-title class="w-35-p"> {{category.children.length}}</mat-panel-title>
+                <mat-panel-title class="w-20-p"> 
+                  <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editCategory(category.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
+                </mat-panel-title>
             </mat-expansion-panel-header>
             <ng-container *ngIf="hasChild(category)">
                 <ng-container *ngFor="let cate of categoryChildren">
@@ -45,7 +48,8 @@ export class CategoryChildComponent implements OnInit {
   constructor(
     private categoriesService: CategoriesService,
     private spinnerService: SpinnerService,
-    private snotifyService: SnotifyService
+    private snotifyService: SnotifyService,
+    private router: Router
   ) {
     this.categoryChildren = [];
   }
@@ -72,7 +76,7 @@ export class CategoryChildComponent implements OnInit {
       return;
     }
     this.spinnerService.requestInProcess(true);
-    this.categoriesService.getCategoryById(id).subscribe(
+    this.categoriesService.edit(id).subscribe(
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         if (!res.status) {
@@ -86,5 +90,10 @@ export class CategoryChildComponent implements OnInit {
         this.snotifyService.error(e, "Error !");
       }
     );
+  }
+
+  editCategory(id) {
+    // console.log(id);
+    this.router.navigate(["/categories/" + id]);
   }
 }

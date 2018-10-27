@@ -7,7 +7,6 @@ import { AuthGuard } from "../../../guard/auth.guard";
 
 @Injectable()
 export class CategoriesService extends ApiService {
-
   getCategories() {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
@@ -31,6 +30,28 @@ export class CategoriesService extends ApiService {
   }
 
   getCategoryById(id) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "categories/" + id + "?edit", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  edit(id) {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {

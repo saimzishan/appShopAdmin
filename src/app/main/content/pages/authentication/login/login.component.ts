@@ -91,10 +91,10 @@ export class FuseLoginComponent implements OnInit {
           );
           this.snotifyService.success("Login sucessfully", "Success !");
           setTimeout(() => {
+            this.spinnerService.requestInProcess(false);
             this.router.navigate(["/user-management"]);
           }, 2500);
         }
-        this.spinnerService.requestInProcess(false);
       },
       errors => {
         this.spinnerService.requestInProcess(false);

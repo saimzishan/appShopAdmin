@@ -1,21 +1,29 @@
+import { Category } from "./../models/category.model";
 import { GLOBAL } from "./../../../shared/globel";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { SnotifyService } from "ng-snotify";
 import { SpinnerService } from "./../../../spinner/spinner.service";
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild
+} from "@angular/core";
 import { CategoryService } from "./category.service";
 import { fuseAnimations } from "../../../core/animations";
 import { Subscription } from "rxjs/Subscription";
-import { Category } from "../models/category.model";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { FuseUtils } from "../../../core/fuseUtils";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar, MatDialogRef, MatDialog } from "@angular/material";
 import { ITreeOptions } from "angular-tree-component";
 import { Supplier } from "../models/supplier.model";
 import { CategoriesService } from "./categories.service";
 import { Router, NavigationEnd } from "@angular/router";
 import { DropzoneDirective } from "ngx-dropzone-wrapper";
-import { Image } from '../models/product.model';
+import { Image } from "../models/product.model";
+import { ActivatedRoute } from "@angular/router";
+import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-category",
@@ -63,6 +71,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
     | { name: string; hasChildren?: undefined })[];
   categories: any;
   parentCatId: any;
+  params;
+  categorie: Category;
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   constructor(
     private categoryService: CategoryService,
@@ -72,32 +83,34 @@ export class CategoryComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     private router: Router,
-    protected http: HttpClient
+    protected http: HttpClient,
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     this.images = new Array<Image>();
     this.image = new Image();
+    this.categorie = new Category();
   }
 
   ngOnInit() {
     this.index();
     this.categoryForm = this.createcategoryForm();
-  }
-
-  checkPageType(): boolean {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.pageType = event.url.split("/");
-        if (this.pageType.length > 2) {
-          this.pageType = this.pageType[2].toString();
-          if (this.pageType !== "new") {
-            this.pageType = 'edit';
-          } else {
-            this.pageType = 'new';
-          }
+    this.route.params.subscribe(params => {
+      this.params = params;
+      if (this.params) {
+        if (this.params.id === "new") {
+          this.pageType = "new";
+        } else {
+          this.pageType = "edit";
         }
       }
     });
-    return this.pageType;
+  }
+
+  checkPageType(): boolean {
+    let res = true;
+    if (this.pageType === "new") res = false;
+    return res;
   }
   addNode(tree: any) {
     const data = this.categoryForm.getRawValue();
@@ -162,6 +175,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
         if (!res.status) {
           this.categories = res.res.data;
           this.nodes = this.createNode(this.categories);
+
+          if (this.pageType === "edit") {
+            this.show(this.params.id);
+          }
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -180,10 +197,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
       (res: any) => {
         this.spinnerService.requestInProcess(false);
         if (!res.status) {
-          this.categoryChildren = res.res.data;
-          this.asyncChildren = this.createNode(this.categoryChildren);
-
-          this.newNodes = this.asyncChildren.map(c => Object.assign({}, c));
+          this.categorie = res.res.data;
+          if (this.categorie.parent_id) {
+            let result = this.getPCategoryName(this.categorie.parent_id);
+            this.parentCat = result.name;
+            this.parentCatId = result.id;
+          }
         }
       },
       errors => {
@@ -227,6 +246,107 @@ export class CategoryComponent implements OnInit, OnDestroy {
     );
   }
 
+  update() {
+    if (this.directiveRef) {
+      const a = this.directiveRef.dropzone();
+      for (const iterator of a.files) {
+        this.addPicture(iterator);
+      }
+    }
+    const data = this.categoryForm.getRawValue();
+    data["parent_id"] = this.parentCatId;
+    data["image"] = this.category.image;
+    data["id"] = this.categorie.id;
+    if (this.categorie.name === this.parentCat) {
+      this.snotifyService.warning(
+        "Please select a defferent parent category",
+        "Warning"
+      );
+      return;
+    }
+    this.categoryService.update(data).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/categories"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
+
+  deleteCate(id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.remove(id);
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  remove(id) {
+    this.categoryService.delete(id).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/categories"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        e = JSON.stringify(e);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
+
+  deleteCateImage(id) {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.removeImage(id);
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  removeImage(id) {
+    const data = {
+      id: this.categorie.id,
+      imageId: id
+    };
+    this.categoryService.deleteImage(data).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.categorie.image = res.res.data;
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        e = JSON.stringify(e);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
+
   addPicture(obj) {
     this.category.image.base64String = obj.dataURL.split(",")[1];
     this.category.image.content_type = obj.type.split("/")[1];
@@ -234,8 +354,12 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.category.image.type = "small";
   }
 
-  onUploadError(evt) { }
-  onUploadSuccess(evt) { }
-  onCanceled(event) { }
-  ngOnDestroy() { }
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {}
+  onCanceled(event) {}
+  ngOnDestroy() {}
+
+  getPCategoryName(id) {
+    return this.categories.find(c => c.id === id);
+  }
 }
