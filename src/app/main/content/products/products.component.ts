@@ -149,7 +149,7 @@ export class ProductsComponent implements OnInit {
     let index = this.dataSource.data.findIndex(product => product.id === p_id);
     this.addedSuppliers = this.dataSource.data[index].suppliers;
     this.router.navigate(["/products/" + p_id], {
-      queryParams: { addedSuppliers: btoa(JSON.stringify(this.addedSuppliers)) }
+      queryParams: { addedSuppliers: btoa(JSON.stringify(this.addedSuppliers)), supplierId: this.supplier_id }
     });
   }
 

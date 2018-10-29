@@ -42,6 +42,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   enabledChild: boolean = true;
   product: Product;
   params: any;
+  supplierId: number;
   constructor(
     private dialog: MatDialog,
     protected http: HttpClient,
@@ -78,6 +79,15 @@ export class ProductComponent implements OnInit, OnDestroy {
         "/products/" + isAlreadySaved._p_id + "/" + isAlreadySaved._s_id
       ]);
     }
+
+    if (!this.params.supplier_id && this.pageType === 'edit') {
+      this.route.queryParams.subscribe(params => {
+        let s_id = params["supplierId"];
+          if (s_id) {
+            this.supplierId = +s_id;
+          }
+      });
+    }
   }
 
   edit(params) {
@@ -101,9 +111,13 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.productService.getProductWithId(params.id)
       .subscribe((res: any) => {
         if (!res.status) {
+          let foundSupplier: any;
           this.product = new Product(res.res.data);
-          this.product.supplier = new Supplier();
-          // this.onProductSaved(params);
+          if (res.res.data) {
+            foundSupplier = (this.supplierId) ? res.res.data.suppliers.find(s => s.id === this.supplierId) :
+            res.res.data.suppliers[0];
+            this.bindSupplier(foundSupplier);
+          }
         }
         this.spinnerService.requestInProcess(false);
       },
@@ -113,6 +127,21 @@ export class ProductComponent implements OnInit, OnDestroy {
           e = JSON.stringify(e.error);
           this.snotifyService.error(e, "Error !");
         });
+    }
+  }
+
+
+  bindSupplier(supplier: any) {
+    this.product.supplier = new Supplier();
+    if(supplier) {
+      this.product.supplier.buying_price = supplier.buying_price;
+      this.product.supplier.market_price = supplier.market_price;
+      this.product.supplier.price = supplier.price;
+      this.product.supplier.upc = supplier.upc;
+      this.product.supplier.width = supplier.width;
+      this.product.supplier.weight = supplier.weight;
+      this.product.supplier.height = supplier.height;
+      this.product.supplier.depth = supplier.depth;
     }
   }
 

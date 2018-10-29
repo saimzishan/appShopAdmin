@@ -108,11 +108,27 @@
                 <ng-container cdkColumnDef="action">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
-                        <!-- <mat-icon class="active-icon mat-red-500-bg s-16">close</mat-icon> -->
-                        <button mat-raised-button class="save-product-button mat-accent mt-16 mt-sm-0" (click)="addNewSupplier(product.id)">
-                            <span>ADD NEW SUPPLIER</span>
+                        <!-- <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
+                                        <button mat-raised-button class="save-product-button mat-accent mt-16 mt-sm-0" (click)="addNewSupplier(product.id)">
+                                            <span>ADD NEW SUPPLIER</span>
+                                        </button> -->
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_horiz</mat-icon>
                         </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="editProduct(product.id)">
+                                <mat-icon>edit</mat-icon>
+                                <span>EDIT PRODUCT</span>
+                            </button>
+                            <button mat-menu-item (click)="addNewSupplier(product.id)">
+                                <mat-icon>add_box</mat-icon>
+                                <span>ADD NEW SUPPLIER</span>
+                            </button>
+                            <button mat-menu-item>
+                                <mat-icon>indeterminate_check_box</mat-icon>
+                                <span>DELETE SUPPLIER</span>
+                            </button>
+                        </mat-menu>
                     </mat-cell>
                 </ng-container>
 
