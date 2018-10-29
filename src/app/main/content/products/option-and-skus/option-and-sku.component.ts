@@ -89,8 +89,14 @@ export class OptionAndSkusComponent implements OnInit {
           element.ps_id = res.id;
           element.isSelected = true;
           element.amount = res.amount;
-          element.changed_by = res.changed_by === "absolute" ? 1 : res.changed_by === null ? '' : 2;
-          element.operation = res.operation === "none" ? 1 : res.operation === "add" ? 2 : 3;
+          element.changed_by =
+            res.changed_by === "absolute"
+              ? 1
+              : res.changed_by === null
+                ? ""
+                : 2;
+          element.operation =
+            res.operation === "none" ? 1 : res.operation === "add" ? 2 : 3;
           element.option_id = res.option_id;
         } else {
           element.isSelected = false;
@@ -172,10 +178,10 @@ export class OptionAndSkusComponent implements OnInit {
   saveOptionSetAndValue(option_set_id, option, operation, change_by, amount) {
     this.setPSIds();
 
-    if (amount === "") {
-      this.snotifyService.warning("Please enter Amount", "Warning !");
-      return;
-    }
+    // if (amount === "") {
+    //   this.snotifyService.warning("Please enter Amount", "Warning !");
+    //   return;
+    // }
     if (this.optionSet.length === 3) {
       this.snotifyService.warning("Maximum limit 3", "Warning !");
       return;
