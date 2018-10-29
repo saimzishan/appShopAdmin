@@ -33,13 +33,13 @@
       <!-- / APP TITLE -->
 
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="!checkPageType()" (click)="store()">
-        <span>ADD</span>
+        <span>SAVE</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()" (click)="deleteCate(categorie.id)">
         <span>DELETE</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()" (click)="update()">
-        <span>SAVE</span>
+        <span>UPDATE</span>
       </button>
     </div>
     <!-- / HEADER -->

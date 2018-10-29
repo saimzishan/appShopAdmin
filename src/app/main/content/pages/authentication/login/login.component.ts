@@ -46,8 +46,8 @@ export class FuseLoginComponent implements OnInit {
     // this.snotifyService.success('Wao', ' !');
     let rememberMe = localStorage.getItem("rememberMe");
     if (rememberMe) {
-      if (rememberMe === "true" && AuthGuard.isLoggedIn()) {
-        this.router.navigate(["/user-management"]);
+      if (rememberMe === "true") {
+        this.refresh();
       }
     }
     this.loginForm = this.formBuilder.group({
@@ -94,6 +94,26 @@ export class FuseLoginComponent implements OnInit {
             this.spinnerService.requestInProcess(false);
             this.router.navigate(["/user-management"]);
           }, 2500);
+        }
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+        // this.notificationServiceBus.launchNotification(true, e);
+      }
+    );
+  }
+
+  refresh() {
+    this.spinnerService.requestInProcess(true);
+    this.userServices.refreshToken().subscribe(
+      (res: any) => {
+        if (!res.error) {
+        localStorage.removeItem("currentUser");
+        console.log(res.res);
+          localStorage.setItem("currentUser", JSON.stringify(res.res));
+          this.router.navigate(["/user-management"]);
         }
       },
       errors => {
