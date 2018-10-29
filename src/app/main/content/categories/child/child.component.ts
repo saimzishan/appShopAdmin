@@ -20,7 +20,7 @@ import { Router } from "@angular/router";
   selector: "category-child",
   template: `
     <mat-accordion>
-        <mat-expansion-panel (opened)="show(category.id)">
+        <mat-expansion-panel (opened)="show(category.id)" [disabled]="!hasChild(category)">
             <mat-expansion-panel-header>
                 <mat-panel-title class="w-40-p"> {{category.name}}</mat-panel-title>
                 <mat-panel-title class="w-45-p"> {{getSpecificNotes(category.notes)}}</mat-panel-title>
