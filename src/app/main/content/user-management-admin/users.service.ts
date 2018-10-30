@@ -301,7 +301,7 @@ export class UserManagementService extends ApiService {
             });
     }
 
-    updateUser(user:User) { }
+    updateUser(user: User ) { }
 
     updateUserRoles(user: User) {
         const access_token = AuthGuard.getToken();
@@ -317,7 +317,7 @@ export class UserManagementService extends ApiService {
                 Authorization: 'Bearer ' + access_token
             })
         };
-        return this.http.put(GLOBAL.USER_API + 'users/' + user.id + '?user_roles', user, httpOptions)
+        return this.http.put(GLOBAL.USER_API + 'users/' + user.id + '?u_level=' + user.level, user, httpOptions)
             .map(this.extractData)
             .catch(err => {
                 return this.handleError(err);

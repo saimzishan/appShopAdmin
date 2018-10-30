@@ -124,15 +124,11 @@ export class VariantComponent implements OnInit {
       this.variant.stock = 0;
       this.variant.low_level_stock = 0;
     }
-
-
-
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
     let pVariants = new ProductVariant();
     pVariants.supplier_id = this.supplierID;
     pVariants.variants.push(this.variant);
-    return;
     this.lImages = new Array<Image>();
     this.resetDropzone();
     return this.saveProductVariants(pVariants);

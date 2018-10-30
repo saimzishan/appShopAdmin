@@ -91,7 +91,7 @@
                                 <span *ngIf="roles.touched && roles.errors?.required;" class="inline-icon error red-fg">
                                     <span>Roles are required.</span>!</span>
                             </div>
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
                                 <mat-form-field class="w-100-p">
                                     <mat-select required #level="ngModel" name="level" placeholder="Select Level" [(ngModel)]="user.level">
                                         <mat-option *ngFor="let level of levels" [value]="level.id">
@@ -101,7 +101,7 @@
                                 </mat-form-field>
                                 <span *ngIf="level.touched && level.errors?.required;" class="inline-icon error red-fg">
                                     <span>Level is required.</span>!</span>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <input type="button" class="btn btn-primary" hidden #userFormSubmit (click)="addUser(userForm)">
