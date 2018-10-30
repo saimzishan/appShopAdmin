@@ -52,14 +52,12 @@
           <div class="tab-content p-24" fusePerfectScrollbar>
 
             <mat-form-field class="w-100-p">
-              <mat-label>Name</mat-label>
               <input matInput name="name" #name="ngModel" [(ngModel)]="supplier.name" placeholder="Supplier Name"
                 required>
             </mat-form-field>
             <span *ngIf="name.touched && name.errors?.required;" class="inline-icon error">
               <span style="color: rgb(255, 0, 0)">Supplier Name is required.</span>!</span>
             <mat-form-field class="w-100-p">
-              <mat-label>Supplier Type</mat-label>
               <mat-select matInput name="type" #type="ngModel" [(ngModel)]="supplier.type" required placeholder="Supplier Type">
                 <mat-option value="WholeSaler">
                   Wholesaler
@@ -103,43 +101,37 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Contact Person Name</mat-label>
                   <input matInput name="contact_name" #contact_name="ngModel" [(ngModel)]="supplier.contact.name"
-                    placeholder="Name" required>
+                    placeholder="Contact Person Name" required>
                 </mat-form-field>
                 <br>
                 <span *ngIf="contact_name.touched && contact_name.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Contact Name is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Email</mat-label>
                   <input matInput name="email" #email="ngModel" [(ngModel)]="supplier.contact.email" placeholder="Email"
                     required>
                 </mat-form-field>
                 <span *ngIf="email.touched && email.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Supplier Email is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Postal Code</mat-label>
                   <input matInput name="postal_code" #postal_code="ngModel" [(ngModel)]="supplier.contact.postal_code"
                     placeholder="Postal Code" required>
                 </mat-form-field>
                 <span *ngIf="postal_code.touched && postal_code.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Postal Code is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Number(House/Flat)</mat-label>
-                  <input matInput name="no" #no="ngModel" [(ngModel)]="supplier.contact.no" placeholder="No" required>
+                  <input matInput name="no" #no="ngModel" [(ngModel)]="supplier.contact.no" placeholder="Number(House/Flat)" required>
                 </mat-form-field>
                 <span *ngIf="no.touched && no.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Number is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Street</mat-label>
-                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="street"
+                  <input matInput name="street" #street="ngModel" [(ngModel)]="supplier.contact.street" placeholder="Street"
                     required>
                 </mat-form-field>
                 <span *ngIf="street.touched && street.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">Street is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Country</mat-label>
-                  <mat-select matInput name="country" #country="ngModel" [(ngModel)]="supplier.contact.country"
+                  <mat-select matInput name="country" #country="ngModel" placeholder="Country" [(ngModel)]="supplier.contact.country"
                     (change)="countrySelected($event.value)" required>
                     <mat-option value="Germany">Germany</mat-option>
                     <mat-option value="Canada">Canada</mat-option>
@@ -156,31 +148,24 @@
                 <span *ngIf="city.touched && city.errors?.required;" class="inline-icon error">
                   <span style="color: rgb(255, 0, 0)">City is required.</span>!</span>
                 <mat-form-field class="w-100-p">
-                  <mat-label>PO Box</mat-label>
                   <input matInput name="po_box" [(ngModel)]="supplier.contact.po_box" placeholder="PO Box">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Landline 1</mat-label>
                   <input matInput name="ph_landline1" [(ngModel)]="supplier.contact.ph_landline1" placeholder="Phone Landline 1">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Landline 2</mat-label>
                   <input matInput name="ph_landline2" [(ngModel)]="supplier.contact.ph_landline2" placeholder="Phone Landline 2">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Landline 3</mat-label>
                   <input matInput name="ph_landline3" [(ngModel)]="supplier.contact.ph_landline3" placeholder="Phone Landline 3">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Mobile 1</mat-label>
-                  <input matInput name="ph_mobile1" [(ngModel)]="supplier.contact.ph_mobile1" placeholder="Phone Mobile 3">
+                  <input matInput name="ph_mobile1" [(ngModel)]="supplier.contact.ph_mobile1" placeholder="Phone Mobile 1">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Mobile 2</mat-label>
                   <input matInput name="ph_mobile2" [(ngModel)]="supplier.contact.ph_mobile2" placeholder="Phone Mobile 2">
                 </mat-form-field>
                 <mat-form-field class="w-100-p">
-                  <mat-label>Phone Mobile 3</mat-label>
                   <input matInput name="ph_mobile3" [(ngModel)]="supplier.contact.ph_mobile3" placeholder="Phone Mobile 3">
                 </mat-form-field>
               </mat-expansion-panel>

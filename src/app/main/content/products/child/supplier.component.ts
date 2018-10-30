@@ -4,21 +4,10 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialog } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { MatSnackBar } from "@angular/material";
-import { FormBuilder, FormGroup, FormControl, NgForm } from "@angular/forms";
+import { FormGroup, FormControl, NgForm } from "@angular/forms";
 import { Component, EventEmitter, Output } from "@angular/core";
-import {
-  Input,
-  OnInit,
-  ViewChildren,
-  Directive,
-  ViewChild
-} from "@angular/core";
-import {
-  Supplier,
-  Product,
-  Image,
-  BluckPrice
-} from "../../models/product.model";
+import { Input, OnInit, ViewChild } from "@angular/core";
+import { Supplier, Product, Image, BluckPrice } from "../../models/product.model";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
@@ -683,12 +672,6 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.success(res.res.message, "Success !");
         this.spinnerService.requestInProcess(false);
         this.onProductSaved(this.product);
-        let temp = {
-          _p_id: res.res.data.p_id,
-          _s_id: this.product.supplier.id,
-          _ps_id: res.res.data.id
-        };
-        localStorage.setItem("_saveP", JSON.stringify(temp));
       },
       errors => {
         this.spinnerService.requestInProcess(false);
