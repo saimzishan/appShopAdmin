@@ -12,6 +12,7 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import { HttpHeaders } from '@angular/common/http';
+import { AuthGuard } from '../guard/auth.guard';
 
 @Injectable()
 export class UsersService extends ApiService {
@@ -52,6 +53,28 @@ export class UsersService extends ApiService {
             .map(this.extractData)
             .catch((err) => { return this.handleError(err); });
     }
+
+    refreshToken() {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: 'Unauthorized'
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + access_token
+            })
+        };
+        return this.http
+          .post(GLOBAL.USER_API + "refresh" , '', httpOptions)
+          .map(this.extractData)
+          .catch(err => {
+            return this.handleError(err);
+          });
+      }
 
 }
 

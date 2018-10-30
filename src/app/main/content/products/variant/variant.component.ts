@@ -37,6 +37,11 @@ export class VariantComponent implements OnInit {
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG;
   sub: any;
   productOptionSetAndValue: Option[];
+  optionSets;
+  optionID: number;
+  optionSetID: number;
+  OoptionSetID: number;
+  OotionID: number;
 
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
@@ -71,6 +76,10 @@ export class VariantComponent implements OnInit {
 
   ngOnInit() {
     this.setProductSupplierIds();
+    console.log(this.productVariants);
+    // console.log(this.getOptionName());
+    // this.getOptionName(1);
+    // console.log(this.productVariants);
   }
 
   getProductOptionSetWithValue() {
@@ -115,11 +124,15 @@ export class VariantComponent implements OnInit {
       this.variant.stock = 0;
       this.variant.low_level_stock = 0;
     }
+
+
+
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
     let pVariants = new ProductVariant();
     pVariants.supplier_id = this.supplierID;
     pVariants.variants.push(this.variant);
+    return;
     this.lImages = new Array<Image>();
     this.resetDropzone();
     return this.saveProductVariants(pVariants);
@@ -334,7 +347,7 @@ export class VariantComponent implements OnInit {
 
   addOptionSet(option_id, option_set_id) {
     let index: any = this.product_variant_attributes
-      .map(function(obj, index) {
+      .map(function (obj, index) {
         if (obj.option_set_id === option_set_id) {
           return index;
         }
@@ -406,8 +419,29 @@ export class VariantComponent implements OnInit {
     // this.variant.amount = this.productSupplier.price;
   }
 
-  onUploadError(event: any) {}
-  onUploadSuccess(event: any) {}
+  onUploadError(event: any) { }
+  onUploadSuccess(event: any) { }
+
+  getOptionSetName(id: number) {
+    const res = this.productOptionSetAndValue.find(
+      optionSet => optionSet.id === id
+    );
+    if (res) {
+      this.optionSetID = res.id;
+      return res.name;
+    }
+  }
+
+  getOptionValue(id) {
+    const res = this.productOptionSetAndValue.find(
+      optionSet => optionSet.id === id
+    );
+
+    if (res) {
+      this.optionID = res.options[0].id;
+      return res.options[0].value;
+    }
+  }
 }
 
 export class Options {
