@@ -11,7 +11,13 @@
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">people</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Users</span>
+                <!-- <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Users</span> -->
+                <mat-form-field>
+                    <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
+                      <mat-option [value]="1">Staff</mat-option>
+                      <mat-option [value]="2">Users</mat-option>
+                    </mat-select>
+                  </mat-form-field>
             </div>
             <!-- / APP TITLE -->
         

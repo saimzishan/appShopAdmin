@@ -238,7 +238,7 @@ export class UserManagementService extends ApiService {
 
     //User CRUD
 
-    getUsers() {
+    getUsers(option) {
         const access_token = AuthGuard.getToken();
         if (access_token === undefined) {
             const error = {
@@ -252,7 +252,7 @@ export class UserManagementService extends ApiService {
                 Authorization: 'Bearer ' + access_token
             })
         };
-        return this.http.get(GLOBAL.USER_API + 'users', httpOptions)
+        return this.http.get(GLOBAL.USER_API + 'users' + '?' + option , httpOptions)
             .map(this.extractData)
             .catch(err => {
                 return this.handleError(err);

@@ -42,6 +42,7 @@ export class VariantComponent implements OnInit {
   optionSetID: number;
   OoptionSetID: number;
   OotionID: number;
+  enableOperation = false;
 
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
@@ -436,6 +437,14 @@ export class VariantComponent implements OnInit {
     if (res) {
       this.optionID = res.options[0].id;
       return res.options[0].value;
+    }
+  }
+
+  operationSelected(opt) {
+    if (opt == 1) {
+      this.enableOperation = false;
+    } else {
+      this.enableOperation = true;
     }
   }
 }

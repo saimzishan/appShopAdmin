@@ -30,6 +30,11 @@ export class UsersManagementComponent implements OnInit {
   user: User;
   dataSource;
   roles = new FormControl();
+  selectedOption = 1;
+  option = 'staff_users';
+  role = true;
+  level = false;
+
   constructor(
     private userMService: UserManagementService,
     private spinnerService: SpinnerService,
@@ -42,9 +47,18 @@ export class UsersManagementComponent implements OnInit {
     this.getUserList();
   }
 
+  view(value) {
+    if (value == 1) {
+      this.option = "staff_users";
+    } else {
+      this.option = "other_users";
+    }
+    this.getUserList();
+  }
+
   getUserList() {
     this.spinnerService.requestInProcess(true);
-    this.userMService.getUsers().subscribe(
+    this.userMService.getUsers(this.option).subscribe(
       (res: any) => {
         let data = res.res.data;
         if (data) {

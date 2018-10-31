@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6" *ngIf="role">
                                 <mat-form-field class="w-100-p">
                                     <mat-select required #roles="ngModel" name="roles" placeholder="Roles" [(ngModel)]="user.roles" multiple>
                                         <mat-select-trigger>
@@ -91,7 +91,7 @@
                                 <span *ngIf="roles.touched && roles.errors?.required;" class="inline-icon error red-fg">
                                     <span>Roles are required.</span>!</span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6" *ngIf="level">
                                 <mat-form-field class="w-100-p">
                                     <mat-select required #level="ngModel" name="level" placeholder="Select Level" [(ngModel)]="user.level">
                                         <mat-option *ngFor="let level of levels" [value]="level.id">
