@@ -296,6 +296,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   remove(id) {
+    if (this.categorie.children.length > 0) {
+      this.snotifyService.warning('Please delete children first', 'Warning!');
+      return;
+    }
     this.categoryService.delete(id).subscribe(
       (res: any) => {
         this.snotifyService.success(res.res.message, "Success !");

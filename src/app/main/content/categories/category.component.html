@@ -72,7 +72,7 @@
 
             <div class="row" *ngIf="!checkPageType() || (!categorie.image)">
               <div class="col-md-12" style="text-align:center">
-                <label>Small (180x135)</label>
+                <label>Maximum size is 2MB</label>
                 <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
                   (success)="onUploadSuccess($event)"></div>
               </div>
