@@ -28,12 +28,69 @@
                 </mat-form-field>
             </div>
             <!-- / SEARCH -->
-        
+
+            <!-- <ng-container cdkColumnDef="action">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
+                <mat-cell fxHide fxShow.gt-xs>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item [routerLink]="'/products/new'">
+                            <mat-icon>add_box</mat-icon>
+                            <span>ADD NEW PRODUCT</span>
+                        </button>
+                        <button mat-menu-item>
+                            <mat-icon>add_box</mat-icon>
+                            <span>ADD BULK PRODUCT</span>
+                        </button>
+                    </mat-menu>
+                </mat-cell>
+            </ng-container> -->
+<!--         
             <button mat-raised-button [routerLink]="'/products/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW PRODUCT</span>
-            </button>
-        
+            </button> -->
+            <div class="col-2">
+                <ng-container cdkColumnDef="action">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs style="margin-left: 185px">Action</mat-header-cell>
+                    <mat-cell fxHide fxShow.gt-xs>
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item [routerLink]="'/products/new'">
+                                <mat-icon>add_box</mat-icon>
+                                <span>ADD NEW PRODUCT</span>
+                            </button>
+                            <button mat-menu-item [routerLink]="'/bulkproduct'">
+                                <mat-icon>add_box</mat-icon>
+                                <span>ADD BULK PRODUCT</span>
+                            </button>
+                        </mat-menu>
+                    </mat-cell>
+                </ng-container>
+            </div>
+            <!-- <ng-container cdkColumnDef="action">
+                <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
+                <mat-cell fxHide fxShow.gt-xs>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon>more_horiz</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item [routerLink]="'/products/new'">
+                            <mat-icon>add_box</mat-icon>
+                            <span>ADD NEW PRODUCT</span>
+                        </button>
+                        <button mat-menu-item>
+                            <mat-icon>add_box</mat-icon>
+                            <span>ADD BULK PRODUCT</span>
+                        </button>
+                    </mat-menu>
+                </mat-cell>
+            </ng-container> -->
         </div>
+
         <!-- / HEADER -->
 
         <!-- CONTENT CARD -->

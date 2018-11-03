@@ -95,6 +95,10 @@ const appRoutes: Routes = [
     path: "pages",
     loadChildren: "./main/content/pages/pages.module#FusePagesModule"
   },
+  {
+    path: "bulkproduct",
+    loadChildren: "./main/content/products/bulk-product/bulkproduct.module#BulkProductModule"
+  },
   /*
   {
     path: 'components',
