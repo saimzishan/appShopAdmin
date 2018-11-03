@@ -1,0 +1,47 @@
+<div id="products" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+                <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">store</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Bulk Product</span>
+            </div>
+        </div>         
+
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <mat-card>
+            <mat-card-content>
+                    <div class="row">
+                            <div class="col-md-12" style="text-align:center">
+                                <label>Upload .csv File</label>
+                                <div class="center">
+                                    <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </mat-card-content>
+            <mat-card-actions>
+                    <div style="text-align: right;">
+                        <button class="btn btn-primary" mat-raised-button [routerLink]="'/products'">Cancel</button>
+                        <button mat-raised-button style="background-color: #3E81CC; color: white">Upload</button>
+                    </div>
+                </mat-card-actions>
+        </mat-card> 
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
