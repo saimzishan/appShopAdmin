@@ -4,6 +4,7 @@ export class GLOBAL {
   // public static USER_API = "http://18.217.12.17/api/public/api/auth/";
   public static USER_API =
     "http://124.109.39.22:18089/onlineappshopapi/public/api/auth/";
+    // "http://1f7bf70e.ngrok.io/api/auth/";
   // public static USER_API = "http://b3779507.ngrok.io/api/auth/";
   // public static USER_API = "http://127.0.0.1:8080/api/auth/";
 

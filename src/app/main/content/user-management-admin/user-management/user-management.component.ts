@@ -36,6 +36,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   userID: any;
   confirmPassword: string;
   isMatch: any;
+  role = true;
+  level = true;
 
   constructor(
     private userMService: UserManagementService,
@@ -72,6 +74,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.spinnerService.requestInProcess(true);
     this.sub = this.userMService.getUserById(id).subscribe(
       (res: any) => {
+        // console.log();
+        if (res.res.data.roles[0].name === 'Admin') {
+          this.role = true;
+          this.level = false;
+        } else {
+          this.role = false;
+          this.level = true;
+        }
         this.user = new User(res.res.data);
         if (this.pageType === "edit") {
           let selectedRoles = this.user.roles;

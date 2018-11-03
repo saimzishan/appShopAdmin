@@ -143,6 +143,14 @@
                             <label for="pwd"> &nbsp; discount off each individual item &nbsp;&nbsp;&nbsp;
                             </label>
                         </div>
+                        <div>
+                            <mat-form-field class="w-100-p" style="padding: 50px">
+                                <mat-select placeholder="Change by" name="change_by" [(ngModel)]="bluckPrice.changed_by" style="margin-top: 5px;">
+                                    <mat-option [value]="1">Absolute</mat-option>
+                                    <mat-option [value]="2">Percentage</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                         <button type="submit" class="btn btn-info btn-group-vertical" style="border-radius: 50%; padding: 0px !important;"
                             (click)="addBluckPrice(bluckPriceForm)">
                             <i class="material-icons">
@@ -155,27 +163,35 @@
                 <div class="col-md-12">
                     <ng-container *ngFor="let row of product.supplier.bulk_prices; let i=index">
                         <div class="row" style="text-align: left">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <mat-form-field>
                                     <input matInput placeholder="Purchases between" value="{{row.from}}" #p_between
                                         name="p_between" style="margin-left: 91%;">
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <mat-form-field>
                                     <input placeholder="and" #and name="and" matInput value="{{row.to}}">
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <mat-form-field>
                                     <input placeholder="of this product will receive a % discount off each individual item"
                                         #discount name="discount" matInput value="{{row.discount}}">
                                 </mat-form-field>
                             </div>
-                            <div class="row">
+                            <div class="col-md-3" style="margin-top: -7px">
+                                <mat-form-field class="w-100-p">
+                                    <mat-select placeholder="Change by" name="changed_by" #changed_by [value]="row.changed_by" style="margin-top: 5px;">
+                                        <mat-option [value]="1">Absolute</mat-option>
+                                        <mat-option [value]="2">Percentage</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="row" style="margin-left: 20px">
                                 <div class="col-md-1" *ngIf="pageType === 'edit'">
                                     <button class="btn btn-info btn-group-vertical" style="border-radius: 50%; margin-left:-30px; padding: 0px !important"
-                                        type="submit" class="btn btn-info btn-xs" (click)="editBulkPrice(row.id , p_between.value , and.value , discount.value)">
+                                        type="submit" class="btn btn-info btn-xs" (click)="editBulkPrice(row.id , p_between.value , and.value , discount.value , changed_by.value)">
                                         <i class="material-icons" style="margin-top: 2px ; font-size: 20px">
                                             create
                                         </i></button>

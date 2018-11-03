@@ -91,11 +91,13 @@ export class BluckPrice {
   from: number;
   to: number;
   discount: number;
+  changed_by: number | string;
   constructor(bluckPrice?) {
     bluckPrice = bluckPrice || {};
     this.from = bluckPrice.from;
     this.to = bluckPrice.to;
     this.discount = bluckPrice.discount;
+    this.changed_by = bluckPrice.changed_by || 1;
   }
 }
 export class Image {

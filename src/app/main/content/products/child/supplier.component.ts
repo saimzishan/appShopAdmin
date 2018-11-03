@@ -85,6 +85,7 @@ export class SupplierFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.product);
     this.route.params.subscribe(params => {
       this.params = params;
       if (this.params) {
@@ -96,6 +97,7 @@ export class SupplierFormComponent implements OnInit {
     if (this.params.supplier_id) {
       this.makeArrayOfSides();
       this.converter();
+      this.bulkPriceConvertor();
     }
 
     if (!this.params.supplier_id && this.pageType === 'edit') {
@@ -612,12 +614,13 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  editBulkPrice(id, from, to, discount) {
+  editBulkPrice(id, from, to, discount , changed_by) {
     const obj = {
       bulck_p_id: id,
       from: from,
       to: to,
-      discount: discount
+      discount: discount,
+      changed_by: changed_by
     };
     this.spinnerService.requestInProcess(true);
     this.productService.saveProduct(obj, "p_bulck_price").subscribe(
@@ -707,6 +710,17 @@ export class SupplierFormComponent implements OnInit {
     });
     this.product.supplier.class = temp;
   }
+
+  bulkPriceConvertor() {
+    this.product.supplier.bulk_prices.forEach(c => {
+      if (c.changed_by === "absolute") {
+        c.changed_by = 1;
+      } else if (c.changed_by === "percentage") {
+        c.changed_by = 2;
+      }
+      console.log(c.changed_by);
+    });
+    }
 
   makeArrayOfSides() {
     if(this.pageType === 'edit'){

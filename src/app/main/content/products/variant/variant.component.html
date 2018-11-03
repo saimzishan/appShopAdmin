@@ -89,7 +89,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation" style="margin-top: 5px;">
+                                        <mat-select placeholder="Operation" name="operation" (change)="operationSelected($event.value)" [(ngModel)]="variant.operation"
+                                            style="margin-top: 5px;">
                                             <mat-option [value]="1">None</mat-option>
                                             <mat-option [value]="2">Add</mat-option>
                                             <mat-option [value]="3">Subtract</mat-option>
@@ -100,7 +101,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.changed_by" style="margin-top: 5px;">
+                                        <mat-select placeholder="Change by" [disabled]="!enableOperation" name="change_by" [(ngModel)]="variant.changed_by" style="margin-top: 5px;">
                                             <mat-option [value]="1">Absolute</mat-option>
                                             <mat-option [value]="2">Percentage</mat-option>
                                         </mat-select>
@@ -108,8 +109,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <input matInput placeholder="Amount" #amount="ngModel" name="amount" type="number"
-                                            [(ngModel)]="variant.amount" min="0">
+                                        <input matInput [disabled]="!enableOperation" placeholder="Amount" #amount="ngModel" name="amount" type="number" [(ngModel)]="variant.amount"
+                                            min="0">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -182,7 +183,6 @@
                     <thead>
                         <tr>
                             <th>Option Set</th>
-                            <th>Options</th>
                             <th>Sku</th>
                             <th>Weight</th>
                             <th>Depth</th>
@@ -206,14 +206,9 @@
                             <tr style="cursor:pointer" (click)="selectVariant(variant)">
                                 <td>
                                     <ng-container *ngFor="let v of variant.product_variant_attributes">
-                                        {{getOptionSetName(v.option_set_id)}}
-                                       
-                                            {{getOptionValue(v.option_set_id)}}
+                                        {{getOptionSetName(v.option_set_id)}} - {{getOptionValue(v.option_set_id)}}
                                         <br>
                                     </ng-container>
-                                </td>
-                                <td>
-                                    <!--  -->
                                 </td>
                                 <td>{{variant.sku}}</td>
                                 <td>{{variant.weight}}</td>

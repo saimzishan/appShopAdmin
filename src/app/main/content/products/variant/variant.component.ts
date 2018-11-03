@@ -42,6 +42,7 @@ export class VariantComponent implements OnInit {
   optionSetID: number;
   OoptionSetID: number;
   OotionID: number;
+  enableOperation = false;
 
   @Input()
   option_with_value: OptionSet[] = new Array<OptionSet>();
@@ -124,7 +125,6 @@ export class VariantComponent implements OnInit {
       this.variant.stock = 0;
       this.variant.low_level_stock = 0;
     }
-
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
     let pVariants = new ProductVariant();
@@ -437,6 +437,14 @@ export class VariantComponent implements OnInit {
     if (res) {
       this.optionID = res.options[0].id;
       return res.options[0].value;
+    }
+  }
+
+  operationSelected(opt) {
+    if (opt == 1) {
+      this.enableOperation = false;
+    } else {
+      this.enableOperation = true;
     }
   }
 }
