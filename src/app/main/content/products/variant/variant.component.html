@@ -49,8 +49,7 @@
                                 <ng-container *ngIf="isNewPressed">
                                     <div class="col-md-6" *ngFor="let optionSet of productOptionSetAndValue">
                                         <mat-form-field class="w-100-p">
-                                            <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)"
-                                                required>
+                                            <mat-select placeholder="Select {{optionSet.name}}" (change)="addOptionSet($event.value, optionSet.id)" required>
                                                 <mat-option *ngFor="let opt of getOptions(optionSet.id)" [value]="opt.id">
                                                     {{opt.value}}</mat-option>
                                             </mat-select>
@@ -90,8 +89,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation"
-                                            style="margin-top: 5px;">
+                                        <mat-select placeholder="Operation" name="operation" [(ngModel)]="variant.operation" style="margin-top: 5px;">
                                             <mat-option [value]="1">None</mat-option>
                                             <mat-option [value]="2">Add</mat-option>
                                             <mat-option [value]="3">Subtract</mat-option>
@@ -102,8 +100,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.changed_by"
-                                            style="margin-top: 5px;">
+                                        <mat-select placeholder="Change by" name="change_by" [(ngModel)]="variant.changed_by" style="margin-top: 5px;">
                                             <mat-option [value]="1">Absolute</mat-option>
                                             <mat-option [value]="2">Percentage</mat-option>
                                         </mat-select>
@@ -128,16 +125,15 @@
                             <div class="row" *ngIf="variant.track_stock">
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <input matInput #stock="ngModel" name="stock" [(ngModel)]="variant.stock"
-                                            placeholder="Stock" required>
+                                        <input matInput #stock="ngModel" name="stock" [(ngModel)]="variant.stock" placeholder="Stock" required>
                                     </mat-form-field>
                                     <span *ngIf="stock.touched && stock.errors?.required;" class="inline-icon error">
                                         <span>Please enter Stock.</span>!</span>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="w-100-p">
-                                        <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="variant.low_level_stock"
-                                            placeholder="Low level Stock" required>
+                                        <input matInput #low_level_stock="ngModel" name="low_level_stock" [(ngModel)]="variant.low_level_stock" placeholder="Low level Stock"
+                                            required>
                                     </mat-form-field>
                                     <span *ngIf="low_level_stock.touched && low_level_stock.errors?.required;" class="inline-icon error">
                                         <span>Please enter Low Level Stock.</span>!</span>
@@ -146,12 +142,9 @@
                         </mat-card-content>
                         <div class="row">
                             <div class="col-md-12" style="text-align:center">
-                                <label>Maximum 5
-                                    images and
-                                    image maximum size 2 MB/image</label>
+                                <label>Maximum 5 images and image maximum size 2 MB/image</label>
                                 <div class="center">
-                                    <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
-                                        (success)="onUploadSuccess($event)">
+                                    <div class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
 
                                     </div>
                                 </div>
@@ -165,8 +158,7 @@
                                     <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
                                     <br>
                                     <br>
-                                    <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;"
-                                        class="btn btn-danger btn-xs">
+                                    <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
                                         <i class="material-icons">
                                             delete
                                         </i>
@@ -179,11 +171,9 @@
                             <div style="text-align: right;">
                                 <button class="btn btn-primary" mat-raised-button (click)="cancelVariant()">Cancel</button>
 
-                                <button mat-raised-button style="background-color: #3E81CC; color: white" *ngIf="isNewPressed"
-                                    (click)="mangeOption(skuForm);">Add</button>
+                                <button mat-raised-button style="background-color: #3E81CC; color: white" *ngIf="isNewPressed" (click)="mangeOption(skuForm);">Add</button>
 
-                                <button mat-raised-button style="background-color: #3E81CC;color: white" *ngIf="isEdit"
-                                    (click)="editVariant(skuForm);">Save</button>
+                                <button mat-raised-button style="background-color: #3E81CC;color: white" *ngIf="isEdit" (click)="editVariant(skuForm);">Save</button>
                             </div>
                         </mat-card-actions>
                     </form>
@@ -191,6 +181,8 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Option Set</th>
+                            <th>Options</th>
                             <th>Sku</th>
                             <th>Weight</th>
                             <th>Depth</th>
@@ -212,22 +204,30 @@
                         </tr>
                         <ng-container *ngFor="let variant of productVariants.variants">
                             <tr style="cursor:pointer" (click)="selectVariant(variant)">
+                                <td>
+                                    <ng-container *ngFor="let v of variant.product_variant_attributes">
+                                        {{getOptionSetName(v.option_set_id)}}
+                                       
+                                            {{getOptionValue(v.option_set_id)}}
+                                        <br>
+                                    </ng-container>
+                                </td>
+                                <td>
+                                    <!--  -->
+                                </td>
                                 <td>{{variant.sku}}</td>
                                 <td>{{variant.weight}}</td>
                                 <td>{{variant.depth}}</td>
                                 <td>{{variant.width}}</td>
                                 <td>{{variant.height}}</td>
-                                <td>{{variant.operation === 2 ? 'Add' :variant.operation === 3?
-                                    'Subtract' : 'None'}}</td>
-                                <td>{{variant.changed_by === 1 ? 'Absolute' :variant.changed_by === 2?
-                                    'Percentage' : 'None'}}</td>
+                                <td>{{variant.operation === 2 ? 'Add' :variant.operation === 3? 'Subtract' : 'None'}}</td>
+                                <td>{{variant.changed_by === 1 ? 'Absolute' :variant.changed_by === 2? 'Percentage' : 'None'}}</td>
                                 <td>{{variant.amount}}</td>
                                 <td>{{variant.stock}}</td>
                                 <td>{{variant.low_level_stock}}</td>
                                 <td>{{variant.images.length}}</td>
                                 <td>
-                                    <button (click)="deleteVariant(variant.id)" type="btn" style="margin-bottom: 15px;"
-                                        class="btn btn-danger btn-xs">
+                                    <button (click)="deleteVariant(variant.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
                                         <i class="material-icons">delete</i>
                                     </button>
                                 </td>

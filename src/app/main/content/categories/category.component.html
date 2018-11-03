@@ -33,13 +33,13 @@
       <!-- / APP TITLE -->
 
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="!checkPageType()" (click)="store()">
-        <span>ADD</span>
+        <span>SAVE</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()" (click)="deleteCate(categorie.id)">
         <span>DELETE</span>
       </button>
       <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="checkPageType()" (click)="update()">
-        <span>SAVE</span>
+        <span>UPDATE</span>
       </button>
     </div>
     <!-- / HEADER -->
@@ -72,7 +72,7 @@
 
             <div class="row" *ngIf="!checkPageType() || (!categorie.image)">
               <div class="col-md-12" style="text-align:center">
-                <label>Small (180x135)</label>
+                <label>Maximum size is 2MB</label>
                 <div class="dropzone" [dropzone]="config" (canceled)="onCanceled($event)" (error)="onUploadError($event)"
                   (success)="onUploadSuccess($event)"></div>
               </div>

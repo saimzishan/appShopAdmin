@@ -11,6 +11,7 @@ import { ProductsService } from "./products.service";
 import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 @Component({
   selector: "app-products",
@@ -54,6 +55,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.index();
+    console.log(AuthGuard.getToken());
   }
 
   index() {
