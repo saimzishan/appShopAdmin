@@ -246,4 +246,14 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   onUploadError(event: any) {}
   onUploadSuccess(event: any) {}
+
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
+  }
 }

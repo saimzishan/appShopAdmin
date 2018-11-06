@@ -156,7 +156,7 @@
 
                             <ng-container *ngFor="let image of variant.images">
                                 <div class="col-md-2">
-                                    <img src="{{baseURL}}{{image.medium}}" style="width: 150px; height: 150px;">
+                                    <img src="{{imageView(image.medium)}}" style="width: 150px; height: 150px;">
                                     <br>
                                     <br>
                                     <button (click)="removeImage(image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">

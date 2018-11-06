@@ -260,6 +260,16 @@ export class SupplierComponent implements OnInit, OnDestroy {
   onUploadSuccess(evt) { }
   onCanceled(event) { }
 
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
+  }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }

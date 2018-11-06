@@ -81,7 +81,7 @@
             <div *ngIf="true" class="row" style="text-align:center">
               <ng-container *ngIf="pageType === 'edit' && this.hasImage && this.supplier.image.id !== -1">
                 <div class="col-md-2">
-                  <img src="{{baseURL}}{{supplier.image.small}}" width="150" height="150">
+                  <img src="{{imageView(supplier.image.small)}}" width="150" height="150">
                   <br>
                   <br>
                   <button (click)="removeImage(supplier.image.id)" type="btn" class="btn btn-danger btn-xs">

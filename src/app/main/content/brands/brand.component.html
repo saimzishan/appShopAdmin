@@ -76,7 +76,7 @@
     
                             <ng-container *ngIf="pageType === 'edit' && this.hasImage && this.brand.image.id !== -1">
                                 <div class="col-md-2">
-                                    <img src="{{baseURL}}{{brand.image.small}}" style="width: 150px; height: 150px;">
+                                    <img src="{{imageView(brand.image.small)}}" style="width: 150px; height: 150px;">
                                     <br>
                                     <br>
                                     <button (click)="removeImage(brand.image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">

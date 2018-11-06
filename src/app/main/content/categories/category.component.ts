@@ -366,4 +366,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
   getPCategoryName(id) {
     return this.categories.find(c => c.id === id);
   }
+
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
+  }
 }

@@ -84,7 +84,8 @@
             <div class="row" *ngIf="checkPageType() && categorie.image" style="text-align:center">
               <ng-container>
                 <div class="col-md-2">
-                  <img src="{{baseURL}}{{categorie.image.small}}" width="150" height="150">
+                  <!-- <img src="{{baseURL}}{{categorie.image.small}}" width="150" height="150"> -->
+                  <img src="{{imageView(categorie.image.small)}}" width="150" height="150">
                   <br>
                   <br>
                   <button (click)="deleteCateImage(categorie.image.id)" type="btn" class="btn btn-danger btn-xs">

@@ -87,7 +87,7 @@
 
                 <ng-container *ngFor="let image of product.product_images">
                     <div class="col-md-2">
-                        <img src="{{baseURL}}{{image.medium}}" width="150" height="150">
+                        <img src="{{imageView(image.medium)}}" width="150" height="150">
                         <br>
                         <br>
                         <button (click)="removeImage(image.id)" *ngIf="this.pageType === 'edit' && this.params.supplier_id"
@@ -413,7 +413,8 @@
 
                     <ng-container *ngFor="let image of product.supplier.images">
                         <div class="col-md-2">
-                            <img src="{{baseURL}}{{image.medium}}" width="150" height="150">
+                            <!-- <img src="{{baseURL}}{{image.medium}}" width="150" height="150"> -->
+                            <img src="{{imageView(image.medium)}}" width="150" height="150">
                             <br>
                             <br>
                             <button (click)="removeImage(image.id)" type="btn" class="btn btn-danger btn-xs">

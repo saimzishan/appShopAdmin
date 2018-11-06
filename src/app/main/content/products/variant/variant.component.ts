@@ -447,6 +447,16 @@ export class VariantComponent implements OnInit {
       this.enableOperation = true;
     }
   }
+
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
+  }
 }
 
 export class Options {

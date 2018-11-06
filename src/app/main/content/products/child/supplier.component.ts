@@ -758,4 +758,14 @@ export class SupplierFormComponent implements OnInit {
       this.sTempImages.splice(index, 1);
     }
   }
+
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
+  }
 }
