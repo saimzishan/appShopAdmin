@@ -72,7 +72,7 @@ store() {
     errors => {
       this.spinnerService.requestInProcess(false);
       let e = errors.error;
-      e = JSON.stringify(e);
+      e = JSON.stringify(e.message);
       this.snotifyService.error(e, "Error !");
     }
   );
