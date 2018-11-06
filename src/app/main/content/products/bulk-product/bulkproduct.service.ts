@@ -13,20 +13,27 @@ import { ApiService } from "../../../../api/api.service";
 
 @Injectable()
 export class BulkProductService extends ApiService {
-  products: any[];
-  onProductsChanged: BehaviorSubject<any> = new BehaviorSubject({});
 
-  // constructor(
-  //     private http: HttpClient
-  // )
-  // {
-  // }
-
-  /**
-   * Resolve
-   * @param {ActivatedRouteSnapshot} route
-   * @param {RouterStateSnapshot} state
-   * @returns {Observable<any> | Promise<any> | any}
-   */
+  store(bulkproduct) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .post(GLOBAL.USER_API + "bulkUploads", bulkproduct, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 
 }
