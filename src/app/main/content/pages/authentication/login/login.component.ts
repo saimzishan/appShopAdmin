@@ -111,7 +111,6 @@ export class FuseLoginComponent implements OnInit {
       (res: any) => {
         if (!res.error) {
         localStorage.removeItem("currentUser");
-        console.log(res.res);
           localStorage.setItem("currentUser", JSON.stringify(res.res));
           this.router.navigate(["/user-management"]);
         }

@@ -77,10 +77,7 @@ export class VariantComponent implements OnInit {
 
   ngOnInit() {
     this.setProductSupplierIds();
-    console.log(this.productVariants);
-    // console.log(this.getOptionName());
     // this.getOptionName(1);
-    // console.log(this.productVariants);
   }
 
   getProductOptionSetWithValue() {

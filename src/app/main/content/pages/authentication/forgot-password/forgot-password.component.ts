@@ -75,7 +75,6 @@ export class FuseForgotPasswordComponent implements OnInit {
         this.spinnerService.requestInProcess(true);
         this.userServices.forgotPassword(this.forgetPass).subscribe(
             (res: any) => {
-                console.log(res);
                 if (res.res.statusCode === '1') {
                     this.snotifyService.success('Link Sent Succesfully !');
                     this.hideFieldAndButton = true;

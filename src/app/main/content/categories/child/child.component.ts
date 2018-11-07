@@ -93,7 +93,6 @@ export class CategoryChildComponent implements OnInit {
   }
 
   editCategory(id) {
-    // console.log(id);
     this.router.navigate(["/categories/" + id]);
   }
 }

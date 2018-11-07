@@ -85,7 +85,6 @@ export class SupplierFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.product);
     this.route.params.subscribe(params => {
       this.params = params;
       if (this.params) {
@@ -394,7 +393,6 @@ export class SupplierFormComponent implements OnInit {
   }
 
   onCanceled(event) {
-    console.log(event);
   }
 
   addBluckPrice(form: NgForm) {
@@ -459,7 +457,6 @@ export class SupplierFormComponent implements OnInit {
           },
           error => {
             this.spinnerService.requestInProcess(false);
-            console.log(error);
           }
         );
       }
@@ -496,7 +493,6 @@ export class SupplierFormComponent implements OnInit {
             },
             error => {
               this.spinnerService.requestInProcess(false);
-              console.log(error);
             }
           );
       }
@@ -576,7 +572,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-        console.log(errors.error.message);
       }
     );
   }
@@ -609,7 +604,6 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.message);
         this.snotifyService.error(e, "Error !");
-        console.log(errors.error.message);
       }
     );
   }
@@ -718,7 +712,6 @@ export class SupplierFormComponent implements OnInit {
       } else if (c.changed_by === "percentage") {
         c.changed_by = 2;
       }
-      console.log(c.changed_by);
     });
     }
 

@@ -9,7 +9,7 @@
 
         <!-- HEADER -->
         <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
-        
+
             <!-- APP TITLE -->
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
                 <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
@@ -24,7 +24,7 @@
                     <mat-icon class="secondary-text">search</mat-icon>
                 </label>
                 <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-                    <input id="search" matInput  (keyup)="applyFilter($event.target.value)" placeholder="Search">
+                    <input id="search" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
                 </mat-form-field>
             </div>
             <!-- / SEARCH -->
@@ -47,7 +47,7 @@
                     </mat-menu>
                 </mat-cell>
             </ng-container> -->
-<!--         
+            <!--         
             <button mat-raised-button [routerLink]="'/products/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW PRODUCT</span>
             </button> -->
@@ -138,7 +138,7 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Active Column -->
+                <!-- supplier Column -->
                 <ng-container cdkColumnDef="supplier">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
                     <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
@@ -149,17 +149,16 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        
                     </mat-cell>
                 </ng-container>
 
                 <!-- Active Column -->
                 <ng-container cdkColumnDef="active">
-                        <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
-                        <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                                <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)" ></mat-checkbox>
-                        </mat-cell>
-                    </ng-container>
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+                        <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
 
                 <!-- Action Column -->
                 <ng-container cdkColumnDef="action">

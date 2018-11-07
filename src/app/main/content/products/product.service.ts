@@ -140,7 +140,6 @@ export class ProductService extends ApiService {
           this.category = response.data;
           this.onCategoryChanged.next(this.category);
           resolve(response);
-          // console.log(this.category);
         }, reject);
     });
   }

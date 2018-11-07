@@ -128,7 +128,6 @@ export class SupplierService extends ApiService {
         return response;
       })
       .catch(error => {
-        console.log(error);
         throw error.message || error;
       });
   }

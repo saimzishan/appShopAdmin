@@ -55,7 +55,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.index();
-    console.log(AuthGuard.getToken());
   }
 
   index() {
@@ -129,7 +128,6 @@ export class ProductsComponent implements OnInit {
   }
 
   isActiveProduct(event, p_id) {
-    console.log(event.checked+ '$'+p_id);
     this.productsService.isProductActive({active: event.checked}, p_id).subscribe(
       (res: any) => {
         if (!res.status) {

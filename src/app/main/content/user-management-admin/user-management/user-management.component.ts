@@ -74,7 +74,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.spinnerService.requestInProcess(true);
     this.sub = this.userMService.getUserById(id).subscribe(
       (res: any) => {
-        // console.log();
         if (res.res.data.roles[0].name === 'Admin') {
           this.role = true;
           this.level = false;
