@@ -42,6 +42,7 @@ export class SupplierFormComponent implements OnInit {
   categoryNodes: any[] = [];
   parentCat: any;
   category_id: number;
+  checkChild;
   product_id: number;
   deleteButton = false;
   categoryOption: ITreeOptions = {
@@ -244,13 +245,17 @@ export class SupplierFormComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-        // this.notificationServiceBus.launchNotification(true, e);
       }
     );
   }
   activeNodes(treeModel: any) {
     this.parentCat = treeModel.activeNodes[0].data.name;
-    this.category_id = treeModel.activeNodes[0].data.my_id;
+    if (treeModel.activeNodes[0].data.hasChildren === true) {
+      this.snotifyService.warning('Please Select Child Category');
+      this.parentCat = '';
+    } else {
+      this.category_id = treeModel.activeNodes[0].data.my_id;
+    }
   }
   onProductSaved(obj) {
     this.productSaved.emit(obj);
@@ -261,7 +266,6 @@ export class SupplierFormComponent implements OnInit {
       this.validateForm(form);
       return;
     }
-
     if (!this.category_id) {
       this.snotifyService.warning("Please Select a category");
       return;
