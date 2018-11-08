@@ -99,6 +99,10 @@ const appRoutes: Routes = [
     path: "bulkproduct",
     loadChildren: "./main/content/products/bulk-product/bulkproduct.module#BulkProductModule"
   },
+  {
+    path: "product",
+    loadChildren: "./main/content/product-class/product-class.module#ProductClassModule"
+  },
   /*
   {
     path: 'components',

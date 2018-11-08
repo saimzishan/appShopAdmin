@@ -14,7 +14,14 @@
             <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
                 <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
                 <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_cart</mat-icon>
-                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Products</span>
+                <!-- <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Products</span> -->
+                <mat-form-field>
+                    <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
+                        <mat-option [value]="1">Products</mat-option>
+                        <mat-option [value]="2">Search</mat-option>
+                        <!-- <mat-option [value]="3">Classes</mat-option> -->
+                    </mat-select>
+                </mat-form-field>
             </div>
             <!-- / APP TITLE -->
 
@@ -90,6 +97,42 @@
                 </mat-cell>
             </ng-container> -->
         </div>
+        <mat-card *ngIf="optionSelection">
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field>
+                                <mat-select placeholder="Select Supplier">
+                                    <mat-option [value]="1">Suppliers</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                    <div class="col-5">
+                        <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                            <mat-form-field>
+                                <mat-select placeholder="Select Class">
+                                    <mat-option [value]="slider">Slider</mat-option>
+                                    <mat-option [value]="featured">Featured</mat-option>
+                                    <mat-option [value]="on-sale">On Sale</mat-option>
+                                    <mat-option [value]="promoted">Promoted</mat-option>
+                                    <mat-option [value]="new-arrival">New Arrival</mat-option>
+                                    <mat-option [value]="banner">Banner</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <br>
 
         <!-- / HEADER -->
 

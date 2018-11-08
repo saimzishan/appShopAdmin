@@ -356,7 +356,7 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-  onUploadError(evt) {}
+  onUploadError(evt) { }
   onUploadSuccess(evt) {
     // this.image.base64String = evt[0].dataURL.split(",")[1];
     // this.image.content_type = evt[0].type.split("/")[1];
@@ -550,7 +550,7 @@ export class SupplierFormComponent implements OnInit {
 
     let object = {
       id: this.product_id,
-      product_images:this.pImages,
+      product_images: this.pImages,
       category_id: this.category_id,
       active: this.product.active,
       name: this.product.name,
@@ -612,7 +612,7 @@ export class SupplierFormComponent implements OnInit {
     );
   }
 
-  editBulkPrice(id, from, to, discount , changed_by) {
+  editBulkPrice(id, from, to, discount, changed_by) {
     const obj = {
       bulck_p_id: id,
       from: from,
@@ -684,7 +684,7 @@ export class SupplierFormComponent implements OnInit {
 
   }
 
-  addBulkPricetoServer() {}
+  addBulkPricetoServer() { }
 
   converter() {
     let temp = [];
@@ -701,8 +701,10 @@ export class SupplierFormComponent implements OnInit {
         c = 5;
       } else if (c === "add-on") {
         c = 6;
-      } else if (c === "none") {
+      } else if (c === "banner") {
         c = 7;
+      } else if (c === "none") {
+        c = 8;
       }
       temp.push(c);
     });
@@ -717,10 +719,10 @@ export class SupplierFormComponent implements OnInit {
         c.changed_by = 2;
       }
     });
-    }
+  }
 
   makeArrayOfSides() {
-    if(this.pageType === 'edit'){
+    if (this.pageType === 'edit') {
       this.product.supplier.sides = this.product.supplier.sides.split(',');
     }
   }

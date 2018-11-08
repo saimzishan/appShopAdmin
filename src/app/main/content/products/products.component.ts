@@ -32,6 +32,10 @@ export class ProductsComponent implements OnInit {
     "action"
   ];
 
+  selectedOption = 1;
+  option;
+  optionSelection = false;
+
   @ViewChild(MatPaginator)
   paginator: MatPaginator;
   @ViewChild("filter")
@@ -169,5 +173,15 @@ export class ProductsComponent implements OnInit {
 
   pageChange(event) {
     this.getProductsWithPage(event.pageIndex + 1);
+  }
+
+  view(value) {
+    if (value == 1) {
+      this.option = "suppliers";
+      this.optionSelection = false;
+    } else {
+      this.option = "class";
+      this.optionSelection = true;
+    }
   }
 }
