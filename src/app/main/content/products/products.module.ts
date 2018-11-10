@@ -22,6 +22,7 @@ import { DROPZONE_CONFIG } from "ngx-dropzone-wrapper";
 import { TageComponent } from "./tage/tage.component";
 import { GLOBAL } from "../../../shared/globel";
 import { TagsService } from "../tags/tags.service";
+import { SuppliersService } from "../suppliers/suppliers.service";
 
 const routes = [
   {
@@ -63,6 +64,7 @@ const routes = [
     CategoriesService,
     DetectChangesService,
     TagsService,
+    SuppliersService,
     {
       provide: DROPZONE_CONFIG,
       useValue: GLOBAL.DEFAULT_DROPZONE_CONFIG

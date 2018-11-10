@@ -12,6 +12,7 @@ import { fuseAnimations } from "../../../core/animations";
 import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { AuthGuard } from "../../../guard/auth.guard";
+import { SuppliersService } from '../suppliers/suppliers.service';
 
 @Component({
   selector: "app-products",
@@ -48,9 +49,11 @@ export class ProductsComponent implements OnInit {
   totalItems: number;
   perPage: number;
   addedSuppliers: any[];
+  suppliers;
 
   constructor(
     private productsService: ProductsService,
+    private suppliersService: SuppliersService,
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     public cd: ChangeDetectorRef,
@@ -176,12 +179,42 @@ export class ProductsComponent implements OnInit {
   }
 
   view(value) {
-    if (value == 1) {
-      this.option = "suppliers";
+    if (value === 1) {
+      this.totalItems = 0;
+      this.index();
       this.optionSelection = false;
     } else {
-      this.option = "class";
       this.optionSelection = true;
     }
+  }
+
+  // getSuppliers() {
+  //   this.spinnerService.requestInProcess(true);
+  //   this.suppliersService.getSuppliers().subscribe(
+  //     (res: any) => {
+  //       this.suppliers = res.res.data.data;
+  //       this.spinnerService.requestInProcess(false);
+  //     },
+  //     errors => {
+  //       this.spinnerService.requestInProcess(false);
+  //       const e = errors.error.message;
+  //       this.snotifyService.error(e, "Error !");
+  //     }
+  //   );
+  // }
+
+  classSelected(class_name) {
+      this.spinnerService.requestInProcess(true);
+      this.productsService.getProductClassDetails(class_name).subscribe(
+        (res: any) => {
+          this.setDataSuorce(res.res.data);
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error.message;
+          this.snotifyService.error(e, "Error !");
+        }
+      );
   }
 }
