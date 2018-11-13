@@ -252,7 +252,7 @@ export class UserManagementService extends ApiService {
                 Authorization: 'Bearer ' + access_token
             })
         };
-        return this.http.get(GLOBAL.USER_API + 'users' + '?' + option , httpOptions)
+        return this.http.get(GLOBAL.USER_API + 'users' + option , httpOptions)
             .map(this.extractData)
             .catch(err => {
                 return this.handleError(err);

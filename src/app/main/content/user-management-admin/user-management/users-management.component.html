@@ -14,8 +14,9 @@
                 <!-- <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Users</span> -->
                 <mat-form-field>
                     <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
-                      <mat-option [value]="1">Staff</mat-option>
-                      <mat-option [value]="2">Users</mat-option>
+                      <mat-option [value]="1">All Users</mat-option>
+                      <mat-option [value]="2">Staff</mat-option>
+                      <mat-option [value]="3">Users</mat-option>
                     </mat-select>
                   </mat-form-field>
             </div>

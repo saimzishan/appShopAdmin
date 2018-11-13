@@ -30,8 +30,8 @@ export class UsersManagementComponent implements OnInit {
   user: User;
   dataSource;
   roles = new FormControl();
-  selectedOption = 1;
-  option = 'staff_users';
+  selectedOption = 2;
+  option = '?staff_users';
   role = true;
   level = false;
 
@@ -48,10 +48,12 @@ export class UsersManagementComponent implements OnInit {
   }
 
   view(value) {
-    if (value == 1) {
-      this.option = "staff_users";
+    if (value === 1) {
+      this.option = "";
+    } else if (value === 2) {
+      this.option = "?staff_users";
     } else {
-      this.option = "other_users";
+      this.option = "?other_users";
     }
     this.getUserList();
   }
@@ -61,14 +63,14 @@ export class UsersManagementComponent implements OnInit {
     this.userMService.getUsers(this.option).subscribe(
       (res: any) => {
         let data = res.res.data;
-        if (data) {
-          data.forEach(element => {
-            if (!element.active) {
-              let index = data.findIndex(u => u.id === element.id);
-              data.splice(index, 1);
-            }
-          });
-        }
+        // if (data) {
+        //   data.forEach(element => {
+        //     if (!element.active) {
+        //       let index = data.findIndex(u => u.id === element.id);
+        //       data.splice(index, 1);
+        //     }
+        //   });
+        // }
         this.setDataSource(data);
         this.spinnerService.requestInProcess(false);
       },

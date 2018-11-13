@@ -229,6 +229,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this.addPicture(iterator);
     }
     const data = this.categoryForm.getRawValue();
+    if (data.name === '') {
+      this.snotifyService.warning('Please Enter Category Name');
+      return;
+    }
     data["parent_id"] = this.parentCatId;
     data["image"] = this.category.image;
     this.categoryService.store(data).subscribe(
