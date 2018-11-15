@@ -15,7 +15,7 @@ import { GLOBAL } from "../../../shared/globel";
 
 const routes = [
   {
-    canActivate:[AuthGuard],
+    canActivate: [AuthGuard],
     path: "",
     component: CategoriesComponent
   },

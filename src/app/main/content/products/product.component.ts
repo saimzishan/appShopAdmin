@@ -189,6 +189,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
     );
   }
+  
   saveAndExit() {
     localStorage.removeItem("current_product");
     localStorage.removeItem("current_product_sp_images");

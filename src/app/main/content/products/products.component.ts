@@ -9,10 +9,13 @@ import {
 } from "@angular/core";
 import { ProductsService } from "./products.service";
 import { fuseAnimations } from "../../../core/animations";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { MatPaginator, MatSort, MatTableDataSource, MatDialogRef, MatDialog } from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { AuthGuard } from "../../../guard/auth.guard";
 import { SuppliersService } from '../suppliers/suppliers.service';
+import { SelectionModel } from "@angular/cdk/collections";
+import { GLOBAL } from "../../../shared/globel";
+import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-products",
@@ -23,13 +26,15 @@ import { SuppliersService } from '../suppliers/suppliers.service';
 export class ProductsComponent implements OnInit {
   dataSource;
   displayedColumns = [
+    "select",
     "name",
-    "category",
-    "brand",
+    "image",
+    "sku",
     "price",
-    "quantity",
+    "inventory",
     "supplier",
-    "active",
+    "classes",
+    "status",
     "action"
   ];
 
@@ -50,6 +55,13 @@ export class ProductsComponent implements OnInit {
   perPage: number;
   addedSuppliers: any[];
   suppliers;
+  enableUpdateFieldCard = false;
+
+  selection = new SelectionModel<Element>(true, []);
+
+  baseURL = GLOBAL.USER_IMAGE_API;
+
+  confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
 
   constructor(
     private productsService: ProductsService,
@@ -57,11 +69,33 @@ export class ProductsComponent implements OnInit {
     private spinnerService: SpinnerService,
     private snotifyService: SnotifyService,
     public cd: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.index();
+  }
+
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    if (this.selection.hasValue()) {
+      this.enableUpdateFieldCard = true;
+    } else {
+      this.enableUpdateFieldCard = false;
+    }
+    console.log(this.selection.hasValue());
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   index() {
@@ -216,5 +250,75 @@ export class ProductsComponent implements OnInit {
           this.snotifyService.error(e, "Error !");
         }
       );
+  }
+
+  deleteProduct() {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // this.removeProduct();
+      }
+      this.confirmDialogRef = null;
+    });
+  }
+
+  // removeProduct() {
+  //   this.spinnerService.requestInProcess(true);
+  //   this.productService.deleteProduct(+this.params.id).subscribe(
+  //     (res: any) => {
+  //       let e = res.res.message;
+  //       this.snotifyService.success(e, "Success !");
+  //       this.spinnerService.requestInProcess(false);
+  //       this.router.navigate(["/products"]);
+  //     },
+  //     errors => {
+  //       this.spinnerService.requestInProcess(false);
+  //       let e = errors.message;
+  //       this.snotifyService.error(e, "Error !");
+  //     }
+  //   );
+  // }
+
+  // converter() {
+  //   let temp = [];
+  //   this.product.supplier.class.forEach(c => {
+  //     if (c === "slider") {
+  //       c = 1;
+  //     } else if (c === "featured") {
+  //       c = 2;
+  //     } else if (c === "on-sale") {
+  //       c = 3;
+  //     } else if (c === "new-arrival") {
+  //       c = 4;
+  //     } else if (c === "promoted") {
+  //       c = 5;
+  //     } else if (c === "add-on") {
+  //       c = 6;
+  //     } else if (c === "banner") {
+  //       c = 7;
+  //     } else if (c === "none") {
+  //       c = 8;
+  //     }
+  //     temp.push(c);
+  //   });
+  //   this.product.supplier.class = temp;
+  // }
+
+  addClasses(value) {
+    console.log(value);
+  }
+
+  imageView(original_image) {
+    let spliting = original_image;
+    spliting = spliting.split('/');
+    if (spliting[0] === '') {
+      return this.baseURL + original_image;
+    } else {
+      return original_image;
+    }
   }
 }

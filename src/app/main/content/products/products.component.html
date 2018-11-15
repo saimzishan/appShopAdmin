@@ -110,18 +110,47 @@
                         </div>
 
                     </div> -->
-                        <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                            <mat-form-field>
-                                <mat-select placeholder="Select Class" (change)="classSelected($event.value)">
-                                    <mat-option value="slider">Slider</mat-option>
-                                    <mat-option value="featured">Featured</mat-option>
-                                    <mat-option value="on-sale">On Sale</mat-option>
-                                    <mat-option value="promoted">Promoted</mat-option>
-                                    <mat-option value="new-arrival">New Arrival</mat-option>
-                                    <mat-option value="banner">Banner</mat-option>
-                                </mat-select>
+                    <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                        <mat-form-field>
+                            <mat-select placeholder="Select Class" (change)="classSelected($event.value)">
+                                <mat-option value="slider">Slider</mat-option>
+                                <mat-option value="featured">Featured</mat-option>
+                                <mat-option value="on-sale">On Sale</mat-option>
+                                <mat-option value="promoted">Promoted</mat-option>
+                                <mat-option value="new-arrival">New Arrival</mat-option>
+                                <mat-option value="banner">Banner</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-2"> -->
+                    <!-- </div> -->
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <br>
+
+        <mat-card *ngIf="enableUpdateFieldCard">
+            <mat-card-content>
+                <div class="row">
+                    <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+                        <div class="col-md-4">
+                            <mat-form-field class="w-100-p">
+                                <input matInput type="number" placeholder="Price" required>
                             </mat-form-field>
                         </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <mat-form-field class="w-100-p">
+                                <input matInput type="number" placeholder="Inventory" required>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-2">
+                            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+                                <span>UPDATE ALL</span>
+                            </button>
+                        </div>
+                    </div>
                     <!-- <div class="col-2"> -->
                     <!-- </div> -->
                 </div>
@@ -136,6 +165,18 @@
 
             <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}">
 
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
                 <!-- Name Column -->
                 <ng-container cdkColumnDef="name">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
@@ -144,19 +185,24 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Category Column -->
-                <ng-container cdkColumnDef="category">
-                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Category</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="text-truncate">{{product.category.name}}</p>
+                <!-- Image Column -->
+                <ng-container cdkColumnDef="image">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
+                    <mat-cell *cdkCellDef="let product">
+                        <!-- <ng-container *ngIf="product.images">
+                            <img src="{{imageView(product.images[0].small)}}" style="height: 66px !important ; width: 66px !important">
+                        </ng-container>
+                        <ng-container *ngIf="!product.images">
+                            <p> No Image</p>
+                        </ng-container> -->
                     </mat-cell>
                 </ng-container>
 
-                <!-- Brand Column -->
-                <ng-container cdkColumnDef="brand">
-                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Brand</mat-header-cell>
+                <!-- SKU Column -->
+                <ng-container cdkColumnDef="sku">
+                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU</mat-header-cell>
                     <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="text-truncate" *ngIf="product && product.brand">{{product.brand.name}}</p>
+                        <p class="text-truncate">{{product.suppliers[0].pivot.sku}}</p>
                     </mat-cell>
                 </ng-container>
 
@@ -168,15 +214,15 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Quantity Column -->
-                <ng-container cdkColumnDef="quantity">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Quantity</mat-header-cell>
+                <!-- Inventory Column -->
+                <ng-container cdkColumnDef="inventory">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Inventory</mat-header-cell>
                     <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
                         <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
                     </mat-cell>
                 </ng-container>
 
-                <!-- supplier Column -->
+                <!-- Supplier Column -->
                 <ng-container cdkColumnDef="supplier">
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
                     <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
@@ -190,11 +236,36 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Active Column -->
-                <ng-container cdkColumnDef="active">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active</mat-header-cell>
+                <!-- Class Column -->
+                <ng-container cdkColumnDef="classes">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Class</mat-header-cell>
                     <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                        <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox>
+                        <mat-form-field>
+                            <mat-select placeholder="Classes" multiple (change)="addClasses($event.value)">
+                                <!-- <mat-option> -->
+                                <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;
+                                color: #ffffff !important;
+                                margin-top: 10px !important;
+                                margin-bottom: 10px">
+                                    <span>Update</span>
+                                </button>
+                                <mat-option [value]="1">Slider</mat-option>
+                                <mat-option [value]="2">Featured</mat-option>
+                                <mat-option [value]="3">On Sale</mat-option>
+                                <mat-option [value]="4">Promoted</mat-option>
+                                <mat-option [value]="5">New Arrival</mat-option>
+                                <mat-option [value]="6">Banner</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Active Column -->
+                <ng-container cdkColumnDef="status">
+                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active / Inactive</mat-header-cell>
+                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+                        <mat-slide-toggle [checked]="product.active === 1" (change)="isActiveProduct($event, product.id)"></mat-slide-toggle>
+                        <!-- <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox> -->
                     </mat-cell>
                 </ng-container>
 
@@ -221,6 +292,10 @@
                             <button mat-menu-item>
                                 <mat-icon>indeterminate_check_box</mat-icon>
                                 <span>DELETE SUPPLIER</span>
+                            </button>
+                            <button mat-menu-item (click)="deleteProduct()">
+                                <mat-icon>delete</mat-icon>
+                                <span>DELETE PRODUCT</span>
                             </button>
                         </mat-menu>
                     </mat-cell>

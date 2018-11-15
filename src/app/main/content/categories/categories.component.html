@@ -32,12 +32,14 @@
         <div class="example-container mat-elevation-z8">
           <div class="row" style="border: 1px solid; margin-left: 0px; padding: 10px; margin-right: 0px;">
             <div class="col-md-3 col-border">Category Name</div>
-            <div class="col-md-4 col-border">Notes</div>
-            <div class="col-md-3 col-border">Sub Categories</div>
+            <div class="col-md-2 col-border">No. of Products</div>
+            <div class="col-md-1 col-border">Move</div>
+            <div class="col-md-2 col-border">Notes</div>
+            <div class="col-md-2 col-border">Sub Categories</div>
             <div class="col-md-2 col-border">Action</div>
           </div>
           <ng-container *ngFor="let category of categories">
-            <category-child [category]='category'>
+            <category-child [category]='category' (categoryMoved)="refresh()">
 
             </category-child>
           </ng-container>

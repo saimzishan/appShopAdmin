@@ -25,7 +25,7 @@ export class CategoriesComponent implements OnInit {
   options: ITreeOptions = {
     getChildren: this.getChildren.bind(this)
   };
-  displayedColumns: string[] = ["name", "children", "notes"];
+  displayedColumns: string[] = ["name", "children", "notes" , "products"];
   panelOpenState = false;
   // displayedColumns = ["position", "name", "weight", "symbol"];
   // dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
@@ -136,5 +136,9 @@ export class CategoriesComponent implements OnInit {
         // this.notificationServiceBus.launchNotification(true, e);
       }
     );
+  }
+
+  refresh() {
+    this.ngOnInit();
   }
 }

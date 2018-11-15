@@ -72,4 +72,26 @@ export class CategoriesService extends ApiService {
         return this.handleError(err);
       });
   }
+
+  moveProductsCategory(obj) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .put(GLOBAL.USER_API + "categories/" + obj.from + "?product_update_cat"  , obj , httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
 }
