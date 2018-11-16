@@ -129,26 +129,30 @@
     </mat-card>
     <br>
 
-    <mat-card *ngIf="selection.hasValue()">
+    <mat-card>
       <mat-card-content>
         <div class="row">
           <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
             <div class="col-md-4">
-              <mat-form-field class="w-100-p">
+              <!-- <mat-form-field class="w-100-p">
                 <input matInput type="number" [(ngModel)]="bulkPrice" placeholder="Price" required>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-4">
-              <mat-form-field class="w-100-p">
+              <!-- <mat-form-field class="w-100-p">
                 <input matInput type="number" [(ngModel)]="bulkInventory" placeholder="Inventory" required>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-2">
-              <button mat-raised-button (click)="update(1)" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
-                <span *ngIf="selection.selected.length > 1">UPDATE ALL</span>
-                <span *ngIf="selection.selected.length === 1">UPDATE</span>
+              <button [hidden]="!selection.hasValue()" mat-raised-button (click)="update(1)" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0"
+                style="background-color: #1E8ACA !important ; color: #ffffff !important">
+                <span>UPDATE ALL</span>
+              </button>
+              <button [hidden]="selection.hasValue()" mat-raised-button class="btn-default btn-block save-product-button mat-white-bg mt-16 mt-sm-0">
+
+                <span>UPDATE ALL</span>
               </button>
             </div>
           </div>
@@ -211,7 +215,10 @@
         <ng-container cdkColumnDef="price">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
           <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-            <p class="text-truncate">{{product.suppliers[0].pivot.price}}</p>
+            <!-- <input type="number" value="{{product.suppliers[0].pivot.price}}"> -->
+            <mat-form-field class="w-50-p">
+              <input matInput [readonly]="!selection.isSelected(product)" [(ngModel)]="product.suppliers[0].pivot.price">
+            </mat-form-field>
           </mat-cell>
         </ng-container>
 
@@ -219,7 +226,10 @@
         <ng-container cdkColumnDef="inventory">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Inventory</mat-header-cell>
           <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
-            <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
+            <!-- <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p> -->
+            <mat-form-field class="w-50-p">
+              <input [readonly]="!selection.isSelected(product)" matInput [(ngModel)]="product.suppliers[0].pivot.stock">
+            </mat-form-field>
           </mat-cell>
         </ng-container>
 

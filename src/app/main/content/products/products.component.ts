@@ -350,19 +350,28 @@ export class ProductsComponent implements OnInit {
   }
 
   update(flag) {
+
     if (flag === 1) {
-      if ((this.bulkInventory === null) && (this.bulkPrice === null)) {
-        this.snotifyService.warning('Please Fill atleast One Field');
-        return;
-      }
+      // if ((this.bulkInventory === null) && (this.bulkPrice === null)) {
+      //   this.snotifyService.warning('Please Fill atleast One Field');
+      //   return;
+      // }
       let obj = [];
       const tempSelectedObj: any = this.selection.selected;
+      console.log(tempSelectedObj);
       for (const iterator of tempSelectedObj) {
-        if (this.bulkInventory === null || this.bulkInventory === '' || this.bulkInventory === undefined) {
+        if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
+          this.snotifyService.warning('Inventory Required');
+          return;
+        } else {
           this.bulkInventory = iterator.suppliers[0].pivot.stock;
         }
-        if (this.bulkPrice === null || this.bulkPrice === '' || this.bulkPrice === undefined) {
+        if (iterator.suppliers[0].pivot.price === null || iterator.suppliers[0].pivot.price === '' || iterator.suppliers[0].pivot.price === undefined) {
+          this.snotifyService.warning('Price Required');
+          return;
+        } else {
           this.bulkPrice = iterator.suppliers[0].pivot.price;
+
         }
         obj.push({
           id: iterator.suppliers[0].pivot.id,
@@ -370,6 +379,7 @@ export class ProductsComponent implements OnInit {
           stock: this.bulkInventory
         });
       }
+
       this.options = 'bulkUploads/1?ps_bulk_update';
       this.updateBulkProducts(obj);
     } else {
