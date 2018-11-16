@@ -16,6 +16,7 @@ import { SuppliersService } from '../suppliers/suppliers.service';
 import { SelectionModel } from "@angular/cdk/collections";
 import { GLOBAL } from "../../../shared/globel";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
+import { ProductService } from "./product.service";
 
 @Component({
   selector: "app-products",
@@ -76,7 +77,8 @@ export class ProductsComponent implements OnInit {
     private snotifyService: SnotifyService,
     public cd: ChangeDetectorRef,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -282,7 +284,7 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  deleteProduct() {
+  deleteProduct(id) {
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
       disableClose: false
     });
@@ -290,28 +292,28 @@ export class ProductsComponent implements OnInit {
       "Are you sure you want to delete?";
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.removeProduct();
+        this.removeProduct(id);
       }
       this.confirmDialogRef = null;
     });
   }
 
-  // removeProduct() {
-  //   this.spinnerService.requestInProcess(true);
-  //   this.productService.deleteProduct(+this.params.id).subscribe(
-  //     (res: any) => {
-  //       let e = res.res.message;
-  //       this.snotifyService.success(e, "Success !");
-  //       this.spinnerService.requestInProcess(false);
-  //       this.router.navigate(["/products"]);
-  //     },
-  //     errors => {
-  //       this.spinnerService.requestInProcess(false);
-  //       let e = errors.message;
-  //       this.snotifyService.error(e, "Error !");
-  //     }
-  //   );
-  // }
+  removeProduct(id) {
+    this.spinnerService.requestInProcess(true);
+    this.productService.deleteProduct(id).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.index();
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
 
   // converter(obj) {
   //   let temp = [];
@@ -356,10 +358,10 @@ export class ProductsComponent implements OnInit {
       let obj = [];
       const tempSelectedObj: any = this.selection.selected;
       for (const iterator of tempSelectedObj) {
-        if (this.bulkInventory === null) {
+        if (this.bulkInventory === null || this.bulkInventory === '' || this.bulkInventory === undefined) {
           this.bulkInventory = iterator.suppliers[0].pivot.stock;
         }
-        if (this.bulkPrice === null) {
+        if (this.bulkPrice === null || this.bulkPrice === '' || this.bulkPrice === undefined) {
           this.bulkPrice = iterator.suppliers[0].pivot.price;
         }
         obj.push({
@@ -387,6 +389,8 @@ export class ProductsComponent implements OnInit {
         this.snotifyService.success(res.res.message);
         this.index();
         this.selection.clear();
+        this.bulkInventory = '';
+        this.bulkPrice = '';
         this.spinnerService.requestInProcess(false);
       },
       errors => {
