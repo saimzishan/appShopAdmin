@@ -82,12 +82,6 @@ export class ProductsComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    if (this.selection.hasValue()) {
-      this.enableUpdateFieldCard = true;
-    } else {
-      this.enableUpdateFieldCard = false;
-    }
-    console.log(this.selection.hasValue());
     return numSelected === numRows;
   }
 

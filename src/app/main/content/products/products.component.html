@@ -1,42 +1,43 @@
 <div id="products" class="page-layout carded fullwidth" fusePerfectScrollbar>
 
-    <!-- TOP BACKGROUND -->
-    <div class="top-bg mat-accent-bg"></div>
-    <!-- / TOP BACKGROUND -->
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg mat-accent-bg"></div>
+  <!-- / TOP BACKGROUND -->
 
-    <!-- CENTER -->
-    <div class="center">
+  <!-- CENTER -->
+  <div class="center">
 
-        <!-- HEADER -->
-        <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <!-- HEADER -->
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
-            <!-- APP TITLE -->
-            <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
-                <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
-                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_cart</mat-icon>
-                <!-- <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Products</span> -->
-                <mat-form-field>
-                    <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
-                        <mat-option [value]="1">All Products</mat-option>
-                        <mat-option [value]="2">Search Products by Class</mat-option>
-                        <!-- <mat-option [value]="3">Classes</mat-option> -->
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <!-- / APP TITLE -->
+      <!-- APP TITLE -->
+      <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
+        <!-- <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_basket</mat-icon> -->
+        <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">shopping_cart</mat-icon>
+        <!-- <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Products</span> -->
+        <mat-form-field>
+          <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
+            <mat-option [value]="1">All Products</mat-option>
+            <mat-option [value]="2">Search Products by Class</mat-option>
+            <!-- <mat-option [value]="3">Classes</mat-option> -->
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- / APP TITLE -->
 
-            <!-- SEARCH -->
-            <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                <label for="search" class="mr-8">
-                    <mat-icon class="secondary-text">search</mat-icon>
-                </label>
-                <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-                    <input id="search" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-                </mat-form-field>
-            </div>
-            <!-- / SEARCH -->
+      <!-- SEARCH -->
+      <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+        <label for="search" class="mr-8">
+          <mat-icon class="secondary-text">search</mat-icon>
+        </label>
+        <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
+          <input id="search" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+        </mat-form-field>
+      </div>
+      <!-- / SEARCH -->
 
-            <!-- <ng-container cdkColumnDef="action">
+      <!-- <ng-container cdkColumnDef="action">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                 <mat-cell fxHide fxShow.gt-xs>
                     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -54,31 +55,31 @@
                     </mat-menu>
                 </mat-cell>
             </ng-container> -->
-            <!--         
+      <!--         
             <button mat-raised-button [routerLink]="'/products/new'" class="add-product-button mat-white-bg my-12 mt-sm-0">
                 <span>ADD NEW PRODUCT</span>
             </button> -->
-            <div class="col-2">
-                <ng-container cdkColumnDef="action">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs style="margin-left: 185px">Action</mat-header-cell>
-                    <mat-cell fxHide fxShow.gt-xs>
-                        <button style="margin-left: 26px" mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon>more_horiz</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button mat-menu-item [routerLink]="'/products/new'">
-                                <mat-icon>add_box</mat-icon>
-                                <span>ADD NEW PRODUCT</span>
-                            </button>
-                            <button mat-menu-item [routerLink]="'/bulkproduct'">
-                                <mat-icon>add_box</mat-icon>
-                                <span>ADD BULK PRODUCT</span>
-                            </button>
-                        </mat-menu>
-                    </mat-cell>
-                </ng-container>
-            </div>
-            <!-- <ng-container cdkColumnDef="action">
+      <div class="col-2">
+        <ng-container cdkColumnDef="action">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs style="margin-left: 185px">Action</mat-header-cell>
+          <mat-cell fxHide fxShow.gt-xs>
+            <button style="margin-left: 26px" mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item [routerLink]="'/products/new'">
+                <mat-icon>add_box</mat-icon>
+                <span>ADD NEW PRODUCT</span>
+              </button>
+              <button mat-menu-item [routerLink]="'/bulkproduct'">
+                <mat-icon>add_box</mat-icon>
+                <span>ADD BULK PRODUCT</span>
+              </button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+      </div>
+      <!-- <ng-container cdkColumnDef="action">
                 <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
                 <mat-cell fxHide fxShow.gt-xs>
                     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -96,11 +97,11 @@
                     </mat-menu>
                 </mat-cell>
             </ng-container> -->
-        </div>
-        <mat-card *ngIf="optionSelection">
-            <mat-card-content>
-                <div class="row">
-                    <!-- <div class="col-5">
+    </div>
+    <mat-card *ngIf="optionSelection">
+      <mat-card-content>
+        <div class="row">
+          <!-- <div class="col-5">
                         <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
                             <mat-form-field>
                                 <mat-select placeholder="Select Supplier" (change)="supplierSelected($event.value)">
@@ -110,209 +111,211 @@
                         </div>
 
                     </div> -->
-                    <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                        <mat-form-field>
-                            <mat-select placeholder="Select Class" (change)="classSelected($event.value)">
-                                <mat-option value="slider">Slider</mat-option>
-                                <mat-option value="featured">Featured</mat-option>
-                                <mat-option value="on-sale">On Sale</mat-option>
-                                <mat-option value="promoted">Promoted</mat-option>
-                                <mat-option value="new-arrival">New Arrival</mat-option>
-                                <mat-option value="banner">Banner</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <!-- <div class="col-2"> -->
-                    <!-- </div> -->
-                </div>
-            </mat-card-content>
-        </mat-card>
-        <br>
+          <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+            <mat-form-field>
+              <mat-select placeholder="Select Class" (change)="classSelected($event.value)">
+                <mat-option value="slider">Slider</mat-option>
+                <mat-option value="featured">Featured</mat-option>
+                <mat-option value="on-sale">On Sale</mat-option>
+                <mat-option value="promoted">Promoted</mat-option>
+                <mat-option value="new-arrival">New Arrival</mat-option>
+                <mat-option value="banner">Banner</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-2"> -->
+          <!-- </div> -->
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <br>
 
-        <mat-card *ngIf="enableUpdateFieldCard">
-            <mat-card-content>
-                <div class="row">
-                    <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-                        <div class="col-md-4">
-                            <mat-form-field class="w-100-p">
-                                <input matInput type="number" placeholder="Price" required>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            <mat-form-field class="w-100-p">
-                                <input matInput type="number" placeholder="Inventory" required>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-1"></div>
-                        <div class="col-md-2">
-                            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
-                                <span>UPDATE ALL</span>
-                            </button>
-                        </div>
-                    </div>
-                    <!-- <div class="col-2"> -->
-                    <!-- </div> -->
-                </div>
-            </mat-card-content>
-        </mat-card>
-        <br>
+    <mat-card *ngIf="selection.hasValue()">
+      <mat-card-content>
+        <div class="row">
+          <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+            <div class="col-md-4">
+              <mat-form-field class="w-100-p">
+                <input matInput type="number" placeholder="Price" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+              <mat-form-field class="w-100-p">
+                <input matInput type="number" placeholder="Inventory" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+              <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+                <span *ngIf="selection.selected.length > 1">UPDATE ALL</span>
+                <span *ngIf="selection.selected.length === 1">UPDATE</span>
+              </button>
+            </div>
+          </div>
+          <!-- <div class="col-2"> -->
+          <!-- </div> -->
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <br>
 
-        <!-- / HEADER -->
+    <!-- / HEADER -->
 
-        <!-- CONTENT CARD -->
-        <div class="content-card mat-white-bg">
+    <!-- CONTENT CARD -->
+    <div class="content-card mat-white-bg">
 
-            <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}">
+      <mat-table class="products-table" #table [dataSource]="dataSource" matSort [@animateStagger]="{value:'50'}">
 
-                <!-- Checkbox Column -->
-                <ng-container matColumnDef="select">
-                    <mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
-                    </mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
-                    </mat-cell>
-                </ng-container>
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Name Column -->
-                <ng-container cdkColumnDef="name">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product">
-                        <p class="text-truncate">{{product.name}}</p>
-                    </mat-cell>
-                </ng-container>
+        <!-- Name Column -->
+        <ng-container cdkColumnDef="name">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *cdkCellDef="let product">
+            <p class="text-truncate">{{product.name}}</p>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Image Column -->
-                <ng-container cdkColumnDef="image">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product">
-                        <!-- <ng-container *ngIf="product.images">
+        <!-- Image Column -->
+        <ng-container cdkColumnDef="image">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
+          <mat-cell *cdkCellDef="let product">
+            <!-- <ng-container *ngIf="product.images">
                             <img src="{{imageView(product.images[0].small)}}" style="height: 66px !important ; width: 66px !important">
                         </ng-container>
                         <ng-container *ngIf="!product.images">
                             <p> No Image</p>
                         </ng-container> -->
-                    </mat-cell>
-                </ng-container>
+          </mat-cell>
+        </ng-container>
 
-                <!-- SKU Column -->
-                <ng-container cdkColumnDef="sku">
-                    <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-                        <p class="text-truncate">{{product.suppliers[0].pivot.sku}}</p>
-                    </mat-cell>
-                </ng-container>
+        <!-- SKU Column -->
+        <ng-container cdkColumnDef="sku">
+          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU</mat-header-cell>
+          <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
+            <p class="text-truncate">{{product.suppliers[0].pivot.sku}}</p>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Price Column -->
-                <ng-container cdkColumnDef="price">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                        <p class="text-truncate">{{product.suppliers[0].pivot.price}}</p>
-                    </mat-cell>
-                </ng-container>
+        <!-- Price Column -->
+        <ng-container cdkColumnDef="price">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Price</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+            <p class="text-truncate">{{product.suppliers[0].pivot.price}}</p>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Inventory Column -->
-                <ng-container cdkColumnDef="inventory">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Inventory</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
-                        <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
-                    </mat-cell>
-                </ng-container>
+        <!-- Inventory Column -->
+        <ng-container cdkColumnDef="inventory">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Inventory</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
+            <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Supplier Column -->
-                <ng-container cdkColumnDef="supplier">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                        <mat-form-field>
-                            <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" (ngModelChange)="onSupplierChange($event, product, i);">
-                                <mat-option *ngFor="let supplier of getSupplier(product.id);" [value]="supplier.id">
-                                    {{supplier.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </mat-cell>
-                </ng-container>
+        <!-- Supplier Column -->
+        <ng-container cdkColumnDef="supplier">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+            <mat-form-field>
+              <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" (ngModelChange)="onSupplierChange($event, product, i);">
+                <mat-option *ngFor="let supplier of getSupplier(product.id);" [value]="supplier.id">
+                  {{supplier.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Class Column -->
-                <ng-container cdkColumnDef="classes">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Class</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                        <mat-form-field>
-                            <mat-select placeholder="Classes" multiple (change)="addClasses($event.value)">
-                                <!-- <mat-option> -->
-                                <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;
+        <!-- Class Column -->
+        <ng-container cdkColumnDef="classes">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Class</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+            <mat-form-field>
+              <mat-select placeholder="Classes" multiple (change)="addClasses($event.value)">
+                <!-- <mat-option> -->
+                <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;
                                 color: #ffffff !important;
                                 margin-top: 10px !important;
                                 margin-bottom: 10px">
-                                    <span>Update</span>
-                                </button>
-                                <mat-option [value]="1">Slider</mat-option>
-                                <mat-option [value]="2">Featured</mat-option>
-                                <mat-option [value]="3">On Sale</mat-option>
-                                <mat-option [value]="4">Promoted</mat-option>
-                                <mat-option [value]="5">New Arrival</mat-option>
-                                <mat-option [value]="6">Banner</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </mat-cell>
-                </ng-container>
+                  <span>Update</span>
+                </button>
+                <mat-option [value]="1">Slider</mat-option>
+                <mat-option [value]="2">Featured</mat-option>
+                <mat-option [value]="3">On Sale</mat-option>
+                <mat-option [value]="4">Promoted</mat-option>
+                <mat-option [value]="5">New Arrival</mat-option>
+                <mat-option [value]="6">Banner</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
 
-                <!-- Active Column -->
-                <ng-container cdkColumnDef="status">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active / Inactive</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
-                        <mat-slide-toggle [checked]="product.active === 1" (change)="isActiveProduct($event, product.id)"></mat-slide-toggle>
-                        <!-- <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox> -->
-                    </mat-cell>
-                </ng-container>
+        <!-- Active Column -->
+        <ng-container cdkColumnDef="status">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active / Inactive</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+            <mat-slide-toggle [checked]="product.active === 1" (change)="isActiveProduct($event, product.id)"></mat-slide-toggle>
+            <!-- <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox> -->
+          </mat-cell>
+        </ng-container>
 
-                <!-- Action Column -->
-                <ng-container cdkColumnDef="action">
-                    <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
-                    <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
-                        <!-- <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
+        <!-- Action Column -->
+        <ng-container cdkColumnDef="action">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
+          <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
+            <!-- <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
                                         <button mat-raised-button class="save-product-button mat-accent mt-16 mt-sm-0" (click)="addNewSupplier(product.id)">
                                             <span>ADD NEW SUPPLIER</span>
                                         </button> -->
-                        <button mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon>more_horiz</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="editProduct(product.id)">
-                                <mat-icon>edit</mat-icon>
-                                <span>EDIT PRODUCT</span>
-                            </button>
-                            <button mat-menu-item (click)="addNewSupplier(product.id)">
-                                <mat-icon>add_box</mat-icon>
-                                <span>ADD NEW SUPPLIER</span>
-                            </button>
-                            <button mat-menu-item>
-                                <mat-icon>indeterminate_check_box</mat-icon>
-                                <span>DELETE SUPPLIER</span>
-                            </button>
-                            <button mat-menu-item (click)="deleteProduct()">
-                                <mat-icon>delete</mat-icon>
-                                <span>DELETE PRODUCT</span>
-                            </button>
-                        </mat-menu>
-                    </mat-cell>
-                </ng-container>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editProduct(product.id)">
+                <mat-icon>edit</mat-icon>
+                <span>EDIT PRODUCT</span>
+              </button>
+              <button mat-menu-item (click)="addNewSupplier(product.id)">
+                <mat-icon>add_box</mat-icon>
+                <span>ADD NEW SUPPLIER</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>indeterminate_check_box</mat-icon>
+                <span>DELETE SUPPLIER</span>
+              </button>
+              <button mat-menu-item (click)="deleteProduct()">
+                <mat-icon>delete</mat-icon>
+                <span>DELETE PRODUCT</span>
+              </button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
 
-                <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-                <mat-row *cdkRowDef="let products; columns: displayedColumns;" class="product" matRipple>
-                </mat-row>
+        <mat-row *cdkRowDef="let products; columns: displayedColumns;" class="product" matRipple>
+        </mat-row>
 
-            </mat-table>
+      </mat-table>
 
-            <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" (page)="pageChange($event)">
-            </mat-paginator>
+      <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" (page)="pageChange($event)">
+      </mat-paginator>
 
-        </div>
-        <!-- / CONTENT CARD -->
     </div>
-    <!-- / CENTER -->
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
 </div>
