@@ -91,7 +91,7 @@ export class ProductsService extends ApiService {
       })
     };
     return this.http
-      .get(GLOBAL.USER_API + "products?page="+ page, httpOptions)
+      .get(GLOBAL.USER_API + "products?page=" + page, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -137,6 +137,62 @@ export class ProductsService extends ApiService {
     };
     return this.http
       .get(GLOBAL.USER_API + "products" + '?' + option, httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
+  updateBulkProduct(obj, option) {
+    const access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      const error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    if (option === 'bulkUploads/1?ps_bulk_update') {
+      const ps = {
+        ps: obj,
+      };
+      return this.http
+        .put(GLOBAL.USER_API + option, ps, httpOptions)
+        .map(this.extractData)
+        .catch(err => {
+          return this.handleError(err);
+        });
+    } else {
+      return this.http
+        .put(GLOBAL.USER_API + option, obj, httpOptions)
+        .map(this.extractData)
+        .catch(err => {
+          return this.handleError(err);
+        });
+    }
+  }
+
+  searchbyWord(search) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .get(GLOBAL.USER_API + "products?search=" + search , httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

@@ -34,7 +34,7 @@ import { ITreeOptions } from "angular-tree-component";
                 <ng-container *ngIf="category.children.length == 0">{{category.product_count}}</ng-container> </mat-panel-title>
                 <mat-panel-title class="col-md-1">
                     <ng-container>
-                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <button style="margin-left: -36px" mat-icon-button [matMenuTriggerFor]="menu">
                             <mat-icon>more_horiz</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu" overlapTrigger="false">
@@ -45,7 +45,7 @@ import { ITreeOptions } from "angular-tree-component";
                 <mat-panel-title class="col-md-2"> {{getSpecificNotes(category.notes)}}</mat-panel-title>
                 <mat-panel-title class="col-md-2"> {{category.children.length}}</mat-panel-title>
                 <mat-panel-title class="col-md-2"> 
-                  <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editCategory(category.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
+                  <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editCategory(category.id)" style="margin-left: -63px;cursor:pointer">edit</mat-icon>
                 </mat-panel-title>
             </mat-expansion-panel-header>
             <ng-container *ngIf="hasChild(category)">

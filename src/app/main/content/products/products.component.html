@@ -8,8 +8,7 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
-      fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -32,7 +31,7 @@
           <mat-icon class="secondary-text">search</mat-icon>
         </label>
         <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
-          <input id="search" matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+          <input id="search" matInput (keyup)="applyFilter($event.target.value , $event)" placeholder="Search">
         </mat-form-field>
       </div>
       <!-- / SEARCH -->
@@ -136,18 +135,18 @@
           <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
             <div class="col-md-4">
               <mat-form-field class="w-100-p">
-                <input matInput type="number" placeholder="Price" required>
+                <input matInput type="number" [(ngModel)]="bulkPrice" placeholder="Price" required>
               </mat-form-field>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-4">
               <mat-form-field class="w-100-p">
-                <input matInput type="number" placeholder="Inventory" required>
+                <input matInput type="number" [(ngModel)]="bulkInventory" placeholder="Inventory" required>
               </mat-form-field>
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-2">
-              <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+              <button mat-raised-button (click)="update(1)" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
                 <span *ngIf="selection.selected.length > 1">UPDATE ALL</span>
                 <span *ngIf="selection.selected.length === 1">UPDATE</span>
               </button>
@@ -170,8 +169,7 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
             </mat-checkbox>
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
@@ -180,24 +178,24 @@
           </mat-cell>
         </ng-container>
 
-        <!-- Name Column -->
-        <ng-container cdkColumnDef="name">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *cdkCellDef="let product">
-            <p class="text-truncate">{{product.name}}</p>
-          </mat-cell>
-        </ng-container>
-
         <!-- Image Column -->
         <ng-container cdkColumnDef="image">
           <mat-header-cell *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
           <mat-cell *cdkCellDef="let product">
-            <!-- <ng-container *ngIf="product.images">
-                            <img src="{{imageView(product.images[0].small)}}" style="height: 66px !important ; width: 66px !important">
-                        </ng-container>
-                        <ng-container *ngIf="!product.images">
-                            <p> No Image</p>
-                        </ng-container> -->
+            <ng-container *ngIf="product.images">
+              <img src="{{imageView(product.images[0].small)}}" style="height: 66px !important ; width: 66px !important">
+            </ng-container>
+            <ng-container *ngIf="!product.images">
+              <p> No Image</p>
+            </ng-container>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container cdkColumnDef="name">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *cdkCellDef="let product">
+            <p class="text-truncate" matTooltip="{{product.name}}">{{product.name}}</p>
           </mat-cell>
         </ng-container>
 
@@ -244,20 +242,18 @@
           <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Class</mat-header-cell>
           <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
             <mat-form-field>
-              <mat-select placeholder="Classes" multiple (change)="addClasses($event.value)">
-                <!-- <mat-option> -->
-                <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;
-                                color: #ffffff !important;
-                                margin-top: 10px !important;
-                                margin-bottom: 10px">
+              <mat-select placeholder="Classes" [ngModel]="product.suppliers[0].pivot.class" multiple (change)="addClasses($event.value , product.suppliers[0].pivot.id)">
+                <button mat-raised-button (click)="update(2)" class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;color: #ffffff !important;margin-top: 10px !important;margin-bottom: 10px">
                   <span>Update</span>
                 </button>
                 <mat-option [value]="1">Slider</mat-option>
                 <mat-option [value]="2">Featured</mat-option>
-                <mat-option [value]="3">On Sale</mat-option>
-                <mat-option [value]="4">Promoted</mat-option>
-                <mat-option [value]="5">New Arrival</mat-option>
-                <mat-option [value]="6">Banner</mat-option>
+                <mat-option [value]="3">On-sale</mat-option>
+                <mat-option [value]="4">new-arrival</mat-option>
+                <mat-option [value]="5">Promoted</mat-option>
+                <mat-option [value]="6">Add-on</mat-option>
+                <mat-option [value]="7">Banner</mat-option>
+                <mat-option [value]="9">Hot</mat-option>
               </mat-select>
             </mat-form-field>
           </mat-cell>

@@ -27,8 +27,8 @@ export class ProductsComponent implements OnInit {
   dataSource;
   displayedColumns = [
     "select",
-    "name",
     "image",
+    "name",
     "sku",
     "price",
     "inventory",
@@ -56,6 +56,12 @@ export class ProductsComponent implements OnInit {
   addedSuppliers: any[];
   suppliers;
   enableUpdateFieldCard = false;
+  new_obj: any;
+  bulkPrice = null;
+  bulkInventory = null;
+  options = '';
+  id;
+  classArray;
 
   selection = new SelectionModel<Element>(true, []);
 
@@ -71,7 +77,7 @@ export class ProductsComponent implements OnInit {
     public cd: ChangeDetectorRef,
     private router: Router,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.index();
@@ -88,8 +94,8 @@ export class ProductsComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   index() {
@@ -133,7 +139,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getSupplier(product_id) {
-    var result = this.dataSource.data.filter(function(obj) {
+    var result = this.dataSource.data.filter(function (obj) {
       if (obj.id === product_id) {
         return obj;
       }
@@ -163,7 +169,7 @@ export class ProductsComponent implements OnInit {
   }
 
   isActiveProduct(event, p_id) {
-    this.productsService.isProductActive({active: event.checked}, p_id).subscribe(
+    this.productsService.isProductActive({ active: event.checked }, p_id).subscribe(
       (res: any) => {
         if (!res.status) {
           this.totalItems = res.res.data.total;
@@ -198,8 +204,38 @@ export class ProductsComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(products);
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(filterValue: string, event) {
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (filterValue === '' && event.key === 'Enter') {
+      return;
+    }
+    if (filterValue !== '') {
+      if (event.key === 'Enter') {
+        this.searchWord(filterValue);
+      }
+    } else {
+      this.index();
+    }
+  }
+
+  searchWord(search) {
+    this.spinnerService.requestInProcess(true);
+    this.productsService.searchbyWord(search).subscribe(
+      (res: any) => {
+        if (!res.status) {
+          this.totalItems = res.res.data.total;
+          this.perPage = res.res.data.per_page;
+          this.setDataSuorce(res.res.data.data);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   pageChange(event) {
@@ -232,18 +268,18 @@ export class ProductsComponent implements OnInit {
   // }
 
   classSelected(class_name) {
-      this.spinnerService.requestInProcess(true);
-      this.productsService.getProductClassDetails(class_name).subscribe(
-        (res: any) => {
-          this.setDataSuorce(res.res.data);
-          this.spinnerService.requestInProcess(false);
-        },
-        errors => {
-          this.spinnerService.requestInProcess(false);
-          let e = errors.error.message;
-          this.snotifyService.error(e, "Error !");
-        }
-      );
+    this.spinnerService.requestInProcess(true);
+    this.productsService.getProductClassDetails(class_name).subscribe(
+      (res: any) => {
+        this.setDataSuorce(res.res.data);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   deleteProduct() {
@@ -277,9 +313,9 @@ export class ProductsComponent implements OnInit {
   //   );
   // }
 
-  // converter() {
+  // converter(obj) {
   //   let temp = [];
-  //   this.product.supplier.class.forEach(c => {
+  //   this.product.suppliers.pivot.class.forEach(c => {
   //     if (c === "slider") {
   //       c = 1;
   //     } else if (c === "featured") {
@@ -299,11 +335,66 @@ export class ProductsComponent implements OnInit {
   //     }
   //     temp.push(c);
   //   });
-  //   this.product.supplier.class = temp;
+  //   this.product.suppliers.pivot.class = temp;
+  //   console.log(obj);
   // }
 
-  addClasses(value) {
-    console.log(value);
+  addClasses(value, i) {
+    this.classArray = value;
+    this.id = i;
+    if (value === []) {
+      this.classArray.push(8);
+    }
+  }
+
+  update(flag) {
+    if (flag === 1) {
+      if ((this.bulkInventory === null) && (this.bulkPrice === null)) {
+        this.snotifyService.warning('Please Fill atleast One Field');
+        return;
+      }
+      let obj = [];
+      const tempSelectedObj: any = this.selection.selected;
+      for (const iterator of tempSelectedObj) {
+        if (this.bulkInventory === null) {
+          this.bulkInventory = iterator.suppliers[0].pivot.stock;
+        }
+        if (this.bulkPrice === null) {
+          this.bulkPrice = iterator.suppliers[0].pivot.price;
+        }
+        obj.push({
+          id: iterator.suppliers[0].pivot.id,
+          price: this.bulkPrice,
+          stock: this.bulkInventory
+        });
+      }
+      this.options = 'bulkUploads/1?ps_bulk_update';
+      this.updateBulkProducts(obj);
+    } else {
+      this.options = 'bulkUploads/' + this.id + '?ps_class_update';
+      const obj = {
+        id: this.id,
+        class: this.classArray
+      };
+      this.updateBulkProducts(obj);
+    }
+  }
+
+  updateBulkProducts(ps) {
+    this.spinnerService.requestInProcess(true);
+    this.productsService.updateBulkProduct(ps, this.options).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message);
+        this.index();
+        this.selection.clear();
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   imageView(original_image) {
