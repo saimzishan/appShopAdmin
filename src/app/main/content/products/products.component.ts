@@ -311,7 +311,6 @@ export class ProductsComponent implements OnInit {
     } else {
       const tempSelectedObj: any = this.selection.selected;
       for (const iterator of tempSelectedObj) {
-        console.log(iterator.id);
         this.bulkId.push(iterator.id);
       }
       this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
@@ -349,32 +348,6 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  // converter(obj) {
-  //   let temp = [];
-  //   this.product.suppliers.pivot.class.forEach(c => {
-  //     if (c === "slider") {
-  //       c = 1;
-  //     } else if (c === "featured") {
-  //       c = 2;
-  //     } else if (c === "on-sale") {
-  //       c = 3;
-  //     } else if (c === "new-arrival") {
-  //       c = 4;
-  //     } else if (c === "promoted") {
-  //       c = 5;
-  //     } else if (c === "add-on") {
-  //       c = 6;
-  //     } else if (c === "banner") {
-  //       c = 7;
-  //     } else if (c === "none") {
-  //       c = 8;
-  //     }
-  //     temp.push(c);
-  //   });
-  //   this.product.suppliers.pivot.class = temp;
-  //   console.log(obj);
-  // }
-
   addClasses(value, i) {
     this.classArray = value;
     this.id = i;
@@ -392,7 +365,6 @@ export class ProductsComponent implements OnInit {
       // }
       let obj = [];
       const tempSelectedObj: any = this.selection.selected;
-      console.log(tempSelectedObj);
       for (const iterator of tempSelectedObj) {
         if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
           this.snotifyService.warning('Inventory Required');
@@ -408,9 +380,6 @@ export class ProductsComponent implements OnInit {
         }
         let classArray;
         classArray = iterator.suppliers[0].pivot.class;
-        // classArray.push(this.classBulkAdd);
-        // console.log(classArray);
-
         for (const i of this.classBulkAdd) {
           classArray.push(i);
         }

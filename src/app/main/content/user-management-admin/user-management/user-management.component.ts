@@ -75,7 +75,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     this.sub = this.userMService.getUserById(id).subscribe(
       (res: any) => {
         if (res.res.data.roles[0].name === 'Admin') {
-          console.log(res.res.data.roles[0].name);
           this.role = true;
           this.level = false;
         } else {
