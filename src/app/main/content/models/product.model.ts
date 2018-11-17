@@ -59,6 +59,7 @@ export class Supplier {
   class: Array<any>;
   product_supplier_attributes: ProductSupplierAttribute[];
   product_variants: ProductVariant;
+  code: string | number;
 
   constructor(supplier?) {
     supplier = supplier || {};
@@ -84,6 +85,7 @@ export class Supplier {
     this.class = supplier.class || new Array();
     this.product_supplier_attributes = new Array<ProductSupplierAttribute>();
     this.product_variants = supplier.product_variants || new ProductVariant();
+    this.code = supplier.code || '';
   }
 }
 export class BluckPrice {

@@ -14,6 +14,7 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { AuthGuard } from "../../../guard/auth.guard";
 import { SnotifyService } from "ng-snotify";
 import { Product } from "../models/product.model";
+import { Body } from "@angular/http/src/body";
 
 @Injectable()
 export class ProductService extends ApiService {
@@ -440,7 +441,7 @@ export class ProductService extends ApiService {
       });
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id) {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
@@ -452,10 +453,11 @@ export class ProductService extends ApiService {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
         Authorization: "Bearer " + access_token
-      })
+      }),
+      body: {pIdes: id}
     };
     return this.http
-      .delete(GLOBAL.USER_API + "products/" + id + "?p_delete", httpOptions)
+      .delete(GLOBAL.USER_API + "products/1?p_delete&" , httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
