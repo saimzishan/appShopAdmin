@@ -32,7 +32,6 @@ export class ProductsComponent implements OnInit {
     "name",
     "category",
     "sku",
-    "suppliercode",
     "price",
     "inventory",
     "supplier",
@@ -357,7 +356,7 @@ export class ProductsComponent implements OnInit {
   }
 
   update(flag) {
-
+    let classArray;
     if (flag === 1) {
       // if ((this.bulkInventory === null) && (this.bulkPrice === null)) {
       //   this.snotifyService.warning('Please Fill atleast One Field');
@@ -366,19 +365,24 @@ export class ProductsComponent implements OnInit {
       let obj = [];
       const tempSelectedObj: any = this.selection.selected;
       for (const iterator of tempSelectedObj) {
-        if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
-          this.snotifyService.warning('Inventory Required');
-          return;
-        } else {
+        if (this.bulkPrice === null && this.bulkInventory === null) {
+          if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
+            this.snotifyService.warning('Inventory Required');
+            return;
+          } else {
+            this.bulkInventory = iterator.suppliers[0].pivot.stock;
+          }
+          if (iterator.suppliers[0].pivot.price === null || iterator.suppliers[0].pivot.price === '' || iterator.suppliers[0].pivot.price === undefined) {
+            this.snotifyService.warning('Price Required');
+            return;
+          } else {
+            this.bulkPrice = iterator.suppliers[0].pivot.price;
+          }
+        } else if (this.bulkPrice === null && this.bulkInventory !== null) {
+          this.bulkPrice = iterator.suppliers[0].pivot.price;
+        } else if (this.bulkPrice !== null && this.bulkInventory === null) {
           this.bulkInventory = iterator.suppliers[0].pivot.stock;
         }
-        if (iterator.suppliers[0].pivot.price === null || iterator.suppliers[0].pivot.price === '' || iterator.suppliers[0].pivot.price === undefined) {
-          this.snotifyService.warning('Price Required');
-          return;
-        } else {
-          this.bulkPrice = iterator.suppliers[0].pivot.price;
-        }
-        let classArray;
         classArray = iterator.suppliers[0].pivot.class;
         for (const i of this.classBulkAdd) {
           classArray.push(i);
@@ -409,8 +413,8 @@ export class ProductsComponent implements OnInit {
         this.snotifyService.success(res.res.message);
         this.index();
         this.selection.clear();
-        this.bulkInventory = '';
-        this.bulkPrice = '';
+        this.bulkInventory = null;
+        this.bulkPrice = null;
         this.classBulkAdd = [];
         this.spinnerService.requestInProcess(false);
       },

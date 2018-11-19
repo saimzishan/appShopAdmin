@@ -18,7 +18,9 @@
         <mat-form-field>
           <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
             <mat-option [value]="1">All Products</mat-option>
-            <mat-option [value]="2">Search Products by Class</mat-option>
+            <mat-option [value]="2">Search by Class</mat-option>
+            <mat-option [value]="1">Search by Category</mat-option>
+            <mat-option [value]="1">Search by Brand</mat-option>
             <!-- <mat-option [value]="3">Classes</mat-option> -->
           </mat-select>
         </mat-form-field>
@@ -108,7 +110,6 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-
                     </div> -->
           <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
             <mat-form-field>
@@ -133,7 +134,17 @@
       <mat-card-content>
         <div class="row">
           <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-            <div class="col-md-4">
+            <div class="col-md-3">
+              <mat-form-field class="w-100-p">
+                <input matInput type="number" [(ngModel)]="bulkPrice" placeholder="Price" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
+              <mat-form-field class="w-100-p">
+                <input matInput type="number" [(ngModel)]="bulkInventory" placeholder="Inventory" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-3">
               <mat-form-field>
                 <mat-select placeholder="Select Class" [(ngModel)]="classBulkAdd" multiple>
                   <mat-option [value]="3">On Sale</mat-option>
@@ -141,12 +152,6 @@
                   <mat-option [value]="9">Hot</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-4">
-              <!-- <mat-form-field class="w-100-p">
-                <input matInput type="number" [(ngModel)]="bulkInventory" placeholder="Inventory" required>
-              </mat-form-field> -->
             </div>
             <div class="col-md-2">
               <button [hidden]="!selection.hasValue()" mat-raised-button (click)="update(1)" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0"
@@ -183,7 +188,7 @@
               </mat-checkbox>
             </mat-header-cell>
           </div>
-          <mat-cell *matCellDef="let row" style="padding: 8px 8px 8px 0 !important;">
+          <mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
             </mat-checkbox>
           </mat-cell>
@@ -191,8 +196,8 @@
 
         <!-- Image Column -->
         <ng-container cdkColumnDef="image">
-          <mat-header-cell style="padding: 8px 8px 8px 0 !important;" *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
-          <mat-cell style="padding: 8px 8px 8px 0 !important;" *cdkCellDef="let product">
+          <mat-header-cell style="margin-left: -62px !important" *cdkHeaderCellDef mat-sort-header>Image</mat-header-cell>
+          <mat-cell style="margin-left: -62px !important" *cdkCellDef="let product">
             <ng-container *ngIf="product.images">
               <img src="{{imageView(product.images[0].small)}}" style="height: 66px !important ; width: 66px !important">
             </ng-container>
@@ -204,8 +209,8 @@
 
         <!-- Name Column -->
         <ng-container cdkColumnDef="name">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
-          <mat-cell *cdkCellDef="let product">
+          <mat-header-cell style="margin-left: 25px !important" *cdkHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *cdkCellDef="let product" style="margin-left: 25px !important">
             <p class="text-truncate" matTooltip="{{product.name}}">{{truncateString(product.name)}}</p>
           </mat-cell>
         </ng-container>
@@ -220,18 +225,9 @@
 
         <!-- SKU Column -->
         <ng-container cdkColumnDef="sku">
-          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU / Supplier Code</mat-header-cell>
           <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-            <p class="text-truncate" *ngIf="product.suppliers">{{product.suppliers[0].pivot.sku}}</p>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Supplier Code Column -->
-        <ng-container cdkColumnDef="suppliercode">
-          <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>Supplier Code</mat-header-cell>
-          <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-            <p class="text-truncate" *ngIf="product.suppliers[0].pivot.code">{{product.suppliers[0].pivot.code}}</p>
-            <p class="text-truncate" *ngIf="product.suppliers[0].pivot.code == 'null' || product.suppliers[0].pivot.code == ''">-</p>
+            <p class="text-truncate" *ngIf="product.suppliers"><b>{{product.suppliers[0].pivot.sku}}</b> <br> {{product.suppliers[0].pivot.code}}</p>
           </mat-cell>
         </ng-container>
 
