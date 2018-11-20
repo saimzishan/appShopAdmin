@@ -254,8 +254,10 @@ export class ProductsComponent implements OnInit {
       this.totalItems = 0;
       this.index();
       this.optionSelection = false;
-    } else {
+    } else if (value === 2) {
       this.optionSelection = true;
+    } else {
+      this.snotifyService.info('Coming Soon :)');
     }
   }
 

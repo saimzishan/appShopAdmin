@@ -705,6 +705,8 @@ export class SupplierFormComponent implements OnInit {
         c = 7;
       } else if (c === "none") {
         c = 8;
+      } else if (c === "hot") {
+        c = 9;
       }
       temp.push(c);
     });
@@ -722,7 +724,7 @@ export class SupplierFormComponent implements OnInit {
   }
 
   makeArrayOfSides() {
-    if (this.pageType === 'edit') {
+    if (this.pageType === 'edit' && this.product.supplier.sides !== null) {
       this.product.supplier.sides = this.product.supplier.sides.split(',');
     }
   }

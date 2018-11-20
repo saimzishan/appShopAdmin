@@ -19,8 +19,8 @@
           <mat-select [(ngModel)]="selectedOption" (change)="view($event.value)">
             <mat-option [value]="1">All Products</mat-option>
             <mat-option [value]="2">Search by Class</mat-option>
-            <mat-option [value]="1">Search by Category</mat-option>
-            <mat-option [value]="1">Search by Brand</mat-option>
+            <mat-option [value]="3">Search by Category</mat-option>
+            <mat-option [value]="4">Search by Brand</mat-option>
             <!-- <mat-option [value]="3">Classes</mat-option> -->
           </mat-select>
         </mat-form-field>
@@ -118,8 +118,10 @@
                 <mat-option value="featured">Featured</mat-option>
                 <mat-option value="on-sale">On Sale</mat-option>
                 <mat-option value="promoted">Promoted</mat-option>
+                <mat-option value="add-on">Add on</mat-option>
                 <mat-option value="new-arrival">New Arrival</mat-option>
                 <mat-option value="banner">Banner</mat-option>
+                <mat-option value="hot">Hot</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -147,8 +149,13 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-select placeholder="Select Class" [(ngModel)]="classBulkAdd" multiple>
-                  <mat-option [value]="3">On Sale</mat-option>
-                  <mat-option [value]="4">New Arrival</mat-option>
+                  <mat-option [value]="1">Slider</mat-option>
+                  <mat-option [value]="2">Featured</mat-option>
+                  <mat-option [value]="3">On-sale</mat-option>
+                  <mat-option [value]="4">new-arrival</mat-option>
+                  <mat-option [value]="5">Promoted</mat-option>
+                  <mat-option [value]="6">Add-on</mat-option>
+                  <mat-option [value]="7">Banner</mat-option>
                   <mat-option [value]="9">Hot</mat-option>
                 </mat-select>
               </mat-form-field>
