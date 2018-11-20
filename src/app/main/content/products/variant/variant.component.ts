@@ -341,7 +341,7 @@ export class VariantComponent implements OnInit {
 
   addOptionSet(option_id, option_set_id) {
     let index: any = this.product_variant_attributes
-      .map(function (obj, index) {
+      .map(function(obj, index) {
         if (obj.option_set_id === option_set_id) {
           return index;
         }
@@ -413,8 +413,8 @@ export class VariantComponent implements OnInit {
     // this.variant.amount = this.productSupplier.price;
   }
 
-  onUploadError(event: any) { }
-  onUploadSuccess(event: any) { }
+  onUploadError(event: any) {}
+  onUploadSuccess(event: any) {}
 
   getOptionSetName(id: number) {
     const res = this.productOptionSetAndValue.find(
@@ -447,11 +447,17 @@ export class VariantComponent implements OnInit {
 
   imageView(original_image) {
     let spliting = original_image;
-    spliting = spliting.split('/');
-    if (spliting[0] === '') {
-      return this.baseURL + original_image;
-    } else {
-      return original_image;
+    if (
+      original_image !== undefined &&
+      original_image !== null &&
+      original_image !== ""
+    ) {
+      spliting = spliting.split("/");
+      if (spliting[0] === "") {
+        return this.baseURL + original_image;
+      } else {
+        return original_image;
+      }
     }
   }
 }

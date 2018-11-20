@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild
+} from "@angular/core";
 import { SupplierService } from "./supplier.service";
 import { fuseAnimations } from "../../../core/animations";
 import { Supplier } from "../models/supplier.model";
@@ -55,29 +61,32 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.supplierID = params['id'] || '';
+      this.supplierID = params["id"] || "";
       if (Boolean(this.supplierID) && parseInt(this.supplierID, 10) > 0) {
         this.getSupplierById(this.supplierID);
-        this.pageType = 'edit';
+        this.pageType = "edit";
       } else {
         this.supplier = new Supplier();
         this.hasImage = false;
-        this.pageType = 'new';
+        this.pageType = "new";
       }
     });
   }
 
   getSupplierById(id: number) {
     this.spinnerService.requestInProcess(true);
-    this.sub = this.supplierService.getSupplierById(id).subscribe((res: any) => {
-      this.supplier = new Supplier(res.res.data);
-      this.hasImage = this.supplier.image.id === -1 ? false : true;
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.sub = this.supplierService.getSupplierById(id).subscribe(
+      (res: any) => {
+        this.supplier = new Supplier(res.res.data);
+        this.hasImage = this.supplier.image.id === -1 ? false : true;
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   addSupplier(form) {
@@ -133,16 +142,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
       tempImage = new Image(this.supplier.image);
       delete this.supplier.image;
     }
-    this.supplierService.editSupplier(this.supplier).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/suppliers']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.supplierService.editSupplier(this.supplier).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/suppliers"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
     this.supplier.image = tempImage;
   }
 
@@ -162,16 +174,19 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
   removeSupplier() {
     this.spinnerService.requestInProcess(true);
-    this.sub = this.supplierService.deleteSupplier(this.supplier.id).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/suppliers']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.sub = this.supplierService.deleteSupplier(this.supplier.id).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/suppliers"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   removeImage(image_id) {
@@ -184,11 +199,15 @@ export class SupplierComponent implements OnInit, OnDestroy {
       if (result) {
         this.spinnerService.requestInProcess(true);
         this.supplierService
-          .deleteSupplierImage(+this.supplier.id, image_id).subscribe(
+          .deleteSupplierImage(+this.supplier.id, image_id)
+          .subscribe(
             res => {
               this.spinnerService.requestInProcess(false);
               if (!res.error) {
-                this.snotifyService.success("Deleted successfully !", "Success");
+                this.snotifyService.success(
+                  "Deleted successfully !",
+                  "Success"
+                );
                 this.supplier.image = new Image();
                 this.hasImage = false;
               }
@@ -208,7 +227,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getGermanyJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
       },
       errors => {
         const e = errors.json();
@@ -220,7 +239,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.supplierService.getCanadaJson().subscribe(
       (res: any) => {
         this.stateJSON = res;
-        setTimeout(() => { }, 500);
+        setTimeout(() => {}, 500);
       },
       errors => {
         const e = errors.json();
@@ -235,7 +254,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
       this.getStatesOfCanada();
     }
   }
-
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -256,17 +274,23 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.image.type = "small";
   }
 
-  onUploadError(evt) { }
-  onUploadSuccess(evt) { }
-  onCanceled(event) { }
+  onUploadError(evt) {}
+  onUploadSuccess(evt) {}
+  onCanceled(event) {}
 
   imageView(original_image) {
     let spliting = original_image;
-    spliting = spliting.split('/');
-    if (spliting[0] === '') {
-      return this.baseURL + original_image;
-    } else {
-      return original_image;
+    if (
+      original_image !== undefined &&
+      original_image !== null &&
+      original_image !== ""
+    ) {
+      spliting = spliting.split("/");
+      if (spliting[0] === "") {
+        return this.baseURL + original_image;
+      } else {
+        return original_image;
+      }
     }
   }
 

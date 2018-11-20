@@ -64,7 +64,7 @@ export class BrandComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    public router: Router,
+    public router: Router
   ) {
     this.brand = new Brand();
     this.images = new Array<Image>();
@@ -73,14 +73,14 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.brandID = params['id'] || '';
+      this.brandID = params["id"] || "";
       if (Boolean(this.brandID) && parseInt(this.brandID, 10) > 0) {
         this.getBrandById(this.brandID);
-        this.pageType = 'edit';
+        this.pageType = "edit";
       } else {
         this.brand = new Brand();
         this.hasImage = false;
-        this.pageType = 'new';
+        this.pageType = "new";
       }
     });
   }
@@ -91,15 +91,18 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   getBrandById(id: number) {
     this.spinnerService.requestInProcess(true);
-    this.sub = this.brandService.getBrandById(id).subscribe((res: any) => {
-      this.brand = new Brand(res.res.data);
-      this.hasImage = this.brand.image.id === -1 ? false : true;
-      this.spinnerService.requestInProcess(false);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.sub = this.brandService.getBrandById(id).subscribe(
+      (res: any) => {
+        this.brand = new Brand(res.res.data);
+        this.hasImage = this.brand.image.id === -1 ? false : true;
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   addBrand(form) {
@@ -108,27 +111,30 @@ export class BrandComponent implements OnInit, OnDestroy {
       this.snotifyService.warning("Please Fill All Required Fields");
       return;
     }
-      let a = this.directiveRef.dropzone();
-      if (a.files.length === 0) {
-        this.snotifyService.warning("Please Upload image", "Warning !");
-        return;
-      }
-      for (const iterator of a.files) {
-        this.addPicture(iterator);
-      }
-    
+    let a = this.directiveRef.dropzone();
+    if (a.files.length === 0) {
+      this.snotifyService.warning("Please Upload image", "Warning !");
+      return;
+    }
+    for (const iterator of a.files) {
+      this.addPicture(iterator);
+    }
+
     this.brand.image = this.image;
     this.spinnerService.requestInProcess(true);
-    this.brandService.addBrand(this.brand).subscribe((res) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/brands']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.brandService.addBrand(this.brand).subscribe(
+      res => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/brands"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   editBrand(form) {
@@ -152,16 +158,19 @@ export class BrandComponent implements OnInit, OnDestroy {
       tempImage = new Image(this.brand.image);
       delete this.brand.image;
     }
-    this.brandService.updateBrand(this.brand).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/brands']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.brandService.updateBrand(this.brand).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/brands"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
     this.brand.image = tempImage;
   }
 
@@ -183,16 +192,19 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   removeBrand() {
     this.spinnerService.requestInProcess(true);
-    this.sub = this.brandService.deleteBrand(this.brand.id).subscribe((res: any) => {
-      let e = res.res.message;
-      this.snotifyService.success(e, 'Success !');
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(['/brands']);
-    }, errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error.message;
-      this.snotifyService.error(e, 'Error !');
-    });
+    this.sub = this.brandService.deleteBrand(this.brand.id).subscribe(
+      (res: any) => {
+        let e = res.res.message;
+        this.snotifyService.success(e, "Success !");
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/brands"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
   }
 
   removeImage(image_id) {
@@ -204,22 +216,21 @@ export class BrandComponent implements OnInit, OnDestroy {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spinnerService.requestInProcess(true);
-        this.brandService
-          .deleteBrandImage(+this.brand.id, image_id).subscribe(
-            res => {
-              this.spinnerService.requestInProcess(false);
-              if (!res.error) {
-                this.snotifyService.success("Deleted successfully !", "Success");
-                this.brand.image = new Image();
-                this.hasImage = false;
-              }
-            },
-            errors => {
-              this.spinnerService.requestInProcess(false);
-              let e = JSON.stringify(errors.error.message);
-              this.snotifyService.error(e, "Fail");
+        this.brandService.deleteBrandImage(+this.brand.id, image_id).subscribe(
+          res => {
+            this.spinnerService.requestInProcess(false);
+            if (!res.error) {
+              this.snotifyService.success("Deleted successfully !", "Success");
+              this.brand.image = new Image();
+              this.hasImage = false;
             }
-          );
+          },
+          errors => {
+            this.spinnerService.requestInProcess(false);
+            let e = JSON.stringify(errors.error.message);
+            this.snotifyService.error(e, "Fail");
+          }
+        );
       }
       this.confirmDialogRef = null;
     });
@@ -249,11 +260,17 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   imageView(original_image) {
     let spliting = original_image;
-    spliting = spliting.split('/');
-    if (spliting[0] === '') {
-      return this.baseURL + original_image;
-    } else {
-      return original_image;
+    if (
+      original_image !== undefined &&
+      original_image !== null &&
+      original_image !== ""
+    ) {
+      spliting = spliting.split("/");
+      if (spliting[0] === "") {
+        return this.baseURL + original_image;
+      } else {
+        return original_image;
+      }
     }
   }
 }

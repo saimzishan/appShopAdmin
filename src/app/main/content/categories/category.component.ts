@@ -229,8 +229,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this.addPicture(iterator);
     }
     const data = this.categoryForm.getRawValue();
-    if (data.name === '') {
-      this.snotifyService.warning('Please Enter Category Name');
+    if (data.name === "") {
+      this.snotifyService.warning("Please Enter Category Name");
       return;
     }
     data["parent_id"] = this.parentCatId;
@@ -301,7 +301,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   remove(id) {
     if (this.categorie.children.length > 0) {
-      this.snotifyService.warning('Please delete children first', 'Warning!');
+      this.snotifyService.warning("Please delete children first", "Warning!");
       return;
     }
     this.categoryService.delete(id).subscribe(
@@ -373,11 +373,17 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   imageView(original_image) {
     let spliting = original_image;
-    spliting = spliting.split('/');
-    if (spliting[0] === '') {
-      return this.baseURL + original_image;
-    } else {
-      return original_image;
+    if (
+      original_image !== undefined &&
+      original_image !== null &&
+      original_image !== ""
+    ) {
+      spliting = spliting.split("/");
+      if (spliting[0] === "") {
+        return this.baseURL + original_image;
+      } else {
+        return original_image;
+      }
     }
   }
 }
