@@ -76,6 +76,10 @@
                 <mat-icon>add_box</mat-icon>
                 <span>ADD BULK PRODUCT</span>
               </button>
+              <button mat-menu-item (click)="deleteAllProducts()">
+                <mat-icon>delete</mat-icon>
+                <span>DELETE ALL PRODUCT</span>
+              </button>
             </mat-menu>
           </mat-cell>
         </ng-container>
@@ -344,7 +348,7 @@
 
       </mat-table>
 
-      <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" (page)="pageChange($event)">
+      <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="[25, 50, 100]" (page)="pageChange($event)">
       </mat-paginator>
 
     </div>

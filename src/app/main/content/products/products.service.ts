@@ -54,7 +54,7 @@ export class ProductsService extends ApiService {
   //     });
   // }
 
-  getProducts() {
+  getProducts(count) {
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -69,14 +69,15 @@ export class ProductsService extends ApiService {
       })
     };
     return this.http
-      .get(GLOBAL.USER_API + "products", httpOptions)
+      .get(GLOBAL.USER_API + "products?count=" + count, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
       });
   }
 
-  getProductsWithPage(page: number) {
+  getProductsWithPage(page: number, count?) {
+    let counting = '';
     let access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       let error = {
@@ -90,8 +91,11 @@ export class ProductsService extends ApiService {
         Authorization: "Bearer " + access_token
       })
     };
+    if (count) {
+      counting = '&count=' + count;
+    }
     return this.http
-      .get(GLOBAL.USER_API + "products?page=" + page, httpOptions)
+      .get(GLOBAL.USER_API + "products?page=" + page + counting, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -192,10 +196,33 @@ export class ProductsService extends ApiService {
       })
     };
     return this.http
-      .get(GLOBAL.USER_API + "products?search=" + search , httpOptions)
+      .get(GLOBAL.USER_API + "products?search=" + search, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
       });
   }
+
+  deleteAllProducts() {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
+      })
+    };
+    return this.http
+      .delete(GLOBAL.USER_API + "products/2?delete_all_prod", httpOptions)
+      .map(this.extractData)
+      .catch(err => {
+        return this.handleError(err);
+      });
+  }
+
 }
