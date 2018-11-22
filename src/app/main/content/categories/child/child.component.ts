@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Observable";
 import { Category } from "./../../models/category.model";
 import {
   Component,
@@ -17,6 +18,7 @@ import { MatDialogRef, MatDialog } from "@angular/material";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { GLOBAL } from "../../../../shared/globel";
 import { ITreeOptions } from "angular-tree-component";
+import { AuthGuard } from "../../../../guard/auth.guard";
 
 // @Directive({
 //     selector:'[my-custom-directive]',
@@ -27,35 +29,63 @@ import { ITreeOptions } from "angular-tree-component";
   selector: "category-child",
   template: `
     <mat-accordion>
-        <mat-expansion-panel (opened)="show(category.id)" [disabled]="!hasChild(category)">
-            <mat-expansion-panel-header>
-                <mat-panel-title class="col-md-3"> {{category.name}}</mat-panel-title>
-                <mat-panel-title class="col-md-2">
-                <ng-container *ngIf="category.children.length == 0">{{category.product_count}}</ng-container> </mat-panel-title>
-                <mat-panel-title class="col-md-1">
-                    <ng-container>
-                        <button style="margin-left: -36px" mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon>more_horiz</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu" overlapTrigger="false">
-                          <tree-root class="expand-tree" #tree [options]="options" (click)="$event.stopPropagation()" [nodes]="nodes" (activate)="activeNodes(tree.treeModel , category.id)"></tree-root>
-                        </mat-menu>
-                    </ng-container>
-                </mat-panel-title>
-                <mat-panel-title class="col-md-2"> {{getSpecificNotes(category.notes)}}</mat-panel-title>
-                <mat-panel-title class="col-md-2"> {{category.children.length}}</mat-panel-title>
-                <mat-panel-title class="col-md-2"> 
-                  <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editCategory(category.id)" style="margin-left: -63px;cursor:pointer">edit</mat-icon>
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ng-container *ngIf="hasChild(category)">
-                <ng-container *ngFor="let cate of categoryChildren">
-                    <category-child [category]='cate'  > </category-child>
-                </ng-container>
-            </ng-container>    
-        </mat-expansion-panel>
-    </mat-accordion>  
-    `,
+      <mat-expansion-panel
+        (opened)="show(category.id)"
+        [disabled]="!hasChild(category)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="col-md-3">
+            {{ category.name }}</mat-panel-title
+          >
+          <mat-panel-title class="col-md-2">
+            <ng-container *ngIf="category.children.length == 0">{{
+              category.product_count
+            }}</ng-container>
+          </mat-panel-title>
+          <mat-panel-title class="col-md-1">
+            <ng-container>
+              <button
+                style="margin-left: -36px"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+              >
+                <mat-icon>more_horiz</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" overlapTrigger="false">
+                <tree-root
+                  class="expand-tree"
+                  #tree
+                  [options]="options"
+                  (click)="$event.stopPropagation()"
+                  [nodes]="nodes"
+                  (activate)="activeNodes(tree.treeModel, category.id)"
+                ></tree-root>
+              </mat-menu>
+            </ng-container>
+          </mat-panel-title>
+          <mat-panel-title class="col-md-2">
+            {{ getSpecificNotes(category.notes) }}</mat-panel-title
+          >
+          <mat-panel-title class="col-md-2">
+            {{ category.children.length }}</mat-panel-title
+          >
+          <mat-panel-title class="col-md-2">
+            <mat-icon
+              class="active-icon mat-green-600-bg s-26"
+              (click)="editCategory(category.id)"
+              style="margin-left: -63px;cursor:pointer"
+              >edit</mat-icon
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ng-container *ngIf="hasChild(category)">
+          <ng-container *ngFor="let cate of categoryChildren">
+            <category-child [category]="cate"> </category-child>
+          </ng-container>
+        </ng-container>
+      </mat-expansion-panel>
+    </mat-accordion>
+  `,
   styleUrls: ["./child.component.scss"]
 })
 export class CategoryChildComponent implements OnInit {
@@ -64,7 +94,6 @@ export class CategoryChildComponent implements OnInit {
   categoryChildren: any;
   categories;
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
-
 
   @Output() categoryMoved = new EventEmitter<string>();
 
@@ -167,7 +196,7 @@ export class CategoryChildComponent implements OnInit {
 
   moveCategory(value, id) {
     if (value == id) {
-      this.snotifyService.warning('Products are Already in this Category');
+      this.snotifyService.warning("Products are Already in this Category");
       return;
     }
     this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
@@ -211,11 +240,19 @@ export class CategoryChildComponent implements OnInit {
   }
 
   getChildren(node: any) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     return new Promise((resolve, reject) => {
       this.spinnerService.requestInProcess(true);
       const httpOptions = {
         headers: new HttpHeaders({
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token
         })
       };
       this.http
@@ -234,8 +271,8 @@ export class CategoryChildComponent implements OnInit {
   activeNodes(treeModel: any, old_id) {
     this.parentCat = treeModel.activeNodes[0].data.name;
     if (treeModel.activeNodes[0].data.hasChildren === true) {
-      this.snotifyService.warning('Please Select Child Category');
-      this.parentCat = '';
+      this.snotifyService.warning("Please Select Child Category");
+      this.parentCat = "";
       return;
     } else {
       this.parentCatId = treeModel.activeNodes[0].data.my_id;

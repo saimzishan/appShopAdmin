@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Observable";
 import { Category } from "./../models/category.model";
 import { GLOBAL } from "./../../../shared/globel";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
@@ -24,6 +25,7 @@ import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { Image } from "../models/product.model";
 import { ActivatedRoute } from "@angular/router";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
+import { AuthGuard } from "../../../guard/auth.guard";
 
 @Component({
   selector: "app-category",
@@ -131,11 +133,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   getChildren(node: any) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     return new Promise((resolve, reject) => {
       this.spinnerService.requestInProcess(true);
       const httpOptions = {
         headers: new HttpHeaders({
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token
         })
       };
       this.http

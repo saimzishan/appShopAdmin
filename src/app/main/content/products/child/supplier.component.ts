@@ -1,3 +1,4 @@
+import { Observable } from "rxjs/Observable";
 import { GLOBAL } from "./../../../../shared/globel";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -7,7 +8,12 @@ import { MatSnackBar } from "@angular/material";
 import { FormGroup, FormControl, NgForm } from "@angular/forms";
 import { Component, EventEmitter, Output } from "@angular/core";
 import { Input, OnInit, ViewChild } from "@angular/core";
-import { Supplier, Product, Image, BluckPrice } from "../../models/product.model";
+import {
+  Supplier,
+  Product,
+  Image,
+  BluckPrice
+} from "../../models/product.model";
 import { ProductService } from "../product.service";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { CategoriesService } from "../../categories/categories.service";
@@ -15,6 +21,7 @@ import { ITreeOptions } from "angular-tree-component";
 import { DropzoneDirective, DropzoneComponent } from "ngx-dropzone-wrapper";
 import { FuseConfirmDialogComponent } from "../../../../core/components/confirm-dialog/confirm-dialog.component";
 import { MatDialogRef } from "@angular/material";
+import { AuthGuard } from "../../../../guard/auth.guard";
 
 @Component({
   selector: "app-product-supplier-form",
@@ -100,7 +107,7 @@ export class SupplierFormComponent implements OnInit {
       this.bulkPriceConvertor();
     }
 
-    if (!this.params.supplier_id && this.pageType === 'edit') {
+    if (!this.params.supplier_id && this.pageType === "edit") {
       this.route.queryParams.subscribe(params => {
         let addedSuppliers = params["addedSuppliers"];
         this.addedSuppliers = JSON.parse(atob(addedSuppliers));
@@ -125,11 +132,19 @@ export class SupplierFormComponent implements OnInit {
   }
 
   getChildren(node: any) {
+    let access_token = AuthGuard.getToken();
+    if (access_token === undefined) {
+      let error = {
+        message: "Unauthorized"
+      };
+      return Observable.throw({ error: error });
+    }
     return new Promise((resolve, reject) => {
       this.spinnerService.requestInProcess(true);
       const httpOptions = {
         headers: new HttpHeaders({
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token
         })
       };
       this.http
@@ -151,7 +166,7 @@ export class SupplierFormComponent implements OnInit {
       (res: any) => {
         if (!res.status) {
           this.suppliers = res.res.data.data;
-          if (!this.params.supplier_id && this.pageType === 'edit') {
+          if (!this.params.supplier_id && this.pageType === "edit") {
             this.addedSuppliers.forEach(sp => {
               let index = this.suppliers.findIndex(s => s.id === sp.id);
               this.suppliers.splice(index, 1);
@@ -251,8 +266,8 @@ export class SupplierFormComponent implements OnInit {
   activeNodes(treeModel: any) {
     this.parentCat = treeModel.activeNodes[0].data.name;
     if (treeModel.activeNodes[0].data.hasChildren === true) {
-      this.snotifyService.warning('Please Select Child Category');
-      this.parentCat = '';
+      this.snotifyService.warning("Please Select Child Category");
+      this.parentCat = "";
     } else {
       this.category_id = treeModel.activeNodes[0].data.my_id;
     }
@@ -270,12 +285,20 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please Select a category");
       return;
     }
-    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
-      this.snotifyService.warning("Please select atleast one side for printing");
+    if (
+      this.product.supplier.printing_option &&
+      this.product.supplier.sides.length === 0
+    ) {
+      this.snotifyService.warning(
+        "Please select atleast one side for printing"
+      );
       return;
     }
-    if (this.product.supplier.track_stock && this.product.supplier.stock === 0 &&
-      this.product.supplier.low_level_stock === 0) {
+    if (
+      this.product.supplier.track_stock &&
+      this.product.supplier.stock === 0 &&
+      this.product.supplier.low_level_stock === 0
+    ) {
       this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
       return;
     }
@@ -284,7 +307,10 @@ export class SupplierFormComponent implements OnInit {
       this.product.supplier.stock = 0;
     }
     if (this.pTempImages.length === 0) {
-      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
+      this.snotifyService.warning(
+        "Please upload Product image(s)",
+        "Warning !"
+      );
       return;
     } else {
       this.pTempImages.forEach(img => {
@@ -313,7 +339,9 @@ export class SupplierFormComponent implements OnInit {
           _ps_id: res.res.data.id
         };
         localStorage.setItem("_saveP", JSON.stringify(temp));
-        this.router.navigate(["/products/" + res.res.data.p_id + "/" + this.product.supplier.id]);
+        this.router.navigate([
+          "/products/" + res.res.data.p_id + "/" + this.product.supplier.id
+        ]);
       },
       errors => {
         this.spinnerService.requestInProcess(false);
@@ -356,7 +384,7 @@ export class SupplierFormComponent implements OnInit {
     this.image = new Image();
     this.spinnerService.requestInProcess(false);
   }
-  onUploadError(evt) { }
+  onUploadError(evt) {}
   onUploadSuccess(evt) {
     // this.image.base64String = evt[0].dataURL.split(",")[1];
     // this.image.content_type = evt[0].type.split("/")[1];
@@ -396,8 +424,7 @@ export class SupplierFormComponent implements OnInit {
     return images;
   }
 
-  onCanceled(event) {
-  }
+  onCanceled(event) {}
 
   addBluckPrice(form: NgForm) {
     if (form.invalid) {
@@ -538,15 +565,20 @@ export class SupplierFormComponent implements OnInit {
       return;
     }
 
-    if (this.pTempImages.length === 0 && this.product.product_images.length === 0) {
-      this.snotifyService.warning("Please upload Product image(s)", "Warning !");
+    if (
+      this.pTempImages.length === 0 &&
+      this.product.product_images.length === 0
+    ) {
+      this.snotifyService.warning(
+        "Please upload Product image(s)",
+        "Warning !"
+      );
       return;
     } else {
       this.pTempImages.forEach(img => {
         this.pImages.push(this.addPicture(img));
       });
     }
-
 
     let object = {
       id: this.product_id,
@@ -586,12 +618,20 @@ export class SupplierFormComponent implements OnInit {
       updatedSupplier.low_level_stock = 0;
       updatedSupplier.stock = 0;
     }
-    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
-      this.snotifyService.warning("Please select atleast one side for printing");
+    if (
+      this.product.supplier.printing_option &&
+      this.product.supplier.sides.length === 0
+    ) {
+      this.snotifyService.warning(
+        "Please select atleast one side for printing"
+      );
       return;
     }
-    if (this.product.supplier.track_stock && +this.product.supplier.stock === 0 &&
-      +this.product.supplier.low_level_stock === 0) {
+    if (
+      this.product.supplier.track_stock &&
+      +this.product.supplier.stock === 0 &&
+      +this.product.supplier.low_level_stock === 0
+    ) {
       this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
       return;
     }
@@ -645,12 +685,20 @@ export class SupplierFormComponent implements OnInit {
       this.snotifyService.warning("Please Select a category");
       return;
     }
-    if (this.product.supplier.printing_option && this.product.supplier.sides.length === 0) {
-      this.snotifyService.warning("Please select atleast one side for printing");
+    if (
+      this.product.supplier.printing_option &&
+      this.product.supplier.sides.length === 0
+    ) {
+      this.snotifyService.warning(
+        "Please select atleast one side for printing"
+      );
       return;
     }
-    if (this.product.supplier.track_stock && this.product.supplier.stock === 0 &&
-      this.product.supplier.low_level_stock === 0) {
+    if (
+      this.product.supplier.track_stock &&
+      this.product.supplier.stock === 0 &&
+      this.product.supplier.low_level_stock === 0
+    ) {
       this.snotifyService.warning("You enter 0 in Low_Level_Stock or Stock");
       return;
     }
@@ -681,10 +729,9 @@ export class SupplierFormComponent implements OnInit {
         this.snotifyService.error(e, "Error !");
       }
     );
-
   }
 
-  addBulkPricetoServer() { }
+  addBulkPricetoServer() {}
 
   converter() {
     let temp = [];
@@ -724,8 +771,8 @@ export class SupplierFormComponent implements OnInit {
   }
 
   makeArrayOfSides() {
-    if (this.pageType === 'edit' && this.product.supplier.sides !== null) {
-      this.product.supplier.sides = this.product.supplier.sides.split(',');
+    if (this.pageType === "edit" && this.product.supplier.sides !== null) {
+      this.product.supplier.sides = this.product.supplier.sides.split(",");
     }
   }
 
@@ -734,7 +781,7 @@ export class SupplierFormComponent implements OnInit {
     if (supplier) {
       return supplier.name;
     } else {
-      return 'supplier';
+      return "supplier";
     }
   }
 
@@ -743,7 +790,9 @@ export class SupplierFormComponent implements OnInit {
   }
 
   onProductRemove(event) {
-    let index = this.pTempImages.findIndex(img => img.upload.uuid === event.upload.uuid);
+    let index = this.pTempImages.findIndex(
+      img => img.upload.uuid === event.upload.uuid
+    );
     if (index !== -1) {
       this.pTempImages.splice(index, 1);
     }
@@ -754,7 +803,9 @@ export class SupplierFormComponent implements OnInit {
   }
 
   onSupplierRemove(event) {
-    let index = this.sTempImages.findIndex(img => img.upload.uuid === event.upload.uuid);
+    let index = this.sTempImages.findIndex(
+      img => img.upload.uuid === event.upload.uuid
+    );
     if (index !== -1) {
       this.sTempImages.splice(index, 1);
     }
