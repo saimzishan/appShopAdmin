@@ -17,6 +17,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { GLOBAL } from "../../../shared/globel";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
 import { ProductService } from "./product.service";
+import { count } from "rxjs/operators";
 
 @Component({
   selector: "app-products",
@@ -107,11 +108,11 @@ export class ProductsComponent implements OnInit {
 
   index() {
     this.spinnerService.requestInProcess(true);
-    this.productsService.getProducts().subscribe(
+    this.productsService.getProducts(25).subscribe(
       (res: any) => {
         if (!res.status) {
           this.totalItems = res.res.data.total;
-          this.perPage = res.res.data.per_page;
+          this.perPage = 25;
           this.setDataSuorce(res.res.data.data);
         }
         this.spinnerService.requestInProcess(false);
@@ -125,9 +126,9 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  getProductsWithPage(page: number) {
+  getProductsWithPage(page: number , count?) {
     this.spinnerService.requestInProcess(true);
-    this.productsService.getProductsWithPage(page).subscribe(
+    this.productsService.getProductsWithPage(page , count).subscribe(
       (res: any) => {
         if (!res.status) {
           this.totalItems = res.res.data.total;
@@ -246,7 +247,8 @@ export class ProductsComponent implements OnInit {
   }
 
   pageChange(event) {
-    this.getProductsWithPage(event.pageIndex + 1);
+    console.log(event);
+    this.getProductsWithPage(event.pageIndex + 1 , event.pageSize);
   }
 
   view(value) {
@@ -367,32 +369,46 @@ export class ProductsComponent implements OnInit {
       let obj = [];
       const tempSelectedObj: any = this.selection.selected;
       for (const iterator of tempSelectedObj) {
-        if (this.bulkPrice === null && this.bulkInventory === null) {
-          if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
-            this.snotifyService.warning('Inventory Required');
-            return;
-          } else {
-            this.bulkInventory = iterator.suppliers[0].pivot.stock;
-          }
-          if (iterator.suppliers[0].pivot.price === null || iterator.suppliers[0].pivot.price === '' || iterator.suppliers[0].pivot.price === undefined) {
-            this.snotifyService.warning('Price Required');
-            return;
-          } else {
-            this.bulkPrice = iterator.suppliers[0].pivot.price;
-          }
-        } else if (this.bulkPrice === null && this.bulkInventory !== null) {
-          this.bulkPrice = iterator.suppliers[0].pivot.price;
-        } else if (this.bulkPrice !== null && this.bulkInventory === null) {
-          this.bulkInventory = iterator.suppliers[0].pivot.stock;
-        }
+        // if (this.bulkPrice === null && this.bulkInventory === null) {
+        //   if (iterator.suppliers[0].pivot.stock === null || iterator.suppliers[0].pivot.stock === '' || iterator.suppliers[0].pivot.stock === undefined) {
+        //     this.snotifyService.warning('Inventory Required');
+        //     return;
+        //   } else {
+        //     // this.bulkInventory = iterator.suppliers[iterator].pivot.stock;
+        //   }
+        //   if (iterator.suppliers[0].pivot.price === null || iterator.suppliers[0].pivot.price === '' || iterator.suppliers[0].pivot.price === undefined) {
+        //     this.snotifyService.warning('Price Required');
+        //     return;
+        //   } else {
+        //     // this.bulkPrice = iterator.suppliers[iterator].pivot.price;
+        //   }
+        // } else if (this.bulkPrice === null && this.bulkInventory !== null) {
+        //   this.bulkPrice = iterator.suppliers[0].pivot.price;
+        // } else if (this.bulkPrice !== null && this.bulkInventory === null) {
+        //   this.bulkInventory = iterator.suppliers[0].pivot.stock;
+        // }
         classArray = iterator.suppliers[0].pivot.class;
         for (const i of this.classBulkAdd) {
           classArray.push(i);
+          if (classArray === []) {
+            classArray.push(8);
+          }
+        }
+        let price , stock;
+        if (this.bulkPrice === null || this.bulkPrice === '') {
+          price = iterator.suppliers[0].pivot.price;
+        } else {
+          price = this.bulkPrice;
+        }
+        if (this.bulkInventory === null || this.bulkInventory === '') {
+          stock = iterator.suppliers[0].pivot.stock;
+        } else {
+          stock = this.bulkInventory;
         }
         obj.push({
           id: iterator.suppliers[0].pivot.id,
-          price: this.bulkPrice,
-          stock: this.bulkInventory,
+          price: price,
+          stock: stock,
           class: classArray
         });
       }
@@ -430,6 +446,38 @@ export class ProductsComponent implements OnInit {
 
   truncateString(name: string) {
     return (name.substring(0, 10)) + '...';
+  }
+
+  deleteAllProducts() {
+    this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
+      disableClose: false
+    });
+    this.confirmDialogRef.componentInstance.confirmMessage =
+      "Are you sure you want to delete?";
+    this.confirmDialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.spinnerService.requestInProcess(true);
+        this.productsService.deleteAllProducts()
+          .subscribe(
+            res => {
+              this.setDataSuorce([]);
+              this.perPage = 0;
+              this.totalItems = 0;
+              this.spinnerService.requestInProcess(false);
+              if (!res.error) {
+                this.snotifyService.success(res.res.message);
+                
+              } else {
+                this.snotifyService.error("Something went wrong!", "Error");
+              }
+            },
+            error => {
+              this.spinnerService.requestInProcess(false);
+            }
+          );
+      }
+      this.confirmDialogRef = null;
+    });
   }
 
   imageView(original_image) {
