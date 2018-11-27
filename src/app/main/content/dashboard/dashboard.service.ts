@@ -1,62 +1,37 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ApiService } from '../../../api/api.service';
+import { AuthGuard } from '../../../guard/auth.guard';
+import { GLOBAL } from '../../../shared/globel';
 
 @Injectable()
-export class DashboardService implements Resolve<any>
+export class DashboardService extends ApiService
 {
     projects: any[];
     widgets: any[];
+    http: any;
 
-    constructor(
-        private http: HttpClient
-    )
-    {
-    }
-
-    /**
-     * Resolve
-     * @param {ActivatedRouteSnapshot} route
-     * @param {RouterStateSnapshot} state
-     * @returns {Observable<any> | Promise<any> | any}
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any
-    {
-
-        return new Promise((resolve, reject) => {
-
-            Promise.all([
-                this.getProjects(),
-                this.getWidgets()
-            ]).then(
-                () => {
-                    resolve();
-                },
-                reject
-            );
-        });
-    }
-
-    getProjects(): Promise<any>
-    {
-        return new Promise((resolve, reject) => {
-            this.http.get('api/projects-dashboard-projects')
-                .subscribe((response: any) => {
-                    this.projects = response;
-                    resolve(response);
-                }, reject);
-        });
-    }
-
-    getWidgets(): Promise<any>
-    {
-        return new Promise((resolve, reject) => {
-            this.http.get('api/e-commerce-dashboard')
-                .subscribe((response: any) => {
-                    this.widgets = response;
-                    resolve(response);
-                }, reject);
-        });
+    getDashboardInfo() {
+        const access_token = AuthGuard.getToken();
+        if (access_token === undefined) {
+            const error = {
+                message: "Unauthorized"
+            };
+            return Observable.throw({ error: error });
+        }
+        const httpOptions = {
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + access_token
+            })
+        };
+        return this.http
+            .get(GLOBAL.USER_API + "bulkUploads" , httpOptions)
+            .map(this.extractData)
+            .catch(err => {
+                return this.handleError(err);
+            });
     }
 }

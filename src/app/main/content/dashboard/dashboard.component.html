@@ -11,26 +11,20 @@
                 <!-- Front -->
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                     <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <mat-form-field>
-                            <mat-select class="simplified font-size-16" aria-label="Change range" [ngModel]="w1">
-                                <mat-option [value]="1">Yestarday</mat-option>
-                                <mat-option [value]="2">Today</mat-option>
-                                <mat-option [value]="3">Tomorrow</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div class="h3">Products</div>
                         <button mat-icon-button fuseWidgetToggle aria-label="more">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                     </div>
                     <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                         <div class="light-blue-fg font-size-72 line-height-72">
-                            650
+                            {{dashboard.product_count}}
                         </div>
                         <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
                     </div>
                     <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Completed:</span>
-                        <span class="h4 ml-8">10</span>
+                        <span class="h4 secondary-text text-truncate">Active Products:</span>
+                        <span class="h4 ml-8">{{dashboard.active_product_count}}</span>
                     </div>
                 </div>
                 <!-- / Front -->
@@ -52,7 +46,7 @@
                 <!-- Front -->
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                     <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Overdue</div>
+                        <div class="h3">Categories</div>
 
                         <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
                             <mat-icon>more_vert</mat-icon>
@@ -61,14 +55,14 @@
 
                     <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                         <div class="red-fg font-size-72 line-height-72">
-                            44
+                            {{dashboard.category_count}}
                         </div>
-                        <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
+                        <div class="h3 secondary-text font-weight-500">CATEGORIES</div>
                     </div>
 
                     <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Yestarday's Overdue:</span>
-                        <span class="h4 ml-8">4</span>
+                        <span class="h4 secondary-text text-truncate">Active Categories:</span>
+                        <span class="h4 ml-8">{{dashboard.category_count}}</span>
                     </div>
                 </div>
                 <!-- / Front -->
@@ -93,7 +87,7 @@
                 <!-- Front -->
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                     <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Issues</div>
+                        <div class="h3">Brands</div>
 
                         <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
                             <mat-icon>more_vert</mat-icon>
@@ -102,14 +96,14 @@
 
                     <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
                         <div class="orange-fg font-size-72 line-height-72">
-                            4
+                            {{dashboard.brand_count}}
                         </div>
-                        <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
+                        <div class="h3 secondary-text font-weight-500">BRANDS</div>
                     </div>
 
                     <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Closed Today:</span>
-                        <span class="h4 ml-8">0</span>
+                        <span class="h4 secondary-text text-truncate">Active Brands:</span>
+                        <span class="h4 ml-8">{{dashboard.brand_count}}</span>
                     </div>
                 </div>
                 <!-- / Front -->
@@ -134,7 +128,7 @@
                 <!-- Front -->
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                     <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Featured</div>
+                        <div class="h3">Users</div>
 
                         <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
                             <mat-icon>more_vert</mat-icon>
@@ -142,14 +136,14 @@
                     </div>
 
                     <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                        <div class="blue-grey-fg font-size-72 line-height-72">38
+                        <div class="blue-grey-fg font-size-72 line-height-72">{{dashboard.user_count}}
                         </div>
-                        <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
+                        <div class="h3 secondary-text font-weight-500">USERS</div>
                     </div>
 
                     <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Implemented:</span>
-                        <span class="h4 ml-8">2</span>
+                        <span class="h4 secondary-text text-truncate">Active Users:</span>
+                        <span class="h4 ml-8">{{dashboard.user_count}}</span>
                     </div>
                 </div>
                 <!-- / Front -->
@@ -169,33 +163,15 @@
             </fuse-widget>
             <!-- / WIDGET 4 -->
             <!-- WIDGET 5 -->
-            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
-
-                <!-- Front -->
+            <!-- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-
                     <div class="px-16 border-bottom" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
-
                         <div fxFlex class="py-8 h3">Progress</div>
-
-                        <!-- <div fxFlex="0 1 auto" class="py-8" fxLayout="row">
-                            <button mat-button class="px-16" *ngFor="let range of widgets.widget5.ranges | keys" (click)="widget5.currentRange = range.key"
-                                [disabled]="widget5.currentRange == range.key">
-                                {{range.value}}
-                            </button>
-                        </div> -->
                     </div>
-
                     <div class="h-420">
-                        <!-- <ngx-charts-bar-vertical-stacked *fuseIfOnDom [scheme]="widget5.scheme" [results]="this.widgets.widget5.mainChart[this.widget5.currentRange]"
-                            [gradient]="widget5.gradient" [xAxis]="widget5.xAxis" [yAxis]="widget5.yAxis" [legend]="widget5.legend"
-                            [showXAxisLabel]="widget5.showXAxisLabel" [showYAxisLabel]="widget5.showYAxisLabel" [xAxisLabel]="widget5.xAxisLabel"
-                            [yAxisLabel]="widget5.yAxisLabel" (select)="widget5.onSelect($event)">
-                        </ngx-charts-bar-vertical-stacked> -->
                     </div>
                 </div>
-                <!-- / Front -->
-            </fuse-widget>
+            </fuse-widget> -->
         </div>
         <!-- / WIDGET GROUP -->
 
