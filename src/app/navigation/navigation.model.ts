@@ -6,6 +6,23 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
     constructor() {
         this.model = [
             {
+                'id': 'suppliers',
+                'title': 'Dashboard',
+                'translate': 'NAV.SUPPLIERS',
+                'type': 'collapse',
+                'icon': 'dashboard',
+                'children': [
+                    {
+                        'id': 'view',
+                        'title': 'View',
+                        'type': 'item',
+                        'icon': 'visibility',
+                        'url': '/dashboard',
+                        'exactMatch': true
+                    }
+                ]
+            },
+            {
                 'id': 'products',
                 'title': 'Products',
                 'translate': 'NAV.ECOMMERCE',
@@ -1154,13 +1171,7 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                       'icon' : 'settings_input_component',
                       'url'  : '/components/navigation'
                   },
-                  {
-                      'id'   : 'search-bar',
-                      'title': 'Search Bar',
-                      'type' : 'item',
-                      'icon' : 'settings_input_component',
-                      'url'  : '/components/search-bar'
-                  },
+
                   {
                       'id'   : 'shortcuts',
                       'title': 'Shortcuts',

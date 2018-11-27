@@ -66,6 +66,7 @@ export class ProductsComponent implements OnInit {
   new_obj: any;
   bulkPrice = null;
   bulkInventory = null;
+  bulklowInventory = null;
   options = '';
   id;
   classArray;
@@ -126,9 +127,9 @@ export class ProductsComponent implements OnInit {
     );
   }
 
-  getProductsWithPage(page: number , count?) {
+  getProductsWithPage(page: number, count?) {
     this.spinnerService.requestInProcess(true);
-    this.productsService.getProductsWithPage(page , count).subscribe(
+    this.productsService.getProductsWithPage(page, count).subscribe(
       (res: any) => {
         if (!res.status) {
           this.totalItems = res.res.data.total;
@@ -248,7 +249,7 @@ export class ProductsComponent implements OnInit {
 
   pageChange(event) {
     console.log(event);
-    this.getProductsWithPage(event.pageIndex + 1 , event.pageSize);
+    this.getProductsWithPage(event.pageIndex + 1, event.pageSize);
   }
 
   view(value) {
@@ -394,7 +395,7 @@ export class ProductsComponent implements OnInit {
             classArray.push(8);
           }
         }
-        let price , stock;
+        let price, stock, low_level_stock;
         if (this.bulkPrice === null || this.bulkPrice === '') {
           price = iterator.suppliers[0].pivot.price;
         } else {
@@ -405,10 +406,16 @@ export class ProductsComponent implements OnInit {
         } else {
           stock = this.bulkInventory;
         }
+        if (this.bulklowInventory === null || this.bulklowInventory === '') {
+          low_level_stock = iterator.suppliers[0].pivot.low_level_stock;
+        } else {
+          low_level_stock = this.bulklowInventory;
+        }
         obj.push({
           id: iterator.suppliers[0].pivot.id,
           price: price,
           stock: stock,
+          low_level_stock: low_level_stock,
           class: classArray
         });
       }
@@ -433,6 +440,7 @@ export class ProductsComponent implements OnInit {
         this.selection.clear();
         this.bulkInventory = null;
         this.bulkPrice = null;
+        this.bulklowInventory = null;
         this.classBulkAdd = [];
         this.spinnerService.requestInProcess(false);
       },
@@ -466,7 +474,7 @@ export class ProductsComponent implements OnInit {
               this.spinnerService.requestInProcess(false);
               if (!res.error) {
                 this.snotifyService.success(res.res.message);
-                
+
               } else {
                 this.snotifyService.error("Something went wrong!", "Error");
               }
@@ -478,6 +486,28 @@ export class ProductsComponent implements OnInit {
       }
       this.confirmDialogRef = null;
     });
+  }
+
+  isTrackInventoryActive(event, id) {
+    this.spinnerService.requestInProcess(true);
+    const obj = {
+      id: id,
+      track_stock: event.checked
+    };
+    this.productsService.trackInventoryUpdate(obj).subscribe(
+      (res: any) => {
+        if (res) {
+          this.snotifyService.success(res.res.message);
+          this.spinnerService.requestInProcess(false);
+        }
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.error);
+        this.snotifyService.error(e, "Error !");
+      });
   }
 
   imageView(original_image) {

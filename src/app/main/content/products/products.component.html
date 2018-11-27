@@ -140,14 +140,19 @@
       <mat-card-content>
         <div class="row">
           <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-            <div class="col-md-3">
+            <div class="col-md-2">
               <mat-form-field class="w-100-p">
                 <input matInput type="number" [(ngModel)]="bulkPrice" placeholder="Price" required>
               </mat-form-field>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <mat-form-field class="w-100-p">
                 <input matInput type="number" [(ngModel)]="bulkInventory" placeholder="Inventory" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-2">
+              <mat-form-field class="w-100-p">
+                <input matInput type="number" [(ngModel)]="bulklowInventory" placeholder="Low Level Inventory" required>
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -255,19 +260,26 @@
 
         <!-- Inventory Column -->
         <ng-container cdkColumnDef="inventory">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Inventory</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-sm>Stock / Low Level Stock</mat-header-cell>
           <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-sm>
             <!-- <p class="text-truncate">{{product.suppliers[0].pivot.stock}}</p> -->
-            <mat-form-field class="w-50-p">
+            <mat-form-field class="w-20-p">
               <input [readonly]="!selection.isSelected(product)" matInput *ngIf="product.suppliers" [(ngModel)]="product.suppliers[0].pivot.stock">
             </mat-form-field>
+            --
+            <mat-form-field class="w-20-p">
+              <input [readonly]="!selection.isSelected(product)" matInput *ngIf="product.suppliers" [(ngModel)]="product.suppliers[0].pivot.low_level_stock">
+            </mat-form-field>
+            <br>
+            <mat-slide-toggle (change)="isTrackInventoryActive($event, product.suppliers[0].id)" [checked]="product.suppliers[0].pivot.track_stock === 1" style="margin-bottom: 15px !important"><b>Track</b></mat-slide-toggle>
           </mat-cell>
         </ng-container>
 
         <!-- Supplier Column -->
         <ng-container cdkColumnDef="supplier">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Supplier</mat-header-cell>
-          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+          <mat-header-cell style="margin-left: 25px !important" *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select
+            Supplier</mat-header-cell>
+          <mat-cell *cdkCellDef="let product; let i = index;" style="margin-left: 25px !important" fxHide fxShow.gt-xs>
             <mat-form-field>
               <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" *ngIf="product.suppliers" (ngModelChange)="onSupplierChange($event, product, i);">
                 <mat-option *ngFor="let supplier of getSupplier(product.id);" [value]="supplier.id">
@@ -280,8 +292,9 @@
 
         <!-- Class Column -->
         <ng-container cdkColumnDef="classes">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select Class</mat-header-cell>
-          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+          <mat-header-cell style="margin-left: 25px !important" *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Select
+            Class</mat-header-cell>
+          <mat-cell style="margin-left: 25px !important" *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
             <mat-form-field>
               <mat-select placeholder="Classes" *ngIf="product.suppliers" [ngModel]="product.suppliers[0].pivot.class" multiple (change)="addClasses($event.value , product.suppliers[0].pivot.id)">
                 <button mat-raised-button (click)="update(2)" class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;color: #ffffff !important;margin-top: 10px !important;margin-bottom: 10px">
@@ -302,8 +315,9 @@
 
         <!-- Active Column -->
         <ng-container cdkColumnDef="status">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active / Inactive</mat-header-cell>
-          <mat-cell *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
+          <mat-header-cell style="margin-left: 25px !important" *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Active
+            / Inactive</mat-header-cell>
+          <mat-cell style="margin-left: 25px !important" *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
             <mat-slide-toggle [checked]="product.active === 1" (change)="isActiveProduct($event, product.id)"></mat-slide-toggle>
             <!-- <mat-checkbox [checked]="product.active" (change)="isActiveProduct($event, product.id)"></mat-checkbox> -->
           </mat-cell>
@@ -311,8 +325,8 @@
 
         <!-- Action Column -->
         <ng-container cdkColumnDef="action">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
-          <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-xs>
+          <mat-header-cell style="margin-left: 25px !important" *cdkHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Action</mat-header-cell>
+          <mat-cell style="margin-left: 25px !important" *cdkCellDef="let product" fxHide fxShow.gt-xs>
             <!-- <mat-icon class="active-icon mat-green-600-bg s-26" (click)="editProduct(product.id)" style="margin-right: 10%;cursor:pointer">edit</mat-icon>
                                         <button mat-raised-button class="save-product-button mat-accent mt-16 mt-sm-0" (click)="addNewSupplier(product.id)">
                                             <span>ADD NEW SUPPLIER</span>
@@ -343,12 +357,13 @@
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *cdkRowDef="let products; columns: displayedColumns;" class="product" matRipple>
+        <mat-row style="height: 108px !important" *cdkRowDef="let products; columns: displayedColumns;" class="product" matRipple>
         </mat-row>
 
       </mat-table>
 
-      <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="[25, 50, 100]" (page)="pageChange($event)">
+      <mat-paginator *ngIf="!optionSelection" #paginator [length]="totalItems" [pageSize]="perPage" [pageSizeOptions]="[25, 50, 100]"
+        (page)="pageChange($event)">
       </mat-paginator>
 
     </div>
