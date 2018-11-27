@@ -124,6 +124,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
   activeNodes(treeModel: any) {
     this.parentCat = treeModel.activeNodes[0].data.name;
     this.parentCatId = treeModel.activeNodes[0].data.my_id;
+    let tempID = this.categories.find(x => x.id === treeModel.activeNodes[0].data.my_id);
+    if (tempID.product_count !== 0) {
+      this.snotifyService.warning('You Cannot Add Sub Category Because Products Already Exist on ' + treeModel.activeNodes[0].data.name);
+      this.parentCat = '';
+      this.parentCatId = '';
+      return;
+    }
   }
 
   onEvent(data) {
@@ -243,7 +250,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       },
       errors => {
         this.spinnerService.requestInProcess(false);
-        let e = errors.error;
+        let e = errors.error.message;
         e = JSON.stringify(e);
         this.snotifyService.error(e, "Error !");
       }
@@ -362,10 +369,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.category.image.type = "small";
   }
 
-  onUploadError(evt) {}
-  onUploadSuccess(evt) {}
-  onCanceled(event) {}
-  ngOnDestroy() {}
+  onUploadError(evt) { }
+  onUploadSuccess(evt) { }
+  onCanceled(event) { }
+  ngOnDestroy() { }
 
   getPCategoryName(id) {
     return this.categories.find(c => c.id === id);
