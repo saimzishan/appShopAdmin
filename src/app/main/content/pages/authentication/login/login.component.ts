@@ -92,7 +92,7 @@ export class FuseLoginComponent implements OnInit {
           this.snotifyService.success("Login sucessfully", "Success !");
           setTimeout(() => {
             this.spinnerService.requestInProcess(false);
-            this.router.navigate(["/user-management"]);
+            this.router.navigate(["/dashboard"]);
           }, 2500);
         }
       },
@@ -112,7 +112,7 @@ export class FuseLoginComponent implements OnInit {
         if (!res.error) {
         localStorage.removeItem("currentUser");
           localStorage.setItem("currentUser", JSON.stringify(res.res));
-          this.router.navigate(["/user-management"]);
+          this.router.navigate(["/dashboard"]);
         }
       },
       errors => {
