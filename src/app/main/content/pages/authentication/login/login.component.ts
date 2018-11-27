@@ -113,6 +113,7 @@ export class FuseLoginComponent implements OnInit {
         localStorage.removeItem("currentUser");
           localStorage.setItem("currentUser", JSON.stringify(res.res));
           this.router.navigate(["/dashboard"]);
+        this.spinnerService.requestInProcess(false);
         }
       },
       errors => {
