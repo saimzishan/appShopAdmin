@@ -2,17 +2,16 @@ import { DropzoneConfigInterface } from "ngx-dropzone-wrapper";
 
 export class GLOBAL {
   // public static USER_API = "http://18.217.12.17/api/public/api/auth/";
-  public static USER_API = "http://www.econowholesale.com/api/public/api/auth/";
-  // public static USER_API =
-  // "http://124.109.39.22:18089/onlineappshopapi/public/api/auth/";
-  // "http://60248c9d.ngrok.io/api/auth/";
+  // public static USER_API = "http://www.econowholesale.com/api/public/api/auth/";
+  // public static USER_API = "http://124.109.39.22:18089/onlineappshopapi/public/api/auth/";
+  public static USER_API = "http://aea1c600.ngrok.io/api/auth/";
   // public static USER_API = "http://2dcc3b88.ngrok.io/api/auth/";
   // public static USER_API =
   // "http://127.0.0.1:8000/api/auth/";
 
   // public static USER_IMAGE_API = "http://18.217.12.17/api";
-  public static USER_IMAGE_API = "http://www.econowholesale.com/api";
-  // public static USER_IMAGE_API = "http://124.109.39.22:18089/onlineappshopapi";
+  // public static USER_IMAGE_API = "http://www.econowholesale.com/api";
+  public static USER_IMAGE_API = "http://124.109.39.22:18089/onlineappshopapi";
 
   public static LEVELS = [
     { id: 1, name: "Silver" },
@@ -22,11 +21,10 @@ export class GLOBAL {
 
   public static STATUS = [
     { id: 1, name: "created" },
-    { id: 2, name: "accepted" },
+    { id: 2, name: "approved" },
     { id: 3, name: "in-progress" },
-    { id: 4, name: "dispatched" },
-    { id: 5, name: "delivered" },
-    { id: 6, name: "closed" }
+    { id: 4, name: "full-fill" },
+    { id: 5, name: "canceled" },
   ];
 
   public static DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -48,8 +46,8 @@ export class GLOBAL {
     url: GLOBAL.USER_API + "drop-image",
     maxFilesize: 2, // size MB
     maxFiles: 1,
-    init: function() {
-      this.on("maxfilesexceeded", function(file) {
+    init: function () {
+      this.on("maxfilesexceeded", function (file) {
         this.removeAllFiles();
         this.addFile(file);
       });
@@ -68,8 +66,8 @@ export class GLOBAL {
     url: GLOBAL.USER_API + "drop-image",
     // maxFilesize: 2, // size MB
     maxFiles: 1,
-    init: function() {
-      this.on("maxfilesexceeded", function(file) {
+    init: function () {
+      this.on("maxfilesexceeded", function (file) {
         this.removeAllFiles();
         this.addFile(file);
       });

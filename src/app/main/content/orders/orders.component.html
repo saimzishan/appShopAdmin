@@ -6,8 +6,7 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
-      fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -15,7 +14,7 @@
         <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">Orders</span>
       </div>
       <!-- / APP TITLE -->
-      
+
       <!-- SEARCH -->
       <div class="search-input-wrapper mx-12 m-md-0" fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
         <label for="search" class="mr-8">
@@ -26,10 +25,48 @@
         </mat-form-field>
       </div>
       <!-- / SEARCH -->
-      <div mat-raised-button  class="add-product-button mat-white-bg my-12 mt-sm-0">
+      <div mat-raised-button class="add-product-button mat-white-bg my-12 mt-sm-0">
       </div>
-      </div>
+    </div>
     <!-- / HEADER -->
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-2">
+            <button mat-raised-button (click)="getOrderList()" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+              <span>All</span>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getFilteredOrder('created')" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #00BCD4 !important ; color: #ffffff !important">
+              <span>Created</span>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getFilteredOrder('approved')" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #8BC34A !important ; color: #ffffff !important">
+              <span>Approved</span>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getFilteredOrder('in-progress')" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #FF9800 !important ; color: #ffffff !important">
+              <span>In-progress</span>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getFilteredOrder('full-fill')" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #4CAF50 !important ; color: #ffffff !important">
+              <span>Fulfilled</span>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getFilteredOrder('canceled')" class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0" style="background-color: #F44336 !important ; color: #ffffff !important">
+              <span>Canceled</span>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <br>
 
     <!-- CONTENT CARD -->
     <div class="content-card mat-white-bg">
@@ -80,8 +117,8 @@
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row *cdkRowDef="let order; columns: displayedColumns;" matRipple class="element-row" [cdkDetailRow]="order"
-          [cdkDetailRowTpl]="tpl" (toggleChange)="onToggleChange($event, order)">
+        <mat-row *cdkRowDef="let order; columns: displayedColumns;" matRipple class="element-row" [cdkDetailRow]="order" [cdkDetailRowTpl]="tpl"
+          (toggleChange)="onToggleChange($event, order)">
         </mat-row>
 
       </mat-table>
@@ -94,18 +131,16 @@
                 <button ngxClipboard [cbContent]="order.user.name + ' ' + getAddress(order.billing.billing_address).no + ' ' +
                       getAddress(order.billing.billing_address).street + ' ' + getAddress(order.billing.billing_address).city + ', ' +
                       getAddress(order.billing.billing_address).postol_code + ' ' + getAddress(order.billing.billing_address).country"
-                  style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" (click)="copied()"
-                  color="accent">Copy</button><br>
+                  style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" (click)="copied()" color="accent">Copy</button><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 25%;">email</mat-icon><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 40%;">today</mat-icon>
               </div>
               <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
-                <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': clipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>
-                  {{getAddress(order.billing.billing_address).no}},
-                  {{getAddress(order.billing.billing_address).street}}<br>
-                  {{getAddress(order.billing.billing_address).city}},
-                  {{getAddress(order.billing.billing_address).postol_code}}<br>
-                  {{getAddress(order.billing.billing_address).country}}</span><br>
+                <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': clipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>                  {{getAddress(order.billing.billing_address).no}},
+                  {{getAddress(order.billing.billing_address).street}}
+                  <br> {{getAddress(order.billing.billing_address).city}}, {{getAddress(order.billing.billing_address).postol_code}}
+                  <br> {{getAddress(order.billing.billing_address).country}}
+                </span><br>
                 <span style="padding: 10px 0px;">{{order.user.email}}</span><br>
                 <span class="text-truncate" style="padding: 12px 0px;">{{order.created_at}}</span>
               </div>
@@ -116,20 +151,18 @@
                 <button ngxClipboard [cbContent]="order.user.name + ' ' + getAddress(order.billing.delivery_address).no + ' ' +
                         getAddress(order.billing.delivery_address).street + ' ' + getAddress(order.billing.delivery_address).city + ', ' +
                         getAddress(order.billing.delivery_address).postol_code + ' ' + getAddress(order.billing.delivery_address).country"
-                  style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" (click)="shipCopied()"
-                  color="accent">Copy</button><br>
+                  style="min-width: 0px;margin-left: 20px!important" mat-raised-button class="m-1" (click)="shipCopied()" color="accent">Copy</button><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 25%;">email</mat-icon><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 40%;">local_shipping</mat-icon><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 55%;padding-left: 20%">attach_money</mat-icon><br>
                 <mat-icon class="s-16" style="float: right;padding-top: 70%;padding-left: 50%">credit_card</mat-icon>
               </div>
               <div class="col-md-6" style="border-left: 1px solid #e4e7ed!important;">
-                <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': shipClipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>
-                  {{getAddress(order.billing.delivery_address).no}},
-                  {{getAddress(order.billing.delivery_address).street}}<br>
-                  {{getAddress(order.billing.delivery_address).city}},
-                  {{getAddress(order.billing.delivery_address).postol_code}}<br>
-                  {{getAddress(order.billing.delivery_address).country}}</span><br>
+                <span class="text-truncate qview-address" [ngClass]="{'clipboard-string': shipClipUI}" style="padding: 10px 0px;">{{order.user.name}}<br>                  {{getAddress(order.billing.delivery_address).no}},
+                  {{getAddress(order.billing.delivery_address).street}}
+                  <br> {{getAddress(order.billing.delivery_address).city}}, {{getAddress(order.billing.delivery_address).postol_code}}
+                  <br> {{getAddress(order.billing.delivery_address).country}}
+                </span><br>
                 <span style="padding: 10px 0px;">{{order.user.email}}</span><br>
                 <span class="text-truncate" style="padding: 12px 0px;">No Shipping Method</span>
                 <span class="text-truncate">0.00</span>
