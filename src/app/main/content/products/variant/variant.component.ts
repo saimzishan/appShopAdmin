@@ -426,14 +426,16 @@ export class VariantComponent implements OnInit {
     }
   }
 
-  getOptionValue(id) {
-    const res = this.productOptionSetAndValue.find(
-      optionSet => optionSet.id === id
+  getOptionValue(oSetId, id) {
+    let res: any = this.productOptionSetAndValue.find(
+      optionSet => optionSet.id === oSetId
     );
-
     if (res) {
-      this.optionID = res.options[0].id;
-      return res.options[0].value;
+      const ress = res.options.find(optionSet => optionSet.id === id);
+      if (ress) {
+        this.optionID = ress.id;
+        return ress.value;
+      }
     }
   }
 

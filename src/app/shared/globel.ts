@@ -7,7 +7,8 @@ export class GLOBAL {
   // "http://124.109.39.22:18089/onlineappshopapi/public/api/auth/";
   // "http://60248c9d.ngrok.io/api/auth/";
   // public static USER_API = "http://2dcc3b88.ngrok.io/api/auth/";
-  // public static USER_API = "http://127.0.0.1:8000/api/auth/";
+  // public static USER_API =
+  // "http://127.0.0.1:8000/api/auth/";
 
   // public static USER_IMAGE_API = "http://18.217.12.17/api";
   public static USER_IMAGE_API = "http://www.econowholesale.com/api";
