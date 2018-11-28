@@ -149,4 +149,20 @@ export class OrdersComponent implements OnInit {
       this.shipClipUI = false;
     }, 500);
   }
+
+  getFilteredOrder(filter: string) {
+    this.spinnerService.requestInProcess(true);
+    this.ordersService.filterOrder(filter).subscribe(
+      (res: any) => {
+        this.orders = res.res.data;
+        this.setDataSource(this.orders);
+        this.spinnerService.requestInProcess(false);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error.message;
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
 }
