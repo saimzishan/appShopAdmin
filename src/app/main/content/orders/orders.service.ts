@@ -1,31 +1,31 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpHeaders } from '@angular/common/http';
-import { GLOBAL } from '../../../shared/globel';
-import { ApiService } from '../../../api/api.service';
-import { AuthGuard } from '../../../guard/auth.guard';
-import { Order } from '../models/order.model';
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { HttpHeaders } from "@angular/common/http";
+import { GLOBAL } from "../../../shared/globel";
+import { ApiService } from "../../../api/api.service";
+import { AuthGuard } from "../../../guard/auth.guard";
+import { Order } from "../models/order.model";
 
 @Injectable()
 export class OrdersService extends ApiService {
-
   //Order CRUD
 
   getOrders() {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.get(GLOBAL.USER_API + 'orders', httpOptions)
+    return this.http
+      .get(GLOBAL.USER_API + "orders", httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -36,17 +36,18 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.get(GLOBAL.USER_API + 'orders/' + id, httpOptions)
+    return this.http
+      .get(GLOBAL.USER_API + "orders/" + id, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -57,17 +58,18 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.post(GLOBAL.USER_API + 'orders', order, httpOptions)
+    return this.http
+      .post(GLOBAL.USER_API + "orders", order, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -78,17 +80,18 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.put(GLOBAL.USER_API + 'orders/' + order.id, order, httpOptions)
+    return this.http
+      .put(GLOBAL.USER_API + "orders/" + order.id, order, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -99,17 +102,22 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.put(GLOBAL.USER_API + 'orders/' + orderId, {previous_status: previousStatus, status: status}, httpOptions)
+    return this.http
+      .put(
+        GLOBAL.USER_API + "orders/" + orderId,
+        { previous_status: previousStatus, status: status },
+        httpOptions
+      )
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -120,17 +128,18 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.delete(GLOBAL.USER_API + 'orders/' + id, httpOptions)
+    return this.http
+      .delete(GLOBAL.USER_API + "orders/" + id, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);
@@ -141,17 +150,18 @@ export class OrdersService extends ApiService {
     const access_token = AuthGuard.getToken();
     if (access_token === undefined) {
       const error = {
-        message: 'Unauthorized'
+        message: "Unauthorized"
       };
       return Observable.throw({ error: error });
     }
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + access_token
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + access_token
       })
     };
-    return this.http.get(GLOBAL.USER_API + 'orders/?search=' + filter, httpOptions)
+    return this.http
+      .get(GLOBAL.USER_API + "orders?search=" + filter, httpOptions)
       .map(this.extractData)
       .catch(err => {
         return this.handleError(err);

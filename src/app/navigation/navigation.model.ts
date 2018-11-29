@@ -1,356 +1,358 @@
-import { FuseNavigationModelInterface } from '../core/components/navigation/navigation.model';
+import { FuseNavigationModelInterface } from "../core/components/navigation/navigation.model";
 
 export class FuseNavigationModel implements FuseNavigationModelInterface {
-    public model: any[];
+  public model: any[];
 
-    constructor() {
-        this.model = [
-            {
-                'id': 'suppliers',
-                'title': 'Dashboard',
-                'translate': 'NAV.SUPPLIERS',
-                'type': 'collapse',
-                'icon': 'dashboard',
-                'children': [
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/dashboard',
-                        'exactMatch': true
-                    }
-                ]
-            },
-            {
-                'id': 'products',
-                'title': 'Products',
-                'translate': 'NAV.ECOMMERCE',
-                'type': 'collapse',
-                'icon': 'shopping_cart',
-                'children': [
-                    /*{
+  constructor() {
+    this.model = [
+      {
+        id: "suppliers",
+        title: "Dashboard",
+        translate: "NAV.SUPPLIERS",
+        type: "collapse",
+        icon: "dashboard",
+        children: [
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/dashboard",
+            exactMatch: true
+          }
+        ]
+      },
+      {
+        id: "suppliers",
+        title: "Suppliers",
+        translate: "NAV.SUPPLIERS",
+        type: "collapse",
+        icon: "supervisor_account",
+        children: [
+          /*{
                       'id'   : 'dashboard',
                       'title': 'Dashboard',
                       'type' : 'item',
                       'url'  : '/apps/e-commerce/dashboard'
                     },*/
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/products',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/products/new',
-                        'exactMatch': true
-                    },
-                    /*{
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/suppliers",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/suppliers/new",
+            exactMatch: true
+          }
+          /*{
                       'id'        : 'productDetail',
                       'title'     : 'Product Detail',
                       'type'      : 'item',
                       'url'       : '/products/:id/:handle',
                       'exactMatch': true
                     },*/
-                ]
-            },
-            {
-                'id': 'orders',
-                'title': 'Orders',
-                'translate': 'NAV.ECOMMERCE',
-                'type': 'collapse',
-                'icon': 'shopping_basket',
-                'children': [
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/order-management/orders',
-                        'exactMatch': true
-                    }
-                ]
-            },
+        ]
+      },
 
-            {
-                'id': 'suppliers',
-                'title': 'Suppliers',
-                'translate': 'NAV.SUPPLIERS',
-                'type': 'collapse',
-                'icon': 'supervisor_account',
-                'children': [
-                    /*{
+      {
+        id: "categories",
+        title: "Categories",
+        translate: "NAV.CATEGORIES",
+        type: "collapse",
+        icon: "category",
+        children: [
+          /*{
                       'id'   : 'dashboard',
                       'title': 'Dashboard',
                       'type' : 'item',
                       'url'  : '/apps/e-commerce/dashboard'
                     },*/
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/suppliers',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/suppliers/new',
-                        'exactMatch': true
-                    },
-                    /*{
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/categories",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/categories/new",
+            exactMatch: true
+          }
+          /*{
                       'id'        : 'productDetail',
                       'title'     : 'Product Detail',
                       'type'      : 'item',
                       'url'       : '/products/:id/:handle',
                       'exactMatch': true
                     },*/
-                ]
-            },
-            {
-                'id': 'categories',
-                'title': 'Categories',
-                'translate': 'NAV.CATEGORIES',
-                'type': 'collapse',
-                'icon': 'category',
-                'children': [
-                    /*{
+        ]
+      },
+      {
+        id: "brands",
+        title: "Brands",
+        translate: "NAV.BRANDS",
+        type: "collapse",
+        icon: "card_travel",
+        children: [
+          /*{
                       'id'   : 'dashboard',
                       'title': 'Dashboard',
                       'type' : 'item',
                       'url'  : '/apps/e-commerce/dashboard'
                     },*/
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/categories',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/categories/new',
-                        'exactMatch': true
-                    },
-                    /*{
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/brands",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/brands/brand/new",
+            exactMatch: true
+          }
+        ]
+      },
+      {
+        id: "taxes",
+        title: "Taxes",
+        translate: "NAV.ECOMMERCE",
+        type: "collapse",
+        icon: "monetization_on",
+        children: [
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/tax-management/taxes",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/tax-management/tax/new",
+            exactMatch: true
+          }
+        ]
+      },
+      {
+        id: "tags",
+        title: "Tags",
+        translate: "NAV.ECOMMERCE",
+        type: "collapse",
+        icon: "loyalty",
+        children: [
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/tag-management/tags",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/tag-management/tag/new",
+            exactMatch: true
+          }
+        ]
+      },
+      {
+        id: "options",
+        title: "Options",
+        translate: "NAV.ECOMMERCE",
+        type: "collapse",
+        icon: "local_mall",
+        children: [
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/options",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "options/option/new",
+            exactMatch: true
+          }
+        ]
+      },
+
+      {
+        id: "products",
+        title: "Products",
+        translate: "NAV.ECOMMERCE",
+        type: "collapse",
+        icon: "shopping_cart",
+        children: [
+          /*{
+                      'id'   : 'dashboard',
+                      'title': 'Dashboard',
+                      'type' : 'item',
+                      'url'  : '/apps/e-commerce/dashboard'
+                    },*/
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/products",
+            exactMatch: true
+          },
+          {
+            id: "add",
+            title: "Add",
+            type: "item",
+            icon: "add_circle",
+            url: "/products/new",
+            exactMatch: true
+          }
+          /*{
                       'id'        : 'productDetail',
                       'title'     : 'Product Detail',
                       'type'      : 'item',
                       'url'       : '/products/:id/:handle',
                       'exactMatch': true
                     },*/
-                ]
-            },
-            {
-                'id': 'brands',
-                'title': 'Brands',
-                'translate': 'NAV.BRANDS',
-                'type': 'collapse',
-                'icon': 'card_travel',
-                'children': [
-                    /*{
-                      'id'   : 'dashboard',
-                      'title': 'Dashboard',
-                      'type' : 'item',
-                      'url'  : '/apps/e-commerce/dashboard'
-                    },*/
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/brands',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/brands/brand/new',
-                        'exactMatch': true
-                    },
-                ]
-            },
-            {
-                'id': 'options',
-                'title': 'Options',
-                'translate': 'NAV.ECOMMERCE',
-                'type': 'collapse',
-                'icon': 'local_mall',
-                'children': [
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/options',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': 'options/option/new',
-                        'exactMatch': true
-                    },
-                ]
-            },
-            {
-                'id': 'taxes',
-                'title': 'Taxes',
-                'translate': 'NAV.ECOMMERCE',
-                'type': 'collapse',
-                'icon': 'monetization_on',
-                'children': [
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/tax-management/taxes',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/tax-management/tax/new',
-                        'exactMatch': true
-                    },
-                ]
-            },
-            {
-                'id': 'tags',
-                'title': 'Tags',
-                'translate': 'NAV.ECOMMERCE',
-                'type': 'collapse',
-                'icon': 'loyalty',
-                'children': [
-                    {
-                        'id': 'view',
-                        'title': 'View',
-                        'type': 'item',
-                        'icon': 'visibility',
-                        'url': '/tag-management/tags',
-                        'exactMatch': true
-                    },
-                    {
-                        'id': 'add',
-                        'title': 'Add',
-                        'type': 'item',
-                        'icon': 'add_circle',
-                        'url': '/tag-management/tag/new',
-                        'exactMatch': true
-                    },
-                ]
-            },
-            {
-                'id': 'userManagement',
-                'title': 'User Management',
-                'translate': 'NAV.BRANDS',
-                'type': 'collapse',
-                'icon': 'supervised_user_circle',
-                'children': [
-                    {
-                        'id': 'manageUsers',
-                        'title': 'Manage Users',
-                        'type': 'collapse',
-                        'icon': 'people',
-                        'children': [
-                            {
-                                'id': 'view',
-                                'title': 'View',
-                                'type': 'item',
-                                'icon': 'visibility',
-                                'url': '/user-management/manage-user/users',
-                                'exactMatch': true
-                            },
-                            {
-                                'id': 'add',
-                                'title': 'Add',
-                                'type': 'item',
-                                'icon': 'add_circle',
-                                'url': '/user-management/manage-user/user/new',
-                                'exactMatch': true
-                            }
-                        ]
-                    },
-                    {
-                        'id': 'manageRoles',
-                        'title': 'Manage Roles',
-                        'type': 'collapse',
-                        'icon': 'center_focus_strong',
-                        'children': [
-                            {
-                                'id': 'view',
-                                'title': 'View',
-                                'type': 'item',
-                                'icon': 'visibility',
-                                'url': '/user-management/manage-role/roles',
-                                'exactMatch': true
-                            },
-                            {
-                                'id': 'add',
-                                'title': 'Add',
-                                'type': 'item',
-                                'icon': 'add_circle',
-                                'url': '/user-management/manage-role/role/new',
-                                'exactMatch': true
-                            }
-                        ]
-                    },
-                    {
-                        'id': 'managePermission',
-                        'title': 'Manage Permissions',
-                        'type': 'collapse',
-                        'icon': 'verified_user',
-                        'children': [
-                            {
-                                'id': 'view',
-                                'title': 'View',
-                                'type': 'item',
-                                'icon': 'visibility',
-                                'url': '/user-management/manage-permission/permissions',
-                                'exactMatch': true
-                            },
-                            {
-                                'id': 'add',
-                                'title': 'Add',
-                                'type': 'item',
-                                'icon': 'add_circle',
-                                'url': '/user-management/manage-permission/permission/new',
-                                'exactMatch': true
-                            }
-                        ]
-                    }
-                    // {
-                    //     'id': 'add',
-                    //     'title': 'Manage Product',
-                    //     'type': 'item',
-                    //     'icon': 'add_shopping_cart',
-                    //     'url': '/user-management/manage-products',
-                    //     'exactMatch': true
-                    // },
-                ]
-            },
+        ]
+      },
+      {
+        id: "orders",
+        title: "Orders",
+        translate: "NAV.ECOMMERCE",
+        type: "collapse",
+        icon: "shopping_basket",
+        children: [
+          {
+            id: "view",
+            title: "View",
+            type: "item",
+            icon: "visibility",
+            url: "/order-management/orders",
+            exactMatch: true
+          }
+        ]
+      },
 
-            /*      {
+      {
+        id: "userManagement",
+        title: "User Management",
+        translate: "NAV.BRANDS",
+        type: "collapse",
+        icon: "supervised_user_circle",
+        children: [
+          {
+            id: "manageUsers",
+            title: "Manage Users",
+            type: "collapse",
+            icon: "people",
+            children: [
+              {
+                id: "view",
+                title: "View",
+                type: "item",
+                icon: "visibility",
+                url: "/user-management/manage-user/users",
+                exactMatch: true
+              },
+              {
+                id: "add",
+                title: "Add",
+                type: "item",
+                icon: "add_circle",
+                url: "/user-management/manage-user/user/new",
+                exactMatch: true
+              }
+            ]
+          },
+          {
+            id: "manageRoles",
+            title: "Manage Roles",
+            type: "collapse",
+            icon: "center_focus_strong",
+            children: [
+              {
+                id: "view",
+                title: "View",
+                type: "item",
+                icon: "visibility",
+                url: "/user-management/manage-role/roles",
+                exactMatch: true
+              },
+              {
+                id: "add",
+                title: "Add",
+                type: "item",
+                icon: "add_circle",
+                url: "/user-management/manage-role/role/new",
+                exactMatch: true
+              }
+            ]
+          },
+          {
+            id: "managePermission",
+            title: "Manage Permissions",
+            type: "collapse",
+            icon: "verified_user",
+            children: [
+              {
+                id: "view",
+                title: "View",
+                type: "item",
+                icon: "visibility",
+                url: "/user-management/manage-permission/permissions",
+                exactMatch: true
+              },
+              {
+                id: "add",
+                title: "Add",
+                type: "item",
+                icon: "add_circle",
+                url: "/user-management/manage-permission/permission/new",
+                exactMatch: true
+              }
+            ]
+          }
+          // {
+          //     'id': 'add',
+          //     'title': 'Manage Product',
+          //     'type': 'item',
+          //     'icon': 'add_shopping_cart',
+          //     'url': '/user-management/manage-products',
+          //     'exactMatch': true
+          // },
+        ]
+      }
+
+      /*      {
                       'id'       : 'calendar',
                       'title'    : 'Calendar',
                       'translate': 'NAV.CALENDAR',
@@ -1217,7 +1219,6 @@ export class FuseNavigationModel implements FuseNavigationModelInterface {
                   }
               ]
           }*/
-        ];
-    }
+    ];
+  }
 }
-

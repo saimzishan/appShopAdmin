@@ -60,6 +60,7 @@ export class VariantComponent implements OnInit {
   isEdit = false;
   isNewPressed = false;
   isAction = false;
+  alreadyTaken = [];
 
   constructor(
     private productService: ProductService,
@@ -77,6 +78,13 @@ export class VariantComponent implements OnInit {
 
   ngOnInit() {
     this.setProductSupplierIds();
+    for (const iterator of this.productVariants.variants) {
+      let temp = "";
+      for (const innerLoop of iterator.product_variant_attributes) {
+        temp += innerLoop.option_set_id + "" + innerLoop.option_id;
+      }
+      this.alreadyTaken.push(temp);
+    }
     // this.getOptionName(1);
   }
 
@@ -96,6 +104,10 @@ export class VariantComponent implements OnInit {
           this.snotifyService.error(e, "Error !");
         }
       );
+  }
+
+  generateAlreadyTakenNumber(array) {
+    this.alreadyTaken.push(array);
   }
 
   mangeOption(form: NgForm) {
@@ -122,8 +134,25 @@ export class VariantComponent implements OnInit {
       this.variant.stock = 0;
       this.variant.low_level_stock = 0;
     }
+
+    let temp = "";
+    for (const iterator of this.product_variant_attributes) {
+      temp += iterator.option_set_id + "" + iterator.option_id;
+    }
+
+    for (const iterator of this.alreadyTaken) {
+      if (iterator === temp) {
+        this.snotifyService.warning(
+          "This combination is already taken ",
+          "Warning !"
+        );
+        return;
+      }
+    }
+
     this.variant.product_variant_attributes = this.product_variant_attributes;
     this.variant.images = this.lImages;
+
     let pVariants = new ProductVariant();
     pVariants.supplier_id = this.supplierID;
     pVariants.variants.push(this.variant);
@@ -353,6 +382,12 @@ export class VariantComponent implements OnInit {
     }
     let pv_attribute = { option_id: option_id, option_set_id: option_set_id };
     this.product_variant_attributes.push(pv_attribute);
+
+    if (
+      this.product_variant_attributes.length ===
+      this.productVariants.variants.length
+    ) {
+    }
   }
 
   addPicture(obj) {
