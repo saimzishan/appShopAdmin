@@ -53,7 +53,7 @@
                     <mat-header-cell *cdkHeaderCellDef mat-sort-header>Slider Image</mat-header-cell>
                     <mat-cell *cdkCellDef="let slider">
                         <ng-container *ngIf="slider.image">
-                            <img src="{{imageView(slider.image.small)}}" height="70" width="70">
+                            <img src="{{imageView(slider.image.small)}}" style="height: 66px !important ; width: 66px !important">
                         </ng-container>
                         <ng-container *ngIf="!slider.image">
                             <p> No Image</p>
