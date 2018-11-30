@@ -754,6 +754,8 @@ export class SupplierFormComponent implements OnInit {
         c = 8;
       } else if (c === "hot") {
         c = 9;
+      } else if (c === "today-deal") {
+        c = 10;
       }
       temp.push(c);
     });
