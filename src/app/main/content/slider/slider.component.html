@@ -1,0 +1,103 @@
+<div id="slider" class="page-layout carded fullwidth" fusePerfectScrollbar>
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg mat-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header white-fg" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <button class="mr-0 mr-sm-16" mat-icon-button [routerLink]="'/sliders'">
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <mat-icon class="logo-icon mr-16" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">slideshow</mat-icon>
+                <span class="logo-text h1" *fuseIfOnDom [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">{{pageType === 'edit' ? 'Update Slider Image': 'New Slider Image'}}</span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='new'" (click)="sliderFormSubmition.click()">
+                <span>SAVE</span>
+            </button>
+
+            <button mat-raised-button class="save-product-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'">
+                <span>DELETE</span>
+            </button>
+
+            <button mat-raised-button class="save-brand-button mat-white-bg mt-16 mt-sm-0" *ngIf="pageType ==='edit'">
+
+                <span>UPDATE</span>
+            </button>
+        </div>
+        <!-- / HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div class="content-card mat-white-bg">
+
+            <!-- CONTENT -->
+            <div class="content">
+
+                <form name="sliderForm" #sliderForm="ngForm" class="brand w-100-p" fxLayout="column" fxFlex>
+
+                    <!-- <mat-tab-group> -->
+
+                    <div class="tab-content p-24" fusePerfectScrollbar>
+
+                        <mat-form-field class="w-100-p">
+                            <input matInput name="sliderName" [(ngModel)]="slider.name" #sliderName="ngModel" placeholder="Slider Name" required>
+                        </mat-form-field>
+                        <span *ngIf="sliderName.touched && sliderName.errors?.required" class="error">
+                            <span>Slider Name is required.</span>!
+                        </span>
+
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="text-align:center">
+                                <label>Image Max size 2 MB</label>
+                                <div class="center">
+                                    <div [disabled]="hasImage" class="dropzone" id="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                                        (success)="onUploadSuccess($event)">
+    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" style="text-align:center">
+    
+                            <!-- <ng-container *ngIf="pageType === 'edit' && this.hasImage && this.brand.image.id !== -1">
+                                <div class="col-md-2">
+                                    <img src="{{imageView(brand.image.small)}}" style="width: 150px; height: 150px;">
+                                    <br>
+                                    <br>
+                                    <button (click)="removeImage(brand.image.id)" type="btn" style="margin-bottom: 15px;" class="btn btn-danger btn-xs">
+                                        <i class="material-icons">
+                                            delete
+                                        </i>
+                                    </button>
+                                    <br>
+                                </div>
+                            </ng-container> -->
+                        </div>
+                    </div>
+                    <!-- </mat-tab> -->
+
+
+                    <!-- </mat-tab-group> -->
+                    <input type="button" class="btn btn-primary" hidden #sliderFormSubmition (click)="addSlider(sliderForm)">
+                    <!-- <input type="button" class="btn btn-primary" hidden #editbrandFormSubmition (click)="editBrand(brandForm)"> -->
+                </form>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+        <!-- / CONTENT CARD -->
+
+    </div>
+    <!-- / CENTER -->
+</div>

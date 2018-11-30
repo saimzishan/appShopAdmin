@@ -104,6 +104,10 @@ const appRoutes: Routes = [
     path: "bulkproduct",
     loadChildren: "./main/content/products/bulk-product/bulkproduct.module#BulkProductModule"
   },
+  {
+    path: "sliders",
+    loadChildren: "./main/content/slider/sliders.module#SlidersModule"
+  },
   /*
   {
     path: 'components',

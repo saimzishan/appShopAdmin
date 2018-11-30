@@ -248,7 +248,6 @@ export class ProductsComponent implements OnInit {
   }
 
   pageChange(event) {
-    console.log(event);
     this.getProductsWithPage(event.pageIndex + 1, event.pageSize);
   }
 
