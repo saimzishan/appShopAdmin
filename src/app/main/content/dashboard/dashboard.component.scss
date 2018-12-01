@@ -1,14 +1,12 @@
-#e-commerce-dashboard {
-
-    .content {
-        flex: 1 0 auto;
-    }
-
-}
+#e-commerce-dashboard {}
 
 .card-1-hearder {
-    justify-content: center;
-    font-family: Muli,'Helvetica Neue',Arial,sans-serif;
-    font-size: 20px;
-    color: #039be5 !important;
+  justify-content: center;
+  font-family: Muli, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 20px;
+  color: #039be5 !important;
+}
+
+.orderBtn {
+  font-size: 25px;
 }

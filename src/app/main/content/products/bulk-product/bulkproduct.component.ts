@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Component , OnInit, ViewEncapsulation , ViewChild} from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material";
 import { DropzoneDirective } from "ngx-dropzone-wrapper";
 import { SnotifyService } from "ng-snotify";
@@ -10,7 +10,6 @@ import { GLOBAL } from "../../../../shared/globel";
 import { BulkProduct } from "../../models/bulkproduct.model";
 import { SpinnerService } from "../../../../spinner/spinner.service";
 import { BulkProductService } from "./bulkproduct.service";
-
 
 declare var $: any;
 
@@ -22,13 +21,11 @@ declare var $: any;
   animations: fuseAnimations
 })
 export class BulkProductComponent implements OnInit {
-
   config = GLOBAL.DEFAULT_DROPZONE_CONFIG_FOR_BULK_PRODUCT;
   @ViewChild(DropzoneDirective)
   directiveRef: DropzoneDirective;
 
   bulkProduct: BulkProduct;
-
   constructor(
     private bulkProductService: BulkProductService,
     private snotifyService: SnotifyService,
@@ -47,7 +44,7 @@ export class BulkProductComponent implements OnInit {
         this.addPicture(iterator);
       }
     } else {
-      this.snotifyService.warning('Please Upload File');
+      this.snotifyService.warning("Please Upload File");
       return;
     }
   }
@@ -55,35 +52,38 @@ export class BulkProductComponent implements OnInit {
   addPicture(obj) {
     if (obj) {
       let reader: FileReader = new FileReader();
-      this.bulkProduct.content_type = '.' + obj.type.split('/')[1];
+      this.bulkProduct.content_type = "." + obj.type.split("/")[1];
       reader.onload = this._handleReaderLoaded.bind(this);
       reader.readAsBinaryString(obj);
-    } 
-}
-
-store() {
-  this.spinnerService.requestInProcess(true);
-  this.bulkProductService.store(this.bulkProduct).subscribe(
-    (res: any) => {
-      this.snotifyService.success(res.res.message);
-      this.spinnerService.requestInProcess(false);
-      this.router.navigate(["/products"]);
-    },
-    errors => {
-      this.spinnerService.requestInProcess(false);
-      let e = errors.error;
-      e = JSON.stringify(e.message);
-      this.snotifyService.error(e, "Error !");
     }
-  );
-}
+  }
 
-_handleReaderLoaded(readerEvt) {
-  var binaryString = readerEvt.target.result;
-  this.bulkProduct.base64string = btoa(binaryString);
-  this.store();
-}
+  store() {
+    if (this.bulkProduct.delimiter === "1") {
+      this.bulkProduct.delimiter = ",";
+    }
+    this.spinnerService.requestInProcess(true);
+    this.bulkProductService.store(this.bulkProduct).subscribe(
+      (res: any) => {
+        this.snotifyService.success(res.res.message);
+        this.spinnerService.requestInProcess(false);
+        this.router.navigate(["/products"]);
+      },
+      errors => {
+        this.spinnerService.requestInProcess(false);
+        let e = errors.error;
+        e = JSON.stringify(e.message);
+        this.snotifyService.error(e, "Error !");
+      }
+    );
+  }
 
-  onUploadError(event: any) { }
-  onUploadSuccess(event: any) { }
+  _handleReaderLoaded(readerEvt) {
+    var binaryString = readerEvt.target.result;
+    this.bulkProduct.base64string = btoa(binaryString);
+    this.store();
+  }
+
+  onUploadError(event: any) {}
+  onUploadSuccess(event: any) {}
 }

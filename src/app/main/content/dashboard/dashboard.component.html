@@ -1,169 +1,174 @@
 <div id="e-commerce-dashboard" class="page-layout simple fullwidth">
 
-    <!-- CONTENT -->
-    <div class="content p-24 w-100-p">
+  <!-- CONTENT -->
+  <div class="content p-24 w-100-p">
 
-        <!-- WIDGET GROUP -->
-        <div class="widget-group" fxLayout="row" fxFlex="100" fxLayoutWrap fxLayoutAlign="start start" *fuseIfOnDom [@animateStagger]="{value:'50'}">
+    <!-- WIDGET GROUP -->
+    <div class="widget-group" fxLayout="row" fxFlex="100" fxLayoutWrap fxLayoutAlign="start start" *fuseIfOnDom
+      [@animateStagger]="{value:'50'}">
 
-            <!-- WIDGET 1 -->
-            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
-                <!-- Front -->
-                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-                    <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Products</div>
-                        <button mat-icon-button fuseWidgetToggle aria-label="more">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </div>
-                    <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                        <div class="light-blue-fg font-size-72 line-height-72">
-                            {{dashboard.product_count}}
-                        </div>
-                        <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
-                    </div>
-                    <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Active Products:</span>
-                        <span class="h4 ml-8">{{dashboard.active_product_count}}</span>
-                    </div>
-                </div>
-                <!-- / Front -->
-                <!-- Back -->
-                <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
-                        <mat-icon class="s-16">close</mat-icon>
-                    </button>
-                    <div>
-                        Description
-                    </div>
-                </div>
-                <!-- / Back -->
-            </fuse-widget>
-            <!-- / WIDGET 1 -->
-            <!-- WIDGET 2 -->
-            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+      <!-- WIDGET 1 -->
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+        fxFlex.gt-xs="50" fxFlex.gt-md="25">
+        <!-- Front -->
+        <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="h3">Products</div>
+            <button mat-icon-button fuseWidgetToggle aria-label="more">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
+          <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+            <div class="light-blue-fg font-size-72 line-height-72">
+              {{dashboard.product_count}}
+            </div>
+            <div class="h3 secondary-text font-weight-500">PRODUCTS</div>
+          </div>
+          <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
+            <span class="h4 secondary-text text-truncate">Active Products:</span>
+            <span class="h4 ml-8">{{dashboard.active_product_count}}</span>
+          </div>
+        </div>
+        <!-- / Front -->
+        <!-- Back -->
+        <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
+          <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+            <mat-icon class="s-16">close</mat-icon>
+          </button>
+          <div>
+            Description
+          </div>
+        </div>
+        <!-- / Back -->
+      </fuse-widget>
+      <!-- / WIDGET 1 -->
+      <!-- WIDGET 2 -->
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+        fxFlex.gt-xs="50" fxFlex.gt-md="25">
 
-                <!-- Front -->
-                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-                    <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Categories</div>
+        <!-- Front -->
+        <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="h3">Categories</div>
 
-                        <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </div>
+            <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
 
-                    <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                        <div class="red-fg font-size-72 line-height-72">
-                            {{dashboard.category_count}}
-                        </div>
-                        <div class="h3 secondary-text font-weight-500">CATEGORIES</div>
-                    </div>
+          <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+            <div class="red-fg font-size-72 line-height-72">
+              {{dashboard.category_count}}
+            </div>
+            <div class="h3 secondary-text font-weight-500">CATEGORIES</div>
+          </div>
 
-                    <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Active Categories:</span>
-                        <span class="h4 ml-8">{{dashboard.category_count}}</span>
-                    </div>
-                </div>
-                <!-- / Front -->
+          <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
+            <span class="h4 secondary-text text-truncate">Active Categories:</span>
+            <span class="h4 ml-8">{{dashboard.category_count}}</span>
+          </div>
+        </div>
+        <!-- / Front -->
 
-                <!-- Back -->
-                <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
-                        <mat-icon class="s-16">close</mat-icon>
-                    </button>
+        <!-- Back -->
+        <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
+          <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+            <mat-icon class="s-16">close</mat-icon>
+          </button>
 
-                    <div>
-                        Details
-                    </div>
-                </div>
-                <!-- / Back -->
+          <div>
+            Details
+          </div>
+        </div>
+        <!-- / Back -->
 
-            </fuse-widget>
-            <!-- / WIDGET 2 -->
-            <!-- WIDGET 3 -->
-            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+      </fuse-widget>
+      <!-- / WIDGET 2 -->
+      <!-- WIDGET 3 -->
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+        fxFlex.gt-xs="50" fxFlex.gt-md="25">
 
-                <!-- Front -->
-                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-                    <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Brands</div>
+        <!-- Front -->
+        <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="h3">Brands</div>
 
-                        <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </div>
+            <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
 
-                    <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                        <div class="orange-fg font-size-72 line-height-72">
-                            {{dashboard.brand_count}}
-                        </div>
-                        <div class="h3 secondary-text font-weight-500">BRANDS</div>
-                    </div>
+          <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+            <div class="orange-fg font-size-72 line-height-72">
+              {{dashboard.brand_count}}
+            </div>
+            <div class="h3 secondary-text font-weight-500">BRANDS</div>
+          </div>
 
-                    <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Active Brands:</span>
-                        <span class="h4 ml-8">{{dashboard.brand_count}}</span>
-                    </div>
-                </div>
-                <!-- / Front -->
+          <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
+            <span class="h4 secondary-text text-truncate">Active Brands:</span>
+            <span class="h4 ml-8">{{dashboard.brand_count}}</span>
+          </div>
+        </div>
+        <!-- / Front -->
 
-                <!-- Back -->
-                <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
-                        <mat-icon class="s-16">close</mat-icon>
-                    </button>
+        <!-- Back -->
+        <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
+          <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+            <mat-icon class="s-16">close</mat-icon>
+          </button>
 
-                    <div>
-                        Details
-                    </div>
-                </div>
-                <!-- / Back -->
+          <div>
+            Details
+          </div>
+        </div>
+        <!-- / Back -->
 
-            </fuse-widget>
-            <!-- / WIDGET 3 -->
-            <!-- WIDGET 4 -->
-            <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100" fxFlex.gt-xs="50" fxFlex.gt-md="25">
+      </fuse-widget>
+      <!-- / WIDGET 3 -->
+      <!-- WIDGET 4 -->
+      <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="column" fxFlex="100"
+        fxFlex.gt-xs="50" fxFlex.gt-md="25">
 
-                <!-- Front -->
-                <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
-                    <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
-                        <div class="h3">Users</div>
+        <!-- Front -->
+        <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
+          <div class="pl-16 pr-8 py-16 h-52" fxLayout="row" fxLayoutAlign="space-between center">
+            <div class="h3">Users</div>
 
-                        <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                    </div>
+            <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="more">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </div>
 
-                    <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
-                        <div class="blue-grey-fg font-size-72 line-height-72">{{dashboard.user_count}}
-                        </div>
-                        <div class="h3 secondary-text font-weight-500">USERS</div>
-                    </div>
+          <div class="pt-8 pb-32" fxLayout="column" fxLayoutAlign="center center">
+            <div class="blue-grey-fg font-size-72 line-height-72">{{dashboard.user_count}}
+            </div>
+            <div class="h3 secondary-text font-weight-500">USERS</div>
+          </div>
 
-                    <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
-                        <span class="h4 secondary-text text-truncate">Active Users:</span>
-                        <span class="h4 ml-8">{{dashboard.user_count}}</span>
-                    </div>
-                </div>
-                <!-- / Front -->
+          <div class="p-16 grey-50-bg border-top" fxLayout="row" fxLayoutAlign="start center">
+            <span class="h4 secondary-text text-truncate">Active Users:</span>
+            <span class="h4 ml-8">{{dashboard.user_count}}</span>
+          </div>
+        </div>
+        <!-- / Front -->
 
-                <!-- Back -->
-                <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
-                    <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
-                        <mat-icon class="s-16">close</mat-icon>
-                    </button>
+        <!-- Back -->
+        <div class="fuse-widget-back p-16 pt-32 mat-white-bg mat-elevation-z2">
+          <button mat-icon-button fuseWidgetToggle class="fuse-widget-flip-button" aria-label="Flip widget">
+            <mat-icon class="s-16">close</mat-icon>
+          </button>
 
-                    <div>
-                        Details
-                    </div>
-                </div>
-                <!-- / Back -->
+          <div>
+            Details
+          </div>
+        </div>
+        <!-- / Back -->
 
-            </fuse-widget>
-            <!-- / WIDGET 4 -->
-            <!-- WIDGET 5 -->
-            <!-- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
+      </fuse-widget>
+      <!-- / WIDGET 4 -->
+      <!-- WIDGET 5 -->
+      <!-- <fuse-widget [@animate]="{value:'*',params:{y:'100%'}}" class="widget" fxLayout="row" fxFlex="100">
                 <div class="fuse-widget-front mat-white-bg mat-elevation-z2">
                     <div class="px-16 border-bottom" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutWrap>
                         <div fxFlex class="py-8 h3">Progress</div>
@@ -172,10 +177,94 @@
                     </div>
                 </div>
             </fuse-widget> -->
-        </div>
-        <!-- / WIDGET GROUP -->
-
     </div>
-    <!-- / CONTENT -->
+    <!-- / WIDGET GROUP -->
 
+  </div>
+  <!-- / CONTENT -->
+
+  <div class="content p-24 w-100-p">
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <h2 class="col-4">Search Order by Date Range</h2>
+          <div class="col-2">
+            <mat-form-field>
+              <input matInput [matDatepicker]="from" [(ngModel)]="startDate" placeholder="From Date">
+              <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+              <mat-datepicker #from></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-2">
+            <mat-form-field>
+              <input matInput [matDatepicker]="to" [(ngModel)]="endDate" placeholder="To Date">
+              <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+              <mat-datepicker #to></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button (click)="getOrderBetweenDates()" style="margin-top: 15px;">
+              <b> Retrieved</b>
+            </button>
+          </div>
+        </div>
+        <hr>
+        <br>
+        <div class="row">
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #1E8ACA !important ; color: #ffffff !important">
+              <b>All</b>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #1E8ACA !important">
+              <b>{{orderStatuses.total}}</b>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #00BCD4 !important ; color: #ffffff !important">
+              <span>Created </span>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #00BCD4 !important">
+              <b>{{orderStatuses.created}}</b>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #8BC34A !important ; color: #ffffff !important">
+              <span>Approved </span>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #8BC34A !important">
+              <b>{{orderStatuses.approved}}</b>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #FF9800 !important ; color: #ffffff !important">
+              <span>In-progress </span>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #FF9800 !important">
+              <b>{{orderStatuses.in_progress}}</b>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #4CAF50 !important ; color: #ffffff !important">
+              <span>Ful-filled </span>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #4CAF50 !important">
+              <b>{{orderStatuses.full_fill}}</b>
+            </button>
+          </div>
+          <div class="col-2">
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #F44336 !important ; color: #ffffff !important">
+              <span>Canceled</span>
+            </button>
+            <button mat-raised-button class="btn-block save-product-button mat-white-bg mt-16 mt-sm-0 orderBtn" style="background-color: #ffffff !important ; color: #F44336 !important">
+              <b>{{orderStatuses.canceled}}</b>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- </div> -->
+    <!-- / WIDGET GROUP -->
+
+  </div>
 </div>

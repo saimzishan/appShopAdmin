@@ -9,10 +9,16 @@ import {
 } from "@angular/core";
 import { ProductsService } from "./products.service";
 import { fuseAnimations } from "../../../core/animations";
-import { MatPaginator, MatSort, MatTableDataSource, MatDialogRef, MatDialog } from "@angular/material";
+import {
+  MatPaginator,
+  MatSort,
+  MatTableDataSource,
+  MatDialogRef,
+  MatDialog
+} from "@angular/material";
 import { SnotifyService } from "ng-snotify";
 import { AuthGuard } from "../../../guard/auth.guard";
-import { SuppliersService } from '../suppliers/suppliers.service';
+import { SuppliersService } from "../suppliers/suppliers.service";
 import { SelectionModel } from "@angular/cdk/collections";
 import { GLOBAL } from "../../../shared/globel";
 import { FuseConfirmDialogComponent } from "../../../core/components/confirm-dialog/confirm-dialog.component";
@@ -67,7 +73,7 @@ export class ProductsComponent implements OnInit {
   bulkPrice = null;
   bulkInventory = null;
   bulklowInventory = null;
-  options = '';
+  options = "";
   id;
   classArray;
 
@@ -76,6 +82,7 @@ export class ProductsComponent implements OnInit {
   baseURL = GLOBAL.USER_IMAGE_API;
 
   confirmDialogRef: MatDialogRef<FuseConfirmDialogComponent>;
+  isLocalSearch = false;
 
   constructor(
     private productsService: ProductsService,
@@ -86,12 +93,11 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private productService: ProductService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.index();
   }
-
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -102,9 +108,9 @@ export class ProductsComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   index() {
@@ -148,7 +154,7 @@ export class ProductsComponent implements OnInit {
   }
 
   getSupplier(product_id) {
-    var result = this.dataSource.data.filter(function (obj) {
+    var result = this.dataSource.data.filter(function(obj) {
       if (obj.id === product_id) {
         return obj;
       }
@@ -160,7 +166,9 @@ export class ProductsComponent implements OnInit {
   onSupplierChange(supplier_id, product, index) {
     this.supplier_id = supplier_id;
     this.product_id = product.id;
-    let i = this.dataSource.data[index].suppliers.findIndex(s => s.id === supplier_id);
+    let i = this.dataSource.data[index].suppliers.findIndex(
+      s => s.id === supplier_id
+    );
     let sp = this.dataSource.data[index].suppliers.splice(i, 1);
     this.dataSource.data[index].suppliers.push(sp[0]);
     this.dataSource.data[index].suppliers.reverse();
@@ -178,28 +186,34 @@ export class ProductsComponent implements OnInit {
   }
 
   isActiveProduct(event, p_id) {
-    this.productsService.isProductActive({ active: event.checked }, p_id).subscribe(
-      (res: any) => {
-        if (!res.status) {
-          this.totalItems = res.res.data.total;
-          this.perPage = res.res.data.per_page;
-          this.setNewPageDataSuorce(res.res.data.data);
+    this.productsService
+      .isProductActive({ active: event.checked }, p_id)
+      .subscribe(
+        (res: any) => {
+          if (!res.status) {
+            this.totalItems = res.res.data.total;
+            this.perPage = res.res.data.per_page;
+            this.setNewPageDataSuorce(res.res.data.data);
+          }
+          this.spinnerService.requestInProcess(false);
+        },
+        errors => {
+          this.spinnerService.requestInProcess(false);
+          let e = errors.error;
+          e = JSON.stringify(e.error);
+          this.snotifyService.error(e, "Error !");
         }
-        this.spinnerService.requestInProcess(false);
-      },
-      errors => {
-        this.spinnerService.requestInProcess(false);
-        let e = errors.error;
-        e = JSON.stringify(e.error);
-        this.snotifyService.error(e, "Error !");
-      });
+      );
   }
 
   addNewSupplier(p_id) {
     let index = this.dataSource.data.findIndex(product => product.id === p_id);
     this.addedSuppliers = this.dataSource.data[index].suppliers;
     this.router.navigate(["/products/" + p_id], {
-      queryParams: { addedSuppliers: btoa(JSON.stringify(this.addedSuppliers)), supplierId: this.supplier_id }
+      queryParams: {
+        addedSuppliers: btoa(JSON.stringify(this.addedSuppliers)),
+        supplierId: this.supplier_id
+      }
     });
   }
 
@@ -214,17 +228,25 @@ export class ProductsComponent implements OnInit {
   }
 
   applyFilter(filterValue: string, event) {
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (filterValue === '' && event.key === 'Enter') {
+    if (this.isLocalSearch) {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
       return;
     }
-    if (filterValue !== '') {
-      if (event.key === 'Enter') {
+    //
+    if (filterValue === "" && event.key === "Enter") {
+      return;
+    }
+    if (filterValue !== "") {
+      if (event.key === "Enter") {
         this.searchWord(filterValue);
       }
     } else {
       this.index();
     }
+  }
+
+  toggleLocalSearch() {
+    this.isLocalSearch = !this.isLocalSearch;
   }
 
   searchWord(search) {
@@ -259,7 +281,7 @@ export class ProductsComponent implements OnInit {
     } else if (value === 2) {
       this.optionSelection = true;
     } else {
-      this.snotifyService.info('Coming Soon :)');
+      this.snotifyService.info("Coming Soon :)");
     }
   }
 
@@ -307,17 +329,16 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-
   bulkDelete() {
     if (this.selection.selected.length === 0) {
-      this.snotifyService.warning('Please Select Product(s) to delete');
+      this.snotifyService.warning("Please Select Product(s) to delete");
     } else {
       const tempSelectedObj: any = this.selection.selected;
       for (const iterator of tempSelectedObj) {
         this.bulkId.push(iterator.id);
       }
       this.confirmDialogRef = this.dialog.open(FuseConfirmDialogComponent, {
-        disableClose: false,
+        disableClose: false
       });
       this.confirmDialogRef.componentInstance.confirmMessage =
         "Are you sure you want to delete?";
@@ -395,17 +416,17 @@ export class ProductsComponent implements OnInit {
           }
         }
         let price, stock, low_level_stock;
-        if (this.bulkPrice === null || this.bulkPrice === '') {
+        if (this.bulkPrice === null || this.bulkPrice === "") {
           price = iterator.suppliers[0].pivot.price;
         } else {
           price = this.bulkPrice;
         }
-        if (this.bulkInventory === null || this.bulkInventory === '') {
+        if (this.bulkInventory === null || this.bulkInventory === "") {
           stock = iterator.suppliers[0].pivot.stock;
         } else {
           stock = this.bulkInventory;
         }
-        if (this.bulklowInventory === null || this.bulklowInventory === '') {
+        if (this.bulklowInventory === null || this.bulklowInventory === "") {
           low_level_stock = iterator.suppliers[0].pivot.low_level_stock;
         } else {
           low_level_stock = this.bulklowInventory;
@@ -418,10 +439,10 @@ export class ProductsComponent implements OnInit {
           class: classArray
         });
       }
-      this.options = 'bulkUploads/1?ps_bulk_update';
+      this.options = "bulkUploads/1?ps_bulk_update";
       this.updateBulkProducts(obj);
     } else {
-      this.options = 'bulkUploads/' + this.id + '?ps_class_update';
+      this.options = "bulkUploads/" + this.id + "?ps_class_update";
       const obj = {
         id: this.id,
         class: this.classArray
@@ -452,7 +473,7 @@ export class ProductsComponent implements OnInit {
   }
 
   truncateString(name: string) {
-    return (name.substring(0, 10)) + '...';
+    return name.substring(0, 10) + "...";
   }
 
   deleteAllProducts() {
@@ -464,24 +485,22 @@ export class ProductsComponent implements OnInit {
     this.confirmDialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spinnerService.requestInProcess(true);
-        this.productsService.deleteAllProducts()
-          .subscribe(
-            res => {
-              this.setDataSuorce([]);
-              this.perPage = 0;
-              this.totalItems = 0;
-              this.spinnerService.requestInProcess(false);
-              if (!res.error) {
-                this.snotifyService.success(res.res.message);
-
-              } else {
-                this.snotifyService.error("Something went wrong!", "Error");
-              }
-            },
-            error => {
-              this.spinnerService.requestInProcess(false);
+        this.productsService.deleteAllProducts().subscribe(
+          res => {
+            this.setDataSuorce([]);
+            this.perPage = 0;
+            this.totalItems = 0;
+            this.spinnerService.requestInProcess(false);
+            if (!res.error) {
+              this.snotifyService.success(res.res.message);
+            } else {
+              this.snotifyService.error("Something went wrong!", "Error");
             }
-          );
+          },
+          error => {
+            this.spinnerService.requestInProcess(false);
+          }
+        );
       }
       this.confirmDialogRef = null;
     });
@@ -506,13 +525,14 @@ export class ProductsComponent implements OnInit {
         let e = errors.error;
         e = JSON.stringify(e.error);
         this.snotifyService.error(e, "Error !");
-      });
+      }
+    );
   }
 
   imageView(original_image) {
     let spliting = original_image;
-    spliting = spliting.split('/');
-    if (spliting[0] === '') {
+    spliting = spliting.split("/");
+    if (spliting[0] === "") {
       return this.baseURL + original_image;
     } else {
       return original_image;

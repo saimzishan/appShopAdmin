@@ -8,7 +8,8 @@
   <div class="center">
 
     <!-- HEADER -->
-    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row" fxLayoutAlign.gt-xs="space-between center">
+    <div class="header white-fg" fxLayout="column" fxLayoutAlign="center center" fxLayout.gt-xs="row"
+      fxLayoutAlign.gt-xs="space-between center">
 
       <!-- APP TITLE -->
       <div class="logo my-12 m-sm-0" fxLayout="row" fxLayoutAlign="start center">
@@ -35,6 +36,9 @@
         <mat-form-field floatPlaceholder="never" fxFlex="1 0 auto">
           <input id="search" matInput (keyup)="applyFilter($event.target.value , $event)" placeholder="Search">
         </mat-form-field>
+        <label for="search" class="mr-8">
+          <mat-checkbox (change)="toggleLocalSearch()" matTooltip="Apply search on current page">Local search</mat-checkbox>
+        </label>
       </div>
       <!-- / SEARCH -->
 
@@ -202,7 +206,8 @@
         <ng-container matColumnDef="select">
           <div class="col-md-1">
             <mat-header-cell *matHeaderCellDef>
-              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+              <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()">
               </mat-checkbox>
             </mat-header-cell>
           </div>
@@ -245,7 +250,8 @@
         <ng-container cdkColumnDef="sku">
           <mat-header-cell *cdkHeaderCellDef fxHide mat-sort-header fxShow.gt-md>SKU / Supplier Code</mat-header-cell>
           <mat-cell *cdkCellDef="let product" fxHide fxShow.gt-md>
-            <p class="text-truncate" *ngIf="product.suppliers"><b>{{product.suppliers[0].pivot.sku}}</b> <br> {{product.suppliers[0].pivot.code}}</p>
+            <p class="text-truncate" *ngIf="product.suppliers"><b>{{product.suppliers[0].pivot.sku}}</b> <br>
+              {{product.suppliers[0].pivot.code}}</p>
           </mat-cell>
         </ng-container>
 
@@ -273,7 +279,8 @@
               <input [readonly]="!selection.isSelected(product)" matInput *ngIf="product.suppliers" [(ngModel)]="product.suppliers[0].pivot.low_level_stock">
             </mat-form-field>
             <br>
-            <mat-slide-toggle (change)="isTrackInventoryActive($event, product.suppliers[0].id)" [checked]="product.suppliers[0].pivot.track_stock === 1" style="margin-bottom: 15px !important"><b>Track</b></mat-slide-toggle>
+            <mat-slide-toggle (change)="isTrackInventoryActive($event, product.suppliers[0].id)" [checked]="product.suppliers[0].pivot.track_stock === 1"
+              style="margin-bottom: 15px !important"><b>Track</b></mat-slide-toggle>
           </mat-cell>
         </ng-container>
 
@@ -283,7 +290,8 @@
             Supplier</mat-header-cell>
           <mat-cell *cdkCellDef="let product; let i = index;" style="margin-left: 25px !important" fxHide fxShow.gt-xs>
             <mat-form-field>
-              <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" *ngIf="product.suppliers" (ngModelChange)="onSupplierChange($event, product, i);">
+              <mat-select placeholder="Select supplier" [ngModel]="product.suppliers[0].id" *ngIf="product.suppliers"
+                (ngModelChange)="onSupplierChange($event, product, i);">
                 <mat-option *ngFor="let supplier of getSupplier(product.id);" [value]="supplier.id">
                   {{supplier.name}}
                 </mat-option>
@@ -298,8 +306,10 @@
             Class</mat-header-cell>
           <mat-cell style="margin-left: 25px !important" *cdkCellDef="let product; let i = index;" fxHide fxShow.gt-xs>
             <mat-form-field>
-              <mat-select placeholder="Classes" *ngIf="product.suppliers" [ngModel]="product.suppliers[0].pivot.class" multiple (change)="addClasses($event.value , product.suppliers[0].pivot.id)">
-                <button mat-raised-button (click)="update(2)" class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0" style="background-color: #1E8ACA !important;color: #ffffff !important;margin-top: 10px !important;margin-bottom: 10px">
+              <mat-select placeholder="Classes" *ngIf="product.suppliers" [ngModel]="product.suppliers[0].pivot.class"
+                multiple (change)="addClasses($event.value , product.suppliers[0].pivot.id)">
+                <button mat-raised-button (click)="update(2)" class="btn-block save-product-button mat-white-bg mt-32 mt-sm-0"
+                  style="background-color: #1E8ACA !important;color: #ffffff !important;margin-top: 10px !important;margin-bottom: 10px">
                   <span>Update</span>
                 </button>
                 <mat-option [value]="1">Slider</mat-option>
@@ -360,7 +370,8 @@
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns"></mat-header-row>
 
-        <mat-row style="height: 108px !important" *cdkRowDef="let products; columns: displayedColumns;" class="product" matRipple>
+        <mat-row style="height: 108px !important" *cdkRowDef="let products; columns: displayedColumns;" class="product"
+          matRipple>
         </mat-row>
 
       </mat-table>
